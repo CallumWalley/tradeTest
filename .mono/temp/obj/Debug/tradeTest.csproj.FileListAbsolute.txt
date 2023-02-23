@@ -1,0 +1,9 @@
+/home/cal/snap/gd-godot-engine-mono-snapcraft/23/.mono/temp/bin/Debug/tradeTest.dll
+/home/cal/snap/gd-godot-engine-mono-snapcraft/23/.mono/temp/bin/Debug/tradeTest.pdb
+/home/cal/snap/gd-godot-engine-mono-snapcraft/23/.mono/temp/obj/Debug/tradeTest.csproj.AssemblyReference.cache
+/home/cal/snap/gd-godot-engine-mono-snapcraft/23/.mono/temp/obj/Debug/tradeTest.GeneratedMSBuildEditorConfig.editorconfig
+/home/cal/snap/gd-godot-engine-mono-snapcraft/23/.mono/temp/obj/Debug/tradeTest.AssemblyInfoInputs.cache
+/home/cal/snap/gd-godot-engine-mono-snapcraft/23/.mono/temp/obj/Debug/tradeTest.AssemblyInfo.cs
+/home/cal/snap/gd-godot-engine-mono-snapcraft/23/.mono/temp/obj/Debug/tradeTest.csproj.CoreCompileInputs.cache
+/home/cal/snap/gd-godot-engine-mono-snapcraft/23/.mono/temp/obj/Debug/tradeTest.dll
+/home/cal/snap/gd-godot-engine-mono-snapcraft/23/.mono/temp/obj/Debug/tradeTest.pdb

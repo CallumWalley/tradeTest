@@ -1,0 +1,5 @@
+res://MainCamera.cs
+res://Spatial.tscn
+res://default_env.tres
+res://grid.cs
+res://stars.gdshader

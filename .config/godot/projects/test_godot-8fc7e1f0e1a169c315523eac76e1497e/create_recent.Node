@@ -1,0 +1,9 @@
+OmniLight
+MeshInstance
+Spatial
+CSGSphere
+Camera
+SpotLight
+CPUParticles
+Particles
+Node2D

@@ -1,0 +1,33 @@
+Project "tradeTest.sln" (Restore target(s)):
+	Message: Building solution configuration "Debug|Any CPU".
+	Project "tradeTest.csproj" (_IsProjectRestoreSupported target(s)):
+	Done building project "tradeTest.csproj".
+	NuGetMessageTask: Determining projects to restore...
+	Project "tradeTest.csproj" (_GenerateRestoreProjectPathWalk target(s)):
+	Done building project "tradeTest.csproj".
+	Project "tradeTest.csproj" (_IsProjectRestoreSupported target(s)):
+	Done building project "tradeTest.csproj".
+	Project "tradeTest.csproj" (_GenerateRestoreGraphProjectEntry target(s)):
+	Done building project "tradeTest.csproj".
+	Project "tradeTest.csproj" (_GenerateProjectRestoreGraph target(s)):
+	Done building project "tradeTest.csproj".
+	RestoreTask: X.509 certificate chain validation will use the fallback certificate bundle at '/snap/gd-godot-engine-mono-snapcraft/23/usr/share/dotnet/sdk/6.0.403/trustedroots/codesignctl.pem'.
+	RestoreTask: Assets file has not changed. Skipping assets file writing. Path: /home/cal/snap/gd-godot-engine-mono-snapcraft/23/.mono/temp/obj/project.assets.json
+	RestoreTask: Restored /home/cal/snap/gd-godot-engine-mono-snapcraft/23/tradeTest.csproj (in 29 ms).
+	RestoreTask: 
+	RestoreTask: NuGet Config files used:
+	RestoreTask:     /home/cal/snap/gd-godot-engine-mono-snapcraft/23/.nuget/NuGet/NuGet.Config
+	RestoreTask: 
+	RestoreTask: Feeds used:
+	RestoreTask:     https://api.nuget.org/v3/index.json
+	RestoreTask: All projects are up-to-date for restore.
+Done building project "tradeTest.sln".
+Project "tradeTest.sln" (Build target(s)):
+	Message: Building solution configuration "Debug|Any CPU".
+	Project "tradeTest.csproj" (default targets):
+		: Skipping target "GenerateTargetFrameworkMonikerAttribute" because all output files are up-to-date with respect to the input files.
+		: Skipping target "CoreGenerateAssemblyInfo" because all output files are up-to-date with respect to the input files.
+		: Skipping target "CoreCompile" because all output files are up-to-date with respect to the input files.
+		Message: tradeTest -> /home/cal/snap/gd-godot-engine-mono-snapcraft/23/.mono/temp/bin/Debug/tradeTest.dll
+	Done building project "tradeTest.csproj".
+Done building project "tradeTest.sln".

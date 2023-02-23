@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "JYWHpE/4WZUS0bk8PaGQO0rh1K0ulKijyEkZIKHx9d/FAyG8mizgNWec0aRd7DXGJv87tMN4jcbdF1jjkv2GSQ==",
+  "success": true,
+  "projectFilePath": "/home/cal/snap/gd-godot-engine-mono-snapcraft/23/tradeTest.csproj",
+  "expectedPackageFiles": [
+    "/home/cal/snap/gd-godot-engine-mono-snapcraft/23/.nuget/packages/microsoft.netframework.referenceassemblies/1.0.2/microsoft.netframework.referenceassemblies.1.0.2.nupkg.sha512",
+    "/home/cal/snap/gd-godot-engine-mono-snapcraft/23/.nuget/packages/microsoft.netframework.referenceassemblies.net472/1.0.2/microsoft.netframework.referenceassemblies.net472.1.0.2.nupkg.sha512"
+  ],
+  "logs": []
+}

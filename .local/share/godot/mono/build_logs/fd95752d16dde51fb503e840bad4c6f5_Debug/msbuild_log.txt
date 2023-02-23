@@ -1,0 +1,33 @@
+Project "test3d.sln" (Restore target(s)):
+	Message: Building solution configuration "Debug|Any CPU".
+	Project "test3d.csproj" (_IsProjectRestoreSupported target(s)):
+	Done building project "test3d.csproj".
+	NuGetMessageTask: Determining projects to restore...
+	Project "test3d.csproj" (_GenerateRestoreProjectPathWalk target(s)):
+	Done building project "test3d.csproj".
+	Project "test3d.csproj" (_IsProjectRestoreSupported target(s)):
+	Done building project "test3d.csproj".
+	Project "test3d.csproj" (_GenerateRestoreGraphProjectEntry target(s)):
+	Done building project "test3d.csproj".
+	Project "test3d.csproj" (_GenerateProjectRestoreGraph target(s)):
+	Done building project "test3d.csproj".
+	RestoreTask: X.509 certificate chain validation will use the fallback certificate bundle at '/snap/gd-godot-engine-mono-snapcraft/23/usr/share/dotnet/sdk/6.0.403/trustedroots/codesignctl.pem'.
+	RestoreTask: Assets file has not changed. Skipping assets file writing. Path: /home/cal/test3d/.mono/temp/obj/project.assets.json
+	RestoreTask: Restored /home/cal/test3d/test3d.csproj (in 23 ms).
+	RestoreTask: 
+	RestoreTask: NuGet Config files used:
+	RestoreTask:     /home/cal/snap/gd-godot-engine-mono-snapcraft/23/.nuget/NuGet/NuGet.Config
+	RestoreTask: 
+	RestoreTask: Feeds used:
+	RestoreTask:     https://api.nuget.org/v3/index.json
+	RestoreTask: All projects are up-to-date for restore.
+Done building project "test3d.sln".
+Project "test3d.sln" (Build target(s)):
+	Message: Building solution configuration "Debug|Any CPU".
+	Project "test3d.csproj" (default targets):
+		: Skipping target "GenerateTargetFrameworkMonikerAttribute" because all output files are up-to-date with respect to the input files.
+		: Skipping target "CoreGenerateAssemblyInfo" because all output files are up-to-date with respect to the input files.
+		: Skipping target "CoreCompile" because all output files are up-to-date with respect to the input files.
+		Message: test3d -> /home/cal/test3d/.mono/temp/bin/Debug/test3d.dll
+	Done building project "test3d.csproj".
+Done building project "test3d.sln".
