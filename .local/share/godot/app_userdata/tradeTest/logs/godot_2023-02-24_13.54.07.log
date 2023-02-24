@@ -1,0 +1,12 @@
+Godot Engine v3.5.1.stable.mono.custom_build.6fed1ffa3 - https://godotengine.org
+OpenGL ES 2.0 Renderer: NVIDIA GeForce GTX 960/PCIe/SSE2
+ 
+Mono: Log file is: '/home/cal/snap/gd-godot-engine-mono-snapcraft/23/.local/share/godot/mono/mono_logs/2023-02-24_13.53.21_22104.log'
+ERROR: Cannot instance script because the class 'Trade' could not be found. Script: 'res://Trade.cs'.
+   at: can_instance (modules/mono/csharp_script.cpp:2897) - Method failed. Returning: __null
+ERROR: Cannot instance script because the class 'Trade' could not be found. Script: 'res://Trade.cs'.
+   at: can_instance (modules/mono/csharp_script.cpp:2897) - Method failed. Returning: __null
+WARNING: Parent path './Systems/System1/Body/UI/InfoCard' for node 'TradeLedger' has vanished when instancing: 'res://Node2D.tscn'.
+   at: instance (scene/resources/packed_scene.cpp:124) - Parent path './Systems/System1/Body/UI/InfoCard' for node 'TradeLedger' has vanished when instancing: 'res://Node2D.tscn'.
+ERROR: Cannot instance script because the class 'Trade' could not be found. Script: 'res://Trade.cs'.
+   at: can_instance (modules/mono/csharp_script.cpp:2897) - Method failed. Returning: __null

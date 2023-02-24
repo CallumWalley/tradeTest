@@ -1,10 +1,6 @@
 Godot Engine v3.5.1.stable.mono.custom_build.6fed1ffa3 - https://godotengine.org
 OpenGL ES 2.0 Renderer: NVIDIA GeForce GTX 960/PCIe/SSE2
  
-Mono: Log file is: '/home/cal/snap/gd-godot-engine-mono-snapcraft/23/.local/share/godot/mono/mono_logs/2023-02-23_22.13.37_29792.log'
-focus
-unfocus
-focus
-unfocus
-focus
-unfocus
+Mono: Log file is: '/home/cal/snap/gd-godot-engine-mono-snapcraft/23/.local/share/godot/mono/mono_logs/2023-02-24_13.54.07_22178.log'
+WARNING: Parent path './Systems/System1/Body/UI/InfoCard' for node 'TradeLedger' has vanished when instancing: 'res://Node2D.tscn'.
+   at: instance (scene/resources/packed_scene.cpp:124) - Parent path './Systems/System1/Body/UI/InfoCard' for node 'TradeLedger' has vanished when instancing: 'res://Node2D.tscn'.

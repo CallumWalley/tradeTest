@@ -1,24 +1,23 @@
 using Godot;
 using System;
 
-public class UITradeLedger : HBoxContainer
+public class UITradeLedger : UIInfoCard
 {
-	[Export]
-	Node tradeGroup;
-	PackedScene ResourceIcon;
-	
+	public TradeSource tradeSource;
+	// ResourceIcon;
+	static PackedScene ResourceIcon = (PackedScene)GD.Load<PackedScene>("res://templates/GUI/ResourceIcon.tscn");
+		
 	public override void _Ready()
 	{
-
-		tradeGroup = (Node)GetNode("../../../Trade");
-		ResourceIcon = (PackedScene)GD.Load<PackedScene>("res://templates/GUI/ResourceIcon.tscn");
+		//tradeGroup = (Node)GetNode("../../../Trade");
+		
 		UpdateNumbers();
 	}
 
 	public void UpdateNumbers(){
-		Node export = GetNode("Balance/Export");
-		Node import = GetNode("Balance/Import");
-		foreach (ResourceGenerator trade in tradeGroup.GetChildren()){
+		Node export = GetNode("Panel/Balance/Export");
+		Node import = GetNode("Panel/Balance/Import");
+		foreach (ResourceGenerator trade in tradeSource.GetChildren()){
 			var ri = ResourceIcon.Instance();
 			TextureRect icon = (TextureRect)ri.GetNode("State/Icon");
 			Label label = (Label)ri.GetNode("State/Number");

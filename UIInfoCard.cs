@@ -1,23 +1,31 @@
 using Godot;
 using System;
 
-public class InfoCard : Container
+public class UIInfoCard : Container
 {
-	bool focus = false;
+	[Export]
+	public bool focus = false;
 	float count = 0f;
 	static float timeToHide = 1f;
-
-
+	
+	private bool VisibleChildren(){
+		foreach (Control child in GetChildren()){
+			GD.Print(child);
+			if (child.Visible){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	private void Focus(){
 	 GD.Print("focus");
-	 focus = true;
-	 Visible = true;
-		// When mouse over this element.
-//		if (resourceGroup.GetChildCount() > 0){
-//			focus = true;
-//			Visible = true;
-//		}
+		if (VisibleChildren()){
+			focus = true;
+		 	Visible = true;
+		}
 	}
+
 	private void UnFocus(){
 	// When mouse over this element.
 		GD.Print("unfocus");
@@ -32,5 +40,4 @@ public class InfoCard : Container
 			}
 		}
 	}
-
 }

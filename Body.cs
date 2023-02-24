@@ -9,10 +9,17 @@ public class Body : Node2D
 	public float radius = 10;
 	[Export]
 	public Color color = new Color(1, 0, 0);
+	
+	
+	public override void _Ready(){
 
+	}
+	
+	
 	public override void _Draw()
 	{
 		DrawCircleArcPoly(nPoints, radius, color);
+		
 	}
 
 	public void DrawCircleArcPoly(int nPoints, float radius, Color color)

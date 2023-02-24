@@ -1,0 +1,16 @@
+res://Body.cs
+res://Node2D.tscn
+res://ResourceGenerator.cs
+res://Trade.cs
+res://TradeDestination.cs
+res://TradeReceiver.cs
+res://UIInfoCard.cs
+res://UITradeLedger.cs
+res://default_env.tres
+res://templates/Body.tscn
+res://templates/GUI/InfoCard.tscn
+res://templates/GUI/NetResource.tscn
+res://templates/GUI/ResourceIcon.tscn
+res://templates/GUI/TradeDestination.cs
+res://templates/GUI/TradeLedger.tscn
+res://templates/TradeSource.tscn

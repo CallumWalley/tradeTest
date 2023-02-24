@@ -1,101 +1,41 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://templates/Body.tscn" type="PackedScene" id=1]
-[ext_resource path="res://ResourceGenerator.cs" type="Script" id=2]
-[ext_resource path="res://templates/ResourceGenerator.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Camera2D.cs" type="Script" id=4]
+[ext_resource path="res://templates/GUI/TradeLedger.tscn" type="PackedScene" id=5]
+[ext_resource path="res://TradeReceiver.cs" type="Script" id=6]
 
-[node name="Node2D" type="Node2D"]
+[node name="Global" type="Node"]
 
-[node name="Camera2D" type="Camera2D" parent="."]
-script = ExtResource( 4 )
+[node name="Systems" type="Node" parent="."]
 
-[node name="Sun" parent="." instance=ExtResource( 1 )]
+[node name="System1" type="Node2D" parent="Systems"]
+
+[node name="Sun" parent="Systems/System1" instance=ExtResource( 1 )]
 position = Vector2( 0, 0 )
 radius = 20.0
 color = Color( 0.898039, 0.92549, 0, 1 )
 
-[node name="NetResource" parent="Sun/UI/InfoCard" index="0"]
-margin_bottom = 19.0
-
-[node name="TradeLedger" parent="Sun/UI/InfoCard" index="1"]
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 54.0
-margin_bottom = 19.0
-
-[node name="Trade" parent="Sun" index="3"]
-script = ExtResource( 2 )
-type = 0
-delta = 0.0
-
-[node name="ResourceGenerator" parent="Sun/Trade" index="0" instance=ExtResource( 3 )]
-type = 1
-
-[node name="ResourceGenerator2" parent="Sun/Trade" index="1" instance=ExtResource( 3 )]
-type = 2
-delta = -5.0
-
-[node name="ResourceGenerator3" parent="Sun/Trade" index="2" instance=ExtResource( 3 )]
-type = 3
-
-[node name="Body" parent="." instance=ExtResource( 1 )]
+[node name="Body" parent="Systems/System1" instance=ExtResource( 1 )]
 position = Vector2( 50, -50 )
 color = Color( 0.415686, 0.219608, 0.219608, 1 )
 
-[node name="NetResource" parent="Body/UI/InfoCard" index="0"]
-margin_bottom = 19.0
+[node name="TradeLedger" parent="Systems/System1/Body/UI/InfoCard" index="0" instance=ExtResource( 5 )]
+focus = true
 
-[node name="TradeLedger" parent="Body/UI/InfoCard" index="1"]
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 54.0
-margin_bottom = 19.0
-
-[node name="Trade" parent="Body" index="3"]
-script = ExtResource( 2 )
-type = 0
-delta = 0.0
-
-[node name="ResourceGenerator" parent="Body/Trade" index="0" instance=ExtResource( 3 )]
-type = 1
-
-[node name="ResourceGenerator2" parent="Body/Trade" index="1" instance=ExtResource( 3 )]
-type = 2
-delta = -5.0
-
-[node name="ResourceGenerator3" parent="Body/Trade" index="2" instance=ExtResource( 3 )]
-type = 3
-
-[node name="Station" parent="." instance=ExtResource( 1 )]
+[node name="Station" parent="Systems/System1" instance=ExtResource( 1 )]
 nPoints = 16
 radius = 5.0
 color = Color( 0.184314, 0.227451, 0.678431, 1 )
 
-[node name="NetResource" parent="Station/UI/InfoCard" index="0"]
-margin_bottom = 19.0
+[node name="Camera2D" type="Camera2D" parent="Systems/System1"]
+script = ExtResource( 4 )
 
-[node name="TradeLedger" parent="Station/UI/InfoCard" index="1"]
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 54.0
-margin_bottom = 19.0
+[node name="Trade" type="Node" parent="."]
 
-[node name="Trade" parent="Station" index="3"]
-script = ExtResource( 2 )
-type = 0
-delta = 0.0
+[node name="TradeReceiver" type="Node" parent="Trade"]
+script = ExtResource( 6 )
 
-[node name="ResourceGenerator" parent="Station/Trade" index="0" instance=ExtResource( 3 )]
-type = 1
-
-[node name="ResourceGenerator2" parent="Station/Trade" index="1" instance=ExtResource( 3 )]
-type = 2
-delta = -5.0
-
-[node name="ResourceGenerator3" parent="Station/Trade" index="2" instance=ExtResource( 3 )]
-type = 3
-
-[editable path="Sun"]
-[editable path="Body"]
-[editable path="Station"]
+[editable path="Systems/System1/Sun"]
+[editable path="Systems/System1/Body"]
+[editable path="Systems/System1/Station"]
