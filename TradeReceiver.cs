@@ -5,17 +5,19 @@ public class TradeReceiver : EcoNode
 {   
     public ResourceAgr freightersRequired;
     public ResourceStatic freightersTotal;
-    public ResourceAgr freighters;
+    public ResourceAgr freighterPool;
 
     public ResourcePool resourcePool;
-
 
     public float freighterCapacity = 14;
     public string name = "Trade Station";
     static readonly PackedScene tradeReceiverUI = (PackedScene)GD.Load<PackedScene>("res://templates/GUI/UITradeReceiver.tscn");
     static readonly PackedScene tradeRoute = (PackedScene)GD.Load<PackedScene>("res://templates/TradeRoute.tscn");
+    static readonly PackedScene p_resourcePool = (PackedScene)GD.Load<PackedScene>("res://templates/ResourcePool.tscn");
 
-	public void Init(ResourcePool _resourcePool){
+	public void Ready(){
+        resourcePool = GetNodeOrNull<ResourcePool>("ResourcePool");
+        if (resourcePool==null){}
         resourcePool = _resourcePool;
         //Register with global trade ledger.
         GetNode<GlobalTradeReciever>("/root/Global/Trade").Register(this);

@@ -19,16 +19,16 @@ public class UITradeRoute : Control
             ui.Init(r);
             GetNode("TradeRoute/Details").AddChild(ui);
         }
+		GetNode("TradeRoute/Summary").Connect("toggled", this, "ShowDetails");
+
 
 		GetNode<Label>("TradeRoute/Summary/Source").Text = $"→ system - {tradeRoute.tradeSource.Name}";
 		UIResource freighterIcon = GetNode<UIResource>("TradeRoute/Summary/Freighters");
-		freighterIcon.invert=true;
 		freighterIcon.Init(tradeRoute.tradeWeight);
 	}
 
-    // public override void _Draw()
-    // {
-    //     //
-    // }
+	public void ShowDetails(bool toggled){
+		GetNode<Control>("TradeRoute/Details").Visible = toggled;
+	}
 
 }

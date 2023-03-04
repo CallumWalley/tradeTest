@@ -16,26 +16,21 @@ public class Body : Node2D
 	[Export]
 	public bool hasTradeReceiver = false;
 	ResourcePool rp;
+	ResourceAgr fp;
+
     static readonly PackedScene tradeSource = (PackedScene)GD.Load<PackedScene>("res://templates/TradeSource.tscn");
 	static readonly PackedScene tradeReceiver = (PackedScene)GD.Load<PackedScene>("res://templates/TradeReceiver.tscn");
 	static readonly PackedScene resourcePool = (PackedScene)GD.Load<PackedScene>("res://templates/ResourcePool.tscn");
 
 
 	public override void _Ready(){
-		rp = GetNodeOrNull<ResourcePool>("ResourcePool");
-		if (rp == null && (hasTradeSource || hasTradeReceiver)){
-			rp = resourcePool.Instance<ResourcePool>();
-			AddChild(rp);
-		}
 		if (hasTradeSource){
 			TradeSource ts = tradeSource.Instance<TradeSource>();
 			AddChild(ts);
-			ts.Init(rp);
 		}
 		if (hasTradeReceiver){
 			TradeReceiver tr = tradeReceiver.Instance<TradeReceiver>();
 			AddChild(tr);
-			tr.Init(rp);
 		}
 	}
 	

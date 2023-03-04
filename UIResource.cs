@@ -27,6 +27,7 @@ public class UIResource : Control
         {
             GD.Print("UI made without object");
         }
+        // Focus to show details.
         Connect("mouse_entered", this, "Focus");
         Connect("mouse_exited", this, "UnFocus");
 		details = GetNode<UIInfoCard>("Details");
@@ -34,12 +35,18 @@ public class UIResource : Control
 
     public void Focus()
     {	
-		if (details != null)details.Focus();
+		if (showDetails){
+            details.Focus();
+            GetNode<Control>("Self/Name").Visible=true;
+        }
     }
 
 	public void UnFocus()
     {
-		if (details != null){details.UnFocus();}
+		if (showDetails){
+            details.UnFocus();
+            GetNode<Control>("Self/Name").Visible=false;
+        }
     }
 
     public override void _Draw()
