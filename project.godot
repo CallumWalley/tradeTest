@@ -37,6 +37,10 @@ singletons=[ "res://addons/godot-git-plugin/git_api.gdnlib" ]
 
 common/drop_mouse_on_gui_input_disabled=true
 
+[memory]
+
+limits/message_queue/max_size_kb=8100
+
 [mono]
 
 project/assembly_name="tradeTest"

@@ -10,7 +10,7 @@ public class UINetResource : HBoxContainer
 	public override void _Ready()
 	{
 		NetResource = GetNode("NetResource");
-		ResourceElement = GD.Load<PackedScene>("res://templates/GUI/ResourceIcon.tscn");
+		ResourceElement = GD.Load<PackedScene>("res://templates/GUI/UIResource.tscn");
 		resourceGroup = GetNode("../../ResourceGroup");
 		 
 		UpdateNumbers();
@@ -22,7 +22,7 @@ public class UINetResource : HBoxContainer
 			Label label = (Label)rp.GetNode("State/Number");
 			TextureRect icon = (TextureRect)rp.GetNode("State/Icon");
 			icon.Texture = Resources.Icon(resource.type);
-			label.Text = resource.delta.ToString();
+			label.Text = resource.value.ToString();
 			NetResource.AddChild(rp);
 		}
 	}

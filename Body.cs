@@ -9,17 +9,40 @@ public class Body : Node2D
 	public float radius = 10;
 	[Export]
 	public Color color = new Color(1, 0, 0);
-	
-	
-	public override void _Ready(){
 
+	[Export]
+	public bool hasTradeSource = false;
+	
+	[Export]
+	public bool hasTradeReceiver = false;
+	ResourcePool rp;
+    static readonly PackedScene tradeSource = (PackedScene)GD.Load<PackedScene>("res://templates/TradeSource.tscn");
+	static readonly PackedScene tradeReceiver = (PackedScene)GD.Load<PackedScene>("res://templates/TradeReceiver.tscn");
+	static readonly PackedScene resourcePool = (PackedScene)GD.Load<PackedScene>("res://templates/ResourcePool.tscn");
+
+
+	public override void _Ready(){
+		rp = GetNodeOrNull<ResourcePool>("ResourcePool");
+		if (rp == null && (hasTradeSource || hasTradeReceiver)){
+			rp = resourcePool.Instance<ResourcePool>();
+			AddChild(rp);
+		}
+		if (hasTradeSource){
+			TradeSource ts = tradeSource.Instance<TradeSource>();
+			AddChild(ts);
+			ts.Init(rp);
+		}
+		if (hasTradeReceiver){
+			TradeReceiver tr = tradeReceiver.Instance<TradeReceiver>();
+			AddChild(tr);
+			tr.Init(rp);
+		}
 	}
 	
 	
 	public override void _Draw()
 	{
 		DrawCircleArcPoly(nPoints, radius, color);
-		
 	}
 
 	public void DrawCircleArcPoly(int nPoints, float radius, Color color)
@@ -36,4 +59,9 @@ public class Body : Node2D
 		pointsArc[nPoints] =  pointsArc[0];
 		DrawPolygon(pointsArc, colors);
 	}
+
+	public void DrawEllipseLineArc(int nPoints, float radius, Color color){
+
+	}
+
 }
