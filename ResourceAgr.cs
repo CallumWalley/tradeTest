@@ -28,5 +28,5 @@ public class ResourceAgr: Resource
 		value = add * multi;
 	}
 
-    
+	
 }

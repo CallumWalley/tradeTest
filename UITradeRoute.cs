@@ -11,14 +11,14 @@ public class UITradeRoute : Control
 	public override void _Draw()
 	{
 		// Create UI
-    }
+	}
 
 	public void Init(TradeRoute  tradeRoute){
-        foreach (Resource r in tradeRoute.tradeSource.resourcePool.GetChildren()){
-            UIResource ui = resourceIcon.Instance<UIResource>();
-            ui.Init(r);
-            GetNode("TradeRoute/Details").AddChild(ui);
-        }
+		foreach (Resource r in tradeRoute.tradeSource.resourcePool.GetChildren()){
+			UIResource ui = resourceIcon.Instance<UIResource>();
+			ui.Init(r);
+			GetNode("TradeRoute/Details").AddChild(ui);
+		}
 		GetNode("TradeRoute/Summary").Connect("toggled", this, "ShowDetails");
 
 

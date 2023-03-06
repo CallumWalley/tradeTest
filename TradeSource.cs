@@ -4,7 +4,7 @@ using System;
 public class TradeSource : Resource
 {	
 	static readonly PackedScene tradeSource = (PackedScene)GD.Load<PackedScene>("res://templates/GUI/UITradeSource.tscn");
-
+	static readonly PackedScene p_resourcePool = (PackedScene)GD.Load<PackedScene>("res://templates/ResourcePool.tscn");
 	public float shipWeight = 0;
 	public TradeRoute tradeRoute;
 	public ResourcePool resourcePool;
@@ -16,9 +16,14 @@ public class TradeSource : Resource
 	public Vector2 Position {
 		get { return GetParent<Body>().Position; }
 	}
-	public void Init(ResourcePool _resourcePool){
-		// Add UI
-		resourcePool = _resourcePool;
+	public override void _Ready(){
+		base._Ready();
+		// If parent doesn't have a resrouce pool. add one.
+		resourcePool = GetNodeOrNull<ResourcePool>("../ResourcePool");
+		if (resourcePool==null){
+			resourcePool = p_resourcePool.Instance<ResourcePool>();
+			GetParent().AddChild(resourcePool);
+		}
 		Control uiParent = (Control)GetNode("../InfoCard");
 		UITradeSource ui = tradeSource.Instance<UITradeSource>();
 		ui.Init(this);

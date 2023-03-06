@@ -18,7 +18,7 @@ public class Body : Node2D
 	ResourcePool rp;
 	ResourceAgr fp;
 
-    static readonly PackedScene tradeSource = (PackedScene)GD.Load<PackedScene>("res://templates/TradeSource.tscn");
+	static readonly PackedScene tradeSource = (PackedScene)GD.Load<PackedScene>("res://templates/TradeSource.tscn");
 	static readonly PackedScene tradeReceiver = (PackedScene)GD.Load<PackedScene>("res://templates/TradeReceiver.tscn");
 	static readonly PackedScene resourcePool = (PackedScene)GD.Load<PackedScene>("res://templates/ResourcePool.tscn");
 
