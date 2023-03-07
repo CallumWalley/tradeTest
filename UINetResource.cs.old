@@ -10,7 +10,11 @@ public class UINetResource : HBoxContainer
 	public override void _Ready()
 	{
 		NetResource = GetNode("NetResource");
+<<<<<<< HEAD
 		ResourceElement = GD.Load<PackedScene>("res://GUI/UIResource.tscn");
+=======
+		ResourceElement = GD.Load<PackedScene>("res://templates/GUI/UIResource.tscn");
+>>>>>>> 5259abcdd5f490e80e5a7c118d5f60b37c957db6
 		resourceGroup = GetNode("../../ResourceGroup");
 		 
 		UpdateNumbers();

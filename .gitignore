@@ -1,0 +1,14 @@
+# Import cache
+.import/
+
+# Binaries
+bin/
+build/
+lib/
+
+# Logs
+*.log
+
+# Other
+.mono/
+.local/

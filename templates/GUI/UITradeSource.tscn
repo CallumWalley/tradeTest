@@ -1,0 +1,28 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://UITradeSource.cs" type="Script" id=2]
+
+[node name="TradeSource" type="HBoxContainer"]
+margin_right = 46.0
+margin_bottom = 48.0
+script = ExtResource( 2 )
+
+[node name="ResourcePool" type="HBoxContainer" parent="."]
+margin_bottom = 48.0
+
+[node name="TradeDestination" type="HBoxContainer" parent="."]
+margin_left = 4.0
+margin_right = 204.0
+margin_bottom = 48.0
+
+[node name="Dropdown" type="OptionButton" parent="TradeDestination"]
+margin_right = 200.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 200, 30 )
+mouse_filter = 1
+keep_pressed_outside = true
+text = "Item 0"
+items = [ "Item 0", null, false, 0, null ]
+selected = 0
+
+[connection signal="item_selected" from="TradeDestination/Dropdown" to="." method="DestinationSelected"]

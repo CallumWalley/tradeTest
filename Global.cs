@@ -4,6 +4,7 @@ using System;
 public class Global : Node
 {
 	[Signal]
+<<<<<<< HEAD
 	public delegate void EFrame_Collect();
 	[Signal]
 
@@ -11,6 +12,9 @@ public class Global : Node
 	[Signal]
 
 	public delegate void EFrame_Produce();
+=======
+	public delegate void EFrame();
+>>>>>>> 5259abcdd5f490e80e5a7c118d5f60b37c957db6
 
 	bool paused = false;
 
@@ -22,7 +26,11 @@ public class Global : Node
 	public override void _Ready()
 	{
 		timeLeft = timePerEframe;
+<<<<<<< HEAD
 		Eframe();
+=======
+		_EconomyFrame();
+>>>>>>> 5259abcdd5f490e80e5a7c118d5f60b37c957db6
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -32,7 +40,11 @@ public class Global : Node
 		if (! paused){
 			timeLeft -= delta;
 			if (timeLeft <= 0){
+<<<<<<< HEAD
 				Eframe();
+=======
+				_EconomyFrame();
+>>>>>>> 5259abcdd5f490e80e5a7c118d5f60b37c957db6
 				timeLeft += timePerEframe;
 			}
 		}
@@ -42,11 +54,17 @@ public class Global : Node
 		paused = value;
 		GD.Print($"Paused is {paused}");
 	}
+<<<<<<< HEAD
 	public void Eframe()
 	{
 		EmitSignal("EFrame_Collect");
 		EmitSignal("EFrame_Move");
 		EmitSignal("EFrame_Produce");
+=======
+	public void _EconomyFrame()
+	{
+		EmitSignal("EFrame");
+>>>>>>> 5259abcdd5f490e80e5a7c118d5f60b37c957db6
 	}
 	public void _time_slider_value_changed(float value){
 		float[] timescale = { 30, 20, 15, 10, 8, 6, 4, 2, 1, 0.5f, 0.1f };
