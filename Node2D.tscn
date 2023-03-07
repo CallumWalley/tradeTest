@@ -1,22 +1,13 @@
 [gd_scene load_steps=9 format=2]
 
-<<<<<<< HEAD
 [ext_resource path="res://Map/Body.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Map/ResourceStatic.tscn" type="PackedScene" id=2]
-=======
-[ext_resource path="res://templates/Body.tscn" type="PackedScene" id=1]
-[ext_resource path="res://templates/ResourceStatic.tscn" type="PackedScene" id=2]
->>>>>>> 5259abcdd5f490e80e5a7c118d5f60b37c957db6
 [ext_resource path="res://GlobalTradeReciever.cs" type="Script" id=3]
 [ext_resource path="res://Camera2D.cs" type="Script" id=4]
 [ext_resource path="res://Global.cs" type="Script" id=5]
 [ext_resource path="res://TimeControl.cs" type="Script" id=7]
 [ext_resource path="res://GlobalTech.cs" type="Script" id=9]
-<<<<<<< HEAD
 [ext_resource path="res://Map/ResourcePool.tscn" type="PackedScene" id=10]
-=======
-[ext_resource path="res://templates/ResourcePool.tscn" type="PackedScene" id=10]
->>>>>>> 5259abcdd5f490e80e5a7c118d5f60b37c957db6
 
 [node name="Global" type="Node"]
 script = ExtResource( 5 )
@@ -33,16 +24,11 @@ color = Color( 0.898039, 0.92549, 0, 1 )
 [node name="Earth" parent="Systems/System1" instance=ExtResource( 1 )]
 position = Vector2( -324, -91 )
 color = Color( 0.415686, 0.219608, 0.219608, 1 )
-<<<<<<< HEAD
 hasResourcePool = true
-=======
-hasTradeSource = true
->>>>>>> 5259abcdd5f490e80e5a7c118d5f60b37c957db6
 
 [node name="ResourcePool" parent="Systems/System1/Earth" instance=ExtResource( 10 )]
 
 [node name="ResourceStatic3" parent="Systems/System1/Earth/ResourcePool" instance=ExtResource( 2 )]
-<<<<<<< HEAD
 Type = 4
 Sum = 1.0
 
@@ -53,28 +39,15 @@ Sum = 1.0
 [node name="ResourceStatic5" parent="Systems/System1/Earth/ResourcePool" instance=ExtResource( 2 )]
 Type = 2
 Sum = -1.0
-=======
-Type = 2
-Sum = 1.0
-
-[node name="ResourceStatic2" parent="Systems/System1/Earth/ResourcePool" instance=ExtResource( 2 )]
-Type = 4
-Sum = 2.0
->>>>>>> 5259abcdd5f490e80e5a7c118d5f60b37c957db6
 
 [node name="Mars" parent="Systems/System1" instance=ExtResource( 1 )]
 position = Vector2( 118, 119 )
 color = Color( 0.415686, 0.219608, 0.219608, 1 )
-<<<<<<< HEAD
 hasResourcePool = true
-=======
-hasTradeSource = true
->>>>>>> 5259abcdd5f490e80e5a7c118d5f60b37c957db6
 
 [node name="ResourcePool" parent="Systems/System1/Mars" instance=ExtResource( 10 )]
 
 [node name="ResourceStatic3" parent="Systems/System1/Mars/ResourcePool" instance=ExtResource( 2 )]
-<<<<<<< HEAD
 Type = 1
 Sum = 1.0
 
@@ -84,17 +57,6 @@ Sum = 1.0
 
 [node name="ResourceStatic5" parent="Systems/System1/Mars/ResourcePool" instance=ExtResource( 2 )]
 Type = 2
-=======
-Type = 2
-Sum = 5.0
-
-[node name="ResourceStatic2" parent="Systems/System1/Mars/ResourcePool" instance=ExtResource( 2 )]
-Type = 3
-Sum = 2.0
-
-[node name="ResourceStatic" parent="Systems/System1/Mars/ResourcePool" instance=ExtResource( 2 )]
-Type = 1
->>>>>>> 5259abcdd5f490e80e5a7c118d5f60b37c957db6
 Sum = -1.0
 
 [node name="Station2" parent="Systems/System1" instance=ExtResource( 1 )]
@@ -104,21 +66,17 @@ radius = 5.0
 color = Color( 0.184314, 0.227451, 0.678431, 1 )
 hasTradeReceiver = true
 
-<<<<<<< HEAD
 [node name="ResourcePool" parent="Systems/System1/Station2" instance=ExtResource( 10 )]
 
 [node name="ResourceStatic6" parent="Systems/System1/Station2/ResourcePool" instance=ExtResource( 2 )]
 Type = 2
 Sum = -1.0
 
-=======
->>>>>>> 5259abcdd5f490e80e5a7c118d5f60b37c957db6
 [node name="Station1" parent="Systems/System1" instance=ExtResource( 1 )]
 position = Vector2( 153, -73 )
 nPoints = 16
 radius = 5.0
 color = Color( 0.184314, 0.227451, 0.678431, 1 )
-<<<<<<< HEAD
 hasTradeReceiver = true
 
 [node name="ResourcePool" parent="Systems/System1/Station1" instance=ExtResource( 10 )]
@@ -140,11 +98,6 @@ hasTradeReceiver = true
 Type = 2
 Sum = -1.0
 
-=======
-hasTradeSource = true
-hasTradeReceiver = true
-
->>>>>>> 5259abcdd5f490e80e5a7c118d5f60b37c957db6
 [node name="Camera2D" type="Camera2D" parent="Systems/System1"]
 script = ExtResource( 4 )
 
@@ -238,7 +191,4 @@ text = ">"
 [editable path="Systems/System1/Mars"]
 [editable path="Systems/System1/Station2"]
 [editable path="Systems/System1/Station1"]
-<<<<<<< HEAD
 [editable path="Systems/System1/Station3"]
-=======
->>>>>>> 5259abcdd5f490e80e5a7c118d5f60b37c957db6

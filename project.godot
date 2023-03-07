@@ -8,43 +8,20 @@
 
 config_version=4
 
-_global_script_classes=[ {
-<<<<<<< HEAD
-"base": "",
-=======
-"base": "EditorVCSInterface",
->>>>>>> 5259abcdd5f490e80e5a7c118d5f60b37c957db6
-"class": "GitAPI",
-"language": "NativeScript",
-"path": "res://addons/godot-git-plugin/git_api.gdns"
-} ]
-_global_script_class_icons={
-"GitAPI": ""
-}
-
 [application]
 
 config/name="tradeTest"
 run/main_scene="res://Node2D.tscn"
 config/icon="res://icon.png"
 
-<<<<<<< HEAD
-=======
-[editor]
-
-version_control_autoload_on_startup=true
-version_control_plugin_name="GitAPI"
-
->>>>>>> 5259abcdd5f490e80e5a7c118d5f60b37c957db6
 [gdnative]
 
-singletons=[ "res://addons/godot-git-plugin/git_api.gdnlib" ]
+singletons=[  ]
 
 [gui]
 
 common/drop_mouse_on_gui_input_disabled=true
 
-<<<<<<< HEAD
 [input]
 
 ui_select={
@@ -61,11 +38,6 @@ ui_cancel={
 , Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":2,"pressed":false,"doubleclick":false,"script":null)
  ]
 }
-=======
-[memory]
-
-limits/message_queue/max_size_kb=8100
->>>>>>> 5259abcdd5f490e80e5a7c118d5f60b37c957db6
 
 [mono]
 

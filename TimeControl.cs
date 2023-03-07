@@ -24,13 +24,8 @@ public class TimeControl : Container
         labelEFramePeriod = (Label)GetNode("Count/eframePeriod");
 
         global = (Global)GetNode("/root/Global");
-<<<<<<< HEAD
         global.Connect("EFrame_Collect",this, "_EFrameCollect");
         //Connect("Pause_toggled", global, "_EFrameCollect");
-=======
-        global.Connect("EFrame",this, "_EconomyFrame");
-        //Connect("Pause_toggled", global, "_EconomyFrame");
->>>>>>> 5259abcdd5f490e80e5a7c118d5f60b37c957db6
 
     }
 
@@ -45,11 +40,7 @@ public class TimeControl : Container
         labelEFramePeriod.Text = $"Seconds Between Economy Frames: {global.timePerEframe.ToString()}";
     }
 
-<<<<<<< HEAD
     void _EFrameCollect(){
-=======
-    void _EconomyFrame(){
->>>>>>> 5259abcdd5f490e80e5a7c118d5f60b37c957db6
         eframeCount+=1;
         PrintStrayNodes();
 
