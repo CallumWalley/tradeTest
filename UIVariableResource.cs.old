@@ -1,0 +1,25 @@
+using Godot;
+using System;
+using System.Collections.Generic;
+
+public class UIVariableResource : Control
+{   
+	static readonly PackedScene resource = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/UIResource.tscn");
+	[Export]
+	public VariableResource variableResource;
+	// public override void _Draw(){
+
+	// }
+	
+	public void Init(VariableResource _variableResource){
+		variableResource = _variableResource;
+		foreach (ResourceStatic rs in variableResource.GetChildren()){
+			UIResource ui=resource.Instance<UIResource>();
+			ui.Init(rs);
+			ui.ShowEdit();
+			GetNode<Control>("Panel").AddChild(ui);
+		}
+	}
+	
+	
+}

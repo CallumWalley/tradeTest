@@ -1,0 +1,53 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/cal/Documents/tradeTest/tradeTest.csproj": {}
+  },
+  "projects": {
+    "/home/cal/Documents/tradeTest/tradeTest.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/cal/Documents/tradeTest/tradeTest.csproj",
+        "projectName": "tradeTest",
+        "projectPath": "/home/cal/Documents/tradeTest/tradeTest.csproj",
+        "packagesPath": "/home/cal/snap/gd-godot-engine-mono-snapcraft/23/.nuget/packages/",
+        "outputPath": "/home/cal/Documents/tradeTest/.mono/temp/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/cal/snap/gd-godot-engine-mono-snapcraft/23/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net472"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net472": {
+            "targetAlias": "net472",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net472": {
+          "targetAlias": "net472",
+          "dependencies": {
+            "Microsoft.NETFramework.ReferenceAssemblies": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.0.2, )",
+              "autoReferenced": true
+            }
+          },
+          "runtimeIdentifierGraphPath": "/snap/gd-godot-engine-mono-snapcraft/23/usr/share/dotnet/sdk/6.0.403/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

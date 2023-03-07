@@ -1,0 +1,9 @@
+/home/cal/Documents/tradeTest/.mono/temp/bin/Debug/tradeTest.dll
+/home/cal/Documents/tradeTest/.mono/temp/bin/Debug/tradeTest.pdb
+/home/cal/Documents/tradeTest/.mono/temp/obj/Debug/tradeTest.csproj.AssemblyReference.cache
+/home/cal/Documents/tradeTest/.mono/temp/obj/Debug/tradeTest.GeneratedMSBuildEditorConfig.editorconfig
+/home/cal/Documents/tradeTest/.mono/temp/obj/Debug/tradeTest.AssemblyInfoInputs.cache
+/home/cal/Documents/tradeTest/.mono/temp/obj/Debug/tradeTest.AssemblyInfo.cs
+/home/cal/Documents/tradeTest/.mono/temp/obj/Debug/tradeTest.csproj.CoreCompileInputs.cache
+/home/cal/Documents/tradeTest/.mono/temp/obj/Debug/tradeTest.dll
+/home/cal/Documents/tradeTest/.mono/temp/obj/Debug/tradeTest.pdb

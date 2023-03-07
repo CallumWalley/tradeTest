@@ -1,0 +1,73 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://GUI/Components/UITradeReceiver.cs" type="Script" id=1]
+[ext_resource path="res://new_theme.tres" type="Theme" id=2]
+[ext_resource path="res://GUI/Components/UIResource.tscn" type="PackedScene" id=3]
+
+[node name="TradeReceiver" type="VBoxContainer"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+rect_min_size = Vector2( 0, 1000 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource( 2 )
+script = ExtResource( 1 )
+
+[node name="Trade" type="RichTextLabel" parent="."]
+visible = false
+margin_right = 1024.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 0, 20 )
+mouse_filter = 1
+bbcode_enabled = true
+bbcode_text = "Trade Routes"
+text = "Trade Routes"
+
+[node name="FreighterPool" type="HBoxContainer" parent="."]
+margin_right = 300.0
+margin_bottom = 18.0
+
+[node name="Used" parent="FreighterPool" instance=ExtResource( 3 )]
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 30.0
+margin_bottom = 18.0
+alignment = 0
+
+[node name="Pool" parent="FreighterPool" instance=ExtResource( 3 )]
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 34.0
+margin_right = 64.0
+margin_bottom = 18.0
+
+[node name="Scroll" type="ScrollContainer" parent="."]
+margin_top = 22.0
+margin_right = 300.0
+margin_bottom = 222.0
+rect_min_size = Vector2( 300, 200 )
+mouse_filter = 1
+theme = ExtResource( 2 )
+scroll_horizontal_enabled = false
+
+[node name="VBox" type="VBoxContainer" parent="Scroll"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 295.0
+margin_bottom = 195.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="Scroll/VBox"]
+visible = false
+margin_right = 113.0
+margin_bottom = 14.0
+text = "NO TRADE ROUTE"
+align = 1
+valign = 1
