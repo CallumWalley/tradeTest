@@ -34,7 +34,7 @@ public class ResourcePool : EcoNode
 		} 
 		if (newResource == null) {
 			newResource = new ResourceAgr();
-            newResource.Type = code;
+			newResource.Type = code;
 			members.Add(newResource);
 			AddChild(newResource);
 		}

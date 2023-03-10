@@ -55,11 +55,12 @@ public class UIResource : Control
 		// if (resource==null){return;}
 		// Messy
 		if (resource != null)
-		{
+		{	
 			GetNode<Label>("Self/Value").Text = (resource.Sum).ToString();
 		}
 		else
 		{
+			GD.Print("Removing null resrouce element");
 			QueueFree();
 		}
 		if (showDetails && (resource is ResourceAgr))

@@ -9,6 +9,10 @@ public class ResourceStatic : Resource
 	[Export]
 	public override float Sum{ get; set; }
 
+	public override void _Ready(){
+		Name = $"{Resources.Index(Type).name}_static";
+	}
+
 	public void Decriment(){
 		Sum--;
 	}

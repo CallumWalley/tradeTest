@@ -36,7 +36,7 @@ public class Global : Node
 				timeLeft += timePerEframe;
 			}
 		}
-		PrintStrayNodes();
+		//PrintStrayNodes();
 	}
 	public void PauseToggled(bool value){
 		paused = value;

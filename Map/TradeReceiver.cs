@@ -43,27 +43,25 @@ public class TradeReceiver : EcoNode
 		freightersRequired._add.Add(newTradeRoute.tradeWeight);
 	}
 	public void DeregisterTradeRoute(TradeRoute tr){
-		try
-		{
+//		try
+//		{
 			freightersRequired._add.Remove(tr.tradeWeight);
-			RemoveChild(tr);
-			tr.Remove();
+
 			tr.resourcePool.tradeRoute = null;
 			GD.Print(tr.resourcePool.members.ToString());
 			foreach (ResourceAgr item in tr.resourcePool.GetStandard())
 			{	
 				//int indx = resourcePool.members.IndexOf(item);
-				GD.Print(item.GetPath());
-				//resourcePool.members.RemoveAt(indx);
+				GD.Print(resourcePool.members.Remove(item));
 			}
-			GD.Print(tr.resourcePool.members.ToString());
+			RemoveChild(tr);
 			tr.QueueFree();
 			GD.Print("Removed trade route.");
-		}
-		catch (System.Exception)
-		{    
-			GD.Print("Failed to remove trade route.");
-		}
+//		}
+//		catch (System.Exception)
+//		{    
+//			GD.Print("Failed to remove trade route.");
+//		}
 	}
 
 	public Vector2 Position {

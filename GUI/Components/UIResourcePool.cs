@@ -13,7 +13,6 @@ public class UIResourcePool: Control
 	}
 
 	public override void _Draw(){
-		GD.Print(resourcePool.members.Count);
 		//Clear();
 		foreach (UIResource r in GetNode("ResourcePool").GetChildren()){
 			GetNode("ResourcePool").RemoveChild(r);
@@ -22,7 +21,7 @@ public class UIResourcePool: Control
 		foreach (Resource r in resourcePool.GetStandard()){
 			UIResource ui = resourceIcon.Instance<UIResource>();
 			ui.Init(r);
-			ui.showDetails = true;
+			//ui.showDetails = true;
 			GetNode("ResourcePool").AddChild(ui);
 		}
 	}

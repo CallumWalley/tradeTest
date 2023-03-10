@@ -52,20 +52,23 @@ public class UITradeDestination : Control
 		tradeDestSelectorButton.Clear();
 		// Todo better structure to avoid this check.
 		tradeDestSelectorButton.AddIconItem(freighterIcon, "[ 0 / 0 ] - No Route Assigned", 0);
-		int indexId = 1;
-	
+		int indexId = 0;
+		indexOfExisting = 0;
+		
 		foreach (TradeReceiver tr in globalTrade.List()){
+			indexId ++;
 			// Self not valid source
 			if ((body.tradeReceiver != null) && (body.tradeReceiver == tr )){continue;}
 			float dist = body.Position.DistanceTo(tr.Position);
 			float freighterKTons = GetNode<GlobalTech>("/root/Global/Tech").GetFreighterTons(resourcePool.shipWeight, dist);
 			tradeDestSelectorButton.AddIconItem(freighterIcon, String.Format("[ {0:F1}  / {1:F1} ] - {2}",freighterKTons, resourcePool.GetType(901).Sum, tr.name), indexId);		
-			indexOfExisting = 0;
+			
+			// If pool has trade route, and this is trade receiver.
 			if (resourcePool.tradeRoute != null && resourcePool.tradeRoute.tradeReceiver == tr){
 				tradeDestSelectorButton.Selected = indexId;
 				indexOfExisting = indexId;
 			}
-			indexId ++;
+			
 		}
 	}
 
