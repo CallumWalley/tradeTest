@@ -60,25 +60,25 @@ public class UIResource : Control
 		}
 		else
 		{
-			GD.Print("Removing null resrouce element");
-			QueueFree();
+			//GD.Print($"Removing null resouce element {GetPath()}");
+			//QueueFree();
 		}
 		if (showDetails && (resource is ResourceAgr))
 		{	
 			Clean();
-			foreach (Resource r in ((ResourceAgr)resource)._add)
+			foreach (Resource r in ((ResourceAgr)resource).add)
 			{
 				UIResource ui = resourceIcon.Instance<UIResource>();
 				ui.Init(r);
 				details.AddChild(ui);
 			}
-			foreach (Resource r in ((ResourceAgr)resource)._sub)
+			foreach (Resource r in ((ResourceAgr)resource).sub)
 			{
 				UIResource ui = resourceIcon.Instance<UIResource>();
 				ui.Init(r);
 				details.AddChild(ui);
 			}
-			foreach (Resource r in ((ResourceAgr)resource)._multi)
+			foreach (Resource r in ((ResourceAgr)resource).multi)
 			{
 				UIResource ui = resourceIcon.Instance<UIResource>();
 				ui.Init(r);
@@ -102,8 +102,8 @@ public class UIResource : Control
 
 		GetNode<TextureButton>("Self/Change/Incriment").Visible = true;
 		GetNode<TextureButton>("Self/Change/Decriment").Visible = true;
-		GetNode<TextureButton>("Self/Change/Incriment").Connect("pressed", resource, "Incriment");
-		GetNode<TextureButton>("Self/Change/Decriment").Connect("pressed", resource, "Decriment");
+		// GetNode<TextureButton>("Self/Change/Incriment").Connect("pressed", resource, "Incriment");
+		// GetNode<TextureButton>("Self/Change/Decriment").Connect("pressed", resource, "Decriment");
 	}
 
 	public void HideEdit()

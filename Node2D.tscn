@@ -1,119 +1,23 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Map/Body.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Map/ResourceStatic.tscn" type="PackedScene" id=2]
-[ext_resource path="res://GlobalTradeReciever.cs" type="Script" id=3]
+[ext_resource path="res://Player/PlayerTradeRoutes.cs" type="Script" id=2]
+[ext_resource path="res://Player/PlayerTradeReciever.cs" type="Script" id=3]
 [ext_resource path="res://Camera2D.cs" type="Script" id=4]
 [ext_resource path="res://Global.cs" type="Script" id=5]
+[ext_resource path="res://Map/Transformer.tscn" type="PackedScene" id=6]
 [ext_resource path="res://TimeControl.cs" type="Script" id=7]
-[ext_resource path="res://GlobalTech.cs" type="Script" id=9]
+[ext_resource path="res://Player/PlayerTech.cs" type="Script" id=9]
 [ext_resource path="res://Map/ResourcePool.tscn" type="PackedScene" id=10]
 
 [node name="Global" type="Node"]
 script = ExtResource( 5 )
 
-[node name="Systems" type="Node" parent="."]
-
-[node name="System1" type="Node2D" parent="Systems"]
-
-[node name="Sun" parent="Systems/System1" instance=ExtResource( 1 )]
-position = Vector2( 0, 0 )
-radius = 20.0
-color = Color( 0.898039, 0.92549, 0, 1 )
-
-[node name="Earth" parent="Systems/System1" instance=ExtResource( 1 )]
-position = Vector2( -324, -91 )
-color = Color( 0.415686, 0.219608, 0.219608, 1 )
-hasResourcePool = true
-
-[node name="ResourcePool" parent="Systems/System1/Earth" instance=ExtResource( 10 )]
-
-[node name="ResourceStatic3" parent="Systems/System1/Earth/ResourcePool" instance=ExtResource( 2 )]
-Type = 4
-Sum = 1.0
-
-[node name="ResourceStatic4" parent="Systems/System1/Earth/ResourcePool" instance=ExtResource( 2 )]
-Type = 1
-Sum = 1.0
-
-[node name="ResourceStatic5" parent="Systems/System1/Earth/ResourcePool" instance=ExtResource( 2 )]
-Type = 2
-Sum = -1.0
-
-[node name="Mars" parent="Systems/System1" instance=ExtResource( 1 )]
-position = Vector2( 118, 119 )
-color = Color( 0.415686, 0.219608, 0.219608, 1 )
-hasResourcePool = true
-
-[node name="ResourcePool" parent="Systems/System1/Mars" instance=ExtResource( 10 )]
-
-[node name="ResourceStatic3" parent="Systems/System1/Mars/ResourcePool" instance=ExtResource( 2 )]
-Type = 1
-Sum = 1.0
-
-[node name="ResourceStatic4" parent="Systems/System1/Mars/ResourcePool" instance=ExtResource( 2 )]
-Type = 3
-Sum = 1.0
-
-[node name="ResourceStatic5" parent="Systems/System1/Mars/ResourcePool" instance=ExtResource( 2 )]
-Type = 2
-Sum = -1.0
-
-[node name="Station2" parent="Systems/System1" instance=ExtResource( 1 )]
-position = Vector2( -285, 148 )
-nPoints = 16
-radius = 5.0
-color = Color( 0.184314, 0.227451, 0.678431, 1 )
-hasTradeReceiver = true
-
-[node name="ResourcePool" parent="Systems/System1/Station2" instance=ExtResource( 10 )]
-
-[node name="ResourceStatic6" parent="Systems/System1/Station2/ResourcePool" instance=ExtResource( 2 )]
-Type = 2
-Sum = -1.0
-
-[node name="Station1" parent="Systems/System1" instance=ExtResource( 1 )]
-position = Vector2( 153, -73 )
-nPoints = 16
-radius = 5.0
-color = Color( 0.184314, 0.227451, 0.678431, 1 )
-hasTradeReceiver = true
-
-[node name="ResourcePool" parent="Systems/System1/Station1" instance=ExtResource( 10 )]
-
-[node name="ResourceStatic6" parent="Systems/System1/Station1/ResourcePool" instance=ExtResource( 2 )]
-Type = 2
-Sum = -1.0
-
-[node name="Station3" parent="Systems/System1" instance=ExtResource( 1 )]
-position = Vector2( -172, -111 )
-nPoints = 16
-radius = 5.0
-color = Color( 0.184314, 0.227451, 0.678431, 1 )
-hasTradeReceiver = true
-
-[node name="ResourcePool" parent="Systems/System1/Station3" instance=ExtResource( 10 )]
-
-[node name="ResourceStatic6" parent="Systems/System1/Station3/ResourcePool" instance=ExtResource( 2 )]
-Type = 2
-Sum = -1.0
-
-[node name="Camera2D" type="Camera2D" parent="Systems/System1"]
-script = ExtResource( 4 )
-
-[node name="Trade" type="Node" parent="."]
-script = ExtResource( 3 )
-
-[node name="Tech" type="Node" parent="."]
-script = ExtResource( 9 )
-
 [node name="UI" type="PanelContainer" parent="."]
-anchor_left = 0.5
-anchor_top = -0.5
-anchor_right = 0.5
-anchor_bottom = -0.5
+anchor_left = 1.0
+anchor_right = 1.0
 margin_left = -364.0
-margin_bottom = 108.0
+margin_bottom = 126.0
 grow_horizontal = 0
 
 [node name="TimeControl" type="VBoxContainer" parent="UI"]
@@ -182,6 +86,80 @@ margin_left = 330.0
 margin_right = 350.0
 margin_bottom = 40.0
 text = ">"
+
+[node name="Systems" type="Node" parent="."]
+
+[node name="System1" type="Node2D" parent="Systems"]
+
+[node name="Sun" parent="Systems/System1" instance=ExtResource( 1 )]
+position = Vector2( 503, 272 )
+radius = 20.0
+color = Color( 0.898039, 0.92549, 0, 1 )
+
+[node name="Earth" parent="Systems/System1" instance=ExtResource( 1 )]
+position = Vector2( 179, 181 )
+color = Color( 0.415686, 0.219608, 0.219608, 1 )
+hasResourcePool = true
+
+[node name="ResourcePool" parent="Systems/System1/Earth" instance=ExtResource( 10 )]
+isValidTradeReceiver = true
+
+[node name="Transformer" parent="Systems/System1/Earth/ResourcePool" instance=ExtResource( 6 )]
+
+[node name="Mars" parent="Systems/System1" instance=ExtResource( 1 )]
+position = Vector2( 621, 391 )
+color = Color( 0.415686, 0.219608, 0.219608, 1 )
+hasResourcePool = true
+
+[node name="ResourcePool" parent="Systems/System1/Mars" instance=ExtResource( 10 )]
+
+[node name="Station2" parent="Systems/System1" instance=ExtResource( 1 )]
+position = Vector2( 218, 420 )
+nPoints = 16
+radius = 5.0
+color = Color( 0.184314, 0.227451, 0.678431, 1 )
+hasTradeReceiver = true
+
+[node name="ResourcePool" parent="Systems/System1/Station2" instance=ExtResource( 10 )]
+
+[node name="Station1" parent="Systems/System1" instance=ExtResource( 1 )]
+position = Vector2( 656, 199 )
+nPoints = 16
+radius = 5.0
+color = Color( 0.184314, 0.227451, 0.678431, 1 )
+hasTradeReceiver = true
+
+[node name="ResourcePool" parent="Systems/System1/Station1" instance=ExtResource( 10 )]
+isValidTradeReceiver = true
+
+[node name="Transformer" parent="Systems/System1/Station1/ResourcePool" instance=ExtResource( 6 )]
+
+[node name="Station3" parent="Systems/System1" instance=ExtResource( 1 )]
+position = Vector2( 331, 161 )
+nPoints = 16
+radius = 5.0
+color = Color( 0.184314, 0.227451, 0.678431, 1 )
+hasTradeReceiver = true
+
+[node name="ResourcePool" parent="Systems/System1/Station3" instance=ExtResource( 10 )]
+
+[node name="Camera2D" type="Camera2D" parent="Systems/System1"]
+anchor_mode = 0
+script = ExtResource( 4 )
+
+[node name="Player" type="Node" parent="."]
+
+[node name="Trade" type="Node" parent="Player"]
+script = ExtResource( 3 )
+
+[node name="Routes" type="Node" parent="Player/Trade"]
+script = ExtResource( 2 )
+
+[node name="Receivers" type="Node" parent="Player/Trade"]
+script = ExtResource( 3 )
+
+[node name="Tech" type="Node" parent="Player"]
+script = ExtResource( 9 )
 
 [connection signal="value_changed" from="UI/TimeControl/Control/HSlider" to="." method="_time_slider_value_changed"]
 [connection signal="toggled" from="UI/TimeControl/Control/Pause" to="." method="PauseToggled"]

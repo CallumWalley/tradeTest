@@ -1,40 +1,40 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public class ResourceAgr: Resource
 {	
+
+	public List<Resource> add = new List<Resource>();
+	public List<Resource> sub =  new List<Resource>();
+	public List<Resource> multi =  new List<Resource>();
+	public ResourceAgr(int _type, List<Resource> _add){
+
+		Type = _type;
+		add = _add;
+
+	}
+
 	[Export]
 	public override int Type{get; set;}
 
-	public override float Sum{get{return value;}}
+	public override float Sum{get{return _Sum();}}
 	
-	[Export]
-	public float value=0;
-	[Export]
-	public Godot.Collections.Array<Resource> _add = new Godot.Collections.Array<Resource>();
-	[Export]
-	public Godot.Collections.Array<Resource> _sub = new Godot.Collections.Array<Resource>();
-	[Export]
-	public Godot.Collections.Array<Resource> _multi = new Godot.Collections.Array<Resource>();
+	public float value = 0;
 
-	public override void _Ready(){
-		Name = $"{Resources.Index(Type).name}_agg";
-	}
 
-	public override void EFrameCollect(){
-		float add=0;
-		float multi=1;
-		foreach (Resource i in _add){
-			add+=i.Sum;
+	public float _Sum(){
+		float addCum=0;
+		float multiCum=1;
+		foreach (Resource i in add){
+			addCum+=i.Sum;
 		}
-		foreach (Resource i in _sub){
-			add-=i.Sum;
+		foreach (Resource i in sub){
+			addCum-=i.Sum;
 		}
-		foreach (Resource i in _multi){
-			multi+=i.Sum;
+		foreach (Resource i in multi){
+			multiCum+=i.Sum;
 		}
-		value = add * multi;
-	}
-
-	
+		return addCum * multiCum;
+	}	
 }

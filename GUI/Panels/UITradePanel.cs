@@ -11,9 +11,9 @@ public class UITradePanel : Control
 	UIResourcePool uiResourcePool;
 	UITradeDestination uiTradeDestination;
 
-	static readonly PackedScene p_uiTradeReceiver = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/UITradeReceiver.tscn");
-	static readonly PackedScene p_uiResourcePool = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/UIResourcePool.tscn");
-	static readonly PackedScene p_uiTradeDestination = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/UITradeDestination.tscn");
+	static readonly PackedScene p_uiTradeReceiver = GD.Load<PackedScene>("res://GUI/Components/UITradeReceiver.tscn");
+	static readonly PackedScene p_uiResourcePool = GD.Load<PackedScene>("res://GUI/Components/UIResourcePool.tscn");
+	static readonly PackedScene p_uiTradeDestination = GD.Load<PackedScene>("res://GUI/Components/UITradeDestination.tscn");
 
 	public void Init(Body _body){
 			// Create trade receiver component.
@@ -27,10 +27,12 @@ public class UITradePanel : Control
 			uiTradeDestination.Init(body, body.resourcePool);
 			AddChild(uiTradeDestination);
 
-			if (body.tradeReceiver != null){
-				uiTradeReceiver = p_uiTradeReceiver.Instance<UITradeReceiver>();
-				uiTradeReceiver.Init(body.tradeReceiver);
-				AddChild(uiTradeReceiver);
+			uiTradeReceiver = p_uiTradeReceiver.Instance<UITradeReceiver>();
+			uiTradeReceiver.Init(body.resourcePool);
+
+			AddChild(uiTradeReceiver);
+			if (body.resourcePool.isValidTradeReceiver){
+				uiTradeReceiver.Visible=true;
 			}
 	}
 

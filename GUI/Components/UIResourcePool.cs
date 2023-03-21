@@ -21,7 +21,7 @@ public class UIResourcePool: Control
 		foreach (Resource r in resourcePool.GetStandard()){
 			UIResource ui = resourceIcon.Instance<UIResource>();
 			ui.Init(r);
-			//ui.showDetails = true;
+			ui.showDetails = true;
 			GetNode("ResourcePool").AddChild(ui);
 		}
 	}

@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class GlobalTech : Node
+public class PlayerTech : Node
 {
     public float freighterA = 0.0000015f; // 0.00000015
 	// multiply by approx 7000000 to get m/s^2

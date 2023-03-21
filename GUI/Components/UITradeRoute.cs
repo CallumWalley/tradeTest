@@ -1,12 +1,15 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public class UITradeRoute : Control
 {
 	public TradeRoute tradeRoute;
-	public TradeReceiver tradeReceiver;
 
+	public ResourcePool resourcePool;
 	static readonly PackedScene resourceIcon = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/UIResource.tscn");
+
+	public static PlayerTradeRoutes playerTradeRoutes;
 
 	TextureButton moveUpButton;
 	TextureButton moveDownButton;
@@ -14,30 +17,33 @@ public class UITradeRoute : Control
 	// Element to update on change.
 	Control callback;
 
+	public void Init(ResourcePool _resourcePool){
+		resourcePool=_resourcePool;
+	}
 
+	public override void _Ready(){
+		base._Ready();
+	}
 
-	// Called when the node enters the scene tree for the first time.
 	public override void _Draw()
 	{	
 		if (tradeRoute == null){return;}
 		moveUpButton.Disabled = false;
 		moveDownButton.Disabled = false;
-		if (tradeRoute.GetIndex() == 0){
-			moveUpButton.Disabled = true;
-		}
-		if (tradeRoute.GetIndex() == tradeReceiver.GetChildCount()-1){
-			moveDownButton.Disabled = true;
-		}
-		// Create UI
+		// if (tradeRoute.GetIndex() == 0){
+		// 	moveUpButton.Disabled = true;
+		// }
+		// if (tradeRoute.GetIndex() == ((resourcePool.GetTradeRoutes().Count())-1){
+		// 	moveDownButton.Disabled = true;
+		// }
 	}
 
 	public void Init(TradeRoute _tradeRoute, Control _callback){
 		tradeRoute = _tradeRoute;
-		tradeReceiver = tradeRoute.GetParent<TradeReceiver>();
 		callback = _callback;
 
 		// Add details panel.
-		foreach (Resource r in tradeRoute.resourcePool.GetStandard()){
+		foreach (Resource r in tradeRoute.poolSource.GetStandard()){
 			UIResource ui = resourceIcon.Instance<UIResource>();
 			ui.Init(r);
 			GetNode("Details").AddChild(ui);
@@ -45,7 +51,7 @@ public class UITradeRoute : Control
 		GetNode("Summary").Connect("toggled", this, "ShowDetails");
 
 		// Set button text
-		GetNode<Label>("Summary/AlignLeft/Source").Text = $"→ system - {tradeRoute.body.Name}";
+		GetNode<Label>("Summary/AlignLeft/Source").Text = $"→ system - {tradeRoute.poolSource.GetParent<Body>().Name}";
 		UIResource freighterIcon = GetNode<UIResource>("Summary/AlignLeft/Freighters");
 		freighterIcon.Init(tradeRoute.tradeWeight);
 
@@ -63,18 +69,18 @@ public class UITradeRoute : Control
 		GetNode<Control>("Details").Visible = toggled;
 	}
 	public void Remove(){
-		tradeReceiver.DeregisterTradeRoute(tradeRoute);
+		GetNode<PlayerTradeRoutes>("/root/Global/Player/Trade/Routes").DeregisterTradeRoute(tradeRoute);
 		GetParent().RemoveChild(this);
 		callback.Update();
 		this.QueueFree();
 	}
 
 	public void ReorderUp(){
-		tradeReceiver.MoveChild(tradeRoute, tradeRoute.GetIndex()-1);
+		resourcePool.MoveChild(tradeRoute, tradeRoute.GetIndex()-1);
 		callback.Update();
 	}
 	public void ReorderDown(){
-		tradeReceiver.MoveChild(tradeRoute, tradeRoute.GetIndex()+1);
+		resourcePool.MoveChild(tradeRoute, tradeRoute.GetIndex()+1);
 		callback.Update();
 	}
 }

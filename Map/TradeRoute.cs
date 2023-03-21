@@ -1,13 +1,15 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
-public class TradeRoute : EcoNode
+public class TradeRoute : ResourcePool
 {
 	[Export]
-	public ResourcePool resourcePool;
-	public TradeReceiver tradeReceiver;
+	public ResourcePool poolSource;
+	public ResourcePool poolDestination;
+	public TransformerTrade transformerSource;
+	public TransformerTrade transformerDestintation;
 
-	public Body body;
 	// Tradeweight in KTonnes
 	//public Resource importTradeWeight;
 	//public Resource exportTradeWeight;
@@ -20,28 +22,30 @@ public class TradeRoute : EcoNode
 		DrawLine();
 	}
 	// Called from TradeReciver
-	public void Init(Body _body, ResourcePool _resourcePool, TradeReceiver _tradeReceiver){
-		resourcePool=_resourcePool;
-		tradeReceiver=_tradeReceiver;
-		body = _body;
-		distance = body.Position.DistanceTo(tradeReceiver.Position);
-		tradeWeight = new ResourceStatic();
-		tradeWeight.Type = 901;
-		tradeWeight.Name = $"Trade route from {Name}";
-		AddChild(tradeWeight);
-		foreach (ResourceAgr item in resourcePool.GetStandard())
-		{
-			tradeReceiver.resourcePool.Add(item);
-		}
+	public void Init(ResourcePool _poolSource, ResourcePool _poolDestination){
+
+		poolSource = _poolSource;
+		poolDestination=_poolDestination;
+
+		transformerSource = poolSource.GetTransformerTrade();
+		transformerDestintation = poolSource.GetTransformerTrade();
+
+		transformerSource.tradeRoutes.Add(this);
+		transformerDestintation.tradeRoutes.Add(this);
+		poolSource.tradeRoute = this;
+
+		distance = poolSource.GetParent<Body>().Position.DistanceTo(poolDestination.GetParent<Body>().Position);
+		tradeWeight = new ResourceStatic(901, 0);
+		//tradeWeight.Name = $"Trade route from {Name}";
 	}
 
 	public override void EFrameCollect()
 	{   
-		tradeWeight.Sum = GetNode<GlobalTech>("/root/Global/Tech").GetFreighterTons(resourcePool.shipWeight, distance);
+		tradeWeight.Sum = GetNode<PlayerTech>("/root/Global/Player/Tech").GetFreighterTons(poolSource.shipWeight, distance);
 	}
 
 	public void DrawLine(){
-		GetNode<Line2D>("Line2D").Points=new Vector2[]{body.Position, tradeReceiver.Position};
+		GetNode<Line2D>("Line2D").Points=new Vector2[]{poolSource.GetParent<Body>().Position, poolDestination.GetParent<Body>().Position};
 	}
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.

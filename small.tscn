@@ -1,0 +1,134 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://Map/Body.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Map/ResourceStatic.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Player/PlayerTradeReciever.cs" type="Script" id=3]
+[ext_resource path="res://Camera2D.cs" type="Script" id=4]
+[ext_resource path="res://Global.cs" type="Script" id=5]
+[ext_resource path="res://Map/Transformer.cs" type="Script" id=6]
+[ext_resource path="res://TimeControl.cs" type="Script" id=7]
+[ext_resource path="res://Player/PlayerTradeRoutes.cs" type="Script" id=8]
+[ext_resource path="res://Player/PlayerTech.cs" type="Script" id=9]
+[ext_resource path="res://Map/ResourcePool.tscn" type="PackedScene" id=10]
+
+[node name="Global" type="Node"]
+script = ExtResource( 5 )
+
+[node name="Map" type="Node" parent="."]
+
+[node name="System1" type="Node2D" parent="Map"]
+
+[node name="Sun" parent="Map/System1" instance=ExtResource( 1 )]
+position = Vector2( 467, 289 )
+radius = 20.0
+color = Color( 0.898039, 0.92549, 0, 1 )
+
+[node name="Earth" parent="Map/System1" instance=ExtResource( 1 )]
+position = Vector2( 206, 204 )
+color = Color( 0.415686, 0.219608, 0.219608, 1 )
+hasResourcePool = true
+
+[node name="ResourcePool" parent="Map/System1/Earth" instance=ExtResource( 10 )]
+
+[node name="Transformer" parent="Map/System1/Earth/ResourcePool" instance=ExtResource( 2 )]
+script = ExtResource( 6 )
+
+[node name="Transformer2" parent="Map/System1/Earth/ResourcePool" instance=ExtResource( 2 )]
+script = ExtResource( 6 )
+
+[node name="Camera2D" type="Camera2D" parent="Map/System1"]
+anchor_mode = 0
+script = ExtResource( 4 )
+
+[node name="Player" type="Node" parent="."]
+
+[node name="Trade" type="Node" parent="Player"]
+
+[node name="Receivers" type="Node" parent="Player/Trade"]
+script = ExtResource( 3 )
+
+[node name="Routes" type="Node" parent="Player/Trade"]
+script = ExtResource( 8 )
+
+[node name="Tech" type="Node" parent="Player"]
+script = ExtResource( 9 )
+
+[node name="UI" type="PanelContainer" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -364.0
+margin_bottom = 126.0
+grow_horizontal = 0
+
+[node name="TimeControl" type="VBoxContainer" parent="UI"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 357.0
+margin_bottom = 119.0
+grow_horizontal = 0
+script = ExtResource( 7 )
+
+[node name="Count" type="VBoxContainer" parent="UI/TimeControl"]
+margin_right = 350.0
+margin_bottom = 68.0
+rect_min_size = Vector2( 100, 20 )
+
+[node name="eframePeriod" type="Label" parent="UI/TimeControl/Count"]
+margin_right = 350.0
+margin_bottom = 14.0
+text = "safafaaaaaaaaaa"
+
+[node name="eframes" type="Label" parent="UI/TimeControl/Count"]
+margin_top = 18.0
+margin_right = 350.0
+margin_bottom = 32.0
+text = "safafaaaaaaaaaa"
+
+[node name="frames" type="Label" parent="UI/TimeControl/Count"]
+margin_top = 36.0
+margin_right = 350.0
+margin_bottom = 50.0
+text = "safffffff"
+
+[node name="walltime" type="Label" parent="UI/TimeControl/Count"]
+margin_top = 54.0
+margin_right = 350.0
+margin_bottom = 68.0
+text = "asfffffffffffffffffffffff"
+
+[node name="Control" type="HBoxContainer" parent="UI/TimeControl"]
+margin_top = 72.0
+margin_right = 350.0
+margin_bottom = 112.0
+
+[node name="Speed" type="Label" parent="UI/TimeControl/Control"]
+margin_top = 13.0
+margin_bottom = 27.0
+
+[node name="HSlider" type="HSlider" parent="UI/TimeControl/Control"]
+margin_left = 4.0
+margin_right = 204.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 200, 0 )
+min_value = 1.0
+max_value = 10.0
+value = 5.0
+tick_count = 10
+
+[node name="Pause" type="CheckButton" parent="UI/TimeControl/Control"]
+margin_left = 208.0
+margin_right = 326.0
+margin_bottom = 40.0
+text = "Pause"
+
+[node name="AdvanceOne" type="Button" parent="UI/TimeControl/Control"]
+margin_left = 330.0
+margin_right = 350.0
+margin_bottom = 40.0
+text = ">"
+
+[connection signal="value_changed" from="UI/TimeControl/Control/HSlider" to="." method="_time_slider_value_changed"]
+[connection signal="toggled" from="UI/TimeControl/Control/Pause" to="." method="PauseToggled"]
+
+[editable path="Map/System1/Sun"]
+[editable path="Map/System1/Earth"]

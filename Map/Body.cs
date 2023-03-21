@@ -20,12 +20,9 @@ public class Body : Node2D
 
 	public ResourcePool resourcePool;
 
-	public TradeReceiver tradeReceiver;
-
 	public UIBody uiBody;
 
 	static readonly PackedScene p_tradePanel = (PackedScene)GD.Load<PackedScene>("res://GUI/Panels/UITradePanel.tscn");
-	static readonly PackedScene p_tradeReceiver = (PackedScene)GD.Load<PackedScene>("res://Map/TradeReceiver.tscn");
 	static readonly PackedScene p_resourcePool = (PackedScene)GD.Load<PackedScene>("res://Map/ResourcePool.tscn");
 
 	static readonly PackedScene p_uiBody = (PackedScene)GD.Load<PackedScene>("res://GUI/UIBody.tscn");
@@ -36,12 +33,11 @@ public class Body : Node2D
 		AddChild(uiBody);
 		if (hasResourcePool || hasTradeReceiver){
 			AddResourcePool();
-			if (hasTradeReceiver){
-				AddTradeReceiver();
-			}
 			UITradePanel tp = p_tradePanel.Instance<UITradePanel>();
+
 			tp.Init(this);
 			uiBody.AddChild(tp);
+
 		}
 		GetNode("Area2D").Connect("mouse_entered", this, "Focus");
 		GetNode("Area2D").Connect("mouse_exited", this, "UnFocus");
@@ -53,6 +49,7 @@ public class Body : Node2D
 		if (Input.IsActionPressed("ui_select")){
 			if (focus){
 				uiBody.Visible = true;
+				uiBody.Raise();
 			}
 		}
 		//  && focus)
@@ -98,19 +95,22 @@ public class Body : Node2D
 		resourcePool = GetNodeOrNull<ResourcePool>("ResourcePool");
 		if (resourcePool==null){
 			resourcePool = p_resourcePool.Instance<ResourcePool>();
+			if (hasTradeReceiver){
+				resourcePool.isValidTradeReceiver=true;
+			}
 			AddChild(resourcePool);
 		}
 		return resourcePool;
 	}
 
-	public TradeReceiver AddTradeReceiver(){
-		tradeReceiver = GetNodeOrNull<TradeReceiver>("ResourcePool");
-		if (tradeReceiver==null){
-			tradeReceiver = p_tradeReceiver.Instance<TradeReceiver>();
-			tradeReceiver.Init(resourcePool);
-			AddChild(tradeReceiver);
-		}
-		return tradeReceiver;
-	}
+	// public TradeReceiver AddTradeReceiver(){
+	// 	tradeReceiver = GetNodeOrNull<TradeReceiver>("ResourcePool");
+	// 	if (tradeReceiver==null){
+	// 		tradeReceiver = p_tradeReceiver.Instance<TradeReceiver>();
+	// 		tradeReceiver.Init(resourcePool);
+	// 		AddChild(tradeReceiver);
+	// 	}
+	// 	return tradeReceiver;
+	// }
 
 }
