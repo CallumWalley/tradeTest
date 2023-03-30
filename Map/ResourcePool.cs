@@ -5,24 +5,26 @@ using System.Collections.Generic;
 public class ResourcePool : EcoNode
 {  
 
-	public ResourceAgr freightersRequired;
-	public ResourceStatic freightersTotal;
-	public ResourcePool resourcePool;
+	// public ResourceAgr freightersRequired;
+	// public ResourceStatic freightersTotal;
+	// public ResourcePool resourcePool;
 
-	public float freighterCapacity = 14;
+	// public float freighterCapacity = 14;
 	public string name = "Trade Station";
-	static readonly PackedScene ps_tradeRoute = (PackedScene)GD.Load<PackedScene>("res://Map/TradeRoute.tscn");
+	// static readonly PackedScene ps_tradeRoute = (PackedScene)GD.Load<PackedScene>("res://Map/TradeRoute.tscn");
 
 	[Export]
 	public bool isValidTradeReceiver = false;
 
-	public List<ResourceAgr> members = new List<ResourceAgr>();
+	public List<string> tags;
 
-	// Downline + upline Traderoutes
+	public List<Resource> members = new List<Resource>();
+
+	// Downline traderoutes
 	public TransformerTrade transformerTrade;
 
-	// Upline trade route
-	public TradeRoute tradeRoute;
+	// Upline traderoute
+	public TradeRoute uplineTraderoute;
 
 	public Vector2 Position{get{return GetParent<Body>().Position;}}
 
@@ -38,18 +40,17 @@ public class ResourcePool : EcoNode
 			GetNode<PlayerTradeReciever>("/root/Global/Player/Trade/Receivers").RegisterResourcePool(this);
 		}
 	}
-
 	public void RegisterTransformer(Transformer tr){
 		AddChild(tr);
 	}
 	public void DeregisterTransformer(Transformer tr){
 		RemoveChild(tr);
 	}
-	public TransformerTrade GetTransformerTrade(){
-		if (transformerTrade == null){
-			transformerTrade = new TransformerTrade();
+	public IEnumerable<TransformerTrade> GetTradeRoutes(){
+		foreach (Transformer t in GetChildren())
+		if (t is TransformerTrade){
+			yield return  transformerTrade;
 		}
-		return transformerTrade;
 	}
 
 	public ResourceAgr GetType(int code){
@@ -96,8 +97,7 @@ public class ResourcePool : EcoNode
 		return GetRange(1, 100);
 	}
 	public override void EFrameCollect(){
-		shipWeight=GetShipWeight();
-		members = new List<ResourceAgr>();
+		members.Clear();
 		foreach (Transformer transformer in GetChildren()){
 			foreach (Resource r in transformer.Upkeep()){
 				AddResource(r);
@@ -110,19 +110,6 @@ public class ResourcePool : EcoNode
 			}		
 		}
 		// GD.Print($"{Name} has {members.Count} members");
-	}
-
-	public float GetShipWeight(){
-		float shipWeightImport = 0;
-		float shipWeightExport = 0;
-		foreach (Resource child in GetStandard()){
-			if (child.Sum > 0){
-				shipWeightExport += child.Sum * Resources.ShipWeight(child.Type);
-			} else {
-				shipWeightImport += child.Sum * Resources.ShipWeight(child.Type);
-			}
-		}
-		return Math.Max(shipWeightExport, shipWeightImport);
 	}
 
 	private void AddResource(Resource _resource){

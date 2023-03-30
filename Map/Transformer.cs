@@ -1,38 +1,46 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public class Transformer : EcoNode
 { 
     public Resource output;
 
     // [Export]
-    Resource upkeep;
+    List<Resource> upkeep;
 
     // [Export]
-    Resource operationCost;
+    List<Resource> operationCost;
     
     // [Export]
-    Resource production;
+    List<Resource> production;
 
     public bool isTradeReceiver;
 
     public override void _Ready()
     {
         base._Ready();
-        upkeep = new ResourceStatic(2, -1);
-        operationCost = new ResourceStatic(1, -2);
-        production = new ResourceStatic(4, 2);
+        upkeep = new List<Resource>{new ResourceStatic(2, -1)};
+        operationCost = new List<Resource>{new ResourceStatic(1, -2)};
+        production = new List<Resource>{new ResourceStatic(4, 2)};
     }
 
-    public Resource[] Upkeep(){
-        return new Resource[]{ upkeep };
+    public IEnumerable<Resource> Upkeep(){
+        return upkeep;
     }
 
-    public Resource[] OperationCost(){
-        return new Resource[]{ operationCost };
+    public IEnumerable<Resource> OperationCost(){
+        return operationCost;
     }
 
-    public virtual Resource[] Production(){
-        return new Resource[]{ production };
+    public virtual IEnumerable<Resource> Production(){
+        return  production;
     }
+
+    
+
+    // scaling formula 
+    // z = bonus
+    // x = number
+    // 2z - (2z/x)
 }

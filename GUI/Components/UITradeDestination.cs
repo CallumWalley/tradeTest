@@ -7,7 +7,7 @@ public class UITradeDestination : Control
 {   
 	public PlayerTradeReciever globalTrade;
 	static readonly Texture freighterIcon = GD.Load<Texture>("res://assets/icons/freighter.png");
-	static readonly PackedScene resourceIcon = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/UIResource.tscn");
+	static readonly PackedScene resourceIcon = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/UIResource.tscn");
 
 	ResourcePool resourcePool;
 
@@ -46,7 +46,7 @@ public class UITradeDestination : Control
 		if (resourcePool == null){return;}
 		tradeDestSelectorButton.Clear();
 		// Todo better structure to avoid this check.
-		tradeDestSelectorButton.AddIconItem(freighterIcon, "[ 0 / 0 ] - No Route Assigned", 0);
+		tradeDestSelectorButton.AddIconItem(freighterIcon, " 0 - No Route Assigned", 0);
 		int indexId = 1; //Start at 1 to allow for 'none' in []
 		indexOfExisting = 0;
 		
@@ -57,10 +57,15 @@ public class UITradeDestination : Control
 			// Self not valid source
 			float dist = body.Position.DistanceTo(rp.Position);
 			float freighterKTons = GetNode<PlayerTech>("/root/Global/Player/Tech").GetFreighterTons(resourcePool.shipWeight, dist);
-			tradeDestSelectorButton.AddIconItem(freighterIcon, String.Format("[ {0:F1}  / {1:F1} ] - {2}",freighterKTons, resourcePool.GetType(901).Sum, rp.name), indexId);		
+			tradeDestSelectorButton.AddIconItem(freighterIcon, String.Format(" {0:F1} - {1}",freighterKTons, rp.GetParent<Body>().Name), indexId);		
 			// set index of existing route (if any)
-			if (resourcePool.tradeRoute != null && resourcePool.tradeRoute.poolDestination == rp){
+			if (resourcePool.uplineTraderoute != null && resourcePool.uplineTraderoute.poolSource == rp){
+				// If trade route was disestablished elsewhere.
+				// if (! resourcePool.uplineTraderoute.poolSource.IsAParentOf(resourcePool.uplineTraderoute.transformerSource)){
+				// 	indexOfExisting = 0;
+				// }else{
 				indexOfExisting = indexId;
+				// }
 				tradeDestSelectorButton.Selected = indexOfExisting;
 			}
 			indexId ++;
@@ -73,13 +78,12 @@ public class UITradeDestination : Control
 		if (value != indexOfExisting){
 			// If existing non-null, remove it.
 			if (indexOfExisting != 0){
-				GetNode<PlayerTradeRoutes>("/root/Global/Player/Trade/Routes").DeregisterTradeRoute(resourcePool.tradeRoute);
-				resourcePool.tradeRoute = null;
+				GetNode<PlayerTradeRoutes>("/root/Global/Player/Trade/Routes").DeregisterTradeRoute(resourcePool.uplineTraderoute);
+				resourcePool.uplineTraderoute = null;
 			}
 			// If selection non-null, create new trade route.
 			if ( value != 0 ){
-				ResourcePool selected = GetNode<PlayerTradeReciever>("/root/Global/Player/Trade/Receivers").GetTradeDestination(value - 1);
-				GetNode<PlayerTradeRoutes>("/root/Global/Player/Trade/Routes").RegisterTradeRoute(resourcePool, selected);
+				GetNode<PlayerTradeRoutes>("/root/Global/Player/Trade/Routes").RegisterTradeRoute(resourcePool, validDestinations[value - 1]);
 			}
 		}
 		tradeDestSelectorButton.Selected = indexOfExisting;

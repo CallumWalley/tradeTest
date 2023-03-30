@@ -2,13 +2,21 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class TradeRoute : ResourcePool
+public class TradeRoute : EcoNode
 {
 	[Export]
-	public ResourcePool poolSource;
 	public ResourcePool poolDestination;
+	public ResourcePool poolSource;
 	public TransformerTrade transformerSource;
 	public TransformerTrade transformerDestintation;
+	public List<Resource> BalanceSource{get; private set;} = new List<Resource>();
+	public List<Resource> BalanceDestination{get{
+		return new List<Resource>( InvertBalance());
+	}}
+
+	public Body Body{get{return GetParent<Body>();}}
+	public int Index{get{return GetIndex();}}
+
 
 	// Tradeweight in KTonnes
 	//public Resource importTradeWeight;
@@ -22,35 +30,59 @@ public class TradeRoute : ResourcePool
 		DrawLine();
 	}
 	// Called from TradeReciver
-	public void Init(ResourcePool _poolSource, ResourcePool _poolDestination){
+	public void Init(ResourcePool _poolDestination, ResourcePool _poolSource){
 
+		poolDestination = _poolDestination;
 		poolSource = _poolSource;
-		poolDestination=_poolDestination;
 
-		transformerSource = poolSource.GetTransformerTrade();
-		transformerDestintation = poolSource.GetTransformerTrade();
+		TransformerTrade transformerDestintation = new TransformerTrade();
+		TransformerTrade transformerSource = new TransformerTrade();
 
-		transformerSource.tradeRoutes.Add(this);
-		transformerDestintation.tradeRoutes.Add(this);
-		poolSource.tradeRoute = this;
+		transformerSource.Init(this, true);
+		transformerDestintation.Init(this);
 
-		distance = poolSource.GetParent<Body>().Position.DistanceTo(poolDestination.GetParent<Body>().Position);
+		poolSource.RegisterTransformer(transformerDestintation);
+		poolDestination.RegisterTransformer(transformerSource);
+		poolDestination.uplineTraderoute = this;
+
+		distance = poolDestination.GetParent<Body>().Position.DistanceTo(poolSource.GetParent<Body>().Position);
+		MatchDemand();
 		tradeWeight = new ResourceStatic(901, 0);
 		//tradeWeight.Name = $"Trade route from {Name}";
 	}
 
-	public override void EFrameCollect()
-	{   
-		tradeWeight.Sum = GetNode<PlayerTech>("/root/Global/Player/Tech").GetFreighterTons(poolSource.shipWeight, distance);
-	}
+	// public override void EFrameCollect()
+	// {   
+	// 	tradeWeight.Sum = GetNode<PlayerTech>("/root/Global/Player/Tech").GetFreighterTons(poolDestination.shipWeight, distance);
+	// }
 
 	public void DrawLine(){
-		GetNode<Line2D>("Line2D").Points=new Vector2[]{poolSource.GetParent<Body>().Position, poolDestination.GetParent<Body>().Position};
+		GetNode<Line2D>("Line2D").Points=new Vector2[]{poolDestination.GetParent<Body>().Position, poolSource.GetParent<Body>().Position};
+	}
+	public float GetShipWeight(){
+		float shipWeightImport = 0;
+		float shipWeightExport = 0;
+		foreach (Resource child in BalanceSource){
+			if (child.Sum > 0){
+				shipWeightExport += child.Sum * Resources.ShipWeight(child.Type);
+			} else {
+				shipWeightImport += child.Sum * Resources.ShipWeight(child.Type);
+			}
+		}
+		return Math.Max(shipWeightExport, shipWeightImport);
 	}
 
-//  // Called every frame. 'delta' is the elapsed time since the previous frame.
-//  public override void _Process(float delta)
-//  {
-//      
-//  }
+	IEnumerable<Resource> InvertBalance(){
+
+		foreach (Resource r in BalanceSource){
+			yield return new ResourceStatic(r.Type, -r.Sum);
+		}
+	}
+
+	public void MatchDemand(){
+		BalanceSource.Clear();
+		foreach (Resource r in poolDestination.GetStandard()){
+			BalanceSource.Add(new ResourceStatic(r.Type, r.Sum));
+		} 
+	}
 }

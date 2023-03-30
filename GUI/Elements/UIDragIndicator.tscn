@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://assets/icons/drag_indicator.svg" type="Texture" id=1]
+
+[node name="Reorder" type="TextureButton"]
+texture_normal = ExtResource( 1 )
+stretch_mode = 3

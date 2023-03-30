@@ -3,7 +3,6 @@ using System;
 
 public class UIResource : Control
 {
-	[Export]
 	public Resource resource;
 	[Export]
 
@@ -11,7 +10,7 @@ public class UIResource : Control
 	[Export]
 
 	public bool showDetails = false;
-	static readonly PackedScene resourceIcon = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/UIResource.tscn");
+	static readonly PackedScene resourceIcon = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/UIResource.tscn");
 	static readonly PackedScene p_infoCard = (PackedScene)GD.Load<PackedScene>("res://GUI/UIInfoCard.tscn");
 
    	UIInfoCard details;

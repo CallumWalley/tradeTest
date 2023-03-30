@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public class Body : Node2D
 {
@@ -9,36 +10,84 @@ public class Body : Node2D
 	public float radius = 10;
 	[Export]
 	public Color color = new Color(1, 0, 0);
-
-	[Export]
-	public bool hasResourcePool = false;
-	
-	[Export]
-	public bool hasTradeReceiver = false;
-	
-	[Export]
-
 	public ResourcePool resourcePool;
 
 	public UIBody uiBody;
 
 	static readonly PackedScene p_tradePanel = (PackedScene)GD.Load<PackedScene>("res://GUI/Panels/UITradePanel.tscn");
-	static readonly PackedScene p_resourcePool = (PackedScene)GD.Load<PackedScene>("res://Map/ResourcePool.tscn");
+	static readonly PackedScene p_astroPanel = (PackedScene)GD.Load<PackedScene>("res://GUI/Panels/UIAstroPanel.tscn");
+	static readonly PackedScene p_industryPanel = (PackedScene)GD.Load<PackedScene>("res://GUI/Panels/UIIndustryPanel.tscn");
 
+	//static readonly PackedScene p_resourcePool = (PackedScene)GD.Load<PackedScene>("res://Map/ResourcePool.tscn");
 	static readonly PackedScene p_uiBody = (PackedScene)GD.Load<PackedScene>("res://GUI/UIBody.tscn");
 
 	bool focus = false;
+
+	public class Designations{
+		string name;
+		List<String> altNames;
+		string adjective;
+	}
+
+	public class Orbital{
+		float aphelion;
+		float perihelion;
+		float semiMajorAxis;
+		float eccentricity;
+		float period;
+		float inclination;
+	}
+
+
+	// Satellites:
+	public class Physical{
+		float circumference;
+		Dictionary<string, float> surfaceArea;
+		float mass;
+		float meanDensity;
+		float escapeVelocity;
+		float rotationPeriod;
+		float axialTilt;
+		float albedo;
+		float[] surfaceTemp;
+	}
+
+	public class Atmosphere{
+		float surfacePressure;
+		Dictionary<string, float> composition;
+	}
 	public override void _Ready(){
+
+		/// INSTALLATIONS
+		// Add resource pool if exists
+		resourcePool = GetNodeOrNull<ResourcePool>("ResourcePool");
+
+		/// UI
+
+		// Main UI element.
 		uiBody = p_uiBody.Instance<UIBody>();
+		uiBody.Init(this);
 		AddChild(uiBody);
-		if (hasResourcePool || hasTradeReceiver){
-			AddResourcePool();
+
+		// Add trade panel
+		if (resourcePool!=null){
 			UITradePanel tp = p_tradePanel.Instance<UITradePanel>();
+			UIIndustryPanel ip = p_industryPanel.Instance<UIIndustryPanel>();
 
 			tp.Init(this);
+			ip.Init(this);
+
 			uiBody.AddChild(tp);
+			uiBody.AddChild(ip);
 
 		}
+
+		// Add astronomical info
+		UIAstroPanel ap = p_astroPanel.Instance<UIAstroPanel>();
+		ap.Init(this);
+		uiBody.AddChild(ap);
+
+		// Add interactive 
 		GetNode("Area2D").Connect("mouse_entered", this, "Focus");
 		GetNode("Area2D").Connect("mouse_exited", this, "UnFocus");
 
@@ -57,7 +106,6 @@ public class Body : Node2D
 		// 	uiBody.Visible = true;
 		// }
 	}
-	
 	
 	public void Focus(){
 		focus = true;
@@ -91,17 +139,17 @@ public class Body : Node2D
 
 	}
 
-	public ResourcePool AddResourcePool(){
-		resourcePool = GetNodeOrNull<ResourcePool>("ResourcePool");
-		if (resourcePool==null){
-			resourcePool = p_resourcePool.Instance<ResourcePool>();
-			if (hasTradeReceiver){
-				resourcePool.isValidTradeReceiver=true;
-			}
-			AddChild(resourcePool);
-		}
-		return resourcePool;
-	}
+	// public ResourcePool AddResourcePool(){
+	// 	resourcePool = GetNodeOrNull<ResourcePool>("ResourcePool");
+	// 	if (resourcePool==null){
+	// 		resourcePool = p_resourcePool.Instance<ResourcePool>();
+	// 		AddChild(resourcePool);
+	// 	}
+	// 	if (hasTradeReceiver){
+	// 		resourcePool.isValidTradeReceiver=true;
+	// 	}
+	// 	return resourcePool;
+	// }
 
 	// public TradeReceiver AddTradeReceiver(){
 	// 	tradeReceiver = GetNodeOrNull<TradeReceiver>("ResourcePool");

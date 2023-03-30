@@ -3,7 +3,6 @@ using System;
 
 public class PlayerTradeReciever : Node
 {
-	[Export]
 	public Godot.Collections.Array<ResourcePool> _index;
 
 	public PlayerTradeReciever()
@@ -15,6 +14,7 @@ public class PlayerTradeReciever : Node
 		_index.Add(tr);
 	}
 	public ResourcePool GetTradeDestination(int i){
+		GD.Print(_index[i].GetParent<Body>().Name);
 		return _index[i];
 	}
 	public Godot.Collections.Array<ResourcePool> List(){

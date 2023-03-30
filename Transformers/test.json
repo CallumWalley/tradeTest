@@ -1,0 +1,40 @@
+[
+    {
+        "name": "Freighter Dockyard",
+        "slug": "f_dockyard",
+        "upkeep":{},
+        "prodCost":{"1":-1},
+        "production": {"901": 12},
+        "class": "trade",
+        "subclass":"freighter",
+        "tags":[],
+        "description": "Freighter Dockyard",
+        "image":"",
+        "defaultPrioroty":0,
+        "requirements":{
+            "player":[],
+            "installation":["orbital"]
+        },
+        "contructionCost":{},
+        "maxConstructionRate":1
+    },
+    {
+        "name": "Surface Mine - Traditional",
+        "slug": "mine_surf_old",
+        "upkeep":{},
+        "prodCost":{"1":-1},
+        "production": {"2": 2},
+        "class": "mining",
+        "subclass":"surface",
+        "tags":[],
+        "description": "Surface Mining using hand tools.",
+        "image":"",
+        "defaultPrioroty":0,
+        "requirements":{
+            "player":[],
+            "installation":["surface", "atmosphere"]
+        },
+        "contructionCost":{},
+        "maxConstructionRate":1
+    }
+]

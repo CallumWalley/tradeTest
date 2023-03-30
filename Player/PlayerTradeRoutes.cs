@@ -4,14 +4,17 @@ using System;
 public class PlayerTradeRoutes : Node
 {
     static readonly PackedScene ps_TradeRoute = (PackedScene)GD.Load<PackedScene>("res://Map/TradeRoute.tscn");
-	public void RegisterTradeRoute(ResourcePool _poolSource, ResourcePool _poolDestination){
+	public void RegisterTradeRoute(ResourcePool poolDestination, ResourcePool poolSource){
 		TradeRoute newTradeRoute = ps_TradeRoute.Instance<TradeRoute>();
-		newTradeRoute.Init(_poolSource, _poolDestination);
+		newTradeRoute.Init(poolDestination, poolSource);
 		AddChild(newTradeRoute);
 	}
 	public void DeregisterTradeRoute(TradeRoute tr){
-		tr.poolDestination.RemoveChild(tr.transformerDestintation);
 		tr.poolSource.RemoveChild(tr.transformerSource);
+		tr.poolDestination.RemoveChild(tr.transformerDestintation);
+		
+		tr.poolDestination.uplineTraderoute = null;
+
 
 		RemoveChild(tr);
 		tr.QueueFree();

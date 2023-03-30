@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Map/Body.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Player/PlayerTradeRoutes.cs" type="Script" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://Global.cs" type="Script" id=5]
 [ext_resource path="res://Map/Transformer.tscn" type="PackedScene" id=6]
 [ext_resource path="res://TimeControl.cs" type="Script" id=7]
+[ext_resource path="res://TransformerList.cs" type="Script" id=8]
 [ext_resource path="res://Player/PlayerTech.cs" type="Script" id=9]
 [ext_resource path="res://Map/ResourcePool.tscn" type="PackedScene" id=10]
 
@@ -96,52 +97,47 @@ position = Vector2( 503, 272 )
 radius = 20.0
 color = Color( 0.898039, 0.92549, 0, 1 )
 
-[node name="Earth" parent="Systems/System1" instance=ExtResource( 1 )]
-position = Vector2( 179, 181 )
+[node name="Mars" parent="Systems/System1" instance=ExtResource( 1 )]
+position = Vector2( 621, 391 )
+radius = 8.0
 color = Color( 0.415686, 0.219608, 0.219608, 1 )
-hasResourcePool = true
+
+[node name="ResourcePool" parent="Systems/System1/Mars" instance=ExtResource( 10 )]
+
+[node name="Saturn" parent="Systems/System1" instance=ExtResource( 1 )]
+position = Vector2( 656, 199 )
+nPoints = 16
+radius = 15.0
+color = Color( 0.596078, 0.596078, 0.372549, 1 )
+
+[node name="ResourcePool" parent="Systems/System1/Saturn" instance=ExtResource( 10 )]
+isValidTradeReceiver = true
+
+[node name="Transformer" parent="Systems/System1/Saturn/ResourcePool" instance=ExtResource( 6 )]
+
+[node name="Earth" parent="Systems/System1" instance=ExtResource( 1 )]
+position = Vector2( 148, 157 )
+nPoints = 16
+color = Color( 0.278431, 0.364706, 0.913725, 1 )
 
 [node name="ResourcePool" parent="Systems/System1/Earth" instance=ExtResource( 10 )]
 isValidTradeReceiver = true
 
-[node name="Transformer" parent="Systems/System1/Earth/ResourcePool" instance=ExtResource( 6 )]
-
-[node name="Mars" parent="Systems/System1" instance=ExtResource( 1 )]
-position = Vector2( 621, 391 )
-color = Color( 0.415686, 0.219608, 0.219608, 1 )
-hasResourcePool = true
-
-[node name="ResourcePool" parent="Systems/System1/Mars" instance=ExtResource( 10 )]
-
-[node name="Station2" parent="Systems/System1" instance=ExtResource( 1 )]
+[node name="Jupyter" parent="Systems/System1" instance=ExtResource( 1 )]
 position = Vector2( 218, 420 )
 nPoints = 16
-radius = 5.0
-color = Color( 0.184314, 0.227451, 0.678431, 1 )
-hasTradeReceiver = true
+radius = 20.0
+color = Color( 0.678431, 0.380392, 0.184314, 1 )
 
-[node name="ResourcePool" parent="Systems/System1/Station2" instance=ExtResource( 10 )]
+[node name="ResourcePool" parent="Systems/System1/Jupyter" instance=ExtResource( 10 )]
 
-[node name="Station1" parent="Systems/System1" instance=ExtResource( 1 )]
-position = Vector2( 656, 199 )
-nPoints = 16
-radius = 5.0
-color = Color( 0.184314, 0.227451, 0.678431, 1 )
-hasTradeReceiver = true
-
-[node name="ResourcePool" parent="Systems/System1/Station1" instance=ExtResource( 10 )]
-isValidTradeReceiver = true
-
-[node name="Transformer" parent="Systems/System1/Station1/ResourcePool" instance=ExtResource( 6 )]
-
-[node name="Station3" parent="Systems/System1" instance=ExtResource( 1 )]
+[node name="Moon" parent="Systems/System1" instance=ExtResource( 1 )]
 position = Vector2( 331, 161 )
 nPoints = 16
-radius = 5.0
-color = Color( 0.184314, 0.227451, 0.678431, 1 )
-hasTradeReceiver = true
+radius = 3.0
+color = Color( 0.513726, 0.513726, 0.513726, 1 )
 
-[node name="ResourcePool" parent="Systems/System1/Station3" instance=ExtResource( 10 )]
+[node name="ResourcePool" parent="Systems/System1/Moon" instance=ExtResource( 10 )]
 
 [node name="Camera2D" type="Camera2D" parent="Systems/System1"]
 anchor_mode = 0
@@ -161,12 +157,15 @@ script = ExtResource( 3 )
 [node name="Tech" type="Node" parent="Player"]
 script = ExtResource( 9 )
 
+[node name="TransformerList" type="Node" parent="."]
+script = ExtResource( 8 )
+
 [connection signal="value_changed" from="UI/TimeControl/Control/HSlider" to="." method="_time_slider_value_changed"]
 [connection signal="toggled" from="UI/TimeControl/Control/Pause" to="." method="PauseToggled"]
 
 [editable path="Systems/System1/Sun"]
-[editable path="Systems/System1/Earth"]
 [editable path="Systems/System1/Mars"]
-[editable path="Systems/System1/Station2"]
-[editable path="Systems/System1/Station1"]
-[editable path="Systems/System1/Station3"]
+[editable path="Systems/System1/Saturn"]
+[editable path="Systems/System1/Earth"]
+[editable path="Systems/System1/Jupyter"]
+[editable path="Systems/System1/Moon"]

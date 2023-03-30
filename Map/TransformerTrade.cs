@@ -4,7 +4,9 @@ using System.Collections.Generic;
 
 public class TransformerTrade : Transformer
 { 
-    public List<TradeRoute> tradeRoutes = new List<TradeRoute>();
+    public TradeRoute tradeRoute;
+
+    public bool isSource;
 
     // [Export]
     Resource upkeep;
@@ -19,31 +21,20 @@ public class TransformerTrade : Transformer
 
     public override void _Ready()
     {
-        base._Ready();
-
+        base._Ready();  
     }
 
-    public void Init(){
-
+    public void Init(TradeRoute _tradeRoute, bool _isSource=false){
+        tradeRoute=_tradeRoute;
+        isSource = _isSource;
     }
 
-    public new Resource[] OperationCost(){
-        List<Resource> oc = new List<Resource>();
-        foreach (TradeRoute tr in tradeRoutes){
-            foreach (Resource r in tr.GetExpenses()){
-                oc.Add(r);
-            }
+    public new IEnumerable<Resource> Production(){
+        if (isSource){
+            return tradeRoute.BalanceSource;
+        }else{
+            GD.Print("inverted");
+            return tradeRoute.BalanceDestination;
         }
-        return oc.ToArray();
-    }
-
-    public new Resource[] Production(){
-        List<Resource> oc = new List<Resource>();
-        foreach (TradeRoute tr in tradeRoutes){
-            foreach (Resource r in tr.GetIncome()){
-                oc.Add(r);
-            }
-        }
-        return oc.ToArray();
     }
 }

@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public class UITradePanel : Control
 {
@@ -7,32 +8,32 @@ public class UITradePanel : Control
 	// private int a = 2;
 	// private string b = "text";
 	Body body;
-	UITradeReceiver uiTradeReceiver;
-	UIResourcePool uiResourcePool;
+	UITransformerList UITransformerList;
+	UIResourceList UIResourceList;
 	UITradeDestination uiTradeDestination;
 
-	static readonly PackedScene p_uiTradeReceiver = GD.Load<PackedScene>("res://GUI/Components/UITradeReceiver.tscn");
-	static readonly PackedScene p_uiResourcePool = GD.Load<PackedScene>("res://GUI/Components/UIResourcePool.tscn");
+	static readonly PackedScene p_UITransformerList = GD.Load<PackedScene>("res://GUI/Components/UITransformerList.tscn");
+	static readonly PackedScene p_UIResourceList = GD.Load<PackedScene>("res://GUI/Components/UIResourceList.tscn");
 	static readonly PackedScene p_uiTradeDestination = GD.Load<PackedScene>("res://GUI/Components/UITradeDestination.tscn");
 
 	public void Init(Body _body){
 			// Create trade receiver component.
 			body = _body;
 
-			uiResourcePool = p_uiResourcePool.Instance<UIResourcePool>();
-			uiResourcePool.Init(body.resourcePool);
-			AddChild(uiResourcePool);
+			UIResourceList = p_UIResourceList.Instance<UIResourceList>();
+			UIResourceList.Init(body.resourcePool.members);
+			AddChild(UIResourceList);
 			
 			uiTradeDestination = p_uiTradeDestination.Instance<UITradeDestination>();
 			uiTradeDestination.Init(body, body.resourcePool);
 			AddChild(uiTradeDestination);
 
-			uiTradeReceiver = p_uiTradeReceiver.Instance<UITradeReceiver>();
-			uiTradeReceiver.Init(body.resourcePool);
+			UITransformerList = p_UITransformerList.Instance<UITransformerList>();
+			UITransformerList.Init(body.resourcePool);
 
-			AddChild(uiTradeReceiver);
+			AddChild(UITransformerList);
 			if (body.resourcePool.isValidTradeReceiver){
-				uiTradeReceiver.Visible=true;
+				UITransformerList.Visible=true;
 			}
 	}
 

@@ -1,0 +1,94 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://GUI/Elements/UIOrderedItem.tscn" type="PackedScene" id=1]
+
+[node name="VBoxContainer" type="VBoxContainer"]
+self_modulate = Color( 0.419608, 0.419608, 0.419608, 1 )
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 405.0
+margin_bottom = 405.0
+rect_min_size = Vector2( 400, 400 )
+
+[node name="DragZone" type="MarginContainer" parent="."]
+margin_right = 400.0
+margin_bottom = 132.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DragZone"]
+margin_right = 400.0
+margin_bottom = 132.0
+
+[node name="DragableItem" parent="DragZone/VBoxContainer" instance=ExtResource( 1 )]
+margin_right = 400.0
+
+[node name="DragableItem2" parent="DragZone/VBoxContainer" instance=ExtResource( 1 )]
+margin_top = 34.0
+margin_right = 400.0
+margin_bottom = 64.0
+
+[node name="DragableItem3" parent="DragZone/VBoxContainer" instance=ExtResource( 1 )]
+margin_top = 68.0
+margin_right = 400.0
+margin_bottom = 98.0
+
+[node name="DragableItem4" parent="DragZone/VBoxContainer" instance=ExtResource( 1 )]
+margin_top = 102.0
+margin_right = 400.0
+margin_bottom = 132.0
+
+[node name="DragZone2" type="MarginContainer" parent="."]
+visible = false
+modulate = Color( 0.956863, 1, 0.717647, 1 )
+margin_top = 136.0
+margin_right = 400.0
+margin_bottom = 268.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DragZone2"]
+margin_right = 400.0
+margin_bottom = 132.0
+
+[node name="DragableItem" parent="DragZone2/VBoxContainer" instance=ExtResource( 1 )]
+margin_right = 400.0
+
+[node name="DragableItem2" parent="DragZone2/VBoxContainer" instance=ExtResource( 1 )]
+margin_top = 34.0
+margin_right = 400.0
+margin_bottom = 64.0
+
+[node name="DragableItem3" parent="DragZone2/VBoxContainer" instance=ExtResource( 1 )]
+margin_top = 68.0
+margin_right = 400.0
+margin_bottom = 98.0
+
+[node name="DragableItem4" parent="DragZone2/VBoxContainer" instance=ExtResource( 1 )]
+margin_top = 102.0
+margin_right = 400.0
+margin_bottom = 132.0
+
+[node name="DragZone3" type="MarginContainer" parent="."]
+visible = false
+margin_top = 272.0
+margin_right = 400.0
+margin_bottom = 404.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DragZone3"]
+margin_right = 400.0
+margin_bottom = 132.0
+
+[node name="DragableItem" parent="DragZone3/VBoxContainer" instance=ExtResource( 1 )]
+margin_right = 400.0
+
+[node name="DragableItem2" parent="DragZone3/VBoxContainer" instance=ExtResource( 1 )]
+margin_top = 34.0
+margin_right = 400.0
+margin_bottom = 64.0
+
+[node name="DragableItem3" parent="DragZone3/VBoxContainer" instance=ExtResource( 1 )]
+margin_top = 68.0
+margin_right = 400.0
+margin_bottom = 98.0
+
+[node name="DragableItem4" parent="DragZone3/VBoxContainer" instance=ExtResource( 1 )]
+margin_top = 102.0
+margin_right = 400.0
+margin_bottom = 132.0
