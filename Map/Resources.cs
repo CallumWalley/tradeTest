@@ -15,7 +15,7 @@ public class Resources{
 	}
 
 	public static Dictionary<int, Resource> _index = new Dictionary<int, Resource>(){
-			{0, new Resource("Uset", GD.Load<Texture>("res://assets/icons/resources/unity_grey.dds"), 1f)},
+			{0, new Resource("Unset", GD.Load<Texture>("res://assets/icons/resources/unity_grey.dds"), 1f)},
 			{1, new Resource("Minerals", GD.Load<Texture>("res://assets/icons/resources/minerals.dds"), 1f)},
 			{2, new Resource("Fuel", GD.Load<Texture>("res://assets/icons/resources/energy.dds"), 0.5f)},
 			{3, new Resource("Food", GD.Load<Texture>("res://assets/icons/resources/food.dds"), 0.5f)},

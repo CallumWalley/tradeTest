@@ -6,14 +6,10 @@ public class UITransformerList : Control
 {
 
 	VBoxContainer list;
-	UIResource freightersTotal;
-	UIResource freightersRequired;
-
-	List<TradeRoute> lastDraw;
-
 	ResourcePool resourcePool;
 	static readonly Texture freighterIcon = GD.Load<Texture>("res://assets/icons/freighter.png");
-	static readonly PackedScene tradeRoute = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/UITradeRoute.tscn");
+	//static readonly PackedScene tradeRoute = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/UITradeRoute.tscn");
+	static readonly PackedScene p_uitransformer = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/UITransformer.tscn");
 
 	public void Init(ResourcePool _resourcePool){
 		resourcePool = _resourcePool;
@@ -48,8 +44,8 @@ public class UITransformerList : Control
 
 		// Go over all trade routes in pool, and either update or create. 
 		int index = 0;
-		foreach (TransformerTrade tr in resourcePool.GetTradeRoutes()){
-			UpdateTradeRoute((TransformerTrade)tr,index);
+		foreach (Transformer tr in resourcePool.GetChildren()){
+			UpdateTradeRoute((Transformer)tr,index);
 			index++;
 		}
 		// Any remaining elements greater than index must no longer exist.
@@ -68,17 +64,17 @@ public class UITransformerList : Control
 		}
 	} 
 
-	void UpdateTradeRoute(TransformerTrade tr, int index){
+	void UpdateTradeRoute(Transformer tr, int index){
 		//Check element with this trade route doesn't already exist.
-		foreach (UITradeRoute uit in list.GetChildren()){
-			if (uit.tradeRoute == tr.tradeRoute){
+		foreach (UITransformer uit in list.GetChildren()){
+			if (uit.transformer == tr){
 				list.MoveChild(uit, index);
 				return;
 			}
 		}
 		// If doesn't exist, add it and insert at postition.
-		UITradeRoute ui = (UITradeRoute)tradeRoute.Instance();
-		ui.Init(tr.tradeRoute);
+		UITransformer ui = (UITransformer)p_uitransformer.Instance();
+		ui.Init(tr);
 		list.AddChild(ui);
 		list.MoveChild(ui, index);
 	}

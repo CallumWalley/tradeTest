@@ -3,9 +3,9 @@
         "name": "Freighter Dockyard",
         "slug": "f_dockyard",
         "upkeep":{},
-        "prodCost":{"1":-1},
+        "operation":{"2":-1},
         "production": {"901": 12},
-        "class": "trade",
+        "superclass": "trade",
         "subclass":"freighter",
         "tags":[],
         "description": "Freighter Dockyard",
@@ -22,9 +22,9 @@
         "name": "Surface Mine - Traditional",
         "slug": "mine_surf_old",
         "upkeep":{},
-        "prodCost":{"1":-1},
-        "production": {"2": 2},
-        "class": "mining",
+        "operation":{"2":-1},
+        "production": {"1": 2},
+        "superclass": "mining",
         "subclass":"surface",
         "tags":[],
         "description": "Surface Mining using hand tools.",
@@ -33,6 +33,25 @@
         "requirements":{
             "player":[],
             "installation":["surface", "atmosphere"]
+        },
+        "contructionCost":{},
+        "maxConstructionRate":1
+    },
+    {
+        "name": "Chemical Fuel Plant - Electrolysis",
+        "slug": "cfuel_water",
+        "upkeep":{},
+        "operation":{"4":-1},
+        "production": {"2": 2},
+        "superclass": "energy",
+        "subclass":"orbital",
+        "tags":[],
+        "description": "",
+        "image":"",
+        "defaultPrioroty":0,
+        "requirements":{
+            "player":[],
+            "installation":["orbital"]
         },
         "contructionCost":{},
         "maxConstructionRate":1

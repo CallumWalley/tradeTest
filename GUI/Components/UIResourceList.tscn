@@ -11,6 +11,7 @@ alignment = 1
 script = ExtResource( 1 )
 
 [node name="Title" type="RichTextLabel" parent="."]
+visible = false
 margin_top = 15.0
 margin_right = 142.0
 margin_bottom = 35.0
@@ -20,7 +21,7 @@ bbcode_text = "Trade Routes"
 text = "Trade Routes"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
-margin_top = 39.0
+margin_top = 27.0
 margin_right = 142.0
-margin_bottom = 39.0
+margin_bottom = 27.0
 alignment = 1

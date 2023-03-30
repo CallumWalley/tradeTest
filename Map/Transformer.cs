@@ -6,41 +6,73 @@ public class Transformer : EcoNode
 { 
     public Resource output;
 
-    // [Export]
-    List<Resource> upkeep;
+    [Export]
+    public string slug;
 
     // [Export]
-    List<Resource> operationCost;
+    public List<Resource> costUpkeep;
+    // [Export]
+    public List<Resource> costOperation;
+    // [Export]
+    public List<Resource> costProduction;
+    public TransformerRegister.TransformerType ttype;
+    public string TypeName {get{return ttype.Name;}}
+    public string TypeSlug {get{return ttype.Slug;}}
+    public string TypeClass {get{return ttype.Superclass;}}
+    public string TypeSubclass {get{return ttype.Subclass;}}
+    public string TypeImage {get{return ttype.Image;}}
+
+    //public string TypeRequirements{get{ttype.Requiremnts}}
+
+    public string[] Tags {get;set;}
+    public string Description {get;set;}
+    public int Prioroty {get;set;}
+
+        // "slug": "f_dockyard",
+        // "upkeep":{},
+        // "operation":{"1":-1},
+        // "production": {"901": 12},
+        // "superclass": "trade",
+        // "subclass":"freighter",
+        // "tags":[],
+        // "description": "Freighter Dockyard",
+        // "image":"",
+        // "defaultPrioroty":0,
+        // "requirements":{
+        //     "player":[],
+        //     "installation":["orbital"]
+        // },
+        // "contructionCost":{},
+        // "maxConstructionRate":1
     
-    // [Export]
-    List<Resource> production;
-
-    public bool isTradeReceiver;
-
     public override void _Ready()
     {
         base._Ready();
-        upkeep = new List<Resource>{new ResourceStatic(2, -1)};
-        operationCost = new List<Resource>{new ResourceStatic(1, -2)};
-        production = new List<Resource>{new ResourceStatic(4, 2)};
+        ttype = GetNode<TransformerRegister>("/root/Global/TransformerRegister").GetFromSlug(slug);
+        costUpkeep = new List<Resource>(GetFromTemplate(ttype.Upkeep));
+        costOperation = new List<Resource>(GetFromTemplate(ttype.Operation));
+        costProduction = new List<Resource>(GetFromTemplate(ttype.Production));
     }
 
     public IEnumerable<Resource> Upkeep(){
-        return upkeep;
+        return costUpkeep;
     }
 
     public IEnumerable<Resource> OperationCost(){
-        return operationCost;
+        return costOperation;
     }
 
     public virtual IEnumerable<Resource> Production(){
-        return  production;
+        return  costProduction;
     }
 
-    
+    public void Create(){
+        
+    }
 
-    // scaling formula 
-    // z = bonus
-    // x = number
-    // 2z - (2z/x)
+    public IEnumerable<Resource> GetFromTemplate(Dictionary<int, float> template){
+        foreach (KeyValuePair<int, float> kvp in template){
+            yield return new ResourceStatic(kvp.Key, kvp.Value);
+        }
+    }
 }

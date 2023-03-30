@@ -7,12 +7,30 @@
 [ext_resource path="res://Global.cs" type="Script" id=5]
 [ext_resource path="res://Map/Transformer.tscn" type="PackedScene" id=6]
 [ext_resource path="res://TimeControl.cs" type="Script" id=7]
-[ext_resource path="res://TransformerList.cs" type="Script" id=8]
+[ext_resource path="res://TransformerRegister.cs" type="Script" id=8]
 [ext_resource path="res://Player/PlayerTech.cs" type="Script" id=9]
 [ext_resource path="res://Map/ResourcePool.tscn" type="PackedScene" id=10]
 
 [node name="Global" type="Node"]
 script = ExtResource( 5 )
+
+[node name="TransformerRegister" type="Node" parent="."]
+process_priority = -1000
+script = ExtResource( 8 )
+
+[node name="Player" type="Node" parent="."]
+
+[node name="Trade" type="Node" parent="Player"]
+script = ExtResource( 3 )
+
+[node name="Routes" type="Node" parent="Player/Trade"]
+script = ExtResource( 2 )
+
+[node name="Receivers" type="Node" parent="Player/Trade"]
+script = ExtResource( 3 )
+
+[node name="Tech" type="Node" parent="Player"]
+script = ExtResource( 9 )
 
 [node name="UI" type="PanelContainer" parent="."]
 anchor_left = 1.0
@@ -113,8 +131,6 @@ color = Color( 0.596078, 0.596078, 0.372549, 1 )
 [node name="ResourcePool" parent="Systems/System1/Saturn" instance=ExtResource( 10 )]
 isValidTradeReceiver = true
 
-[node name="Transformer" parent="Systems/System1/Saturn/ResourcePool" instance=ExtResource( 6 )]
-
 [node name="Earth" parent="Systems/System1" instance=ExtResource( 1 )]
 position = Vector2( 148, 157 )
 nPoints = 16
@@ -123,6 +139,9 @@ color = Color( 0.278431, 0.364706, 0.913725, 1 )
 [node name="ResourcePool" parent="Systems/System1/Earth" instance=ExtResource( 10 )]
 isValidTradeReceiver = true
 
+[node name="Chemical Fuel Plant" parent="Systems/System1/Earth/ResourcePool" instance=ExtResource( 6 )]
+slug = "cfuel_water"
+
 [node name="Jupyter" parent="Systems/System1" instance=ExtResource( 1 )]
 position = Vector2( 218, 420 )
 nPoints = 16
@@ -130,6 +149,9 @@ radius = 20.0
 color = Color( 0.678431, 0.380392, 0.184314, 1 )
 
 [node name="ResourcePool" parent="Systems/System1/Jupyter" instance=ExtResource( 10 )]
+
+[node name="Freighter Dockyard" parent="Systems/System1/Jupyter/ResourcePool" instance=ExtResource( 6 )]
+slug = "f_dockyard"
 
 [node name="Moon" parent="Systems/System1" instance=ExtResource( 1 )]
 position = Vector2( 331, 161 )
@@ -142,23 +164,6 @@ color = Color( 0.513726, 0.513726, 0.513726, 1 )
 [node name="Camera2D" type="Camera2D" parent="Systems/System1"]
 anchor_mode = 0
 script = ExtResource( 4 )
-
-[node name="Player" type="Node" parent="."]
-
-[node name="Trade" type="Node" parent="Player"]
-script = ExtResource( 3 )
-
-[node name="Routes" type="Node" parent="Player/Trade"]
-script = ExtResource( 2 )
-
-[node name="Receivers" type="Node" parent="Player/Trade"]
-script = ExtResource( 3 )
-
-[node name="Tech" type="Node" parent="Player"]
-script = ExtResource( 9 )
-
-[node name="TransformerList" type="Node" parent="."]
-script = ExtResource( 8 )
 
 [connection signal="value_changed" from="UI/TimeControl/Control/HSlider" to="." method="_time_slider_value_changed"]
 [connection signal="toggled" from="UI/TimeControl/Control/Pause" to="." method="PauseToggled"]
