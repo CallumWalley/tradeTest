@@ -10,7 +10,7 @@ public class TransformerTrade : Transformer
 
     public override void _Ready()
     {
-        ttype = GetNode<TransformerRegister>("/root/Global/TransformerRegister").tradeRoute;
+        
 
         base._Ready();  
 
@@ -20,6 +20,7 @@ public class TransformerTrade : Transformer
     public void Init(TradeRoute _tradeRoute, bool _isSource=false){
         tradeRoute=_tradeRoute;
         isSource = _isSource;
+        ttype = TransformerRegister.TradeRoute;
         Tags = new string[]{"trade_route", "non_buildable"};
         Description = "A trade route";
     }

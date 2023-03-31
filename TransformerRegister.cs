@@ -27,7 +27,14 @@ public class TransformerRegister : Node
     }
 
     // Special transformer type for trade route;
-    public TransformerType tradeRoute;
+    public static TransformerType TradeRoute{get{
+        TransformerType tradeRoute = new TransformerType();
+        tradeRoute.Name="Trade Route";
+        tradeRoute.Slug="trade_route";
+        tradeRoute.Superclass = "special";
+        tradeRoute.Subclass = "trade_route";
+        return tradeRoute;
+    }}
 
     // public class TempOutType{
 
@@ -36,11 +43,6 @@ public class TransformerRegister : Node
     public override void _Ready()
     {   
         list = new List<TransformerType>(LoadFromFile());
-        tradeRoute = new TransformerType();
-        tradeRoute.Name="Trade Route";
-        tradeRoute.Slug="trade_route";
-        tradeRoute.Superclass = "special";
-        tradeRoute.Subclass = "trade_route";
     }
 
 IEnumerable<TransformerType> LoadFromFile(){

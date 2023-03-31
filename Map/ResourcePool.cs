@@ -41,7 +41,10 @@ public class ResourcePool : EcoNode
 		}
 	}
 	public void RegisterTransformer(Transformer tr){
-		AddChild(tr);
+		GD.Print(tr);
+		GD.Print(this);
+
+		this.AddChild(tr);
 	}
 	public void DeregisterTransformer(Transformer tr){
 		RemoveChild(tr);

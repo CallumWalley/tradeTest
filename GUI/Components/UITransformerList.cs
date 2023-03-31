@@ -27,23 +27,23 @@ public class UITransformerList : Control
 	}
 	
 	public override void _Draw(){
-		//Clear();
+        //Clear();
 
 
-		// //TODO proper string formatting.
-		// //freighterPoolLabel.Text = $"[ {tradeReceiver.freightersUsed.Sum.ToString()} / {tradeReceiver.freighterCapacity.ToString()}]";
-		// if (resourcePool.GetTransformerTrade().tradeRoutes.Count < 1){
-		// 	Label noNodeLabel = new Label();
-		// 	noNodeLabel.Text = "No Trade Routes";
-		// 	noNodeLabel.Valign = Label.VAlign.Center;
-		// 	noNodeLabel.Align = Label.AlignEnum.Center;
-		// 	list.AddChild(noNodeLabel);
-		// }
-		// else
-		// {s
+        // //TODO proper string formatting.
+        // //freighterPoolLabel.Text = $"[ {tradeReceiver.freightersUsed.Sum.ToString()} / {tradeReceiver.freighterCapacity.ToString()}]";
+        // if (resourcePool.GetTransformerTrade().tradeRoutes.Count < 1){
+        // 	Label noNodeLabel = new Label();
+        // 	noNodeLabel.Text = "No Trade Routes";
+        // 	noNodeLabel.Valign = Label.VAlign.Center;
+        // 	noNodeLabel.Align = Label.AlignEnum.Center;
+        // 	list.AddChild(noNodeLabel);
+        // }
+        // else
+        // {s
 
-		// Go over all trade routes in pool, and either update or create. 
-		int index = 0;
+        // Go over all trade routes in pool, and either update or create. 
+        int index = 0;
 		foreach (Transformer tr in resourcePool.GetChildren()){
 			UpdateTradeRoute((Transformer)tr,index);
 			index++;

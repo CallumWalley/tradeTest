@@ -35,8 +35,8 @@ public class TradeRoute : EcoNode
 		poolDestination = _poolDestination;
 		poolSource = _poolSource;
 
-		TransformerTrade transformerDestintation = new TransformerTrade();
-		TransformerTrade transformerSource = new TransformerTrade();
+		transformerDestintation = new TransformerTrade();
+		transformerSource = new TransformerTrade();
 
 		transformerSource.Init(this, true);
 		transformerDestintation.Init(this);
