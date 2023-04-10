@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class UITransformer : Control
 {
-	static readonly PackedScene resourceIcon = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/UIResource.tscn");
+	//static readonly PackedScene resourceIcon = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/UIResource.tscn");
 
     // Game object this UI element follows.
     public Transformer transformer;
@@ -14,18 +14,11 @@ public class UITransformer : Control
 	TextureButton moveDownButton;
 
 	// Element to update on change.
-	Control callback;
+	//Control callback;
 
 	public void Init(Transformer _transformer){
 		transformer = _transformer;
-		//callback = _callback;
 
-		// // Add details panel.
-		// foreach (Resource r in tradeRoute.poolDestination.GetStandard()){
-		// 	UIResource ui = resourceIcon.Instance<UIResource>();
-		// 	ui.Init(r);
-		// 	GetNode("DetailContent").AddChild(ui);
-		// }
 		GetNode("Summary").Connect("toggled", this, "ShowDetails");
 
 		// Set button text
@@ -37,17 +30,19 @@ public class UITransformer : Control
 		moveUpButton.Connect("pressed", this, "ReorderUp");
 		moveDownButton.Connect("pressed", this, "ReorderDown");
 
-		//GetNode<TextureButton>("Summary/AlignRight/Cancel/").Connect("pressed", this, "Remove");
-
         GetNode<Label>("DetailContent/VBoxContainer/Description").Text = transformer.Description;
 
 		// Init resource pool display.
 		UIResourceList uiCostUpkeep = GetNode<UIResourceList>("DetailContent/VBoxContainer/CostUpkeep");
         UIResourceList uiCostProduction = GetNode<UIResourceList>("DetailContent/VBoxContainer/CostProduction");
 		UIResourceList uiCostOperation = GetNode<UIResourceList>("DetailContent/VBoxContainer/CostOperation");
-        uiCostUpkeep.Init(transformer.costUpkeep);
-        uiCostProduction.Init(transformer.costProduction);
-        uiCostOperation.Init(transformer.costOperation);
+
+		bool editable = (transformer is TransformerTrade);
+
+        //uiCostUpkeep.Init(transformer.costUpkeep);
+		//uiCostOperation.Init(transformer.costOperation);
+
+        uiCostProduction.Init(transformer.costProduction, editable);
 	}
 	public override void _Ready(){
 		base._Ready();
@@ -55,7 +50,7 @@ public class UITransformer : Control
 	public override void _Draw()
 	{	
 		if (transformer == null){return;}
-		//int index = tradeRoute.poolDestination.GetTransformerTrade().tradeRoutes.IndexOf(tradeRoute);
+		//int index = tradeRoute.destination.GetTransformerTrade().tradeRoutes.IndexOf(tradeRoute);
 		int index = GetIndex();
 		moveUpButton.Disabled = false;
 		moveDownButton.Disabled = false;
@@ -81,11 +76,18 @@ public class UITransformer : Control
 	// }
 
 	public void ReorderUp(){
-		transformer.GetParent<ResourcePool>().MoveChild(transformer, transformer.GetIndex()-1);
-		GetParent<Control>().Update();
+		transformer.GetParent<Installation>().MoveChild(transformer, transformer.GetIndex()-1);
+		//FIXME
+		GetParent<Control>().GetParent<Control>().GetParent<Control>().Visible = false;
+		GetParent<Control>().GetParent<Control>().GetParent<Control>().Visible = true;
+
 	}
 	public void ReorderDown(){
-		transformer.GetParent<ResourcePool>().MoveChild(transformer, transformer.GetIndex()-1);
-		GetParent<Control>().Update();
+		Installation par = transformer.GetParent<Installation>();
+		int chindex = transformer.GetIndex()+1;
+		par.MoveChild(transformer, chindex);
+		// FIXME
+		GetParent<Control>().GetParent<Control>().GetParent<Control>().Visible = false;
+		GetParent<Control>().GetParent<Control>().GetParent<Control>().Visible = true;
 	}
 }

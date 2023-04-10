@@ -1,5 +1,8 @@
 # UI Design
 
+## Card
+Element drawn in worldspace.
+
 ## Panel
 A panel contains multiple related components, should be able to stand alone.
 e.g. Trade info, astronomical info

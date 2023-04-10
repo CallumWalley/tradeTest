@@ -9,7 +9,7 @@
 [ext_resource path="res://TimeControl.cs" type="Script" id=7]
 [ext_resource path="res://TransformerRegister.cs" type="Script" id=8]
 [ext_resource path="res://Player/PlayerTech.cs" type="Script" id=9]
-[ext_resource path="res://Map/ResourcePool.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Map/Installation.tscn" type="PackedScene" id=10]
 
 [node name="Global" type="Node"]
 script = ExtResource( 5 )
@@ -120,7 +120,10 @@ position = Vector2( 621, 391 )
 radius = 8.0
 color = Color( 0.415686, 0.219608, 0.219608, 1 )
 
-[node name="ResourcePool" parent="Systems/System1/Mars" instance=ExtResource( 10 )]
+[node name="Installation" parent="Systems/System1/Mars" instance=ExtResource( 10 )]
+
+[node name="Surface Mine" parent="Systems/System1/Mars/Installation" instance=ExtResource( 6 )]
+slug = "mine_surf_old"
 
 [node name="Saturn" parent="Systems/System1" instance=ExtResource( 1 )]
 position = Vector2( 656, 199 )
@@ -128,19 +131,21 @@ nPoints = 16
 radius = 15.0
 color = Color( 0.596078, 0.596078, 0.372549, 1 )
 
-[node name="ResourcePool" parent="Systems/System1/Saturn" instance=ExtResource( 10 )]
-isValidTradeReceiver = true
+[node name="Installation" parent="Systems/System1/Saturn" instance=ExtResource( 10 )]
 
 [node name="Earth" parent="Systems/System1" instance=ExtResource( 1 )]
 position = Vector2( 148, 157 )
 nPoints = 16
 color = Color( 0.278431, 0.364706, 0.913725, 1 )
 
-[node name="ResourcePool" parent="Systems/System1/Earth" instance=ExtResource( 10 )]
+[node name="Installation" parent="Systems/System1/Earth" instance=ExtResource( 10 )]
 isValidTradeReceiver = true
 
-[node name="Chemical Fuel Plant" parent="Systems/System1/Earth/ResourcePool" instance=ExtResource( 6 )]
-slug = "cfuel_water"
+[node name="Freighter Dockyard" parent="Systems/System1/Earth/Installation" instance=ExtResource( 6 )]
+slug = "f_dockyard"
+
+[node name="Fuel Reserves" parent="Systems/System1/Earth/Installation" instance=ExtResource( 6 )]
+slug = "orbit_storage_fuel"
 
 [node name="Jupyter" parent="Systems/System1" instance=ExtResource( 1 )]
 position = Vector2( 218, 420 )
@@ -148,10 +153,13 @@ nPoints = 16
 radius = 20.0
 color = Color( 0.678431, 0.380392, 0.184314, 1 )
 
-[node name="ResourcePool" parent="Systems/System1/Jupyter" instance=ExtResource( 10 )]
+[node name="Installation" parent="Systems/System1/Jupyter" instance=ExtResource( 10 )]
 
-[node name="Freighter Dockyard" parent="Systems/System1/Jupyter/ResourcePool" instance=ExtResource( 6 )]
-slug = "f_dockyard"
+[node name="Chemical Fuel Plant" parent="Systems/System1/Jupyter/Installation" instance=ExtResource( 6 )]
+slug = "cfuel_water"
+
+[node name="Fuel Reserves" parent="Systems/System1/Jupyter/Installation" instance=ExtResource( 6 )]
+slug = "orbit_storage_fuel"
 
 [node name="Moon" parent="Systems/System1" instance=ExtResource( 1 )]
 position = Vector2( 331, 161 )
@@ -159,7 +167,7 @@ nPoints = 16
 radius = 3.0
 color = Color( 0.513726, 0.513726, 0.513726, 1 )
 
-[node name="ResourcePool" parent="Systems/System1/Moon" instance=ExtResource( 10 )]
+[node name="Installation" parent="Systems/System1/Moon" instance=ExtResource( 10 )]
 
 [node name="Camera2D" type="Camera2D" parent="Systems/System1"]
 anchor_mode = 0

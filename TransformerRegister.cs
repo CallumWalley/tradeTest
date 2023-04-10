@@ -24,6 +24,8 @@ public class TransformerRegister : Node
         public Dictionary<int, float> Upkeep{ get; set; }
         public Dictionary<int, float> Operation{ get; set; }
         public Dictionary<int, float> Production{ get; set; }
+        public Dictionary<int, float> Storage{ get; set; }
+
     }
 
     // Special transformer type for trade route;

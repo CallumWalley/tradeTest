@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://GUI/Elements/UIDragIndicator.tscn" type="PackedScene" id=1]
-[ext_resource path="res://GUI/Elements/UIIncriment.tscn" type="PackedScene" id=2]
+[ext_resource path="res://GUI/Elements/Button/UIIncriment.tscn" type="PackedScene" id=2]
 [ext_resource path="res://GUI/Elements/UIOrderedItem.cs" type="Script" id=3]
-[ext_resource path="res://GUI/Elements/UICancel.tscn" type="PackedScene" id=4]
+[ext_resource path="res://GUI/Elements/Button/UICancel.tscn" type="PackedScene" id=4]
 
 [node name="OrderedItem" type="VBoxContainer"]
 margin_right = 1023.0

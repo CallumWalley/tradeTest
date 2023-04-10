@@ -9,7 +9,7 @@
 [ext_resource path="res://TimeControl.cs" type="Script" id=7]
 [ext_resource path="res://Player/PlayerTradeRoutes.cs" type="Script" id=8]
 [ext_resource path="res://Player/PlayerTech.cs" type="Script" id=9]
-[ext_resource path="res://Map/ResourcePool.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Map/Installation.tscn" type="PackedScene" id=10]
 
 [node name="Global" type="Node"]
 script = ExtResource( 5 )
@@ -26,14 +26,14 @@ color = Color( 0.898039, 0.92549, 0, 1 )
 [node name="Earth" parent="Map/System1" instance=ExtResource( 1 )]
 position = Vector2( 206, 204 )
 color = Color( 0.415686, 0.219608, 0.219608, 1 )
-hasResourcePool = true
+hasInstallation = true
 
-[node name="ResourcePool" parent="Map/System1/Earth" instance=ExtResource( 10 )]
+[node name="Installation" parent="Map/System1/Earth" instance=ExtResource( 10 )]
 
-[node name="Transformer" parent="Map/System1/Earth/ResourcePool" instance=ExtResource( 2 )]
+[node name="Transformer" parent="Map/System1/Earth/Installation" instance=ExtResource( 2 )]
 script = ExtResource( 6 )
 
-[node name="Transformer2" parent="Map/System1/Earth/ResourcePool" instance=ExtResource( 2 )]
+[node name="Transformer2" parent="Map/System1/Earth/Installation" instance=ExtResource( 2 )]
 script = ExtResource( 6 )
 
 [node name="Camera2D" type="Camera2D" parent="Map/System1"]

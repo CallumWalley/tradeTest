@@ -2,7 +2,7 @@
 
 [ext_resource path="res://GUI/Panels/UIAstroPanel.cs" type="Script" id=1]
 
-[node name="BodyInfo" type="MarginContainer"]
+[node name="Astronomical" type="MarginContainer"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5

@@ -5,11 +5,11 @@ using System.Collections.Generic;
 public class TradeRoute : EcoNode
 {
 	[Export]
-	public ResourcePool poolDestination;
-	public ResourcePool poolSource;
+	public Installation destination;
+	public Installation source;
 	public TransformerTrade transformerSource;
 	public TransformerTrade transformerDestintation;
-	public List<Resource> BalanceSource{get; private set;} = new List<Resource>();
+	public List<Resource> BalanceSource{get; set;} = new List<Resource>();
 	public List<Resource> BalanceDestination{get{
 		return new List<Resource>( InvertBalance());
 	}}
@@ -30,10 +30,10 @@ public class TradeRoute : EcoNode
 		DrawLine();
 	}
 	// Called from TradeReciver
-	public void Init(ResourcePool _poolDestination, ResourcePool _poolSource){
+	public void Init(Installation _destination, Installation _source){
 
-		poolDestination = _poolDestination;
-		poolSource = _poolSource;
+		destination = _destination;
+		source = _source;
 
 		transformerDestintation = new TransformerTrade();
 		transformerSource = new TransformerTrade();
@@ -41,25 +41,21 @@ public class TradeRoute : EcoNode
 		transformerSource.Init(this, true);
 		transformerDestintation.Init(this);
 
-		poolSource.RegisterTransformer(transformerDestintation);
-		poolDestination.RegisterTransformer(transformerSource);
-		poolDestination.uplineTraderoute = this;
+		source.RegisterTransformer(transformerSource);
+		destination.RegisterTransformer(transformerDestintation);
+		destination.uplineTraderoute = this;
 
-		distance = poolDestination.GetParent<Body>().Position.DistanceTo(poolSource.GetParent<Body>().Position);
+		distance = destination.GetParent<Body>().Position.DistanceTo(source.GetParent<Body>().Position);
+		Name = $"Trade route from {transformerSource.Name} to {transformerDestintation.Name}";
+
 		MatchDemand();
-		tradeWeight = new ResourceStatic(901, 0);
-		//tradeWeight.Name = $"Trade route from {Name}";
+		UpdateFreighterWeight();
 	}
-
-	// public override void EFrameCollect()
-	// {   
-	// 	tradeWeight.Sum = GetNode<PlayerTech>("/root/Global/Player/Tech").GetFreighterTons(poolDestination.shipWeight, distance);
-	// }
 
 	public void DrawLine(){
-		GetNode<Line2D>("Line2D").Points=new Vector2[]{poolDestination.GetParent<Body>().Position, poolSource.GetParent<Body>().Position};
+		GetNode<Line2D>("Line2D").Points=new Vector2[]{destination.Position, source.Position};
 	}
-	public float GetShipWeight(){
+	public float GetFrieghterWeight(){
 		float shipWeightImport = 0;
 		float shipWeightExport = 0;
 		foreach (Resource child in BalanceSource){
@@ -69,20 +65,25 @@ public class TradeRoute : EcoNode
 				shipWeightImport += child.Sum * Resources.ShipWeight(child.Type);
 			}
 		}
-		return Math.Max(shipWeightExport, shipWeightImport);
+		return - Math.Max(shipWeightExport, shipWeightImport);
 	}
 
 	IEnumerable<Resource> InvertBalance(){
-
 		foreach (Resource r in BalanceSource){
+			if (r.Type == 901){continue;}//Ignore trade ship cost.
 			yield return new ResourceStatic(r.Type, -r.Sum);
 		}
 	}
 
 	public void MatchDemand(){
 		BalanceSource.Clear();
-		foreach (Resource r in poolDestination.GetStandard()){
+		foreach (Resource r in destination.GetStandard()){
 			BalanceSource.Add(new ResourceStatic(r.Type, r.Sum));
 		} 
+	}
+
+	void UpdateFreighterWeight(){
+		tradeWeight = new ResourceStatic(901, GetFrieghterWeight());
+		BalanceSource.Add(tradeWeight);
 	}
 }

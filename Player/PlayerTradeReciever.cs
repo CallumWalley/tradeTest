@@ -1,23 +1,23 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public class PlayerTradeReciever : Node
 {
-	public Godot.Collections.Array<ResourcePool> _index;
+	public List<Installation> list;
 
 	public PlayerTradeReciever()
 	{
-		_index = new Godot.Collections.Array<ResourcePool>();
+		list = new List<Installation>();
 	}
 
-	public void RegisterResourcePool(ResourcePool tr){
-		_index.Add(tr);
+	public void RegisterInstallation(Installation tr){
+		list.Add(tr);
 	}
-	public ResourcePool GetTradeDestination(int i){
-		GD.Print(_index[i].GetParent<Body>().Name);
-		return _index[i];
+	public Installation GetTradeDestination(int i){
+		return list[i];
 	}
-	public Godot.Collections.Array<ResourcePool> List(){
-		return _index;
-	}
+	// public List List(){
+	// 	return _index;
+	// }
 }

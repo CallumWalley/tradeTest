@@ -6,13 +6,12 @@ public class UITransformerList : Control
 {
 
 	VBoxContainer list;
-	ResourcePool resourcePool;
-	static readonly Texture freighterIcon = GD.Load<Texture>("res://assets/icons/freighter.png");
+	Installation installation;
 	//static readonly PackedScene tradeRoute = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/UITradeRoute.tscn");
 	static readonly PackedScene p_uitransformer = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/UITransformer.tscn");
 
-	public void Init(ResourcePool _resourcePool){
-		resourcePool = _resourcePool;
+	public void Init(Installation _installation){
+		installation = _installation;
 	}
 
 	public override void _Ready()
@@ -32,7 +31,7 @@ public class UITransformerList : Control
 
         // //TODO proper string formatting.
         // //freighterPoolLabel.Text = $"[ {tradeReceiver.freightersUsed.Sum.ToString()} / {tradeReceiver.freighterCapacity.ToString()}]";
-        // if (resourcePool.GetTransformerTrade().tradeRoutes.Count < 1){
+        // if (installation.GetTransformerTrade().tradeRoutes.Count < 1){
         // 	Label noNodeLabel = new Label();
         // 	noNodeLabel.Text = "No Trade Routes";
         // 	noNodeLabel.Valign = Label.VAlign.Center;
@@ -44,27 +43,20 @@ public class UITransformerList : Control
 
         // Go over all trade routes in pool, and either update or create. 
         int index = 0;
-		foreach (Transformer tr in resourcePool.GetChildren()){
-			UpdateTradeRoute((Transformer)tr,index);
+		foreach (Transformer tr in installation.GetChildren()){
+			UpdateTransformer((Transformer)tr,index);
 			index++;
 		}
 		// Any remaining elements greater than index must no longer exist.
 		while (list.GetChildCount() > index){
-			Transformer tr = list.GetChildOrNull<Transformer>(index+1);
+			UITransformer tr = list.GetChildOrNull<UITransformer>(list.GetChildCount()-1);
 			list.RemoveChild(tr);
 			tr.QueueFree();
 		}
 		//}
 	}
 
-	public void Clear(){
-		foreach (Control tr in list.GetChildren()){
-			list.RemoveChild(tr);
-			tr.QueueFree();
-		}
-	} 
-
-	void UpdateTradeRoute(Transformer tr, int index){
+	void UpdateTransformer(Transformer tr, int index){
 		//Check element with this trade route doesn't already exist.
 		foreach (UITransformer uit in list.GetChildren()){
 			if (uit.transformer == tr){

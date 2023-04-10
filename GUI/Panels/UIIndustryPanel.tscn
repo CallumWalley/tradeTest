@@ -30,7 +30,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = SubResource( 1 )
 
-[node name="ResourcePool" parent="." instance=ExtResource( 1 )]
+[node name="Installation" parent="." instance=ExtResource( 1 )]
 margin_right = 1024.0
 margin_bottom = 600.0
 

@@ -20,7 +20,7 @@ public class UITradeRoute : Control
 		//callback = _callback;
 
 		// // Add details panel.
-		// foreach (Resource r in tradeRoute.poolDestination.GetStandard()){
+		// foreach (Resource r in tradeRoute.destination.GetStandard()){
 		// 	UIResource ui = resourceIcon.Instance<UIResource>();
 		// 	ui.Init(r);
 		// 	GetNode("DetailContent").AddChild(ui);
@@ -28,7 +28,7 @@ public class UITradeRoute : Control
 		GetNode("Summary").Connect("toggled", this, "ShowDetails");
 
 		// Set button text
-		GetNode<Label>("Summary/SummaryContent/Source").Text = $"→ system - {tradeRoute.poolDestination.GetParent<Body>().Name}";
+		GetNode<Label>("Summary/SummaryContent/Source").Text = $"→ system - {tradeRoute.destination.Name}";
 		UIResource freighterIcon = GetNode<UIResource>("Summary/SummaryContent/Freighters");
 		freighterIcon.Init(tradeRoute.tradeWeight);
 
@@ -42,7 +42,7 @@ public class UITradeRoute : Control
 		GetNode<TextureButton>("Summary/AlignRight/Cancel/").Connect("pressed", this, "Remove");
 
 		// Init resource pool display.
-		UIResourceList uir = GetNode<UIResourceList>("DetailContent/ResourcePool");
+		UIResourceList uir = GetNode<UIResourceList>("DetailContent/Installation");
 		uir.Init(tradeRoute.BalanceSource);
 	}
 	public override void _Ready(){
@@ -51,7 +51,7 @@ public class UITradeRoute : Control
 	public override void _Draw()
 	{	
 		if (tradeRoute == null){return;}
-		//int index = tradeRoute.poolDestination.GetTransformerTrade().tradeRoutes.IndexOf(tradeRoute);
+		//int index = tradeRoute.destination.GetTransformerTrade().tradeRoutes.IndexOf(tradeRoute);
 		int index = GetIndex();
 		moveUpButton.Disabled = false;
 		moveDownButton.Disabled = false;
@@ -77,11 +77,11 @@ public class UITradeRoute : Control
 	}
 
 	public void ReorderUp(){
-		tradeRoute.poolDestination.MoveChild(tradeRoute, tradeRoute.GetIndex()-1);
+		tradeRoute.destination.MoveChild(tradeRoute, tradeRoute.GetIndex()-1);
 		GetParent<Control>().Update();
 	}
 	public void ReorderDown(){
-		tradeRoute.poolDestination.MoveChild(tradeRoute, tradeRoute.GetIndex()+1);
+		tradeRoute.destination.MoveChild(tradeRoute, tradeRoute.GetIndex()+1);
 		GetParent<Control>().Update();
 	}
 }

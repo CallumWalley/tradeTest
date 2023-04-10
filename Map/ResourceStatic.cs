@@ -9,9 +9,10 @@ public class ResourceStatic : Resource
 
 	public float Requested{ get; set; }
 
-	public ResourceStatic(int _type, float _sum){
+	public ResourceStatic(int _type, float _sum, string _details="Base value"){
 		Type = _type;
 		Sum = _sum;
+		Details = _details;
 	}
 	
 	public void Decriment(){

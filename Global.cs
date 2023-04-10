@@ -3,14 +3,11 @@ using System;
 
 public class Global : Node
 {
-	[Signal]
-	public delegate void EFrame_Collect();
-	[Signal]
 
-	public delegate void EFrame_Move();
 	[Signal]
-
-	public delegate void EFrame_Produce();
+	public delegate void EFrameEarly();
+	[Signal]
+	public delegate void EFrameLate();
 
 	bool paused = false;
 
@@ -44,9 +41,8 @@ public class Global : Node
 	}
 	public void Eframe()
 	{
-		EmitSignal("EFrame_Collect");
-		EmitSignal("EFrame_Move");
-		EmitSignal("EFrame_Produce");
+		EmitSignal("EFrameLate");
+		EmitSignal("EFrameEarly");
 	}
 	public void _time_slider_value_changed(float value){
 		float[] timescale = { 30, 20, 15, 10, 8, 6, 4, 2, 1, 0.5f, 0.1f };

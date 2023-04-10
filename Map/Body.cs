@@ -10,16 +10,11 @@ public class Body : Node2D
 	public float radius = 10;
 	[Export]
 	public Color color = new Color(1, 0, 0);
-	public ResourcePool resourcePool;
 
-	public UIBody uiBody;
+	public UIBodyCard uiBody;
 
-	static readonly PackedScene p_tradePanel = (PackedScene)GD.Load<PackedScene>("res://GUI/Panels/UITradePanel.tscn");
-	static readonly PackedScene p_astroPanel = (PackedScene)GD.Load<PackedScene>("res://GUI/Panels/UIAstroPanel.tscn");
-	static readonly PackedScene p_industryPanel = (PackedScene)GD.Load<PackedScene>("res://GUI/Panels/UIIndustryPanel.tscn");
-
-	//static readonly PackedScene p_resourcePool = (PackedScene)GD.Load<PackedScene>("res://Map/ResourcePool.tscn");
-	static readonly PackedScene p_uiBody = (PackedScene)GD.Load<PackedScene>("res://GUI/UIBody.tscn");
+	public IEnumerable<Installation> Installations{get{return GetInstallations();}}
+	static readonly PackedScene p_uiBody = (PackedScene)GD.Load<PackedScene>("res://GUI/Cards/UIBodyCard.tscn");
 
 	bool focus = false;
 
@@ -37,8 +32,6 @@ public class Body : Node2D
 		float period;
 		float inclination;
 	}
-
-
 	// Satellites:
 	public class Physical{
 		float circumference;
@@ -57,46 +50,26 @@ public class Body : Node2D
 		Dictionary<string, float> composition;
 	}
 	public override void _Ready(){
-
-		/// INSTALLATIONS
-		// Add resource pool if exists
-		resourcePool = GetNodeOrNull<ResourcePool>("ResourcePool");
-
 		/// UI
-
 		// Main UI element.
-		uiBody = p_uiBody.Instance<UIBody>();
-		uiBody.Init(this);
-		AddChild(uiBody);
-
-		// Add trade panel
-		if (resourcePool!=null){
-			UITradePanel tp = p_tradePanel.Instance<UITradePanel>();
-			UIIndustryPanel ip = p_industryPanel.Instance<UIIndustryPanel>();
-
-			tp.Init(this);
-			ip.Init(this);
-
-			uiBody.AddChild(tp);
-			uiBody.AddChild(ip);
-
-		}
-
-		// Add astronomical info
-		UIAstroPanel ap = p_astroPanel.Instance<UIAstroPanel>();
-		ap.Init(this);
-		uiBody.AddChild(ap);
+		// uiBody = p_uiBody.Instance<UIBody>();
+		// uiBody.Init(this);
+		// AddChild(uiBody);
 
 		// Add interactive 
 		GetNode("Area2D").Connect("mouse_entered", this, "Focus");
 		GetNode("Area2D").Connect("mouse_exited", this, "UnFocus");
-
 	}
 
 	public override void _Process(float _delta)
 	{
 		if (Input.IsActionPressed("ui_select")){
 			if (focus){
+				if (uiBody == null){
+					uiBody = p_uiBody.Instance<UIBodyCard>();
+					uiBody.Init(this);
+					AddChild(uiBody);
+				}
 				uiBody.Visible = true;
 				uiBody.Raise();
 			}
@@ -139,26 +112,12 @@ public class Body : Node2D
 
 	}
 
-	// public ResourcePool AddResourcePool(){
-	// 	resourcePool = GetNodeOrNull<ResourcePool>("ResourcePool");
-	// 	if (resourcePool==null){
-	// 		resourcePool = p_resourcePool.Instance<ResourcePool>();
-	// 		AddChild(resourcePool);
-	// 	}
-	// 	if (hasTradeReceiver){
-	// 		resourcePool.isValidTradeReceiver=true;
-	// 	}
-	// 	return resourcePool;
-	// }
-
-	// public TradeReceiver AddTradeReceiver(){
-	// 	tradeReceiver = GetNodeOrNull<TradeReceiver>("ResourcePool");
-	// 	if (tradeReceiver==null){
-	// 		tradeReceiver = p_tradeReceiver.Instance<TradeReceiver>();
-	// 		tradeReceiver.Init(resourcePool);
-	// 		AddChild(tradeReceiver);
-	// 	}
-	// 	return tradeReceiver;
-	// }
+	public IEnumerable<Installation> GetInstallations(){
+		foreach (Node c in GetChildren()){
+			if (c is Installation){
+				yield return (Installation)c;
+			}
+		}
+	}
 
 }

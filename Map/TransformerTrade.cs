@@ -10,11 +10,7 @@ public class TransformerTrade : Transformer
 
     public override void _Ready()
     {
-        
-
         base._Ready();  
-
-        //public int Prioroty {get;set;}
     }
 
     public void Init(TradeRoute _tradeRoute, bool _isSource=false){
@@ -22,14 +18,20 @@ public class TransformerTrade : Transformer
         isSource = _isSource;
         ttype = TransformerRegister.TradeRoute;
         Tags = new string[]{"trade_route", "non_buildable"};
-        Description = "A trade route";
+        Description = $"A Trade Route connecting {tradeRoute.destination.Name}, {tradeRoute.destination.Body.Name} to {tradeRoute.source.Name}, {tradeRoute.source.Body.Name}";
+
+        if (isSource){
+            Name = $"Trade to {tradeRoute.destination.Body.Name}";
+        }else{
+            Name = $"Trade from {tradeRoute.source.Body.Name}";
+        }
     }
 
-    public new IEnumerable<Resource> Production(){
+    // BUG: Changing resource on destination does not work as is passed phoney list.
+    public override IEnumerable<Resource> Produced(){
         if (isSource){
             return tradeRoute.BalanceSource;
         }else{
-            GD.Print("inverted");
             return tradeRoute.BalanceDestination;
         }
     }

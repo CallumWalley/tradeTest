@@ -4,17 +4,45 @@ using System.Collections.Generic;
 
 public class Transformer : EcoNode
 { 
-    public Resource output;
+    // Small class to handle 'request, vs receive'
+    public class Requester{
+
+        public ResourceStatic request;
+        // 0 fulfilled.
+        // 1 partially fulfilled.
+        // 2 unfulfilled.
+        public int Type{get{return request.Type;}}
+        public float Sum{get{return request.Sum;}}
+        public ResourceStatic Response{get;set;}
+        public Requester(ResourceStatic _request){
+            request =_request;
+        }
+        public void Respond(ResourceStatic _response, int _status){
+            Response = _response;
+        }
+    }
 
     [Export]
     public string slug;
-
-    // [Export]
-    public List<Resource> costUpkeep;
-    // [Export]
-    public List<Resource> costOperation;
-    // [Export]
+    public Resource output;
+    public List<Requester> costUpkeep;
+    public List<Requester> costOperation;
     public List<Resource> costProduction;
+    public List<Resource> storage;
+
+
+    List<Situations.Base> situations;
+    List<Requester> requesters;
+    // 0-100 
+    // Decays without maintainance.
+    float breakDown;
+
+    //How many 'buildings' this industry contains.
+    int weight = 1;
+
+    //How many 'buildings' are currently offline.
+    int weightOffline = 1;
+    
     public TransformerRegister.TransformerType ttype;
     public string TypeName {get{return ttype.Name;}}
     public string TypeSlug {get{return ttype.Slug;}}
@@ -27,52 +55,49 @@ public class Transformer : EcoNode
     public string[] Tags {get;set;}
     public string Description {get;set;}
     public int Prioroty {get;set;}
-
-        // "slug": "f_dockyard",
-        // "upkeep":{},
-        // "operation":{"1":-1},
-        // "production": {"901": 12},
-        // "superclass": "trade",
-        // "subclass":"freighter",
-        // "tags":[],
-        // "description": "Freighter Dockyard",
-        // "image":"",
-        // "defaultPrioroty":0,
-        // "requirements":{
-        //     "player":[],
-        //     "installation":["orbital"]
-        // },
-        // "contructionCost":{},
-        // "maxConstructionRate":1
     
     public override void _Ready()
     {
         base._Ready();
-        ttype = GetNode<TransformerRegister>("/root/Global/TransformerRegister").GetFromSlug(slug);
-        costUpkeep = new List<Resource>(GetFromTemplate(ttype.Upkeep));
-        costOperation = new List<Resource>(GetFromTemplate(ttype.Operation));
-        costProduction = new List<Resource>(GetFromTemplate(ttype.Production));
-    }
 
-    public IEnumerable<Resource> Upkeep(){
-        return costUpkeep;
-    }
+        // If instantiated in editor
+        if (ttype is null){
+            ttype = GetNode<TransformerRegister>("/root/Global/TransformerRegister").GetFromSlug(slug);
+        }
 
-    public IEnumerable<Resource> OperationCost(){
-        return costOperation;
-    }
-
-    public virtual IEnumerable<Resource> Production(){
-        return  costProduction;
-    }
-
-    public void Create(){
+        Tags = ttype.Tags;
+        Description = ttype.Description;
+        Prioroty = ttype.defaultPrioroty;
         
+        costUpkeep = new List<Requester>(GetFromTemplate(ttype.Upkeep));
+        costOperation = new List<Requester>(GetFromTemplate(ttype.Operation));
+
+        costProduction = new List<Resource>(GetStaticFromTemplate(ttype.Production));
+        storage = new List<Resource>(GetStaticFromTemplate(ttype.Storage));
     }
 
-    public IEnumerable<Resource> GetFromTemplate(Dictionary<int, float> template){
+    //How much this transformer is requesting from pool.
+    public virtual IEnumerable<Requester> Requests(){
+        foreach (Requester r in costUpkeep){
+            yield return r;
+        }foreach (Requester r in costOperation){
+            yield return r;
+        }
+    }
+    public virtual IEnumerable<Resource> Produced(){
+        return costProduction;
+    }
+
+    IEnumerable<Requester> GetFromTemplate(Dictionary<int, float> template){
+        if (template == null){yield break;}
         foreach (KeyValuePair<int, float> kvp in template){
-            yield return new ResourceStatic(kvp.Key, kvp.Value);
+            yield return new Requester(new ResourceStatic(kvp.Key, kvp.Value, Name));
+        }
+    }
+    IEnumerable<ResourceStatic> GetStaticFromTemplate(Dictionary<int, float> template){
+        if (template == null){yield break;}
+        foreach (KeyValuePair<int, float> kvp in template){
+            yield return new ResourceStatic(kvp.Key, kvp.Value, Name);
         }
     }
 }

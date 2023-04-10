@@ -1,18 +1,41 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://GUI/Components/UIResourcePallet.cs" type="Script" id=1]
-[ext_resource path="res://GUI/Elements/UIResource.tscn" type="PackedScene" id=2]
-[ext_resource path="res://GUI/Elements/UIIncriment.tscn" type="PackedScene" id=3]
-[ext_resource path="res://GUI/Elements/UIAdd.tscn" type="PackedScene" id=4]
-[ext_resource path="res://assets/icons/minus_29.dds" type="Texture" id=5]
+[ext_resource path="res://GUI/Elements/Display/UIResource.tscn" type="PackedScene" id=2]
+[ext_resource path="res://GUI/Elements/Button/UIIncriment.tscn" type="PackedScene" id=3]
+[ext_resource path="res://GUI/Elements/Button/UIAdd.tscn" type="PackedScene" id=4]
+[ext_resource path="res://assets/icons/Buttons/minus_29.dds" type="Texture" id=5]
 
-[node name="ResourcePool" type="VBoxContainer"]
+[sub_resource type="CSharpScript" id=1]
+script/source = "using Godot;
+using System;
+using System.Collections.Generic;
+
+public class UIResourcePallet : UIResourceList
+{
+
+	public override void _Ready(){
+		base._Ready();
+	}
+
+	new public void Init(IEnumerable<Resource> _resourceList){
+		resourceList=_resourceList;
+		hbox = GetNode<HBoxContainer>(\"HBoxContainer/CurrentResources\");
+	}
+//  // Called every frame. 'delta' is the elapsed time since the previous frame.
+//  public override void _Process(float delta)
+//  {
+//      
+//  }
+}
+"
+
+[node name="ResourcePallet" type="VBoxContainer"]
 margin_right = 142.0
 margin_bottom = 55.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 1
-script = ExtResource( 1 )
+script = SubResource( 1 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 margin_top = 13.0

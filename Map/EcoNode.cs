@@ -5,15 +5,13 @@ public class EcoNode : Node
 {
     public override void _Ready()
     {
-        GetNode<Global>("/root/Global").Connect("EFrame_Collect",this, "EFrameCollect");
-        GetNode<Global>("/root/Global").Connect("EFrame_Move",this, "EFrameMove");
-        GetNode<Global>("/root/Global").Connect("EFrame_Produce",this, "EFrameProduce");
+        GetNode<Global>("/root/Global").Connect("EFrameEarly",this, "EFrameEarly");
+        GetNode<Global>("/root/Global").Connect("EFrameLate",this, "EFrameLate");
+
     }
 
-    public virtual void EFrameCollect(){
+    public virtual void EFrameEarly(){
     }
-    public virtual void EFrameMove(){
-    }
-    public virtual void EFrameProduce(){
+    public virtual void EFrameLate(){
     }
 }

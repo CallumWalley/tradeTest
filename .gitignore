@@ -16,3 +16,5 @@ mono_crash*
 .config/*
 .nuget/*
 .dotnet/*
+
+assets/icons/Buttons/all/*
