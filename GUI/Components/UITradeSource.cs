@@ -41,7 +41,7 @@ public class UITradeSource : UIElement
             frieghtersAvailable.Hide();
         }else{
             installationSummary.Init(sourceInstallation);
-            frieghtersAvailable.Init(sourceInstallation.GetTypeDelta(901));
+            frieghtersAvailable.Init(sourceInstallation.resourceDelta.GetType(901));
             labelLeft.Hide();
 	    }
         Connect("mouse_entered", this, "ShowTradeRoute");

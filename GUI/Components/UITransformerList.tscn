@@ -3,7 +3,7 @@
 [ext_resource path="res://GUI/Components/UITransformerList.cs" type="Script" id=1]
 [ext_resource path="res://base_theme.tres" type="Theme" id=2]
 
-[node name="TransformerLift" type="VBoxContainer"]
+[node name="TransformerList" type="VBoxContainer"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5

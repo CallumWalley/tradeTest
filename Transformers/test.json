@@ -2,81 +2,108 @@
     {
         "name": "Freighter Dockyard",
         "slug": "f_dockyard",
-        "upkeep":{},
-        "operation":{"2":-1},
-        "production": {"901": 12},
-        "storage": {"2": 3},
-        "superclass": "trade",
-        "subclass":"freighter",
-        "tags":[],
-        "description": "All the trade gantries, maintainance facilites and refueling shuttles required to maintain a fleet of starships frieghters.",
-        "image":"",
-        "defaultPrioroty":0,
-        "requirements":{
-            "player":[],
-            "installation":["orbital"]
+        "consumption": {
+            "2": -1
         },
-        "contructionCost":{},
-        "maxConstructionRate":1
+        "production": {
+            "901": 12
+        },
+        "storage": {
+            "2": 3
+        },
+        "superclass": "trade",
+        "subclass": "freighter",
+        "tags": [],
+        "description": "All the trade gantries, maintainance facilites and refueling shuttles required to maintain a fleet of starships frieghters.",
+        "image": "",
+        "defaultPrioroty": 0,
+        "requirements": {
+            "player": [],
+            "installation": [
+                "orbital"
+            ]
+        },
+        "contructionCost": {},
+        "maxConstructionRate": 1
     },
     {
         "name": "Fuel Reserves",
         "slug": "orbit_storage_fuel",
-        "upkeep":{},
-        "operation":{},
+        "consumption": {},
         "production": {},
-        "storage": {"2": 40},
-        "superclass": "storage",
-        "subclass":"storage_fuel",
-        "tags":[],
-        "description": "Strategic fuel reserves.",
-        "image":"",
-        "defaultPrioroty":0,
-        "requirements":{
-            "player":[],
-            "installation":["orbital"]
+        "storage": {
+            "2": 40
         },
-        "contructionCost":{},
-        "maxConstructionRate":1
+        "superclass": "storage",
+        "subclass": "storage_fuel",
+        "tags": [],
+        "description": "Strategic fuel reserves.",
+        "image": "",
+        "defaultPrioroty": 0,
+        "requirements": {
+            "player": [],
+            "installation": [
+                "orbital"
+            ]
+        },
+        "contructionCost": {},
+        "maxConstructionRate": 1
     },
     {
         "name": "Surface Mine",
         "slug": "mine_surf_old",
-        "upkeep":{},
-        "operation":{"2":-1},
-        "production": {"1": 2},
-        "storage": {"1": 6, "2": 3},
-        "superclass": "extraction",
-        "subclass":"mining_surface",
-        "tags":[],
-        "description": "Surface Mining using hand tools.",
-        "image":"",
-        "defaultPrioroty":0,
-        "requirements":{
-            "player":[],
-            "installation":["surface", "atmosphere"]
+        "consumption": {
+            "2": -1
         },
-        "contructionCost":{},
-        "maxConstructionRate":1
+        "production": {
+            "1": 2
+        },
+        "storage": {
+            "1": 6,
+            "2": 3
+        },
+        "superclass": "extraction",
+        "subclass": "mining_surface",
+        "tags": [],
+        "description": "Surface Mining using hand tools.",
+        "image": "",
+        "defaultPrioroty": 0,
+        "requirements": {
+            "player": [],
+            "installation": [
+                "surface",
+                "atmosphere"
+            ]
+        },
+        "contructionCost": {},
+        "maxConstructionRate": 1
     },
     {
         "name": "Chemical Fuel Plant",
         "slug": "cfuel_water",
-        "upkeep":{},
-        "operation":{"4": -1},
-        "production": {"2": 2},
-        "storage": {"2":4, "4": 3},
-        "superclass": "fuel",
-        "subclass":"orbital",
-        "tags":[],
-        "description": "Facilities for converting H2O into chemical fuel.",
-        "image":"",
-        "defaultPrioroty":0,
-        "requirements":{
-            "player":[],
-            "installation":["orbital"]
+        "consumption": {
+            "4": -1
         },
-        "contructionCost":{},
-        "maxConstructionRate":1
+        "production": {
+            "2": 2
+        },
+        "storage": {
+            "2": 4,
+            "4": 3
+        },
+        "superclass": "fuel",
+        "subclass": "orbital",
+        "tags": [],
+        "description": "Facilities for converting H2O into chemical fuel.",
+        "image": "",
+        "defaultPrioroty": 0,
+        "requirements": {
+            "player": [],
+            "installation": [
+                "orbital"
+            ]
+        },
+        "contructionCost": {},
+        "maxConstructionRate": 1
     }
 ]

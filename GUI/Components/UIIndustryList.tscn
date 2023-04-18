@@ -2,7 +2,7 @@
 
 [ext_resource path="res://GUI/Components/UIIndustryList.cs" type="Script" id=1]
 [ext_resource path="res://base_theme.tres" type="Theme" id=2]
-[ext_resource path="res://GUI/Elements/UIOrderableList.tscn" type="PackedScene" id=3]
+[ext_resource path="res://GUI/Elements/_UIOrderableList.tscn" type="PackedScene" id=3]
 
 [node name="IndustryList" type="VBoxContainer"]
 anchor_left = 0.5

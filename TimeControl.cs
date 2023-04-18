@@ -24,23 +24,24 @@ public class TimeControl : Container
         labelEFramePeriod = (Label)GetNode("Count/eframePeriod");
 
         global = (Global)GetNode("/root/Global");
-        global.Connect("EFrameEarly",this, "EFrameEarly");
+        global.Connect("EFrameEarly", this, "EFrameEarly");
 
     }
 
- // Called every frame. 'delta' is the elapsed time since the previous frame.
+    // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(float delta)
     {
-        frameCount+=1;
+        frameCount += 1;
 
-        labelWalltime.Text = $"Walltime: {(Time.GetTicksMsec()-startTime).ToString()}";
+        labelWalltime.Text = $"Walltime: {(Time.GetTicksMsec() - startTime).ToString()}";
         labelEframes.Text = $"Economy Frames: {eframeCount.ToString()}";
         labelFrames.Text = $"Frames: {frameCount.ToString()}";
         labelEFramePeriod.Text = $"Seconds Between Economy Frames: {global.timePerEframe.ToString()}";
     }
 
-    void EFrameEarly(){
-        eframeCount+=1;
+    void EFrameEarly()
+    {
+        eframeCount += 1;
         PrintStrayNodes();
 
     }

@@ -53,7 +53,8 @@ public class UIElement : Control
         base._Draw();
         // If parent not visible, hide.
         Control p = GetParentOrNull<Control>();
-        if (!p.Visible){
+        if (!p.Visible)
+        {
             Visible = false;
         }
     }
