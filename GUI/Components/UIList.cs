@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class UIList : Control
+public class UIList : Container
 {
     public interface IListable
     {
@@ -12,8 +12,8 @@ public class UIList : Control
         void Init(System.Object gameElement);
 
     }
+
     public IEnumerable<System.Object> list;
-    protected HBoxContainer hbox;
     PackedScene prefab;
 
 
@@ -34,17 +34,16 @@ public class UIList : Control
             index++;
         }
         // Any remaining elements greater than index must no longer exist.
-        while (hbox.GetChildCount() > index)
+        while (GetChildCount() > index)
         {
-            Control uir = hbox.GetChildOrNull<Control>(index + 1);
-            hbox.RemoveChild(uir);
+            Control uir = GetChildOrNull<Control>(index + 1);
+            RemoveChild(uir);
             uir.QueueFree();
         }
     }
 
     public override void _Ready()
     {
-        hbox = GetNode<HBoxContainer>("HBoxContainer/AlignLeft");
         GetNode<Global>("/root/Global").Connect("EFrameEarly", this, "DeferredDraw");
     }
     void DeferredDraw()
@@ -54,18 +53,18 @@ public class UIList : Control
     }
     void Update(System.Object r, int index)
     {
-        foreach (IListable uir in hbox.GetChildren())
+        foreach (IListable uir in GetChildren())
         {
             if (r == uir.GameElement)
             {
-                hbox.MoveChild(uir.Control, index);
+                MoveChild(uir.Control, index);
                 return;
             }
         }
         // If doesn't exist, add it and insert at postition.
         IListable ui = (IListable)prefab.Instance();
         ui.Init(r);
-        hbox.AddChild(ui.Control);
-        hbox.MoveChild(ui.Control, index);
+        AddChild(ui.Control);
+        MoveChild(ui.Control, index);
     }
 }

@@ -10,8 +10,12 @@ public class ResourceAgr : Resource
     // Does not consider child members.
     public override int Count { get { return (add.Count + multi.Count); } }
 
-    public List<Resource> add = new List<Resource>();
-    public List<Resource> multi = new List<Resource>();
+    public IEnumerable<Resource> GetAdd { get { return add; } }
+    public IEnumerable<Resource> GetMulti { get { return multi; } }
+
+
+    List<Resource> add = new List<Resource>();
+    List<Resource> multi = new List<Resource>();
     public ResourceAgr(int _type, List<Resource> _add, string _details = "Sum")
     {
         Type = _type;

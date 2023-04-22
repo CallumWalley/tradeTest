@@ -22,7 +22,7 @@ public class UIStorageList : Control
         // 	return;
         // }
         int index = 0;
-        foreach (Resource r in installation.resourceDelta)
+        foreach (Resource r in installation.resourceDelta.GetEnumeranator())
         {
             if (r.Storable)
             {

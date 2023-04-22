@@ -78,13 +78,13 @@ margin_right = 60.0
 visible = false
 margin_top = 34.0
 margin_right = 1023.0
-margin_bottom = 74.0
+margin_bottom = 102.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="DetailContent"]
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 1016.0
-margin_bottom = 33.0
+margin_bottom = 61.0
 
 [node name="Description" type="Label" parent="DetailContent/VBoxContainer"]
 margin_right = 1009.0
@@ -92,17 +92,46 @@ margin_bottom = 14.0
 text = "Description"
 autowrap = true
 
-[node name="CostUpkeep" parent="DetailContent/VBoxContainer" instance=ExtResource( 6 )]
+[node name="HSplitContainer" type="HSplitContainer" parent="DetailContent/VBoxContainer"]
 margin_top = 18.0
 margin_right = 1009.0
-margin_bottom = 18.0
+margin_bottom = 54.0
 
-[node name="CostProduction" parent="DetailContent/VBoxContainer" instance=ExtResource( 6 )]
-margin_top = 22.0
-margin_right = 1009.0
+[node name="Left" type="VBoxContainer" parent="DetailContent/VBoxContainer/HSplitContainer"]
+margin_right = 4.0
+margin_bottom = 36.0
+
+[node name="Consumption" parent="DetailContent/VBoxContainer/HSplitContainer/Left" instance=ExtResource( 6 )]
+margin_right = 4.0
+margin_bottom = 9.0
+
+[node name="Production" parent="DetailContent/VBoxContainer/HSplitContainer/Left" instance=ExtResource( 6 )]
+margin_top = 13.0
+margin_right = 4.0
 margin_bottom = 22.0
 
-[node name="CostOperation" parent="DetailContent/VBoxContainer" instance=ExtResource( 6 )]
-margin_top = 26.0
+[node name="TabContainer" type="TabContainer" parent="DetailContent/VBoxContainer/HSplitContainer"]
+margin_left = 16.0
 margin_right = 1009.0
-margin_bottom = 26.0
+margin_bottom = 36.0
+tab_align = 0
+
+[node name="Situation" type="VBoxContainer" parent="DetailContent/VBoxContainer/HSplitContainer/TabContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="NoSituation" type="Label" parent="DetailContent/VBoxContainer/HSplitContainer/TabContainer/Situation"]
+visible = false
+margin_top = 21.0
+margin_right = 985.0
+margin_bottom = 35.0
+text = "Situation Nominal"
+align = 1
+valign = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DetailContent/VBoxContainer/HSplitContainer/TabContainer/Situation"]
+margin_right = 985.0

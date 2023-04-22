@@ -1,14 +1,26 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-public class ResourceList
+public class ResourceList //: IEnumerable
 {
     // Resource list is a list of resources...
     private List<Resource> members;
 
     // If true, top level elements will be added as static
     public bool Shallow { get; set; }
-
+    // IEnumerator IEnumerable.GetEnumerator()
+    // {
+    //     // call the generic version of the method
+    //     return this.GetEnumerator();
+    // }
+    // fix this later.
+    public IEnumerable<Resource> GetEnumeranator()
+    {
+        foreach (Resource m in members)
+        {
+            yield return m;
+        }
+    }
     public Resource Find(Predicate<Resource> match)
     {
         return members.Find(match);
@@ -29,13 +41,7 @@ public class ResourceList
             members = new List<Resource>() { };
         }
     }
-    public IEnumerator<Resource> GetEnumerator()
-    {
-        foreach (Resource m in members)
-        {
-            yield return m;
-        }
-    }
+
 
     public Resource GetType(int code, bool createMissing = false)
     {
@@ -171,5 +177,15 @@ public class ResourceList
     {
         return GetRange(1, 100);
     }
-
+    public void Clear()
+    {
+        foreach (Resource m in members)
+        {
+            m.Sum = 0;
+        }
+    }
+    public void RemoveZeros()
+    {
+        members.RemoveAll(m => m.Sum == 0);
+    }
 }

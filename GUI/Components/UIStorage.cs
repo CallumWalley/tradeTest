@@ -53,6 +53,8 @@ public class UIStorage : UIElement //, UIList.IListable
     public override void _Draw()
     {
         if (storage == null) { return; }
+        if (stockpile == null) { return; }
+
         base._Draw();
         // Set text color
         value.RemoveColorOverride("font_color");

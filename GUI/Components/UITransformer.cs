@@ -16,6 +16,7 @@ public class UITransformer : Control, UIList.IListable
     TextureButton moveDownButton;
 
     Control details;
+    Button button;
     Control situations;
 
     // Element to update on change.
@@ -31,18 +32,20 @@ public class UITransformer : Control, UIList.IListable
     public override void _Ready()
     {
         base._Ready();
-        GetNode("Summary").Connect("toggled", this, "ShowDetails");
+        button = GetNode<Button>("Accordian/Button");
+        details = GetNode<Container>("Accordian/Container");
+
+        button.Connect("toggled", this, "ShowDetails");
 
         // Set button text
-        GetNode<Label>("Summary/SummaryContent/Summary").Text = transformer.Name;
+        button.GetNode<Label>("SummaryContent/Summary").Text = transformer.Name;
 
         // Set reorder buttons
-        moveUpButton = GetNode<TextureButton>("Summary/AlignRight/Incriment/MoveUp");
-        moveDownButton = GetNode<TextureButton>("Summary/AlignRight/Incriment/MoveDown");
+        moveUpButton = button.GetNode<TextureButton>("AlignRight/Incriment/MoveUp");
+        moveDownButton = button.GetNode<TextureButton>("AlignRight/Incriment/MoveDown");
         moveUpButton.Connect("pressed", this, "ReorderUp");
         moveDownButton.Connect("pressed", this, "ReorderDown");
 
-        details = GetNode<PanelContainer>("DetailContent");
         situations = details.GetNode<VBoxContainer>("VBoxContainer/HSplitContainer/TabContainer/Situation");
 
         // Init resource pool display.

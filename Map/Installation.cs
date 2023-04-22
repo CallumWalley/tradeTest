@@ -19,6 +19,9 @@ public class Installation : EcoNode
     [Export]
     public bool isValidTradeReceiver = false;
 
+    [Export]
+    public bool storageFull = false;
+
     //for debuggin
     public Godot.Collections.Array Children { get { return GetChildren(); } }
 
@@ -58,6 +61,18 @@ public class Installation : EcoNode
         {
             GetNode<PlayerTradeReciever>("/root/Global/Player/Trade/Receivers").RegisterInstallation(this);
         }
+        // If added in inspector, could already be resources in storage.
+        if (storageFull)
+        {
+            foreach (Resource r in resourceStockpile.GetEnumeranator())
+            {
+                Resource typeStockpile = resourceStockpile.GetType(r.Type, true);
+                Resource typeStorage = resourceStorage.GetType(r.Type, true);
+
+                typeStockpile.Sum = Math.Min(Math.Max(typeStockpile.Sum + r.Sum, 0), typeStorage.Sum);
+            }
+        }
+
     }
     public void RegisterTransformer(Transformer tr)
     {
@@ -80,7 +95,7 @@ public class Installation : EcoNode
     // this is so messy, i hate it. aaaaaaaaaaah
     public override void EFrameLate()
     {
-        foreach (Resource r in resourceDelta)
+        foreach (Resource r in resourceDelta.GetEnumeranator())
         {
             Resource typeStockpile = resourceStockpile.GetType(r.Type, true);
             Resource typeStorage = resourceStorage.GetType(r.Type, true);
@@ -89,18 +104,18 @@ public class Installation : EcoNode
             r.Clear();
         }
         // Re count storage
-        foreach (ResourceAgr r in resourceStorage)
+        foreach (ResourceAgr r in resourceStorage.GetEnumeranator())
         {
             r.Clear();
         }
         //Get production from each transformer.
-        foreach (Resource r in resourceDeltaProduced)
+        foreach (Resource r in resourceDeltaProduced.GetEnumeranator())
         {
             r.Clear();
         }
         foreach (Transformer transformer in GetChildren())
         {
-            foreach (Resource r in transformer.Production)
+            foreach (Resource r in transformer.Production.GetEnumeranator())
             {
                 resourceDeltaProduced.Add(r);
                 resourceDelta.Add(r);
@@ -113,7 +128,7 @@ public class Installation : EcoNode
     }
     public override void EFrameEarly()
     {
-        foreach (Resource r in resourceDeltaConsumed)
+        foreach (Resource r in resourceDeltaConsumed.GetEnumeranator())
         {
             r.Clear();
         }
@@ -128,27 +143,23 @@ public class Installation : EcoNode
                 float stockpile = resourceStockpile.GetType(type, true).Sum;
                 float storage = resourceStorage.GetType(type, true).Sum;
 
-                // // Amount of extra DELTA required to cover this request.
-                // float remainderDelta = (produced + consumed) + r.Sum;
-                // // Amount of extra NET required to cover this request.	
-                // float remainderNet = stockpile + remainderDelta;
-                // ResourceStatic rr;
-                // int status;
-                // if (remainderDelta >= 0 || remainderNet >= 0)
-                // {
-                //     // Fullfill full request.
-                //     rr = new ResourceStatic(r.Type, r.Sum);
-                //     status = 0;
-                // }
-                // else
-                // {
-                //     // Fullfill partial request.
-                //     rr = new ResourceStatic(r.Type, r.Sum + remainderNet);
-                //     status = 1;
-                // }
-                // r.Respond(rr, status);
-                // resourceDeltaConsumed.Add(rr);
-                // resourceDelta.Add(rr);
+                // Amount of extra DELTA required to cover this request.
+                float remainderDelta = (produced + consumed) + it.Request.Sum;
+                // Amount of extra NET required to cover this request.	
+                float remainderNet = stockpile + remainderDelta;
+                if (remainderDelta >= 0 || remainderNet >= 0)
+                {
+                    it.Respond();
+                }
+                else
+                {
+                    // Fullfill partial request.
+                    it.Respond(Mathf.Max(it.Request.Sum + remainderNet, 0));
+                }
+
+                // Add response to lists.
+                resourceDeltaConsumed.Add(it.Response);
+                resourceDelta.Add(it.Response);
 
                 // Deduct remainder from storage.
                 // Emit some sort of storage message.

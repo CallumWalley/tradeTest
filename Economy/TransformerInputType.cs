@@ -17,9 +17,11 @@ public class TransformerInputType
             Request = _request;
             Response = new ResourceStatic(Request.Type, 0);
         }
-        public virtual void Respond(ResourceStatic _response, int _status)
-        {
-        }
+        // No inputs if request fulfilled.
+        public virtual void Respond() { Response.Sum = Request.Sum; }
+        // No fulfilled value returned if not fulfilled.
+        public virtual void Respond(float value) { Response.Sum = value; }
+
     }
     public class Linear : Base
     {
@@ -34,10 +36,15 @@ public class TransformerInputType
             transformer.Production.Multiply(multiplier);
             transformer.AddSituation(new Situations.OutputModifier(Response, multiplier, transformer));
         }
-        public override void Respond(ResourceStatic _response, int _status)
+        public override void Respond()
         {
-            Response = _response;
-            multiplier.Sum = ((Response.Sum - Request.Sum) / Request.Sum);
+            base.Respond();
+            multiplier.Sum = 1f;
+        }
+        public override void Respond(float value)
+        {
+            base.Respond(value);
+            multiplier.Sum = ((value - Request.Sum) / Request.Sum);
         }
     }
     // // Small class to handle 'request, vs receive'

@@ -44,7 +44,7 @@ public class UITradeRoute : Control
 
         // Init resource pool display.
         UIResourceList uir = GetNode<UIResourceList>("DetailContent/Installation");
-        uir.Init(tradeRoute.Balance);
+        uir.Init(tradeRoute.Balance.GetStandard());
     }
     public override void _Ready()
     {

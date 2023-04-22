@@ -9,7 +9,7 @@ public class TradeRoute : EcoNode
     public Installation source;
     public TransformerTrade transformerSource;
     public TransformerTrade transformerDestintation;
-    public List<Resource> Balance;
+    public ResourceList Balance;
     public List<TransformerInputType.Base> consumptionSource;
     public List<TransformerInputType.Base> consumptionDestination;
 
@@ -21,13 +21,17 @@ public class TradeRoute : EcoNode
     {
         public InputType(TransformerTrade _transformer, ResourceStatic _request) : base(_transformer, _request)
         {
-            transformer = _transformer;
-            Request = _request;
-            Type = Request.Type;
+
         }
-        public new void Respond(ResourceStatic _response, int _status)
+        public new void Respond()
         {
-            ((TransformerTrade)transformer).twin.Production.GetType(Type).Sum = _response.Sum;
+            base.Respond();
+            ((TransformerTrade)transformer).twin.Production.GetType(Type).Sum = Request.Sum;
+        }
+        public new void Respond(float value)
+        {
+            base.Respond(value);
+            ((TransformerTrade)transformer).twin.Production.GetType(Type).Sum = Response.Sum;
         }
     }
 
@@ -62,6 +66,8 @@ public class TradeRoute : EcoNode
         distance = destination.GetParent<Body>().Position.DistanceTo(source.GetParent<Body>().Position);
         Name = $"Trade route from {transformerSource.Name} to {transformerDestintation.Name}";
 
+        Balance = new ResourceList(true);
+
         MatchDemand();
         UpdateFreighterWeight();
     }
@@ -74,7 +80,7 @@ public class TradeRoute : EcoNode
     {
         float shipWeightImport = 0;
         float shipWeightExport = 0;
-        foreach (Resource child in Balance)
+        foreach (Resource child in Balance.GetEnumeranator())
         {
             if (child.Sum > 0)
             {
@@ -90,7 +96,7 @@ public class TradeRoute : EcoNode
 
     public void Set()
     {
-        foreach (Resource r in Balance)
+        foreach (Resource r in Balance.GetEnumeranator())
         {
             if (r.Sum > 0)
             {
@@ -126,10 +132,12 @@ public class TradeRoute : EcoNode
     public void MatchDemand()
     {
         Balance.Clear();
+
         foreach (Resource r in destination.resourceDelta.GetStandard())
         {
-            Balance.Add(new ResourceStatic(r.Type, r.Sum));
+            Balance.GetType(r.Type, true).Sum = r.Sum;
         }
+        Balance.RemoveZeros();
     }
 
     void UpdateFreighterWeight()

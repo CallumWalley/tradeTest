@@ -17,7 +17,8 @@ public class UIResourcesPanel : Control
 
     UITradeSourceSelector uiTradeDestinationSelector;
     static readonly PackedScene p_transformer = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/UITransformer.tscn");
-    static readonly PackedScene p_list = GD.Load<PackedScene>("res://GUI/Components/UIList.tscn");
+    static readonly PackedScene p_vlist = GD.Load<PackedScene>("res://GUI/Components/UIListVBox.tscn");
+    static readonly PackedScene p_hlist = GD.Load<PackedScene>("res://GUI/Components/UIListHBox.tscn");
     static readonly PackedScene p_UIStorageList = GD.Load<PackedScene>("res://GUI/Components/UIStorageList.tscn");
     static readonly PackedScene p_uiTradeDestination = GD.Load<PackedScene>("res://GUI/Components/UITradeSourceSelector.tscn");
 
@@ -30,7 +31,7 @@ public class UIResourcesPanel : Control
         uiTradeDestinationSelector.Init(installation);
         AddChild(uiTradeDestinationSelector);
 
-        uiResourceList = p_list.Instance<UIResourceList>();
+        uiResourceList = p_hlist.Instance<UIResourceList>();
         uiResourceList.Init(installation.resourceDelta.GetStandard());
         AddChild(uiResourceList);
 
@@ -51,12 +52,19 @@ public class UIResourcesPanel : Control
 
 
 
-        uiTransformerList = p_list.Instance<UIList>();
-        uiTransformerList.Init(new List<System.Object> { installation.GetChildren() }, p_transformer);
+        uiTransformerList = p_vlist.Instance<UIList>();
+        uiTransformerList.Init(WhyAreYouLikeThis(installation.GetChildren()), p_transformer);
         AddChild(uiTransformerList);
         uiTransformerList.Visible = true;
     }
-
+    // TODO: ask noel for heeeeelppppppp
+    IEnumerable<System.Object> WhyAreYouLikeThis(Godot.Collections.Array aaaaaaaa)
+    {
+        foreach (System.Object aaaaaaaaaaaa in aaaaaaaa)
+        {
+            yield return aaaaaaaaaaaa;
+        }
+    }
 
     //  // Called every frame. 'delta' is the elapsed time since the previous frame.
     //  public override void _Process(float delta)

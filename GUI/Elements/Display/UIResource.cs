@@ -9,6 +9,32 @@ public class UIResource : UIElement, UIList.IListable
     public Control Control { get { return this; } }
     public System.Object GameElement { get { return resource; } }
 
+    public bool NameVisible
+    {
+        get
+        {
+            if (name != null)
+            {
+                return name.Visible;
+            }
+            else
+            {
+                GD.Print("This resrouce is null for some reason");
+                return false;
+            }
+        }
+        set
+        {
+            if (name != null)
+            {
+                name.Visible = value;
+            }
+            else
+            {
+                GD.Print("This resrouce is null for some reason");
+            }
+        }
+    }
 
     // Prefabs
     static readonly PackedScene p_UIResourceBreakdown = GD.Load<PackedScene>("res://GUI/Components/UIResourceBreakdown.tscn");
@@ -17,6 +43,8 @@ public class UIResource : UIElement, UIList.IListable
     // Child components
     protected Control details;
     protected Label value;
+    protected Label name;
+    bool showDetails = true;
 
     public void Init(Resource _resource, Resource _request)
     {
@@ -28,8 +56,9 @@ public class UIResource : UIElement, UIList.IListable
     {
         Init((Resource)_go);
     }
-    public void Init(Resource _resource)
+    public void Init(Resource _resource, bool _showDetails = true)
     {
+        showDetails = _showDetails;
         resource = _resource;
         if (resource != null)
         {
@@ -43,10 +72,17 @@ public class UIResource : UIElement, UIList.IListable
 
     public override void _Ready()
     {
-        base._Ready();
+        if (showDetails)
+        {
+            base._Ready();
+        }
 
         // Assign children
         value = GetNode<Label>("Value");
+        name = GetNode<Label>("Name");
+
+
+
         // details assigned on first call of ShowDetails
     }
 
@@ -97,6 +133,7 @@ public class UIResource : UIElement, UIList.IListable
             {
                 value.Text = (resource.Sum).ToString();
             }
+            name.Text = $": {resource.Name}";
         }
         else
         {
