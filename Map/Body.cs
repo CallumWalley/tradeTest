@@ -117,7 +117,20 @@ public class Body : Node2D
         pointsArc[nPoints] = pointsArc[0];
         DrawPolygon(pointsArc, colors);
     }
+    // public void DrawCircleArcLine(int nPoints, float radius, Color color)
+    // {
+    //     var pointsArc = new Vector2[nPoints + 1];
+    //     var colors = new Color[] { color };
 
+    //     for (int i = 0; i < nPoints; ++i)
+    //     {
+    //         float anglePoint = i * ((float)Math.PI * 2f / nPoints);
+    //         pointsArc[i] = new Vector2(Mathf.Cos(anglePoint), Mathf.Sin(anglePoint)) * radius;
+    //         //GD.Print(pointsArc[i]);
+    //     }
+    //     pointsArc[nPoints] = pointsArc[0];
+    //     DrawArc(pointsArc, colors);
+    // }
     public void DrawEllipseLineArc(int nPoints, float radius, Color color)
     {
 

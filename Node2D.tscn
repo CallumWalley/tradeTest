@@ -121,6 +121,7 @@ radius = 8.0
 color = Color( 0.415686, 0.219608, 0.219608, 1 )
 
 [node name="Installation" parent="Systems/System1/Mars" instance=ExtResource( 10 )]
+storageFull = true
 
 [node name="Surface Mine" parent="Systems/System1/Mars/Installation" instance=ExtResource( 6 )]
 slug = "mine_surf_old"
@@ -132,6 +133,7 @@ radius = 15.0
 color = Color( 0.596078, 0.596078, 0.372549, 1 )
 
 [node name="Installation" parent="Systems/System1/Saturn" instance=ExtResource( 10 )]
+storageFull = true
 
 [node name="Earth" parent="Systems/System1" instance=ExtResource( 1 )]
 position = Vector2( 148, 157 )

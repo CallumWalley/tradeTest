@@ -18,8 +18,5 @@ toggle_mode = true
 flat = true
 align = 0
 
-[node name="Container" type="VBoxContainer" parent="."]
+[node name="Container" type="MarginContainer" parent="."]
 visible = false
-margin_top = 24.0
-margin_right = 1024.0
-margin_bottom = 24.0

@@ -8,6 +8,7 @@ public class TransformerInputType
         public ResourceStatic Request;
         public ResourceStatic Response;
         protected Transformer transformer;
+        public int State{get; set;}
 
         public int Type { get; protected set; }
 
@@ -18,10 +19,16 @@ public class TransformerInputType
             Response = new ResourceStatic(Request.Type, 0);
         }
         // No inputs if request fulfilled.
-        public virtual void Respond() { Response.Sum = Request.Sum; }
+        public virtual void Respond() { 
+            Response.Sum = Request.Sum;
+            State=0; 
+            GD.Print($"Fulfilled request");
+        }
         // No fulfilled value returned if not fulfilled.
-        public virtual void Respond(float value) { Response.Sum = value; }
-
+        public virtual void Respond(float value) { Response.Sum = value;
+            GD.Print($"Partial request {value}/{Request.Sum}");
+            State = 1;
+        }
     }
     public class Linear : Base
     {
