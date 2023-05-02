@@ -5,38 +5,38 @@
 [ext_resource path="res://GUI/Components/UITransformer.cs" type="Script" id=3]
 [ext_resource path="res://GUI/Elements/Button/UICancel.tscn" type="PackedScene" id=4]
 [ext_resource path="res://GUI/Elements/UIAccordian.tscn" type="PackedScene" id=5]
-[ext_resource path="res://GUI/Components/UIListHBox.tscn" type="PackedScene" id=6]
+[ext_resource path="res://GUI/Elements/Organising/UIListHBox.tscn" type="PackedScene" id=6]
 
 [node name="Transformer" type="PanelContainer"]
-margin_right = 339.0
-margin_bottom = 44.0
+offset_right = 339.0
+offset_bottom = 44.0
 size_flags_horizontal = 7
 size_flags_vertical = 7
 script = ExtResource( 3 )
 
 [node name="Accordian" parent="." instance=ExtResource( 5 )]
 anchor_right = 0.0
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 332.0
-margin_bottom = 37.0
+offset_left = 7.0
+offset_top = 7.0
+offset_right = 332.0
+offset_bottom = 37.0
 size_flags_stretch_ratio = 0.0
 
 [node name="Button" parent="Accordian" index="0"]
-margin_right = 325.0
-margin_bottom = 30.0
-rect_min_size = Vector2( 0, 30 )
+offset_right = 325.0
+offset_bottom = 30.0
+custom_minimum_size = Vector2( 0, 30 )
 
 [node name="SummaryContent" type="HBoxContainer" parent="Accordian/Button" index="0"]
 anchor_right = 0.65
 anchor_bottom = 1.0
-rect_min_size = Vector2( 100, 0 )
+custom_minimum_size = Vector2( 100, 0 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Summary" type="Label" parent="Accordian/Button/SummaryContent"]
-margin_right = 115.0
-margin_bottom = 30.0
+offset_right = 115.0
+offset_bottom = 30.0
 size_flags_horizontal = 0
 size_flags_vertical = 1
 text = "TransformerName"
@@ -46,98 +46,113 @@ valign = 1
 anchor_left = 0.65
 anchor_right = 1.0
 anchor_bottom = 1.0
-rect_min_size = Vector2( 0, 30 )
+custom_minimum_size = Vector2( 0, 30 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 2
 
 [node name="VSeparator" type="VSeparator" parent="Accordian/Button/AlignRight"]
 modulate = Color( 0.482353, 0.482353, 0.482353, 1 )
-margin_left = 88.0
-margin_right = 92.0
-margin_bottom = 30.0
+offset_left = 88.0
+offset_right = 92.0
+offset_bottom = 30.0
 
 [node name="Drag" parent="Accordian/Button/AlignRight" instance=ExtResource( 1 )]
 visible = false
 modulate = Color( 0.509804, 0.509804, 0.509804, 1 )
-margin_left = 15.0
-margin_right = 39.0
-margin_bottom = 31.0
+offset_left = 15.0
+offset_right = 39.0
+offset_bottom = 31.0
 
 [node name="Incriment" parent="Accordian/Button/AlignRight" instance=ExtResource( 2 )]
-margin_left = 96.0
-margin_right = 105.0
+offset_left = 96.0
+offset_right = 105.0
 
 [node name="VSeparator2" type="VSeparator" parent="Accordian/Button/AlignRight"]
 modulate = Color( 0.482353, 0.482353, 0.482353, 1 )
-margin_left = 109.0
-margin_right = 113.0
-margin_bottom = 30.0
+offset_left = 109.0
+offset_right = 113.0
+offset_bottom = 30.0
 
 [node name="Cancel" parent="Accordian/Button/AlignRight" instance=ExtResource( 4 )]
 visible = false
-margin_left = 29.0
-margin_right = 60.0
+offset_left = 29.0
+offset_right = 60.0
 
 [node name="Container" parent="Accordian" index="1"]
 modulate = Color( 0.615686, 0.615686, 0.615686, 1 )
-margin_top = 34.0
-margin_right = 325.0
-margin_bottom = 88.0
+offset_top = 34.0
+offset_right = 325.0
+offset_bottom = 88.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Accordian/Container" index="0"]
-margin_right = 325.0
-margin_bottom = 54.0
+offset_right = 325.0
+offset_bottom = 54.0
 
 [node name="Description" type="Label" parent="Accordian/Container/VBoxContainer"]
-margin_right = 325.0
-margin_bottom = 14.0
+offset_right = 325.0
+offset_bottom = 14.0
 text = "Description"
 autowrap = true
 
 [node name="HSplitContainer" type="HSplitContainer" parent="Accordian/Container/VBoxContainer"]
-margin_top = 18.0
-margin_right = 325.0
-margin_bottom = 54.0
+offset_top = 18.0
+offset_right = 325.0
+offset_bottom = 54.0
 
 [node name="Left" type="VBoxContainer" parent="Accordian/Container/VBoxContainer/HSplitContainer"]
-margin_bottom = 36.0
+offset_right = 3.0
+offset_bottom = 36.0
 
 [node name="Consumption" parent="Accordian/Container/VBoxContainer/HSplitContainer/Left" instance=ExtResource( 6 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_bottom = 16.0
+offset_right = 3.0
+offset_bottom = 6.0
 
 [node name="Production" parent="Accordian/Container/VBoxContainer/HSplitContainer/Left" instance=ExtResource( 6 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 20.0
-margin_bottom = 36.0
+offset_top = 10.0
+offset_right = 3.0
+offset_bottom = 17.0
+
+[node name="HSeparator" type="HSeparator" parent="Accordian/Container/VBoxContainer/HSplitContainer/Left"]
+offset_top = 21.0
+offset_right = 3.0
+offset_bottom = 25.0
+
+[node name="Storage" parent="Accordian/Container/VBoxContainer/HSplitContainer/Left" instance=ExtResource( 6 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_top = 29.0
+offset_right = 3.0
+offset_bottom = 36.0
 
 [node name="TabContainer" type="TabContainer" parent="Accordian/Container/VBoxContainer/HSplitContainer"]
-margin_left = 12.0
-margin_right = 325.0
-margin_bottom = 36.0
-tab_align = 0
+offset_left = 15.0
+offset_right = 325.0
+offset_bottom = 36.0
+tab_alignment = 0
 
 [node name="Situation" type="VBoxContainer" parent="Accordian/Container/VBoxContainer/HSplitContainer/TabContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 32.0
-margin_right = -4.0
-margin_bottom = -4.0
+offset_left = 4.0
+offset_top = 32.0
+offset_right = -4.0
+offset_bottom = -4.0
 
 [node name="NoSituation" type="Label" parent="Accordian/Container/VBoxContainer/HSplitContainer/TabContainer/Situation"]
 visible = false
-margin_top = 21.0
-margin_right = 985.0
-margin_bottom = 35.0
+offset_top = 21.0
+offset_right = 985.0
+offset_bottom = 35.0
 text = "Situation Nominal"
 align = 1
 valign = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Accordian/Container/VBoxContainer/HSplitContainer/TabContainer/Situation"]
-margin_right = 305.0
+offset_right = 302.0
 
 [editable path="Accordian"]

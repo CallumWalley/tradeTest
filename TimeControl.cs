@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class TimeControl : Container
+public partial class TimeControl : Container
 {
 
     //Labels
@@ -24,12 +24,12 @@ public class TimeControl : Container
         labelEFramePeriod = (Label)GetNode("Count/eframePeriod");
 
         global = (Global)GetNode("/root/Global");
-        global.Connect("EFrameEarly", this, "EFrameEarly");
+        global.Connect("EFrameEarly", new Callable(this, "EFrameEarly"));
 
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(float delta)
+    public override void _Process(double delta)
     {
         frameCount += 1;
 
@@ -42,7 +42,6 @@ public class TimeControl : Container
     void EFrameEarly()
     {
         eframeCount += 1;
-        PrintStrayNodes();
-
+        PrintOrphanNodes();
     }
 }

@@ -2,7 +2,7 @@ using Godot;
 using System;
 
 //Base class for informational element.
-public class UIElement : Control
+public partial class UIElement : Control
 {
     protected Logger logger;
     protected bool mouseOver;
@@ -25,8 +25,8 @@ public class UIElement : Control
         GD.Print("new object.");
 
         // // defaultVisibile = Visible;
-        Connect("mouse_entered", this, "MouseEnter");
-        Connect("mouse_exited", this, "MouseExit");
+        Connect("mouse_entered", new Callable(this, "MouseEnter"));
+        Connect("mouse_exited", new Callable(this, "MouseExit"));
     }
 
     void MouseEnter()
@@ -60,7 +60,7 @@ public class UIElement : Control
     }
 
     // TODO replace with co-routine?
-    public override void _Process(float delta)
+    public override void _Process(double delta)
     {
         base._Process(delta);
 

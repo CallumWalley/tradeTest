@@ -4,9 +4,9 @@
 
 [node name="ResourceBreakdown" type="PopupPanel"]
 process_priority = 10
-margin_right = 150.0
-margin_bottom = 28.0
-rect_clip_content = true
+offset_right = 150.0
+offset_bottom = 28.0
+clip_contents = true
 size_flags_horizontal = 7
 size_flags_vertical = 7
 script = ExtResource( 2 )

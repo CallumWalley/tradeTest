@@ -1,65 +1,66 @@
 using Godot;
 using System;
 
-public class UIResourceBreakdown : UIPopover
+public partial class UIResourceBreakdown : UIPopover
 {
-	Resource resource;
-	readonly PackedScene p_accordian = GD.Load<PackedScene>("res://GUI/Elements/UIAccordian.tscn");
-	readonly PackedScene p_resource = GD.Load<PackedScene>("res://GUI/Elements/Display/UIResource.tscn");
+    Resource.IResource resource;
+    readonly PackedScene p_accordian = GD.Load<PackedScene>("res://GUI/Elements/UIAccordian.tscn");
+    readonly PackedScene p_resource = GD.Load<PackedScene>("res://GUI/Elements/Display/UIResource.tscn");
 
 
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
-	{
-		base._Ready();
-		Render(resource, this);
-		this.Raise();
-	}
-	public override void _Draw()
-	{
-		base._Draw();
-		Raise();
-		
-	}
-	public void Init(Resource _resource)
-	{
-		resource = _resource;
-	}
+    // Called when the node enters the scene tree for the first time.
+    public override void _Ready()
+    {
+        base._Ready();
+        Render(resource, this);
+        this.Raise();
+    }
+    public override void _Draw()
+    {
+        base._Draw();
+        Raise();
 
-	void Render(Resource r, Control parent)
-	{
-		UIResource newResource = p_resource.Instance<UIResource>();
-		newResource.Init(resource, false);
+    }
+    public void Init(Resource.IResource _resource)
+    {
+        resource = _resource;
+    }
 
-		if (r is ResourceAgr)
-		{
-			UIAccordian newAccordian = p_accordian.Instance<UIAccordian>();
-			parent.AddChild(newAccordian);
+    void Render(Resource.IResource r, Control parent, bool multiple = false)
+    {
+        UIResource newResource = p_resource.Instance<UIResource>();
+        newResource.Init(resource, false);
 
-			newAccordian.GetNode<Button>("Button").AddChild(newResource);
+        if (r is Resource.RGroup)
+        {
+            UIAccordian newAccordian = p_accordian.Instance<UIAccordian>();
+            parent.AddChild(newAccordian);
 
-			foreach (Resource r2 in ((ResourceAgr)r).GetAdd)
-			{
-				Render(r2, newAccordian.GetNode<Container>("Container"));
-			}
-			foreach (Resource r2 in ((ResourceAgr)r).GetMulti){
-				newAccordian.AddChild(new HSeparator());
-				break;
-			}
-			foreach (Resource r2 in ((ResourceAgr)r).GetMulti)
-			{
-				Render(r2, newAccordian.GetNode<Container>("Container"));
-			}
-			newAccordian.Expanded = true;
-			newAccordian.MarginLeft = 8;
-		}
-		else
-		{
-			parent.AddChild(newResource);
-		}
-		newResource.NameVisible = true;
-		newResource.MarginLeft = 8;
+            newAccordian.GetNode<Button>("Button").AddChild(newResource);
+
+            foreach (Resource.IResource r2 in ((Resource.RGroup)r).GetAdd)
+            {
+                Render(r2, newAccordian.GetNode<Container>("Container"));
+            }
+            foreach (Resource.IResource r2 in ((Resource.RGroup)r).GetMulti)
+            {
+                newAccordian.AddChild(new HSeparator());
+                break;
+            }
+            foreach (Resource.IResource r2 in ((Resource.RGroup)r).GetMulti)
+            {
+                Render(r2, newAccordian.GetNode<Container>("Container"), true);
+            }
+            newAccordian.Expanded = true;
+            newAccordian.OffsetLeft = 8;
+        }
+        else
+        {
+            parent.AddChild(newResource);
+        }
+        newResource.NameVisible = true;
+        newResource.OffsetLeft = 8;
 
 
-	}
+    }
 }

@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using System.Collections;
 
-public class UIInstallationSummary : UIElement
+public partial class UIInstallationSummary : UIElement
 {   
     Installation installation;
     Label labelName;

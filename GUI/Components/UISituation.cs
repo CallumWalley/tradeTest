@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class UISituation : VBoxContainer
+public partial class UISituation : VBoxContainer
 {
     RichTextLabel name;
     RichTextLabel description;
@@ -24,7 +24,7 @@ public class UISituation : VBoxContainer
 
     public override void _Draw()
     {
-        name.BbcodeText = $"[b]{situation.Name}[/b]";
+        name.Text = $"[b]{situation.Name}[/b]";
         description.Text = situation.Description;
         if (situation is Situations.OutputModifier)
         {

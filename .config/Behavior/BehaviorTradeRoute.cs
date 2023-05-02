@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 
-public class BehaviorTradeRoute: Behavior{
+public partial class BehaviorTradeRoute: Behavior{
 
     
 

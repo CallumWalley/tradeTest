@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class PlayerTradeReciever : Node
+public partial class PlayerTradeReciever : Node
 {
 	public List<Installation> list;
 

@@ -43,7 +43,7 @@ public class UIInfoCard : Container
 	}
 	
 	// TODO replace with co-routine
-	public override void _Process(float delta){
+	public override void _Process(double delta){
 
 		if ( ( ! defaultVisibile ) && Visible && ! focus ){
 			count-=delta;

@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class UIIndustryPanel : Control
+public partial class UIIndustryPanel : Control
 {
 	Body body;
 

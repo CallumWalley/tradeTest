@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class UIBodyCard : UICard
+public partial class UIBodyCard : UICard
 {
     Body body;
     static readonly PackedScene p_tradePanel = (PackedScene)GD.Load<PackedScene>("res://GUI/Panels/UIResourcesPanel.tscn");
@@ -103,7 +103,7 @@ public class UIBodyCard : UICard
 
     // }
 
-    // public override void _Process(float _delta)
+    // public override void _Process(double _delta)
     // {
     // 	if (Input.IsActionPressed("ui_select")){
     // 		if (focus){

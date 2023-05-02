@@ -2,7 +2,7 @@
 
 [node name="Details" type="Popup"]
 visible = true
-margin_left = 330.0
-margin_top = 257.0
-margin_right = 330.0
-margin_bottom = 275.0
+offset_left = 330.0
+offset_top = 257.0
+offset_right = 330.0
+offset_bottom = 275.0

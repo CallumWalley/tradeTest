@@ -2,11 +2,11 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class UITradeSourceSelector : Control
+public partial class UITradeSourceSelector : Control
 {
     PlayerTradeReciever globalTrade;
     PlayerTradeRoutes playerTradeRoutes;
-    static readonly Texture freighterIcon = GD.Load<Texture>("res://assets/icons/freighter.png");
+    static readonly Texture2D freighterIcon = GD.Load<Texture2D>("res://assets/icons/freighter.png");
 
 
     // Index of trade route destingation if exists already;
@@ -64,10 +64,10 @@ public class UITradeSourceSelector : Control
         GetNode("AlignLeft").AddChild(currentTradeSourcePanel);
         currentTradeSourcePanel.GetNode<Button>("Button").Flat = true;
         currentTradeSourcePanel.GetNode<Button>("Button").Disabled = true;
-        textureButton.Connect("pressed", this, "DropDown");
+        textureButton.Connect("pressed", new Callable(this, "DropDown"));
     }
 
-    public override void _Process(float delta)
+    public override void _Process(double delta)
     {
         // Draw is too slow to update, makes panel jump around.
         base._Process(delta);
@@ -81,12 +81,12 @@ public class UITradeSourceSelector : Control
 
         if (!(validTradeSources is null) && validTradeSources.Count < 2)
         {
-            textureButton.HintTooltip = "No stations are able to send freighters.";
+            textureButton.TooltipText = "No stations are able to send freighters.";
             textureButton.Disabled = true;
         }
         else
         {
-            textureButton.HintTooltip = "Request freighters from another station.";
+            textureButton.TooltipText = "Request freighters from another station.";
             textureButton.Disabled = false;
         }
     }
@@ -119,7 +119,7 @@ public class UITradeSourceSelector : Control
             uir.QueueFree();
         }
         popoverList.Show();
-        popoverList.RectGlobalPosition = RectGlobalPosition;
+        popoverList.GlobalPosition = GlobalPosition;
 
         // show current dest somehow.
     }

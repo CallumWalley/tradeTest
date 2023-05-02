@@ -4,7 +4,7 @@
 [ext_resource path="res://GUI/Elements/Button/UISettings.tscn" type="PackedScene" id=2]
 [ext_resource path="res://GUI/Components/UITradeSourceSelector.cs" type="Script" id=3]
 [ext_resource path="res://GUI/Elements/UIPopover.tscn" type="PackedScene" id=5]
-[ext_resource path="res://assets/icons/alert.png" type="Texture" id=6]
+[ext_resource path="res://assets/icons/alert.png" type="Texture2D" id=6]
 
 [sub_resource type="AtlasTexture" id=2]
 flags = 4
@@ -14,8 +14,8 @@ region = Rect2( 0, 0, 38, 38 )
 [node name="TradeSource" type="Button"]
 anchor_right = 1.0
 anchor_bottom = 0.107
-margin_bottom = -0.200005
-rect_min_size = Vector2( 0, 64 )
+offset_bottom = -0.200005
+custom_minimum_size = Vector2( 0, 64 )
 size_flags_vertical = 3
 shortcut_in_tooltip = false
 flat = true
@@ -24,7 +24,7 @@ script = ExtResource( 3 )
 [node name="AlignLeft" type="HBoxContainer" parent="."]
 anchor_right = 0.9
 anchor_bottom = 1.0
-margin_right = -20.0
+offset_right = -20.0
 size_flags_horizontal = 3
 
 [node name="AlignRight" type="HBoxContainer" parent="."]
@@ -35,29 +35,29 @@ grow_horizontal = 0
 alignment = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="AlignRight"]
-margin_left = 64.0
-margin_right = 102.0
-margin_bottom = 64.0
+offset_left = 64.0
+offset_right = 102.0
+offset_bottom = 64.0
 alignment = 1
 
 [node name="Settings" parent="AlignRight/VBoxContainer" instance=ExtResource( 2 )]
-margin_left = 0.0
-margin_top = 13.0
-margin_right = 38.0
-margin_bottom = 51.0
-rect_pivot_offset = Vector2( 0, 32 )
+offset_left = 0.0
+offset_top = 13.0
+offset_right = 38.0
+offset_bottom = 51.0
+pivot_offset = Vector2( 0, 32 )
 shortcut_in_tooltip = false
 texture_disabled = SubResource( 2 )
 
 [node name="InfoCard" parent="." instance=ExtResource( 1 )]
 
 [node name="PopoverList" parent="." instance=ExtResource( 5 )]
-margin_top = -123.0
-margin_bottom = -51.0
+offset_top = -123.0
+offset_bottom = -51.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PopoverList"]
 anchor_right = 1.0
-margin_left = 4.0
-margin_top = 4.0
-margin_right = -4.0
-margin_bottom = 68.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = 68.0

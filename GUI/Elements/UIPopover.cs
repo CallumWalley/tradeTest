@@ -1,8 +1,8 @@
 using Godot;
 using System;
 
-public class UIPopover : UIElement
-{   
+public partial class UIPopover : UIElement
+{
     public bool moveWithParent = true;
     Vector2 offset; // initial offset to parent.
 
@@ -23,13 +23,15 @@ public class UIPopover : UIElement
     {
         base._Draw();
     }
-    public override void _Process(float _delta)
-    {   
+    public override void _Process(double _delta)
+    {
         base._Process(_delta);
-        if (moveWithParent){
+        if (moveWithParent)
+        {
             Control p = GetParentOrNull<Control>();
-            if (p != null){
-                RectPosition = p.RectGlobalPosition;//+ offset;
+            if (p != null)
+            {
+                Position = p.GlobalPosition;//+ offset;
             }
         }
 

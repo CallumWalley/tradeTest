@@ -11,7 +11,7 @@ public enum LogLevel
     ERROR
 }
 
-public class Logger
+public partial class Logger
 {
     private static char[] DELIMITERS = { '[', ']' };
 

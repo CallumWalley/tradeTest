@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class UIInputType : UIResource
+public partial class UIInputType : UIResource
 {
     // modification for inputType class (e.g, show requested and delivered)
     public TransformerInputType.Base inputType;
@@ -17,7 +17,7 @@ public class UIInputType : UIResource
     {
         if (inputType != null)
         {
-            value.Text = String.Format("{0:N1}/{1:N1}", inputType.Response.Sum, inputType.Request.Sum);
+            value.Text = String.Format("{0:N1}/{1:N1}", inputType.Response.Sum(), inputType.Request.Sum());
         }
         else
         {

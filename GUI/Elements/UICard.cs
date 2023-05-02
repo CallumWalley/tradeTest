@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class UICard : WindowDialog
+public partial class UICard : Window
 {
     public override void _Input(InputEvent @event)
     {
@@ -10,6 +10,7 @@ public class UICard : WindowDialog
             SetDeferred("visible", false);
         }
     }
+
     public override void _Ready()
     {
         //global = (Global)GetNode("/root/Global");
@@ -55,7 +56,7 @@ public class UICard : WindowDialog
 // 	}
 
 // 	// TODO replace with co-routine
-// 	public override void _Process(float delta){
+// 	public override void _Process(double delta){
 
 // 		if ( ( ! defaultVisibile ) && Visible && ! focus ){
 // 			count-=delta;

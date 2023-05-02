@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 
-public class TransformerRegister : Node
+public partial class TransformerRegister : Node
 {
     // Declare member variables here. Examples:
     // private int a = 2;
     // private string b = "text";
     List<TransformerType> list;
 
-    public class TransformerType
+    public partial class TransformerType
     {
         public string Name { get; set; }
         public string Slug { get; set; }
@@ -62,7 +62,7 @@ public class TransformerRegister : Node
 
     IEnumerable<TransformerType> LoadFromFile()
     {
-        foreach (var file in System.IO.Directory.GetFiles("Transformers", "*.json"))
+        foreach (var file in System.IO.DirAccess.GetFiles("Transformers", "*.json"))
         {
             using (StreamReader fi = System.IO.File.OpenText(file))
             {
@@ -81,7 +81,7 @@ public class TransformerRegister : Node
     }
 
     //  // Called every frame. 'delta' is the elapsed time since the previous frame.
-    //  public override void _Process(float delta)
+    //  public override void _Process(double delta)
     //  {
     //      
     //  }

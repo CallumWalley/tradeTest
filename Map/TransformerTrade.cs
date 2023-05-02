@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class TransformerTrade : Transformer
+public partial class TransformerTrade : Transformer
 {
     public TradeRoute tradeRoute;
 

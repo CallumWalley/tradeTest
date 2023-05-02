@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class UIAstroPanel : MarginContainer
+public partial class UIAstroPanel : MarginContainer
 {
     public Body body;
 

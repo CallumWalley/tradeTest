@@ -16,7 +16,9 @@
             "request": "launch",
             "mode": "executable",
             "preLaunchTask": "build",
-            "executable": "/snap/gd-godot-engine-mono-snapcraft/23/godot-engine-mono/godot-engine-mono",
+            "executable": "/usr/local/bin/godot",
+            // See which arguments are available here:
+            // https://docs.godotengine.org/en/stable/getting_started/editor/command_line_tutorial.html
             "executableArguments": [
                 "--path",
                 "${workspaceRoot}"
@@ -28,7 +30,9 @@
             "request": "launch",
             "mode": "executable",
             "preLaunchTask": "build",
-            "executable": "/snap/gd-godot-engine-mono-snapcraft/23/godot-engine-mono/godot-engine-mono",
+            "executable": "/usr/local/bin/godot",
+            // See which arguments are available here:
+            // https://docs.godotengine.org/en/stable/getting_started/editor/command_line_tutorial.html
             "executableArguments": [
                 "--path",
                 "${workspaceRoot}",
@@ -40,7 +44,7 @@
             "type": "godot-mono",
             "request": "attach",
             "address": "localhost",
-            "port": 6007
+            "port": 23685
         }
     ]
 }

@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class UIEditValue : Label
+public partial class UIEditValue : Label
 {
 
 	LineEdit lineEdit;
@@ -19,7 +19,7 @@ public class UIEditValue : Label
 		}
 		return true;
 	}
-	bool TextEntered(String str){
+	bool TextSubmitted(String str){
 		if (textEntered != null){
 			return textEntered(str);
 		}
@@ -34,10 +34,10 @@ public class UIEditValue : Label
 				lineEdit.SetDeferred("visible", false);
 			}else if (@event.IsActionPressed("ui_accept")){
 				lineEdit.SetDeferred("visible", false);
-				TextEntered(lineEdit.Text);
+				TextSubmitted(lineEdit.Text);
 			}else if (@event.IsActionPressed("ui_select") && !mouseOver){
 				lineEdit.SetDeferred("visible", false);
-				TextEntered(lineEdit.Text);
+				TextSubmitted(lineEdit.Text);
 			}
 		}else if (@event is InputEventMouseButton){
 			if (((InputEventMouseButton)@event).Doubleclick)
@@ -54,11 +54,11 @@ public class UIEditValue : Label
 	{
 		lineEdit = GetNode<LineEdit>("LineEdit");
 
-		lineEdit.Connect("text_changed", this, "TextChanged");
-		lineEdit.Connect("text_entered", this, "TextEntered");
+		lineEdit.Connect("text_changed", new Callable(this, "TextChanged"));
+		lineEdit.Connect("text_entered", new Callable(this, "TextSubmitted"));
 
-		lineEdit.Connect("mouse_entered", this, "MouseEnter");
-		lineEdit.Connect("mouse_exited", this, "MouseExit");
+		lineEdit.Connect("mouse_entered", new Callable(this, "MouseEnter"));
+		lineEdit.Connect("mouse_exited", new Callable(this, "MouseExit"));
 	}
 
 	void MouseEnter(){

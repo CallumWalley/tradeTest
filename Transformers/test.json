@@ -50,6 +50,29 @@
         "maxConstructionRate": 1
     },
     {
+        "name": "Water Reserves",
+        "slug": "orbit_storage_h20",
+        "consumption": {},
+        "production": {},
+        "storage": {
+            "4": 40
+        },
+        "superclass": "storage",
+        "subclass": "storage_h20",
+        "tags": [],
+        "description": "Large quantities of dihydrogen oxide, pressurised in order to maintain a subcritical state.",
+        "image": "",
+        "defaultPrioroty": 0,
+        "requirements": {
+            "player": [],
+            "installation": [
+                "orbital"
+            ]
+        },
+        "contructionCost": {},
+        "maxConstructionRate": 1
+    },
+    {
         "name": "Surface Mine",
         "slug": "mine_surf_old",
         "consumption": {

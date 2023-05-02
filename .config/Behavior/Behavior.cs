@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 
-public class Behavior{
+public partial class Behavior{
 
 
 

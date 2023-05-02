@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class UITradeRoute : Control
+public partial class UITradeRoute : Control
 {
     public TradeRoute tradeRoute;
     static readonly PackedScene resourceIcon = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/UIResource.tscn");
@@ -26,7 +26,7 @@ public class UITradeRoute : Control
         // 	ui.Init(r);
         // 	GetNode("DetailContent").AddChild(ui);
         // }
-        GetNode("Summary").Connect("toggled", this, "ShowDetails");
+        GetNode("Summary").Connect("toggled", new Callable(this, "ShowDetails"));
 
         // Set button text
         GetNode<Label>("Summary/SummaryContent/Source").Text = $"→ system - {tradeRoute.destination.Name}";
@@ -36,15 +36,15 @@ public class UITradeRoute : Control
         // Set reorder buttons
         moveUpButton = GetNode<TextureButton>("Summary/AlignRight/Incriment/MoveUp");
         moveDownButton = GetNode<TextureButton>("Summary/AlignRight/Incriment/MoveDown");
-        moveUpButton.Connect("pressed", this, "ReorderUp");
-        moveDownButton.Connect("pressed", this, "ReorderDown");
+        moveUpButton.Connect("pressed", new Callable(this, "ReorderUp"));
+        moveDownButton.Connect("pressed", new Callable(this, "ReorderDown"));
 
         // Set reorder buttons
-        GetNode<TextureButton>("Summary/AlignRight/Cancel/").Connect("pressed", this, "Remove");
+        GetNode<TextureButton>("Summary/AlignRight/Cancel/").Connect("pressed", new Callable(this, "Remove"));
 
         // Init resource pool display.
-        UIResourceList uir = GetNode<UIResourceList>("DetailContent/Installation");
-        uir.Init(tradeRoute.Balance.GetStandard());
+        UIResource uir = GetNode<UIResource>("DetailContent/Installation");
+        uir.Init(tradeRoute.Balance);
     }
     public override void _Ready()
     {

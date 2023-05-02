@@ -1,8 +1,7 @@
-[gd_scene format=2]
+[gd_scene load_steps=2 format=3 uid="uid://cdaaip1pg2kx2"]
+
+[ext_resource type="Script" path="res://tree.cs" id="1_yg3pb"]
 
 [node name="Details" type="Popup"]
 visible = true
-margin_left = 486.0
-margin_top = 154.0
-margin_right = 486.0
-margin_bottom = 172.0
+script = ExtResource("1_yg3pb")

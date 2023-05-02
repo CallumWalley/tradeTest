@@ -1,16 +1,16 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-public class Situations
+public partial class Situations
 {
 
-    public class Base
+    public partial class Base
     {
         public virtual string Name { get; set; }
         public virtual string Description { get; set; }
     };
 
-    public class BaseTransformer : Base
+    public partial class BaseTransformer : Base
     {
         public new string Name { get; set; }
         public new string Description { get; set; }
@@ -23,24 +23,24 @@ public class Situations
         }
     }
 
-    public class OutputModifier : BaseTransformer
+    public partial class OutputModifier : BaseTransformer
     {
         public new string Name { get; set; }
         public new string Description { get; set; }
-        public readonly Resource cause;
-        public readonly Resource effect;
+        public readonly Resource.IResource cause;
+        public readonly Resource.IResource effect;
         Transformer transformer;
-        public OutputModifier(Resource _cause, Resource _effect, Transformer _transformer, string _name = "Resource Shortfall", string _description = "Output is being affected by resource shortfall") : base(_transformer, _name, _description)
+        public OutputModifier(Resource.IResource _cause, Resource.IResource _effect, Transformer _transformer, string _name = "Resource Shortfall", string _description = "Output is being affected by resource shortfall") : base(_transformer, _name, _description)
         {
             cause = _cause;
             effect = _effect;
         }
     }
 
-    // public class ResourceShortage : BaseTransformer{
+    // public class Resource.IResourceShortage : BaseTransformer{
     //     Transformer.Requester requester;
-    //     ResourceList outputs;
-    //     public ResourceShortage(Transformer _transformer, Transformer.Requester _requester, List<Resource> _outputs) : base(_transformer){
+    //     Resource.RList outputs;
+    //     public Resource.IResourceShortage(Transformer _transformer, Transformer.Requester _requester, List<Resource> _outputs) : base(_transformer){
     //         outputs = _outputs;
     //         requester = _requester;
     //     }

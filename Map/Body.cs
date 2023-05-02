@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class Body : Node2D
+public partial class Body : Node2D
 {
     [Export]
     public int nPoints = 32;
@@ -18,14 +18,14 @@ public class Body : Node2D
 
     bool focus = false;
 
-    public class Designations
+    public partial class Designations
     {
         string name;
         List<String> altNames;
         string adjective;
     }
 
-    public class Orbital
+    public partial class Orbital
     {
         float aphelion;
         float perihelion;
@@ -35,7 +35,7 @@ public class Body : Node2D
         float inclination;
     }
     // Satellites:
-    public class Physical
+    public partial class Physical
     {
         float circumference;
         Dictionary<string, float> surfaceArea;
@@ -48,7 +48,7 @@ public class Body : Node2D
         float[] surfaceTemp;
     }
 
-    public class Atmosphere
+    public partial class Atmosphere
     {
         float surfacePressure;
         Dictionary<string, float> composition;
@@ -62,11 +62,11 @@ public class Body : Node2D
         // AddChild(uiBody);
 
         // Add interactive 
-        GetNode("Area2D").Connect("mouse_entered", this, "Focus");
-        GetNode("Area2D").Connect("mouse_exited", this, "UnFocus");
+        GetNode("Area2D").Connect("mouse_entered", new Callable(this, "Focus"));
+        GetNode("Area2D").Connect("mouse_exited", new Callable(this, "UnFocus"));
     }
 
-    public override void _Process(float _delta)
+    public override void _Process(double _delta)
     {
         if (Input.IsActionPressed("ui_select"))
         {
@@ -133,6 +133,7 @@ public class Body : Node2D
     // }
     public void DrawEllipseLineArc(int nPoints, float radius, Color color)
     {
+
 
     }
 

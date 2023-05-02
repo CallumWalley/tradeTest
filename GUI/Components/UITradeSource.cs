@@ -3,15 +3,15 @@ using System;
 using System.Linq;
 using System.Collections;
 
-public class UITradeSource : UIElement
-{   
+public partial class UITradeSource : UIElement
+{
     public Installation installation;
-	public Installation sourceInstallation;
+    public Installation sourceInstallation;
 
     // Element in change of this element.
     Control driverControl;
 
-	UIInstallationSummary installationSummary;
+    UIInstallationSummary installationSummary;
     UIResource frieghtersAvailable;
     Label labelRight;
     Label labelLeft;
@@ -21,7 +21,7 @@ public class UITradeSource : UIElement
 
     // If not active, show button flat, and not clicking.
     public bool active = true;
-    
+
     public override void _Ready()
     {
         base._Ready();
@@ -29,55 +29,63 @@ public class UITradeSource : UIElement
         labelRight = button.GetNode<Label>("AlignRight/Label");
         labelLeft = button.GetNode<Label>("AlignLeft/Label");
         frieghtersAvailable = button.GetNode<UIResource>("AlignRight/Available");
-		installationSummary = button.GetNode<UIInstallationSummary>("AlignLeft/InstallationSummary");
+        installationSummary = button.GetNode<UIInstallationSummary>("AlignLeft/InstallationSummary");
         line2D = new Line2D();
         AddChild(line2D);
         line2D.Visible = false;
 
         // If no destination, hide summary, show no trade route message.
-        if(sourceInstallation == null){
+        if (sourceInstallation == null)
+        {
             labelRight.Hide();
             installationSummary.Hide();
             frieghtersAvailable.Hide();
-        }else{
+        }
+        else
+        {
             installationSummary.Init(sourceInstallation);
-            frieghtersAvailable.Init(sourceInstallation.resourceDelta.GetType(901));
+            frieghtersAvailable.Init(sourceInstallation.resourceDelta[901]);
             labelLeft.Hide();
-	    }
-        Connect("mouse_entered", this, "ShowTradeRoute");
-        Connect("mouse_exited", this, "HideTradeRoute");
-        if (driverControl != null){
-            button.Connect("pressed", driverControl, "SetTradeSource", new Godot.Collections.Array(sourceInstallation));
+        }
+        Connect("mouse_entered", new Callable(this, "ShowTradeRoute"));
+        Connect("mouse_exited", new Callable(this, "HideTradeRoute"));
+        if (driverControl != null)
+        {
+            button.Connect("pressed", new Callable(driverControl, "SetTradeSource"), new Godot.Collections.Array(sourceInstallation));
         }
     }
-    public void Init(Installation _installation, Installation _sourceInstallation, Control _driverControl=null)
+    public void Init(Installation _installation, Installation _sourceInstallation, Control _driverControl = null)
     {
-        driverControl=_driverControl;
-        installation=_installation;
-		sourceInstallation=_sourceInstallation;
+        driverControl = _driverControl;
+        installation = _installation;
+        sourceInstallation = _sourceInstallation;
 
     }
     public override void _Draw()
-    {	
+    {
         base._Draw();
-		if (installation == null){return;}
-        if (labelRight.Visible){
+        if (installation == null) { return; }
+        if (labelRight.Visible)
+        {
             float dist = installation.Position.DistanceTo(sourceInstallation.Position);
             float time = GetNode<PlayerTech>("/root/Global/Player/Tech").GetFreighterTons(1, dist);
             labelRight.Text = string.Format("{0} - {1}", UnitTypes.DistanceSI(dist), UnitTypes.TimeSol(time));
         }
-        if (line2D.Visible && (sourceInstallation != null)){
-            line2D.Points=new Vector2[]{sourceInstallation.Position - RectGlobalPosition, installation.Position - RectGlobalPosition};
+        if (line2D.Visible && (sourceInstallation != null))
+        {
+            line2D.Points = new Vector2[] { sourceInstallation.Position - GlobalPosition, installation.Position - GlobalPosition };
             //line2D.GlobalPosition = sourceInstallation.Position;
         }
 
 
     }
 
-    void ShowTradeRoute(){
+    void ShowTradeRoute()
+    {
         line2D.Visible = true;
     }
-    void HideTradeRoute(){
+    void HideTradeRoute()
+    {
         line2D.Visible = false;
-    }    
+    }
 }

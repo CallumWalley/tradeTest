@@ -5,7 +5,7 @@
     "tasks": [
         {
             "label": "build",
-            "command": "/snap/gd-godot-engine-mono-snapcraft/23/godot-engine-mono/godot-engine-mono",
+            "command": "/usr/local/bin/godot",
             "type": "process",
             "args": [
                 "--build-solutions",

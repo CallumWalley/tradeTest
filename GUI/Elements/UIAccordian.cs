@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class UIAccordian : Control
+public partial class UIAccordian : Control
 {
 	Button button;
 	Container container;
@@ -14,7 +14,7 @@ public class UIAccordian : Control
 		container = GetNode<Container>("Container");
 		button = GetNode<Button>("Button");
 
-		button.Connect("toggled", this, "ShowDetails");
+		button.Connect("toggled", new Callable(this, "ShowDetails"));
 	}
 	public void ShowDetails(bool toggled)
 	{
