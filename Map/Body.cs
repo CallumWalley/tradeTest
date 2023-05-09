@@ -27,37 +27,37 @@ public partial class Body : Node2D
 
     public partial class Orbital
     {
-        float aphelion;
-        float perihelion;
-        float semiMajorAxis;
-        float eccentricity;
-        float period;
-        float inclination;
+        double aphelion;
+        double perihelion;
+        double semiMajorAxis;
+        double eccentricity;
+        double period;
+        double inclination;
     }
     // Satellites:
     public partial class Physical
     {
-        float circumference;
-        Dictionary<string, float> surfaceArea;
-        float mass;
-        float meanDensity;
-        float escapeVelocity;
-        float rotationPeriod;
-        float axialTilt;
-        float albedo;
-        float[] surfaceTemp;
+        double circumference;
+        Dictionary<string, double> surfaceArea;
+        double mass;
+        double meanDensity;
+        double escapeVelocity;
+        double rotationPeriod;
+        double axialTilt;
+        double albedo;
+        double[] surfaceTemp;
     }
 
     public partial class Atmosphere
     {
-        float surfacePressure;
-        Dictionary<string, float> composition;
+        double surfacePressure;
+        Dictionary<string, double> composition;
     }
     public override void _Ready()
     {
         /// UI
         // Main UI element.
-        // uiBody = p_uiBody.Instance<UIBody>();
+        // uiBody = p_uiBody.Instantiate<UIBody>();
         // uiBody.Init(this);
         // AddChild(uiBody);
 
@@ -74,12 +74,12 @@ public partial class Body : Node2D
             {
                 if (uiBody == null)
                 {
-                    uiBody = p_uiBody.Instance<UIBodyCard>();
+                    uiBody = p_uiBody.Instantiate<UIBodyCard>();
                     uiBody.Init(this);
                     AddChild(uiBody);
                 }
                 uiBody.Visible = true;
-                uiBody.Raise();
+                uiBody.MoveToForeground();
             }
         }
         //  && focus)
@@ -117,21 +117,21 @@ public partial class Body : Node2D
         pointsArc[nPoints] = pointsArc[0];
         DrawPolygon(pointsArc, colors);
     }
-    // public void DrawCircleArcLine(int nPoints, float radius, Color color)
+    // public void DrawCircleArcLine(int nPoints, double radius, Color color)
     // {
     //     var pointsArc = new Vector2[nPoints + 1];
     //     var colors = new Color[] { color };
 
     //     for (int i = 0; i < nPoints; ++i)
     //     {
-    //         float anglePoint = i * ((float)Math.PI * 2f / nPoints);
+    //         double anglePoint = i * ((double)Math.PI * 2f / nPoints);
     //         pointsArc[i] = new Vector2(Mathf.Cos(anglePoint), Mathf.Sin(anglePoint)) * radius;
     //         //GD.Print(pointsArc[i]);
     //     }
     //     pointsArc[nPoints] = pointsArc[0];
     //     DrawArc(pointsArc, colors);
     // }
-    public void DrawEllipseLineArc(int nPoints, float radius, Color color)
+    public void DrawEllipseLineArc(int nPoints, double radius, Color color)
     {
 
 

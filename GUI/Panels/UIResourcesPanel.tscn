@@ -1,28 +1,13 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://chc2prkc3urqg"]
 
-[sub_resource type="CSharpScript" id=1]
-script/source = "using Godot;
-using System;
-
-public class UIIndustryPanel : Control
-{
-	Body body;
-
-	public void Init(Body _body){
-			body = _body;
-	}
-
-}
-"
+[ext_resource type="Script" path="res://GUI/Panels/UIResourcesPanel.cs" id="1_3df8n"]
 
 [node name="TradePanel" type="VBoxContainer"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -512.0
-offset_top = -300.0
-offset_right = 512.0
-offset_bottom = 300.0
+custom_minimum_size = Vector2(600, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_vertical = 3
-script = SubResource( 1 )
+script = ExtResource("1_3df8n")

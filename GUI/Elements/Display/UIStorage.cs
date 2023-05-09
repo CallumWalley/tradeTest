@@ -25,7 +25,7 @@ public partial class UIStorage : UIElement, UIContainers.IListable
 
         if (storage != null)
         {
-            ((TextureRect)GetNode("Icon")).Texture2D = Resource.Icon(resourceCode: storage.Type());
+            ((TextureRect)GetNode("Icon")).Texture = Resource.Icon(resourceCode: storage.Type());
         }
     }
 
@@ -87,7 +87,7 @@ public partial class UIStorage : UIElement, UIContainers.IListable
         // // Storage is filling.
         // else if (delta.Sum() > 0)
         // {
-        //     float t = (storage.Sum() - stockpile.Sum()) / delta.Sum();
+        //     double t = (storage.Sum() - stockpile.Sum()) / delta.Sum();
         //     value.Text = String.Format("+{0}", t);
         //     detailLabel.Text = string.Format("{0} reserves will reach capacity in {1}", storage.Name().ToUpper(), UnitTypes.TimeSol(t));
 
@@ -95,7 +95,7 @@ public partial class UIStorage : UIElement, UIContainers.IListable
         // // Storage is emptying.
         // else
         // {
-        //     float t = remainder / (delta.Sum());
+        //     double t = remainder / (delta.Sum());
         //     value.Text = String.Format("-{0}", t);
         //     string.Format("{0} reserves will be exhausted in {1}", storage.Name().ToUpper(), UnitTypes.TimeSol(t));
         // }

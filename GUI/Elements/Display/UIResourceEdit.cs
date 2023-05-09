@@ -14,19 +14,19 @@ public partial class UIResourceEdit : UIResource
         MoveChild(value, 1);
     }
 
-    public void ChangeValue(float _delta)
+    public void ChangeValue(double _delta)
     {
         ((Resource.RStatic)resource).Set(resource.Sum() + _delta);
         CallDeferred("_draw");
     }
-    public void SetValue(float _value)
+    public void SetValue(double _value)
     {
         ((Resource.RStatic)resource).Set(_value);
         CallDeferred("_draw");
     }
     public bool ValidateAndSet(string _string)
     {
-        bool valid = float.TryParse(_string, out float f);
+        bool valid = double.TryParse(_string, out double f);
         SetValue(f);
         return valid;
     }

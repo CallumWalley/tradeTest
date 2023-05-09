@@ -75,7 +75,7 @@ public partial class UITransformerTrade : UITransformer
     // 	GetNode<PlayerTradeRoutes>("/root/Global/Player/Trade/Routes").DeregisterTradeRoute(tradeRoute);
     // 	Control parent = GetParent<Control>();
     // 	parent.RemoveChild(this);
-    // 	parent.Update();
+    // 	parent.QueueRedraw();
     // 	QueueFree();
     // }
 

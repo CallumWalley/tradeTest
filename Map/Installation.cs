@@ -12,7 +12,7 @@ public partial class Installation : EcoNode
     public bool storageFull = false;
 
     //for debuggin
-    public Godot.Collections.Array Children { get { return GetChildren(); } }
+    public Godot.Collections.Array<Node> Children { get { return GetChildren(); } }
 
     public List<string> tags;
 
@@ -38,7 +38,7 @@ public partial class Installation : EcoNode
     // BODY IS PARENT
     public Body Body { get { return GetParent<Body>(); } }
 
-    public float shipWeight;
+    public double shipWeight;
 
     // Convenience function. Makes children at start of scene into members.
     public override void _Ready()
@@ -143,7 +143,7 @@ public partial class Installation : EcoNode
     }
     public override void EFrameEarly()
     {
-        Dictionary<int, float> lastProduced = new Dictionary<int, float>();
+        Dictionary<int, double> lastProduced = new Dictionary<int, double>();
         foreach (Resource.RBase r in resourceDeltaProduced)
         {
             lastProduced[r.Type()] = r.Sum();
@@ -156,14 +156,14 @@ public partial class Installation : EcoNode
                 int type = input.Request.Type();
                 // How much of this resource was produced last step.
                 Resource.RStorage storage = (Resource.RStorage)resourceStorage[type];
-                float requested = input.Request.Sum();
+                double requested = input.Request.Sum();
                 // this should just be somewhere else.
                 if (!lastProduced.ContainsKey(type))
                 {
                     lastProduced[type] = 0;
                 }
                 // Amount of extra DELTA required to cover this request.
-                float remainderDelta = (lastProduced[type] + requested); //+ it.Request.Sum();
+                double remainderDelta = (lastProduced[type] + requested); //+ it.Request.Sum();
 
                 // GD.Print(String.Format("Produced: {0:N1}\nConsumed: {1:N1}\nRequested: {2:N1}\nDelta: {3:N1}\nStored: {4:N1}\nRemainder: {5:N1}", produced, consumed, requested, remainderDelta, stockpile, remainderNet));
                 // Amount of extra NET required to cover this request.	
@@ -194,7 +194,7 @@ public partial class Installation : EcoNode
                 // Emit some sort of storage message.
             }
         }
-        foreach (KeyValuePair<int, float> kvp in lastProduced)
+        foreach (KeyValuePair<int, double> kvp in lastProduced)
         {
             if (resourceStorage.ContainsKey(kvp.Key))
             {

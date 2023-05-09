@@ -6,7 +6,7 @@ public partial class Resource
     public Logger logger;
     public interface IResource
     {
-        float Sum();
+        double Sum();
         int Type();
         string Details();
         string Name();
@@ -28,7 +28,7 @@ public partial class Resource
         {
             return Resource.Index(type).name;
         }
-        public abstract float Sum();
+        public abstract double Sum();
         public abstract int Count();
 
     }
@@ -91,10 +91,10 @@ public partial class Resource
             multi.Add(rm);
         }
 
-        public override float Sum()
+        public override double Sum()
         {
-            float addCum = 0;
-            float multiCum = 1;
+            double addCum = 0;
+            double multiCum = 1;
             foreach (Resource.IResource i in add)
             {
                 addCum += i.Sum();
@@ -117,8 +117,8 @@ public partial class Resource
     }
     public partial class RStatic : RBase, IResource
     {
-        float sum;
-        public RStatic(int _type, float _sum, string _details = "Base value")
+        double sum;
+        public RStatic(int _type, double _sum, string _details = "Base value")
         {
             type = _type;
             sum = _sum;
@@ -129,11 +129,11 @@ public partial class Resource
         {
             return new RGroup(rs.type, new List<IResource> { rs });
         }
-        public void Set(float newValue)
+        public void Set(double newValue)
         {
             sum = newValue;
         }
-        public override float Sum()
+        public override double Sum()
         {
             return sum;
         }
@@ -141,7 +141,7 @@ public partial class Resource
         public override int Count() { return 1; }
         public void Clear() { return; }
         public Texture2D Icon { get { return Index(type).icon; } }
-        public float ShipWeight { get { return Index(type).shipWeight; } }
+        public double ShipWeight { get { return Index(type).shipWeight; } }
         public bool Storable { get { return Index(type).storable; } }
 
         public override string ToString()
@@ -152,26 +152,26 @@ public partial class Resource
 
     public partial class RStorage : RGroup, IResource
     {
-        float stockpile; //Amount in this storage.
+        double stockpile; //Amount in this storage.
         public RStorage(int type) : base(type) { stockpile = 0; }
-        public RStorage(int _type, List<IResource> _add, float initValue = 0) : base(_type, _add)
+        public RStorage(int _type, List<IResource> _add, double initValue = 0) : base(_type, _add)
         {
             stockpile = initValue;
         }
 
-        public float Deposit(float value)
+        public double Deposit(double value)
         {
             // returns amount space free.
             // if negative, this is resource that didn't fit.
-            float leftover = Free() - value;
+            double leftover = Free() - value;
             stockpile = Mathf.Min(Sum(), value + stockpile);
             return leftover;
         }
-        public float Free()
+        public double Free()
         {
             return Sum() - stockpile;
         }
-        public float Stock()
+        public double Stock()
         {
             return stockpile;
         }
@@ -192,12 +192,12 @@ public partial class Resource
     {
         public string name;
         public Texture2D icon;
-        public float shipWeight;
+        public double shipWeight;
 
         // If this resrource is something that can be store, or only instant;
         public bool storable;
 
-        public ResourceType(string _name, Texture2D _icon, float _shipWeight, bool _storable)
+        public ResourceType(string _name, Texture2D _icon, double _shipWeight, bool _storable)
         {
             name = _name;
             icon = _icon;
@@ -222,7 +222,7 @@ public partial class Resource
     {
         return _index[resourceCode].icon;
     }
-    public static float ShipWeight(int resourceCode)
+    public static double ShipWeight(int resourceCode)
     {
         return _index[resourceCode].shipWeight;
     }

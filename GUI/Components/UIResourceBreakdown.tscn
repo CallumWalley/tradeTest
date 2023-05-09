@@ -1,12 +1,8 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://eooniuqv45y2"]
 
-[ext_resource path="res://GUI/Components/UIResourceBreakdown.cs" type="Script" id=2]
+[ext_resource type="Script" path="res://GUI/Components/UIResourceBreakdown.cs" id="2"]
 
-[node name="ResourceBreakdown" type="PopupPanel"]
+[node name="ResourceBreakdown" type="VBoxContainer"]
 process_priority = 10
-offset_right = 150.0
-offset_bottom = 28.0
-clip_contents = true
-size_flags_horizontal = 7
-size_flags_vertical = 7
-script = ExtResource( 2 )
+top_level = true
+script = ExtResource("2")

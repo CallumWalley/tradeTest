@@ -1,15 +1,15 @@
 [gd_scene load_steps=11 format=3 uid="uid://hk0vx7clcqrl"]
 
-[ext_resource type="PackedScene" path="res://Map/Body.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://cwj52641j5qo2" path="res://Map/Body.tscn" id="1"]
 [ext_resource type="Script" path="res://Player/PlayerTradeRoutes.cs" id="2"]
 [ext_resource type="Script" path="res://Player/PlayerTradeReciever.cs" id="3"]
 [ext_resource type="Script" path="res://Camera2D.cs" id="4"]
 [ext_resource type="Script" path="res://Global.cs" id="5"]
-[ext_resource type="PackedScene" path="res://Map/Transformer.tscn" id="6"]
+[ext_resource type="PackedScene" uid="uid://d1oe4qnb04s6k" path="res://Map/Transformer.tscn" id="6"]
 [ext_resource type="Script" path="res://TimeControl.cs" id="7"]
 [ext_resource type="Script" path="res://TransformerRegister.cs" id="8"]
 [ext_resource type="Script" path="res://Player/PlayerTech.cs" id="9"]
-[ext_resource type="PackedScene" path="res://Map/Installation.tscn" id="10"]
+[ext_resource type="PackedScene" uid="uid://ch66j0x6btq21" path="res://Map/Installation.tscn" id="10"]
 
 [node name="Global" type="Node"]
 script = ExtResource("5")

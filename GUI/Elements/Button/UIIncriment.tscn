@@ -1,32 +1,28 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=8 format=3 uid="uid://c555jlpytxxpv"]
 
-[ext_resource path="res://assets/icons/Buttons/arrows/icon_up_hover.tga" type="Texture2D" id=1]
-[ext_resource path="res://assets/icons/Buttons/arrows/icon_up_disabled.tga" type="Texture2D" id=2]
-[ext_resource path="res://assets/icons/Buttons/arrows/icon_down_disabled.tga" type="Texture2D" id=3]
-[ext_resource path="res://assets/icons/Buttons/arrows/icon_down_default.tga" type="Texture2D" id=4]
-[ext_resource path="res://assets/icons/Buttons/arrows/icon_up_default.tga" type="Texture2D" id=5]
-[ext_resource path="res://assets/icons/Buttons/arrows/icon_down_hover.tga" type="Texture2D" id=6]
-[ext_resource path="res://GUI/Elements/Button/UIIncriment.cs" type="Script" id=7]
+[ext_resource type="Texture2D" uid="uid://cddtcs35w5o6y" path="res://assets/icons/Buttons/arrows/icon_up_hover.tga" id="1"]
+[ext_resource type="Texture2D" uid="uid://caa8w3loybrv6" path="res://assets/icons/Buttons/arrows/icon_up_disabled.tga" id="2"]
+[ext_resource type="Texture2D" uid="uid://v7wdjhsmedmx" path="res://assets/icons/Buttons/arrows/icon_down_disabled.tga" id="3"]
+[ext_resource type="Texture2D" uid="uid://pqjhkng2e4yc" path="res://assets/icons/Buttons/arrows/icon_down_default.tga" id="4"]
+[ext_resource type="Texture2D" uid="uid://hbjllt5b25js" path="res://assets/icons/Buttons/arrows/icon_up_default.tga" id="5"]
+[ext_resource type="Texture2D" uid="uid://dyqa37d405qvp" path="res://assets/icons/Buttons/arrows/icon_down_hover.tga" id="6"]
+[ext_resource type="Script" path="res://GUI/Elements/Button/UIIncriment.cs" id="7"]
 
 [node name="Incriment" type="VBoxContainer"]
 offset_left = 6.0
 offset_right = 15.0
 offset_bottom = 30.0
 alignment = 1
-script = ExtResource( 7 )
+script = ExtResource("7")
 
 [node name="MoveUp" type="TextureButton" parent="."]
-offset_top = 7.0
-offset_right = 9.0
-offset_bottom = 13.0
-texture_normal = ExtResource( 5 )
-texture_hover = ExtResource( 1 )
-texture_disabled = ExtResource( 2 )
+layout_mode = 2
+texture_normal = ExtResource("5")
+texture_hover = ExtResource("1")
+texture_disabled = ExtResource("2")
 
 [node name="MoveDown" type="TextureButton" parent="."]
-offset_top = 17.0
-offset_right = 9.0
-offset_bottom = 23.0
-texture_normal = ExtResource( 4 )
-texture_hover = ExtResource( 6 )
-texture_disabled = ExtResource( 3 )
+layout_mode = 2
+texture_normal = ExtResource("4")
+texture_hover = ExtResource("6")
+texture_disabled = ExtResource("3")

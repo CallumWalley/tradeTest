@@ -22,7 +22,7 @@ public partial class UITradeRoute : Control
 
         // // Add details panel.
         // foreach (Resource r in tradeRoute.destination.GetStandard()){
-        // 	UIResource ui = resourceIcon.Instance<UIResource>();
+        // 	UIResource ui = resourceIcon.Instantiate<UIResource>();
         // 	ui.Init(r);
         // 	GetNode("DetailContent").AddChild(ui);
         // }
@@ -78,18 +78,18 @@ public partial class UITradeRoute : Control
         GetNode<PlayerTradeRoutes>("/root/Global/Player/Trade/Routes").DeregisterTradeRoute(tradeRoute);
         Control parent = GetParent<Control>();
         parent.RemoveChild(this);
-        parent.Update();
+        parent.QueueRedraw();
         QueueFree();
     }
 
     public void ReorderUp()
     {
         tradeRoute.destination.MoveChild(tradeRoute, tradeRoute.GetIndex() - 1);
-        GetParent<Control>().Update();
+        GetParent<Control>().QueueRedraw();
     }
     public void ReorderDown()
     {
         tradeRoute.destination.MoveChild(tradeRoute, tradeRoute.GetIndex() + 1);
-        GetParent<Control>().Update();
+        GetParent<Control>().QueueRedraw();
     }
 }

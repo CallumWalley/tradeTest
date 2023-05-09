@@ -59,7 +59,7 @@ public partial class UITradeSourceSelector : Control
         //currentTradeSourcePanel = GetNode<UITradeSource>("AlignLeft/TradeSource");
         //label = GetNode<Label>("AlignLeft/CurrentDestination/Text");
 
-        currentTradeSourcePanel = (UITradeSource)p_tradeSource.Instance();
+        currentTradeSourcePanel = (UITradeSource)p_tradeSource.Instantiate();
         currentTradeSourcePanel.Init(installation, CurrectSourceInstallation, this);
         GetNode("AlignLeft").AddChild(currentTradeSourcePanel);
         currentTradeSourcePanel.GetNode<Button>("Button").Flat = true;
@@ -135,7 +135,7 @@ public partial class UITradeSourceSelector : Control
             }
         }
         // If doesn't exist, add it and insert at postition.
-        UITradeSource uitd = (UITradeSource)p_tradeSource.Instance();
+        UITradeSource uitd = (UITradeSource)p_tradeSource.Instantiate();
         uitd.Init(installation, i, this);
         vBox.AddChild(uitd);
         vBox.MoveChild(uitd, index);
@@ -163,7 +163,7 @@ public partial class UITradeSourceSelector : Control
                 GetNode<PlayerTradeRoutes>("/root/Global/Player/Trade/Routes").RegisterTradeRoute(installation, newSourceInstallation);
             }
             currentTradeSourcePanel.QueueFree();
-            UITradeSource newTradeSource = p_tradeSource.Instance<UITradeSource>();
+            UITradeSource newTradeSource = p_tradeSource.Instantiate<UITradeSource>();
             newTradeSource.Init(installation, newSourceInstallation, this);
             GetNode<HBoxContainer>("AlignLeft").AddChild(newTradeSource);
             // Hide right hand side. (Undecided)
@@ -177,7 +177,7 @@ public partial class UITradeSourceSelector : Control
         // Replace UI element in panel.
         // Force redraw.
         // Replace with 'panel' method'
-        GetParent<Control>().GetParent<Control>().GetParent<Control>().Visible = false;
-        GetParent<Control>().GetParent<Control>().SetDeferred("visible", true);
+        //GetParent<Control>().GetParent<Control>().GetParent<Control>().Visible = false;
+        //GetParent<Control>().GetParent<Control>().SetDeferred("visible", true);
     }
 }

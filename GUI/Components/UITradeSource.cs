@@ -9,7 +9,7 @@ public partial class UITradeSource : UIElement
     public Installation sourceInstallation;
 
     // Element in change of this element.
-    Control driverControl;
+    UITradeSourceSelector driverControl;
 
     UIInstallationSummary installationSummary;
     UIResource frieghtersAvailable;
@@ -49,17 +49,18 @@ public partial class UITradeSource : UIElement
         }
         Connect("mouse_entered", new Callable(this, "ShowTradeRoute"));
         Connect("mouse_exited", new Callable(this, "HideTradeRoute"));
+
         if (driverControl != null)
         {
-            button.Connect("pressed", new Callable(driverControl, "SetTradeSource"), new Godot.Collections.Array(sourceInstallation));
+            button.Pressed += () => { driverControl.SetTradeSource(sourceInstallation); };
+            //.Connect("pressed", new Callable(this, "Pressed")); //sourceInstallation
         }
     }
-    public void Init(Installation _installation, Installation _sourceInstallation, Control _driverControl = null)
+    public void Init(Installation _installation, Installation _sourceInstallation, UITradeSourceSelector _driverControl = null)
     {
         driverControl = _driverControl;
         installation = _installation;
         sourceInstallation = _sourceInstallation;
-
     }
     public override void _Draw()
     {
@@ -67,8 +68,8 @@ public partial class UITradeSource : UIElement
         if (installation == null) { return; }
         if (labelRight.Visible)
         {
-            float dist = installation.Position.DistanceTo(sourceInstallation.Position);
-            float time = GetNode<PlayerTech>("/root/Global/Player/Tech").GetFreighterTons(1, dist);
+            double dist = installation.Position.DistanceTo(sourceInstallation.Position);
+            double time = GetNode<PlayerTech>("/root/Global/Player/Tech").GetFreighterTons(1, dist);
             labelRight.Text = string.Format("{0} - {1}", UnitTypes.DistanceSI(dist), UnitTypes.TimeSol(time));
         }
         if (line2D.Visible && (sourceInstallation != null))
@@ -87,5 +88,9 @@ public partial class UITradeSource : UIElement
     void HideTradeRoute()
     {
         line2D.Visible = false;
+    }
+    void Pressed()
+    {
+        //EmitSignal(SignalName.SetTradeSource, stateName);
     }
 }

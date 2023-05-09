@@ -1,18 +1,18 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://deelem6vrdm80"]
 
-[ext_resource path="res://GUI/Cards/UIBodyCard.cs" type="Script" id=1]
+[ext_resource type="Script" path="res://GUI/Cards/UIBodyCard.cs" id="1"]
+[ext_resource type="Theme" uid="uid://b1bxyq2lrfdqf" path="res://base_theme.tres" id="1_aa0fk"]
 
 [node name="UICard" type="Window"]
-offset_right = 400.0
-offset_bottom = 134.0
-custom_minimum_size = Vector2( 400, 0 )
-mouse_filter = 1
-size_flags_horizontal = 3
-size_flags_vertical = 3
-resizable = true
-script = ExtResource( 1 )
+wrap_controls = true
+always_on_top = true
+theme = ExtResource("1_aa0fk")
+script = ExtResource("1")
 
 [node name="TabContainer" type="TabContainer" parent="."]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-tab_alignment = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_aa0fk")

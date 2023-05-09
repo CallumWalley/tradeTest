@@ -7,7 +7,7 @@ public partial class UIBodyCard : UICard
     Body body;
     static readonly PackedScene p_tradePanel = (PackedScene)GD.Load<PackedScene>("res://GUI/Panels/UIResourcesPanel.tscn");
     static readonly PackedScene p_astroPanel = (PackedScene)GD.Load<PackedScene>("res://GUI/Panels/UIAstroPanel.tscn");
-    static readonly PackedScene p_industryPanel = (PackedScene)GD.Load<PackedScene>("res://GUI/Panels/UIIndustryPanel.tscn");
+    //    static readonly PackedScene p_industryPanel = (PackedScene)GD.Load<PackedScene>("res://GUI/Panels/UIIndustryPanel.tscn");
 
     TabContainer tabContainer;
 
@@ -16,17 +16,17 @@ public partial class UIBodyCard : UICard
         body = _body;
 
         tabContainer = GetNode<TabContainer>("TabContainer");
-        SetPosition(body.Position);
+        Position = (Vector2I)body.Position;
 
         foreach (Installation i in body.Installations)
         {
-            UIResourcesPanel tp = p_tradePanel.Instance<UIResourcesPanel>();
+            UIResourcesPanel tp = p_tradePanel.Instantiate<UIResourcesPanel>();
             tp.Init(i);
             tabContainer.AddChild(tp);
         }
 
         //Always add astro panel.
-        UIAstroPanel ap = p_astroPanel.Instance<UIAstroPanel>();
+        UIAstroPanel ap = p_astroPanel.Instantiate<UIAstroPanel>();
         ap.Init(body);
         tabContainer.AddChild(ap);
 
@@ -46,31 +46,31 @@ public partial class UIBodyCard : UICard
     // }
 
     // public class Orbital{
-    // 	float aphelion;
-    // 	float perihelion;
-    // 	float semiMajorAxis;
-    // 	float eccentricity;
-    // 	float period;
-    // 	float inclination;
+    // 	double aphelion;
+    // 	double perihelion;
+    // 	double semiMajorAxis;
+    // 	double eccentricity;
+    // 	double period;
+    // 	double inclination;
     // }
 
 
     // // Satellites:
     // public class Physical{
-    // 	float circumference;
-    // 	Dictionary<string, float> surfaceArea;
-    // 	float mass;
-    // 	float meanDensity;
-    // 	float escapeVelocity;
-    // 	float rotationPeriod;
-    // 	float axialTilt;
-    // 	float albedo;
-    // 	float[] surfaceTemp;
+    // 	double circumference;
+    // 	Dictionary<string, double> surfaceArea;
+    // 	double mass;
+    // 	double meanDensity;
+    // 	double escapeVelocity;
+    // 	double rotationPeriod;
+    // 	double axialTilt;
+    // 	double albedo;
+    // 	double[] surfaceTemp;
     // }
 
     // public class Atmosphere{
-    // 	float surfacePressure;
-    // 	Dictionary<string, float> composition;
+    // 	double surfacePressure;
+    // 	Dictionary<string, double> composition;
     // }
     // public override void _Ready(){
 
@@ -81,8 +81,8 @@ public partial class UIBodyCard : UICard
     // 	/// UI
     // 	// Add trade panel
     // 	if (installation!=null){
-    // 		UIResourcesPanel tp = p_tradePanel.Instance<UIResourcesPanel>();
-    // 		UIIndustryPanel ip = p_industryPanel.Instance<UIIndustryPanel>();
+    // 		UIResourcesPanel tp = p_tradePanel.Instantiate<UIResourcesPanel>();
+    // 		UIIndustryPanel ip = p_industryPanel.Instantiate<UIIndustryPanel>();
 
     // 		tp.Init(this);
     // 		ip.Init(this);
@@ -93,7 +93,7 @@ public partial class UIBodyCard : UICard
     // 	}
 
     // 	// Add astronomical info
-    // 	UIAstroPanel ap = p_astroPanel.Instance<UIAstroPanel>();
+    // 	UIAstroPanel ap = p_astroPanel.Instantiate<UIAstroPanel>();
     // 	ap.Init(this);
     // 	uiBody.AddChild(ap);
 
@@ -108,7 +108,7 @@ public partial class UIBodyCard : UICard
     // 	if (Input.IsActionPressed("ui_select")){
     // 		if (focus){
     // 			uiBody.Visible = true;
-    // 			uiBody.Raise();
+    // 			uiBody.MoveToForeground();
     // 		}
     // 	}
     // 	//  && focus)
@@ -128,7 +128,7 @@ public partial class UIBodyCard : UICard
     // public Installation AddInstallation(){
     // 	installation = GetNodeOrNull<Installation>("Installation");
     // 	if (installation==null){
-    // 		installation = p_installation.Instance<Installation>();
+    // 		installation = p_installation.Instantiate<Installation>();
     // 		AddChild(installation);
     // 	}
     // 	if (hasTradeReceiver){
@@ -140,7 +140,7 @@ public partial class UIBodyCard : UICard
     // public TradeReceiver AddTradeReceiver(){
     // 	tradeReceiver = GetNodeOrNull<TradeReceiver>("Installation");
     // 	if (tradeReceiver==null){
-    // 		tradeReceiver = p_tradeReceiver.Instance<TradeReceiver>();
+    // 		tradeReceiver = p_tradeReceiver.Instantiate<TradeReceiver>();
     // 		tradeReceiver.Init(installation);
     // 		AddChild(tradeReceiver);
     // 	}

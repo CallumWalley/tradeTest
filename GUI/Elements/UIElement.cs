@@ -7,14 +7,14 @@ public partial class UIElement : Control
     protected Logger logger;
     protected bool mouseOver;
     bool showDetails = false;
-    float count = 0f;
+    double count = 0f;
 
     // How long to hover before showing details.
 
-    static readonly float showPeriod = 0.6f;
+    static readonly double showPeriod = 0.6f;
 
     // How long before hiding details after mouse leave.
-    static readonly float hidePeriod = 0.6f;
+    static readonly double hidePeriod = 0.6f;
 
 
     public override void _Ready()

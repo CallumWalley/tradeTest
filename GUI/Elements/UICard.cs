@@ -24,8 +24,8 @@ public partial class UICard : Window
 // 	[Export]
 // 	public bool focus = false;
 // 	bool defaultVisibile;
-// 	float count = 0f;
-// 	static readonly float timeToHide = 1f;
+// 	double count = 0f;
+// 	static readonly double timeToHide = 1f;
 // 	//public Global global;
 
 

@@ -33,7 +33,7 @@ public class UITradeRoute : Control
 
 		// Add details panel.
 		foreach (Resource r in tradeRoute.destination.GetStandard()){
-			UIResource ui = resourceIcon.Instance<UIResource>();
+			UIResource ui = resourceIcon.Instantiate<UIResource>();
 			ui.Init(r);
 			GetNode(\"Details\").AddChild(ui);
 		}

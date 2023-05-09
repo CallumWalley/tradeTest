@@ -1,9 +1,11 @@
 using Godot;
 using System;
 
-public partial class UIPopover : UIElement
+public partial class UIPopover : Control
 {
     public bool moveWithParent = true;
+
+
     Vector2 offset; // initial offset to parent.
 
     public override void _Input(InputEvent @event)
@@ -14,10 +16,10 @@ public partial class UIPopover : UIElement
             SetDeferred("visible", false);
         }
     }
-
     public override void _Ready()
     {
         base._Ready();
+        TopLevel = true;
     }
     public override void _Draw()
     {
@@ -31,7 +33,7 @@ public partial class UIPopover : UIElement
             Control p = GetParentOrNull<Control>();
             if (p != null)
             {
-                Position = p.GlobalPosition;//+ offset;
+                Position = (Vector2I)p.GlobalPosition;//+ offset;
             }
         }
 

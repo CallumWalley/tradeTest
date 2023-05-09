@@ -1,19 +1,20 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://c6xa4eat5qpkl"]
 
-[ext_resource path="res://TradeRoute.cs" type="Script" id=1]
+[ext_resource type="Script" path="res://Map/TradeRoute.cs" id="1_5t8b0"]
 
-[sub_resource type="Curve" id=1]
-_data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 0.5, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
+[sub_resource type="Curve" id="1"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
 
 [node name="TradeRoute" type="Node"]
-script = ExtResource( 1 )
+script = ExtResource("1_5t8b0")
 
 [node name="Line2D" type="Line2D" parent="."]
 z_index = -1
-points = PackedVector2Array( 0, 0, 0, 0 )
+points = PackedVector2Array(0, 0, 0, 0)
 width = 0.5
-width_curve = SubResource( 1 )
-default_color = Color( 0.4, 0.501961, 1, 1 )
+width_curve = SubResource("1")
+default_color = Color(0.4, 0.501961, 1, 1)
 begin_cap_mode = 2
 end_cap_mode = 2
 antialiased = true

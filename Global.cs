@@ -5,13 +5,13 @@ public partial class Global : Node
 {
 
     [Signal]
-    public delegate void EFrameEarly();
+    public delegate void EFrameEarlyEventHandler();
     [Signal]
-    public delegate void EFrameLate();
+    public delegate void EFrameLateEventHandler();
 
     bool paused = false;
 
-    public float timePerEframe = 1;
+    public double timePerEframe = 1;
 
     double timeLeft;
 
@@ -47,10 +47,10 @@ public partial class Global : Node
         EmitSignal("EFrameLate");
         EmitSignal("EFrameEarly");
     }
-    public void _time_slider_value_changed(float value)
+    public void _time_slider_value_changed(double value)
     {
-        float[] timescale = { 30, 20, 15, 10, 8, 6, 4, 2, 1, 0.5f, 0.1f };
-        float newTimePerEframe = timescale[(int)value];
+        double[] timescale = { 30, 20, 15, 10, 8, 6, 4, 2, 1, 0.5f, 0.1f };
+        double newTimePerEframe = timescale[(int)value];
         timeLeft = (timeLeft / timePerEframe) * newTimePerEframe;
         timePerEframe = newTimePerEframe;
         //GD.Print(timePerEframe);

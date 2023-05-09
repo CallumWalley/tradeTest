@@ -13,12 +13,12 @@ public partial class UIResourceBreakdown : UIPopover
     {
         base._Ready();
         Render(resource, this);
-        this.Raise();
+        //this.MoveToForeground();
     }
     public override void _Draw()
     {
         base._Draw();
-        Raise();
+        //MoveToForeground();
 
     }
     public void Init(Resource.IResource _resource)
@@ -28,12 +28,12 @@ public partial class UIResourceBreakdown : UIPopover
 
     void Render(Resource.IResource r, Control parent, bool multiple = false)
     {
-        UIResource newResource = p_resource.Instance<UIResource>();
+        UIResource newResource = p_resource.Instantiate<UIResource>();
         newResource.Init(resource, false);
 
         if (r is Resource.RGroup)
         {
-            UIAccordian newAccordian = p_accordian.Instance<UIAccordian>();
+            UIAccordian newAccordian = p_accordian.Instantiate<UIAccordian>();
             parent.AddChild(newAccordian);
 
             newAccordian.GetNode<Button>("Button").AddChild(newResource);

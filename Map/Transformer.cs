@@ -13,7 +13,7 @@ public partial class Transformer : EcoNode
     public List<Situations.Base> Situations { get; protected set; }
     // 0-100 
     // Decays without maintainance.
-    float breakDown;
+    double breakDown;
 
     //How many 'buildings' this industry contains.
     int weight = 1;
@@ -66,27 +66,27 @@ public partial class Transformer : EcoNode
             yield return tip;
         }
     }
-    // IEnumerable<Requester> GetFromTemplate(Dictionary<int, float> template)
+    // IEnumerable<Requester> GetFromTemplate(Dictionary<int, double> template)
     // {
     //     if (template == null) { yield break; }
-    //     foreach (KeyValuePair<int, float> kvp in template)
+    //     foreach (KeyValuePair<int, double> kvp in template)
     //     {
     //         yield return new Requester(new Resource.IResource.RStatic(kvp.Key, kvp.Value, Name));
     //     }
     // }
-    IEnumerable<Resource.RStatic> GetStaticFromTemplate(Dictionary<int, float> template)
+    IEnumerable<Resource.RStatic> GetStaticFromTemplate(Dictionary<int, double> template)
     {
         if (template == null) { yield break; }
-        foreach (KeyValuePair<int, float> kvp in template)
+        foreach (KeyValuePair<int, double> kvp in template)
         {
             yield return new Resource.RStatic(kvp.Key, kvp.Value, Name);
         }
     }
 
-    IEnumerable<TransformerInputType.Base> GetInputClassFromTemplate(Dictionary<int, float> template)
+    IEnumerable<TransformerInputType.Base> GetInputClassFromTemplate(Dictionary<int, double> template)
     {
         if (template == null) { yield break; }
-        foreach (KeyValuePair<int, float> kvp in template)
+        foreach (KeyValuePair<int, double> kvp in template)
         {
             yield return new TransformerInputType.Base(this, new Resource.RStatic(kvp.Key, kvp.Value, Name));
         }

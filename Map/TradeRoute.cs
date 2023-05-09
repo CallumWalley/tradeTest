@@ -28,7 +28,7 @@ public partial class TradeRoute : EcoNode
             base.Respond();
             ((Resource.RStatic)((TransformerTrade)transformer).twin.Production[Type]).Set(Request.Sum());
         }
-        public new void Respond(float value)
+        public new void Respond(double value)
         {
             base.Respond(value);
             ((Resource.RStatic)((TransformerTrade)transformer).twin.Production[(Type)]).Set(Response.Sum());
@@ -39,7 +39,7 @@ public partial class TradeRoute : EcoNode
     //public Resource.IResource importTradeWeight;
     //public Resource.IResource exportTradeWeight;
     public Resource.RStatic tradeWeight;
-    public float distance;
+    public double distance;
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -75,10 +75,10 @@ public partial class TradeRoute : EcoNode
     {
         GetNode<Line2D>("Line2D").Points = new Vector2[] { destination.Position, source.Position };
     }
-    public float GetFrieghterWeight()
+    public double GetFrieghterWeight()
     {
-        float shipWeightImport = 0;
-        float shipWeightExport = 0;
+        double shipWeightImport = 0;
+        double shipWeightExport = 0;
         foreach (Resource.IResource child in Balance)
         {
             if (child.Sum() > 0)

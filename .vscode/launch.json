@@ -6,45 +6,43 @@
     "configurations": [
         {
             "name": "Play in Editor",
-            "type": "godot-mono",
-            "mode": "playInEditor",
-            "request": "launch"
-        },
-        {
-            "name": "Launch",
-            "type": "godot-mono",
+            "type": "coreclr",
+            // "preLaunchTask": "build",
+            // "mode": "playInEditor",
             "request": "launch",
-            "mode": "executable",
-            "preLaunchTask": "build",
-            "executable": "/usr/local/bin/godot",
-            // See which arguments are available here:
-            // https://docs.godotengine.org/en/stable/getting_started/editor/command_line_tutorial.html
-            "executableArguments": [
-                "--path",
-                "${workspaceRoot}"
-            ]
+            "program": "/usr/local/bin/godot",
         },
-        {
-            "name": "Launch (Select Scene)",
-            "type": "godot-mono",
-            "request": "launch",
-            "mode": "executable",
-            "preLaunchTask": "build",
-            "executable": "/usr/local/bin/godot",
-            // See which arguments are available here:
-            // https://docs.godotengine.org/en/stable/getting_started/editor/command_line_tutorial.html
-            "executableArguments": [
-                "--path",
-                "${workspaceRoot}",
-                "${command:SelectLaunchScene}"
-            ]
-        },
-        {
-            "name": "Attach",
-            "type": "godot-mono",
-            "request": "attach",
-            "address": "localhost",
-            "port": 23685
-        }
+        // {
+        //     "name": "Launch",
+        //     "type": "godot-mono",
+        //     "request": "launch",
+        //     "mode": "executable",
+        //     "preLaunchTask": "build",
+        //     "executable": "/usr/local/bin/godot",
+        //     "executableArguments": [
+        //         "--path",
+        //         "${workspaceRoot}"
+        //     ]
+        // },
+        // {
+        //     "name": "Launch (Select Scene)",
+        //     "type": "godot-mono",
+        //     "request": "launch",
+        //     "mode": "executable",
+        //     "preLaunchTask": "build",
+        //     "executable": "/usr/local/bin/godot",
+        //     "executableArguments": [
+        //         "--path",
+        //         "${workspaceRoot}",
+        //         "${command:SelectLaunchScene}"
+        //     ]
+        // },
+        // {
+        //     "name": "Attach",
+        //     "type": "godot-mono",
+        //     "request": "attach",
+        //     "address": "localhost",
+        //     "port": 23685
+        // }
     ]
 }

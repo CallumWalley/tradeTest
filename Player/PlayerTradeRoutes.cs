@@ -6,7 +6,7 @@ public partial class PlayerTradeRoutes : Node
     static readonly PackedScene ps_TradeRoute = (PackedScene)GD.Load<PackedScene>("res://Map/TradeRoute.tscn");
     public void RegisterTradeRoute(Installation destination, Installation source)
     {
-        TradeRoute newTradeRoute = ps_TradeRoute.Instance<TradeRoute>();
+        TradeRoute newTradeRoute = ps_TradeRoute.Instantiate<TradeRoute>();
         newTradeRoute.Init(destination, source);
         AddChild(newTradeRoute);
     }

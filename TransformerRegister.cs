@@ -21,17 +21,17 @@ public partial class TransformerRegister : Node
         public string Description { get; set; }
         public string Image { get; set; }
         public int defaultPrioroty;
-        public Dictionary<int, float> Consumption { get; set; }
-        public Dictionary<int, float> Production { get; set; }
-        public Dictionary<int, float> Storage { get; set; }
+        public Dictionary<int, double> Consumption { get; set; }
+        public Dictionary<int, double> Production { get; set; }
+        public Dictionary<int, double> Storage { get; set; }
 
     }
 
     // public class TransformerInputTypeLoader
     // {
     //     public int Type;
-    //     public float Value;
-    //     public TransformerInputTypeLoader(int i, float v, string tip)
+    //     public double Value;
+    //     public TransformerInputTypeLoader(int i, double v, string tip)
     //     {
 
     //     }
@@ -62,7 +62,8 @@ public partial class TransformerRegister : Node
 
     IEnumerable<TransformerType> LoadFromFile()
     {
-        foreach (var file in System.IO.DirAccess.GetFiles("Transformers", "*.json"))
+        //GD.Print(System.IO.Directory.GetFiles("Transformers", ".json"));
+        foreach (string file in System.IO.Directory.GetFiles("Transformers", "*.json"))
         {
             using (StreamReader fi = System.IO.File.OpenText(file))
             {

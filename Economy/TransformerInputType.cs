@@ -25,7 +25,7 @@ public partial class TransformerInputType
             GD.Print($"Fulfilled request");
         }
         // No fulfilled value returned if not fulfilled.
-        public virtual void Respond(float value)
+        public virtual void Respond(double value)
         {
             Response.Set(value);
             GD.Print($"Partial request {value}/{Request.Sum()}");
@@ -51,7 +51,7 @@ public partial class TransformerInputType
             base.Respond();
             multiplier.Set(1f);
         }
-        public override void Respond(float value)
+        public override void Respond(double value)
         {
             base.Respond(value);
             multiplier.Set((value - Request.Sum()) / Request.Sum());
@@ -66,7 +66,7 @@ public partial class TransformerInputType
     //     // 1 partially fulfilled.
     //     // 2 unfulfilled.
     //     public int Type { get { return request .Type(); } }
-    //     public float Sum { get { return request.Sum(); } }
+    //     public double Sum { get { return request.Sum(); } }
     //     public Resource.IResource.RStatic Response { get; set; }
     //     public Requester(Resource.RStatic _request)
     //     {

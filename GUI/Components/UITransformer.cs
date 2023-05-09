@@ -52,10 +52,10 @@ public partial class UITransformer : Control, UIContainers.IListable
         situations = details.GetNode<VBoxContainer>("VBoxContainer/HSplitContainer/TabContainer/Situation");
         details.GetNode<Label>("VBoxContainer/Description").Text = transformer.Description;
 
-        // Init resource pool display. // new UIContainers.UIResourceList();
-        UIContainers.UIResourceList uiDelta = leftSide.GetNode<UIContainers.UIResourceList>("/Production");
-        UIContainers.UIResourceList uiConsumption = new UIContainers.UIResourceList();//details.GetNode<UIContainers.UIResourceList>("VBoxContainer/HSplitContainer/Left/Consumption");
-        UIContainers.UIResourceList uiStorage = new UIContainers.UIResourceList(); //details.GetNode<UIContainers.UIResourceList>("VBoxContainer/HSplitContainer/Left/Storage");
+        // Init resource pool display. // new UIResourceList();
+        UIResourceList uiDelta = new UIResourceList(); //leftSide.GetNode<UIResourceList>("/Production");
+        //UIResourceList uiConsumption = new UIResourceList();//details.GetNode<UIResourceList>("VBoxContainer/HSplitContainer/Left/Consumption");
+        UIResourceList uiStorage = new UIResourceList(); //details.GetNode<UIResourceList>("VBoxContainer/HSplitContainer/Left/Storage");
         leftSide.AddChild(uiDelta);
         // leftSide.AddChild(uiConsumption);
         leftSide.AddChild(uiStorage);
@@ -109,7 +109,7 @@ public partial class UITransformer : Control, UIContainers.IListable
     // 	GetNode<PlayerTradeRoutes>("/root/Global/Player/Trade/Routes").DeregisterTradeRoute(tradeRoute);
     // 	Control parent = GetParent<Control>();
     // 	parent.RemoveChild(this);
-    // 	parent.Update();
+    // 	parent.QueueRedraw();
     // 	QueueFree();
     // }
 
@@ -141,7 +141,7 @@ public partial class UITransformer : Control, UIContainers.IListable
             }
         }
         // If doesn't exist, add it and insert at postition.
-        UISituation ui = (UISituation)p_situation.Instance();
+        UISituation ui = (UISituation)p_situation.Instantiate();
         ui.Init(s);
         situations.AddChild(ui);
         situations.MoveChild(ui, index);

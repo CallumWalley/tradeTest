@@ -65,7 +65,7 @@ public partial class UIResource : UIElement, UIContainers.IListable
         resource = _resource;
         if (resource != null)
         {
-            ((TextureRect)GetNode("Icon")).Texture2D = Resource.Icon(resourceCode: resource.Type());
+            ((TextureRect)GetNode("Icon")).Texture = Resource.Icon(resourceCode: resource.Type());
         }
         else
         {
@@ -91,12 +91,12 @@ public partial class UIResource : UIElement, UIContainers.IListable
 
     void CreateDetails()
     {
-        details = p_UIResourceBreakdown.Instance<UIResourceBreakdown>();
+        details = p_UIResourceBreakdown.Instantiate<UIResourceBreakdown>();
         ((UIResourceBreakdown)details).Init(resource);
         AddChild(details);
         // Add details panel
         // if (resource is Resource.IResource.RGroup){
-        // 	UResource.RList rl = p_UResource.RList.Instance<UResource.RList>();
+        // 	UResource.RList rl = p_UResource.RList.Instantiate<UResource.RList>();
         // 	rl.Init(((Resource.RGroup)resource).add);
         // 	details.GetNode<Control>("PanelContainer").AddChild(rl);
         // }else{

@@ -1,4 +1,4 @@
-[gd_scene format=2]
+[gd_scene format=3 uid="uid://b57ncssi2lkcq"]
 
 [node name="Label" type="Label"]
 offset_left = 853.0
@@ -6,4 +6,3 @@ offset_top = 22.0
 offset_right = 990.0
 offset_bottom = 36.0
 text = "0.01 Mm - 4.2 Weeks"
-align = 1
