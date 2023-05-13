@@ -72,11 +72,7 @@ public partial class UITradeSource : UIElement
             double time = GetNode<PlayerTech>("/root/Global/Player/Tech").GetFreighterTons(1, dist);
             labelRight.Text = string.Format("{0} - {1}", UnitTypes.DistanceSI(dist), UnitTypes.TimeSol(time));
         }
-        if (line2D.Visible && (sourceInstallation != null))
-        {
-            line2D.Points = new Vector2[] { sourceInstallation.Position - GlobalPosition, installation.Position - GlobalPosition };
-            //line2D.GlobalPosition = sourceInstallation.Position;
-        }
+
 
 
     }
@@ -84,6 +80,11 @@ public partial class UITradeSource : UIElement
     void ShowTradeRoute()
     {
         line2D.Visible = true;
+        if (line2D.Visible && (sourceInstallation != null))
+        {
+            line2D.Points = new Vector2[] { sourceInstallation.Position - GlobalPosition, installation.Position - GlobalPosition };
+            //line2D.GlobalPosition = sourceInstallation.Position;
+        }
     }
     void HideTradeRoute()
     {
