@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 
-public partial class TransformerRegister : Node
+public partial class IndustryRegister : Node
 {
     // Declare member variables here. Examples:
     // private int a = 2;
     // private string b = "text";
-    List<TransformerType> list;
+    List<IndustryType> list;
 
-    public partial class TransformerType
+    public partial class IndustryType
     {
         public string Name { get; set; }
         public string Slug { get; set; }
@@ -27,22 +27,22 @@ public partial class TransformerRegister : Node
 
     }
 
-    // public class TransformerInputTypeLoader
+    // public class IndustryInputTypeLoader
     // {
     //     public int Type;
     //     public double Value;
-    //     public TransformerInputTypeLoader(int i, double v, string tip)
+    //     public IndustryInputTypeLoader(int i, double v, string tip)
     //     {
 
     //     }
     // }
 
-    // Special transformer type for trade route;
-    public static TransformerType TradeRoute
+    // Special Industry type for trade route;
+    public static IndustryType TradeRoute
     {
         get
         {
-            TransformerType tradeRoute = new TransformerType();
+            IndustryType tradeRoute = new IndustryType();
             tradeRoute.Name = "Trade Route";
             tradeRoute.Slug = "trade_route";
             tradeRoute.Superclass = "special";
@@ -57,18 +57,18 @@ public partial class TransformerRegister : Node
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        list = new List<TransformerType>(LoadFromFile());
+        list = new List<IndustryType>(LoadFromFile());
     }
 
-    IEnumerable<TransformerType> LoadFromFile()
+    IEnumerable<IndustryType> LoadFromFile()
     {
-        //GD.Print(System.IO.Directory.GetFiles("Transformers", ".json"));
-        foreach (string file in System.IO.Directory.GetFiles("Transformers", "*.json"))
+        //GD.Print(System.IO.Directory.GetFiles("Industrys", ".json"));
+        foreach (string file in System.IO.Directory.GetFiles("Industrys", "*.json"))
         {
             using (StreamReader fi = System.IO.File.OpenText(file))
             {
                 JsonSerializer serializer = new JsonSerializer();
-                foreach (TransformerType tt in (List<TransformerType>)serializer.Deserialize(fi, typeof(List<TransformerType>)))
+                foreach (IndustryType tt in (List<IndustryType>)serializer.Deserialize(fi, typeof(List<IndustryType>)))
                 {
                     yield return tt;
                 }
@@ -76,7 +76,7 @@ public partial class TransformerRegister : Node
         }
     }
 
-    public TransformerType GetFromSlug(string slug)
+    public IndustryType GetFromSlug(string slug)
     {
         return list.Find(x => x.Slug == slug);
     }

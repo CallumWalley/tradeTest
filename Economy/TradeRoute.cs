@@ -7,31 +7,31 @@ public partial class TradeRoute : EcoNode
     [Export]
     public Installation destination;
     public Installation source;
-    public TransformerTrade transformerSource;
-    public TransformerTrade transformerDestintation;
+    public IndustryTrade IndustrySource;
+    public IndustryTrade IndustryDestintation;
     public Resource.RStaticList<Resource.RStatic> Balance;
-    public List<TransformerInputType.Base> consumptionSource;
-    public List<TransformerInputType.Base> consumptionDestination;
+    public List<IndustryInputType.Base> consumptionSource;
+    public List<IndustryInputType.Base> consumptionDestination;
 
     public Body Body { get { return GetParent<Body>(); } }
     public int Index { get { return GetIndex(); } }
 
     // Input class type.
-    public partial class InputType : TransformerInputType.Base
+    public partial class InputType : IndustryInputType.Base
     {
-        public InputType(TransformerTrade _transformer, Resource.RStatic _request) : base(_transformer, _request)
+        public InputType(IndustryTrade _Industry, Resource.RStatic _request) : base(_Industry, _request)
         {
 
         }
         public new void Respond()
         {
             base.Respond();
-            ((Resource.RStatic)((TransformerTrade)transformer).twin.Production[Type]).Set(Request.Sum());
+            ((Resource.RStatic)((IndustryTrade)Industry).twin.Production[Type]).Set(Request.Sum());
         }
         public new void Respond(double value)
         {
             base.Respond(value);
-            ((Resource.RStatic)((TransformerTrade)transformer).twin.Production[(Type)]).Set(Response.Sum());
+            ((Resource.RStatic)((IndustryTrade)Industry).twin.Production[(Type)]).Set(Response.Sum());
         }
     }
 
@@ -53,18 +53,18 @@ public partial class TradeRoute : EcoNode
         destination = _destination;
         source = _source;
 
-        transformerDestintation = new TransformerTrade();
-        transformerSource = new TransformerTrade();
+        IndustryDestintation = new IndustryTrade();
+        IndustrySource = new IndustryTrade();
 
-        transformerSource.Init(this, true);
-        transformerDestintation.Init(this);
+        IndustrySource.Init(this, true);
+        IndustryDestintation.Init(this);
 
-        source.RegisterTransformer(transformerSource);
-        destination.RegisterTransformer(transformerDestintation);
+        source.RegisterIndustry(IndustrySource);
+        destination.RegisterIndustry(IndustryDestintation);
         destination.uplineTraderoute = this;
 
         distance = destination.GetParent<Body>().Position.DistanceTo(source.GetParent<Body>().Position);
-        Name = $"Trade route from {transformerSource.Name} to {transformerDestintation.Name}";
+        Name = $"Trade route from {IndustrySource.Name} to {IndustryDestintation.Name}";
 
         Balance = new Resource.RStaticList<Resource.RStatic>();
         MatchDemand();
@@ -99,11 +99,11 @@ public partial class TradeRoute : EcoNode
         {
             if (r.Sum() > 0)
             {
-                consumptionSource.Add(new InputType(transformerSource, new Resource.RStatic(r.Type(), r.Sum(), $"Trade to {destination.Name}")));
+                consumptionSource.Add(new InputType(IndustrySource, new Resource.RStatic(r.Type(), r.Sum(), $"Trade to {destination.Name}")));
             }
             else
             {
-                consumptionDestination.Add(new InputType(transformerSource, new Resource.RStatic(r.Type(), r.Sum(), $"Trade to {destination.Name}")));
+                consumptionDestination.Add(new InputType(IndustrySource, new Resource.RStatic(r.Type(), r.Sum(), $"Trade to {destination.Name}")));
 
             }
         }

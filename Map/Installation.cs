@@ -5,14 +5,24 @@ using System.Collections.Generic;
 public partial class Installation : EcoNode
 {
 
+    // Interface allowing object to be member of resourceOrder
+    public interface ResourceConsumer
+    {
+
+    }
+
     [Export]
     public bool isValidTradeReceiver = false;
 
     [Export]
     public bool storageFull = false;
 
+    public List<ResourceConsumer> ResourceConsumers { get; }
+    public List<Industry> Industries { get { return industries; } }
+    List<Industry> industries = new List<Industry> { };
+
     //for debuggin
-    public Godot.Collections.Array<Node> Children { get { return GetChildren(); } }
+    public Godot.Collections.Array<Node> Children { get { return GetChildren(true); } }
 
     public List<string> tags;
 
@@ -28,7 +38,7 @@ public partial class Installation : EcoNode
     // TOTAL storage available.
 
     // Downline traderoutes
-    public TransformerTrade transformerTrade;
+    public IndustryTrade IndustryTrade;
 
     // Upline traderoute
     public TradeRoute uplineTraderoute;
@@ -53,24 +63,26 @@ public partial class Installation : EcoNode
         {
             GetNode<PlayerTradeReciever>("/root/Global/Player/Trade/Receivers").RegisterInstallation(this);
         }
-        // If added in inspector. Regester transformers.
-        foreach (Transformer t in Children)
+        // If added in inspector. Regester Industrys.
+        foreach (Industry t in Children)
         {
             // Remove self so not trigger warning when added.
             RemoveChild(t);
-            RegisterTransformer(t);
+            RegisterIndustry(t);
         }
     }
-    public void RegisterTransformer(Transformer tr)
+    public void RegisterIndustry(Industry tr)
     {
+        Industrys.Add(tr);
         AddChild(tr);
+
         foreach (Resource.RGroup p in tr.Production)
         {
             resourceDeltaProduced.Add((Resource.RGroup)p);
             resourceDelta.Add((Resource.RGroup)p);
 
         }
-        foreach (TransformerInputType.Base p in tr.Consumption)
+        foreach (IndustryInputType.Base p in tr.Consumption)
         {
             resourceDeltaConsumed.Add(p.Response);
             resourceDelta.Add(p.Response);
@@ -81,8 +93,9 @@ public partial class Installation : EcoNode
             resourceStorage[p.Type()].Fill();
         }
     }
-    public void DeregisterTransformer(Transformer tr)
+    public void DeregisterIndustry(Industry tr)
     {
+        Industrys.Remove(tr);
         RemoveChild(tr);
 
         foreach (Resource.RGroup p in tr.Production)
@@ -91,7 +104,7 @@ public partial class Installation : EcoNode
             resourceDelta.Remove(p);
 
         }
-        foreach (TransformerInputType.Base p in tr.Consumption)
+        foreach (IndustryInputType.Base p in tr.Consumption)
         {
             resourceDeltaConsumed.Remove(p.Response);
             resourceDelta.Remove(p.Response);
@@ -102,17 +115,16 @@ public partial class Installation : EcoNode
             resourceStorage.Remove(p);
         }
     }
-    public IEnumerable<TransformerTrade> GetTradeRoutes()
-    {
-        foreach (Transformer t in GetChildren())
-        {
-            if (t is TransformerTrade)
-            {
-                yield return transformerTrade;
-            }
-        }
-
-    }
+    // public IEnumerable<IndustryTrade> GetTradeRoutes()
+    // {
+    //     foreach (Industry t in GetChildren())
+    //     {
+    //         if (t is IndustryTrade)
+    //         {
+    //             yield return IndustryTrade;
+    //         }
+    //     }
+    // }
 
     // this is so messy, i hate it. aaaaaaaaaaah
     public override void EFrameLate()
@@ -123,19 +135,19 @@ public partial class Installation : EcoNode
         // {
         // 	r.Clear();
         // }
-        // //Get production from each transformer.
+        // //Get production from each Industry.
         // foreach (Resource r in resourceDeltaProduced)
         // {
         // 	r.Clear();
         // }
-        // foreach (Transformer transformer in GetChildren())
+        // foreach (Industry Industry in GetChildren())
         // {
-        // 	foreach (Resource r in transformer.Production)
+        // 	foreach (Resource r in Industry.Production)
         // 	{
         // 		resourceDeltaProduced.Add(r);
         // 		resourceDelta.Add(r);
         // 	}
-        // 	foreach (Resource r in transformer.Storage)
+        // 	foreach (Resource r in Industry.Storage)
         // 	{
         // 		resourceStorage.Add(r);
         // 	}
@@ -149,9 +161,9 @@ public partial class Installation : EcoNode
             lastProduced[r.Type()] = r.Sum();
         }
 
-        foreach (Transformer transformer in GetChildren())
+        foreach (Industry Industry in Industrys)
         {
-            foreach (TransformerInputType.Base input in transformer.Consumption)
+            foreach (IndustryInputType.Base input in Industry.Consumption)
             {
                 int type = input.Request.Type();
                 // How much of this resource was produced last step.

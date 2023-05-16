@@ -2,12 +2,12 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class UITransformer : Control, UIContainers.IListable
+public partial class UIIndustry : Control, UIContainers.IListable
 {
     // Game object this UI element follows.
     public Control Control { get { return this; } }
-    public System.Object GameElement { get { return transformer; } }
-    public Transformer transformer;
+    public System.Object GameElement { get { return Industry; } }
+    public Industry Industry;
     public static PlayerTradeRoutes playerTradeRoutes;
 
     static readonly PackedScene p_situation = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/UISituation.tscn");
@@ -23,11 +23,11 @@ public partial class UITransformer : Control, UIContainers.IListable
     //Control callback;
     public virtual void Init(System.Object gameObject)
     {
-        Init((Transformer)gameObject);
+        Init((Industry)gameObject);
     }
-    public virtual void Init(Transformer _transformer)
+    public virtual void Init(Industry _Industry)
     {
-        transformer = _transformer;
+        Industry = _Industry;
     }
     public override void _Ready()
     {
@@ -38,10 +38,10 @@ public partial class UITransformer : Control, UIContainers.IListable
         VBoxContainer leftSide = details.GetNode<VBoxContainer>("VBoxContainer/HSplitContainer/Left");
 
 
-        button.Connect("toggled", new Callable(this, "ShowDetails"));
+        // button.Connect("toggled", new Callable(this, "ShowDetails"));
 
         // Set button text
-        button.GetNode<Label>("SummaryContent/Summary").Text = transformer.Name;
+        button.GetNode<Label>("SummaryContent/Summary").Text = Industry.Name;
 
         // Set reorder buttons
         moveUpButton = button.GetNode<TextureButton>("AlignRight/Incriment/MoveUp");
@@ -50,7 +50,7 @@ public partial class UITransformer : Control, UIContainers.IListable
         moveDownButton.Connect("pressed", new Callable(this, "ReorderDown"));
 
         situations = details.GetNode<VBoxContainer>("VBoxContainer/HSplitContainer/TabContainer/Situation");
-        details.GetNode<Label>("VBoxContainer/Description").Text = transformer.Description;
+        details.GetNode<Label>("VBoxContainer/Description").Text = Industry.Description;
 
         // Init resource pool display. // new UIResourceList();
         UIResourceList uiDelta = new UIResourceList(); //leftSide.GetNode<UIResourceList>("/Production");
@@ -61,16 +61,15 @@ public partial class UITransformer : Control, UIContainers.IListable
         leftSide.AddChild(uiStorage);
 
 
-
-        // uiConsumption.Init(Flatten(transformer.Consumption));
-        uiDelta.Init(transformer.Production);
-        uiStorage.Init(transformer.Storage);
+        // uiConsumption.Init(Flatten(Industry.Consumption));
+        uiDelta.Init(Industry.Production);
+        uiStorage.Init(Industry.Storage);
 
     }
     public override void _Draw()
     {
-        if (transformer == null) { return; }
-        //int index = tradeRoute.destination.GetTransformerTrade().tradeRoutes.IndexOf(tradeRoute);
+        if (Industry == null) { return; }
+        //int index = tradeRoute.destination.GetIndustryTrade().tradeRoutes.IndexOf(tradeRoute);
         int index = GetIndex();
         moveUpButton.Disabled = false;
         moveDownButton.Disabled = false;
@@ -88,7 +87,7 @@ public partial class UITransformer : Control, UIContainers.IListable
         }
         if (details.Visible)
         {
-            if (transformer.Situations.Count > 0)
+            if (Industry.Situations.Count > 0)
             {
                 situations.GetNode<Label>("NoSituation").Visible = false;
             }
@@ -97,25 +96,17 @@ public partial class UITransformer : Control, UIContainers.IListable
                 situations.GetNode<Label>("NoSituation").Visible = true;
             }
         }
-        // for
-        // tradeRoute
     }
 
     public void ShowDetails(bool toggled)
     {
         details.Visible = toggled;
     }
-    // public void Remove(){
-    // 	GetNode<PlayerTradeRoutes>("/root/Global/Player/Trade/Routes").DeregisterTradeRoute(tradeRoute);
-    // 	Control parent = GetParent<Control>();
-    // 	parent.RemoveChild(this);
-    // 	parent.QueueRedraw();
-    // 	QueueFree();
-    // }
+
 
     public void ReorderUp()
     {
-        transformer.GetParent<Installation>().MoveChild(transformer, transformer.GetIndex() - 1);
+        Industry.GetParent<Installation>().MoveChild(Industry, Industry.GetIndex() - 1);
         //FIXME
         GetParent<Control>().GetParent<Control>().GetParent<Control>().Visible = false;
         GetParent<Control>().GetParent<Control>().GetParent<Control>().Visible = true;
@@ -123,9 +114,9 @@ public partial class UITransformer : Control, UIContainers.IListable
     }
     public void ReorderDown()
     {
-        Installation par = transformer.GetParent<Installation>();
-        int chindex = transformer.GetIndex() + 1;
-        par.MoveChild(transformer, chindex);
+        Installation par = Industry.GetParent<Installation>();
+        int chindex = Industry.GetIndex() + 1;
+        par.MoveChild(Industry, chindex);
         // FIXME
         GetParent<Control>().GetParent<Control>().GetParent<Control>().Visible = false;
         GetParent<Control>().GetParent<Control>().GetParent<Control>().Visible = true;
@@ -147,9 +138,9 @@ public partial class UITransformer : Control, UIContainers.IListable
         situations.MoveChild(ui, index);
     }
 
-    IEnumerable<Resource.IResource> Flatten(IEnumerable<TransformerInputType.Base> inputList)
+    IEnumerable<Resource.IResource> Flatten(IEnumerable<IndustryInputType.Base> inputList)
     {
-        foreach (TransformerInputType.Base i in inputList)
+        foreach (IndustryInputType.Base i in inputList)
         {
             yield return i.Response;
         }

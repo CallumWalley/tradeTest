@@ -1,19 +1,19 @@
 using Godot;
 using System;
 
-public partial class TransformerInputType
+public partial class IndustryInputType
 {
     public partial class Base
     {
         public Resource.RStatic Request;
         public Resource.RStatic Response;
-        protected Transformer transformer;
+        protected Industry Industry;
         public int State { get; set; }
         public int Type { get { return Request.Type(); } }
 
-        public Base(Transformer _transformer, Resource.RStatic _request)
+        public Base(Industry _Industry, Resource.RStatic _request)
         {
-            transformer = _transformer;
+            Industry = _Industry;
             Request = _request;
             Response = new Resource.RStatic(Request.Type(), 0);
         }
@@ -22,13 +22,12 @@ public partial class TransformerInputType
         {
             Response.Set(Request.Sum());
             State = 0;
-            GD.Print($"Fulfilled request");
         }
         // No fulfilled value returned if not fulfilled.
         public virtual void Respond(double value)
         {
             Response.Set(value);
-            GD.Print($"Partial request {value}/{Request.Sum()}");
+            // GD.Print($"Partial request {value}/{Request.Sum()}");
             State = 1;
         }
         public override string ToString()
@@ -40,11 +39,11 @@ public partial class TransformerInputType
     {
         Resource.RStatic multiplier;
 
-        public Linear(Transformer _transformer, Resource.RStatic _request) : base(_transformer, _request)
+        public Linear(Industry _Industry, Resource.RStatic _request) : base(_Industry, _request)
         {
             multiplier = new Resource.RStatic(Type, 0);
-            ((Resource.RGroup)transformer.Production[Type]).Multiply(multiplier);
-            transformer.AddSituation(new Situations.OutputModifier(Response, multiplier, transformer));
+            ((Resource.RGroup)Industry.Production[Type]).Multiply(multiplier);
+            Industry.AddSituation(new Situations.OutputModifier(Response, multiplier, Industry));
         }
         public override void Respond()
         {

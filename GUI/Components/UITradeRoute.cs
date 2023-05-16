@@ -53,7 +53,7 @@ public partial class UITradeRoute : Control
     public override void _Draw()
     {
         if (tradeRoute == null) { return; }
-        //int index = tradeRoute.destination.GetTransformerTrade().tradeRoutes.IndexOf(tradeRoute);
+        //int index = tradeRoute.destination.GetIndustryTrade().tradeRoutes.IndexOf(tradeRoute);
         int index = GetIndex();
         moveUpButton.Disabled = false;
         moveDownButton.Disabled = false;
@@ -65,8 +65,6 @@ public partial class UITradeRoute : Control
         {
             moveDownButton.Disabled = true;
         }
-        // for
-        // tradeRoute
     }
 
     public void ShowDetails(bool toggled)

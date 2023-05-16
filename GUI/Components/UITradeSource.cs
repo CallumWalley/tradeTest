@@ -30,9 +30,6 @@ public partial class UITradeSource : UIElement
         labelLeft = button.GetNode<Label>("AlignLeft/Label");
         frieghtersAvailable = button.GetNode<UIResource>("AlignRight/Available");
         installationSummary = button.GetNode<UIInstallationSummary>("AlignLeft/InstallationSummary");
-        line2D = new Line2D();
-        AddChild(line2D);
-        line2D.Visible = false;
 
         // If no destination, hide summary, show no trade route message.
         if (sourceInstallation == null)
@@ -53,6 +50,7 @@ public partial class UITradeSource : UIElement
         if (driverControl != null)
         {
             button.Pressed += () => { driverControl.SetTradeSource(sourceInstallation); };
+            button.Pressed += () => { HideTradeRoute(); };
             //.Connect("pressed", new Callable(this, "Pressed")); //sourceInstallation
         }
     }
@@ -72,9 +70,9 @@ public partial class UITradeSource : UIElement
             double time = GetNode<PlayerTech>("/root/Global/Player/Tech").GetFreighterTons(1, dist);
             labelRight.Text = string.Format("{0} - {1}", UnitTypes.DistanceSI(dist), UnitTypes.TimeSol(time));
         }
-        if (line2D.Visible && (sourceInstallation != null))
+
         {
-            line2D.Points = new Vector2[] { sourceInstallation.Position - GlobalPosition, installation.Position - GlobalPosition };
+
             //line2D.GlobalPosition = sourceInstallation.Position;
         }
 
@@ -83,11 +81,23 @@ public partial class UITradeSource : UIElement
 
     void ShowTradeRoute()
     {
-        line2D.Visible = true;
+        if (sourceInstallation != null)
+        {
+            line2D = new Line2D();
+            GetNode("/root/Global/UI").AddChild(line2D);
+
+            line2D.Points = new Vector2[] { sourceInstallation.Position, installation.Position };
+            GD.Print("Line added");
+        }
     }
     void HideTradeRoute()
     {
-        line2D.Visible = false;
+        if (line2D != null)
+        {
+            line2D.QueueFree();
+            line2D = null;
+            GD.Print("Line removed");
+        }
     }
     void Pressed()
     {

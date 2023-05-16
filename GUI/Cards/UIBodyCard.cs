@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public partial class UIBodyCard : UICard
 {
     Body body;
-    static readonly PackedScene p_tradePanel = (PackedScene)GD.Load<PackedScene>("res://GUI/Panels/UIResourcesPanel.tscn");
+    static readonly PackedScene p_tradePanel = (PackedScene)GD.Load<PackedScene>("res://GUI/Panels/UIInstallation.tscn");
     static readonly PackedScene p_astroPanel = (PackedScene)GD.Load<PackedScene>("res://GUI/Panels/UIAstroPanel.tscn");
     //    static readonly PackedScene p_industryPanel = (PackedScene)GD.Load<PackedScene>("res://GUI/Panels/UIIndustryPanel.tscn");
 
@@ -20,7 +20,7 @@ public partial class UIBodyCard : UICard
 
         foreach (Installation i in body.Installations)
         {
-            UIResourcesPanel tp = p_tradePanel.Instantiate<UIResourcesPanel>();
+            UIInstallation tp = p_tradePanel.Instantiate<UIInstallation>();
             tp.Init(i);
             tabContainer.AddChild(tp);
         }
@@ -81,7 +81,7 @@ public partial class UIBodyCard : UICard
     // 	/// UI
     // 	// Add trade panel
     // 	if (installation!=null){
-    // 		UIResourcesPanel tp = p_tradePanel.Instantiate<UIResourcesPanel>();
+    // 		UIInstallation tp = p_tradePanel.Instantiate<UIInstallation>();
     // 		UIIndustryPanel ip = p_industryPanel.Instantiate<UIIndustryPanel>();
 
     // 		tp.Init(this);

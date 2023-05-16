@@ -7,15 +7,17 @@ public partial class UITransformerTrade : UITransformer
     //static readonly PackedScene resourceIcon = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/UIResource.tscn");
 
     // Game object this UI element follows.
-    public Transformer transformer;
-    public static PlayerTradeRoutes playerTradeRoutes;
-
-    TextureButton moveUpButton;
-    TextureButton moveDownButton;
-
+    TradeRoute tradeRoute;
     // Element to update on change.
     //Control callback;
-
+    public virtual void Init(TradeRoute _tradeRoute)
+    {
+        tradeRoute = _tradeRoute;
+    }
+    public virtual void Init(System.Object gameObject)
+    {
+        Init((TradeRoute)gameObject);
+    }
     public override void Init(Transformer _transformer)
     {
         transformer = _transformer;
@@ -24,7 +26,7 @@ public partial class UITransformerTrade : UITransformer
         GetNode("Summary").Connect("toggled", new Callable(this, "ShowDetails"));
 
         // Set button text
-        GetNode<Label>("Summary/SummaryContent/Summary").Text = transformer.Name;
+        GetNode<Label>("Summary/SummaryContent/Summary").Text = transformer.Name;   
 
         // // Set reorder buttons
         // moveUpButton = GetNode<TextureButton>("Summary/AlignRight/Incriment/MoveUp");

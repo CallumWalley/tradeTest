@@ -12,14 +12,14 @@ public partial class PlayerTradeRoutes : Node
     }
     public void DeregisterTradeRoute(TradeRoute tr)
     {
-        tr.source.DeregisterTransformer(tr.transformerSource);
-        tr.destination.DeregisterTransformer(tr.transformerDestintation);
+        tr.source.DeregisterIndustry(tr.IndustrySource);
+        tr.destination.DeregisterIndustry(tr.IndustryDestintation);
 
         tr.destination.uplineTraderoute = null;
 
         RemoveChild(tr);
-        tr.transformerSource.QueueFree();
-        tr.transformerDestintation.QueueFree();
+        tr.IndustrySource.QueueFree();
+        tr.IndustryDestintation.QueueFree();
         tr.QueueFree();
         GD.Print("Removed trade route.");
     }

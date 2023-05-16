@@ -4,9 +4,9 @@ using System;
 public partial class UIInputType : UIResource
 {
     // modification for inputType class (e.g, show requested and delivered)
-    public TransformerInputType.Base inputType;
+    public IndustryInputType.Base inputType;
 
-    public void Init(TransformerInputType.Base _inputType)
+    public void Init(IndustryInputType.Base _inputType)
     {
         inputType = _inputType;
         base.Init(inputType.Response);

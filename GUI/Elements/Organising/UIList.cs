@@ -24,6 +24,7 @@ public partial class UIList : BoxContainer
     // }
     public override void _Draw()
     {
+
         if (list == null) { return; }
         // Go over all trade routes in pool, and either update or create. 
         int index = 0;
@@ -33,17 +34,20 @@ public partial class UIList : BoxContainer
             if (r == null)
             {
                 // list.Remove()
-
             }
             Update(r, index);
             index++;
         }
+        GD.Print($"{GetChildCount()} tracking {index} objects.");
         // Any remaining elements greater than index must no longer exist.
         while (GetChildCount() > index)
         {
             Control uir = GetChildOrNull<Control>(index + 1);
-            RemoveChild(uir);
-            uir.QueueFree();
+            if (uir != null)
+            {
+                RemoveChild(uir);
+                uir.QueueFree();
+            }
         }
     }
     public override void _Ready()
@@ -67,6 +71,7 @@ public partial class UIList : BoxContainer
         }
         // If doesn't exist, add it and insert at postition.
         UIContainers.IListable ui = (UIContainers.IListable)prefab.Instantiate();
+        GD.Print("instantiated list item");
         ui.Init(r);
         AddChild(ui.Control);
         MoveChild(ui.Control, index);

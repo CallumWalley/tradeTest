@@ -232,6 +232,17 @@ public partial class Resource
 
         // if true, element will be created rather than returning null
         public bool CreateMissing = false;
+
+        // Returns standard resources.
+        public IEnumerable<TResource> Standard
+        {
+            get
+            {
+                GD.Print("getting standard");
+                return GetStandard();
+            }
+        }
+
         // TResource list is a list of resources...
         protected SortedDictionary<int, TResource> members;
         public RList(IEnumerable<TResource> _members)
@@ -267,7 +278,7 @@ public partial class Resource
             members.Add(r.Type(), r);
         }
 
-        public IEnumerable<TResource> GetStandard()
+        IEnumerable<TResource> GetStandard()
         {
             return GetRange(1, 100);
         }

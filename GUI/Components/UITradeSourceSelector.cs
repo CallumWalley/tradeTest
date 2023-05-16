@@ -12,7 +12,7 @@ public partial class UITradeSourceSelector : Control
     // Index of trade route destingation if exists already;
     public bool receiver = false;
 
-    Installation installation;
+    public Installation installation;
 
 
     // Children members
@@ -177,6 +177,7 @@ public partial class UITradeSourceSelector : Control
         // Replace UI element in panel.
         // Force redraw.
         // Replace with 'panel' method'
+        QueueRedraw();
         //GetParent<Control>().GetParent<Control>().GetParent<Control>().Visible = false;
         //GetParent<Control>().GetParent<Control>().SetDeferred("visible", true);
     }

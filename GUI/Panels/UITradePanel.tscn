@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://chc2prkc3urqg"]
+[gd_scene load_steps=2 format=3 uid="uid://dvv11jokqbi68"]
 
-[ext_resource type="Script" path="res://GUI/Panels/UIResourcesPanel.cs" id="1_3df8n"]
+[ext_resource type="Script" path="res://GUI/Panels/UITradePanel.cs" id="1_f63vc"]
 
 [node name="TradePanel" type="VBoxContainer"]
 custom_minimum_size = Vector2(600, 0)
@@ -10,4 +10,4 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 3
-script = ExtResource("1_3df8n")
+script = ExtResource("1_f63vc")

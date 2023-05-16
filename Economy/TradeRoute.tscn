@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://bay4r4otaahaa"]
+[gd_scene load_steps=3 format=3]
 
-[ext_resource type="Script" path="res://Map/TradeRoute.cs" id="1"]
+[ext_resource type="Script" path="res://Economy/TradeRoute.cs" id="1"]
 
 [sub_resource type="Curve" id="1"]
 _data = [Vector2(0, 0), 0.0, 2.73829, 0, 0, Vector2(1, 1), 1.56753, 0.0, 0, 0]

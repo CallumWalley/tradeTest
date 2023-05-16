@@ -10,37 +10,37 @@ public partial class Situations
         public virtual string Description { get; set; }
     };
 
-    public partial class BaseTransformer : Base
+    public partial class BaseIndustry : Base
     {
         public new string Name { get; set; }
         public new string Description { get; set; }
-        Transformer transformer;
-        public BaseTransformer(Transformer _transformer, string _name = "Unknown", string _description = "This doesn't concern you.")
+        Industry Industry;
+        public BaseIndustry(Industry _Industry, string _name = "Unknown", string _description = "This doesn't concern you.")
         {
-            transformer = _transformer;
+            Industry = _Industry;
             Name = _name;
             Description = _description;
         }
     }
 
-    public partial class OutputModifier : BaseTransformer
+    public partial class OutputModifier : BaseIndustry
     {
         public new string Name { get; set; }
         public new string Description { get; set; }
         public readonly Resource.IResource cause;
         public readonly Resource.IResource effect;
-        Transformer transformer;
-        public OutputModifier(Resource.IResource _cause, Resource.IResource _effect, Transformer _transformer, string _name = "Resource Shortfall", string _description = "Output is being affected by resource shortfall") : base(_transformer, _name, _description)
+        Industry Industry;
+        public OutputModifier(Resource.IResource _cause, Resource.IResource _effect, Industry _Industry, string _name = "Resource Shortfall", string _description = "Output is being affected by resource shortfall") : base(_Industry, _name, _description)
         {
             cause = _cause;
             effect = _effect;
         }
     }
 
-    // public class Resource.IResourceShortage : BaseTransformer{
-    //     Transformer.Requester requester;
+    // public class Resource.IResourceShortage : BaseIndustry{
+    //     Industry.Requester requester;
     //     Resource.RList outputs;
-    //     public Resource.IResourceShortage(Transformer _transformer, Transformer.Requester _requester, List<Resource> _outputs) : base(_transformer){
+    //     public Resource.IResourceShortage(Industry _Industry, Industry.Requester _requester, List<Resource> _outputs) : base(_Industry){
     //         outputs = _outputs;
     //         requester = _requester;
     //     }

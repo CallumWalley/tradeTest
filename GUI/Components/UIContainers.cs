@@ -11,6 +11,10 @@ public partial class UIContainers
         Control Control { get; }
         void Init(System.Object gameElement);
     }
+    public interface IOrderable : IListable
+    {
+
+    }
 }
 
 // public partial class UIHListChildren : UIHList
