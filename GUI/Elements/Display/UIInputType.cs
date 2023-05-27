@@ -4,9 +4,9 @@ using System;
 public partial class UIInputType : UIResource
 {
     // modification for inputType class (e.g, show requested and delivered)
-    public IndustryInputType.Base inputType;
+    public Resource.BaseRequest inputType;
 
-    public void Init(IndustryInputType.Base _inputType)
+    public void Init(Resource.BaseRequest _inputType)
     {
         inputType = _inputType;
         base.Init(inputType.Response);

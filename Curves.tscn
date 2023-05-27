@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bxx7hmxhp17bv"]
+
+[ext_resource type="Script" path="res://Curves.cs" id="1_kaqq2"]
+
+[node name="Curves" type="Node"]
+script = ExtResource("1_kaqq2")

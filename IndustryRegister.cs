@@ -27,11 +27,11 @@ public partial class IndustryRegister : Node
 
     }
 
-    // public class IndustryInputTypeLoader
+    // public class InputTypeLoader
     // {
     //     public int Type;
     //     public double Value;
-    //     public IndustryInputTypeLoader(int i, double v, string tip)
+    //     public InputTypeLoader(int i, double v, string tip)
     //     {
 
     //     }
@@ -63,7 +63,7 @@ public partial class IndustryRegister : Node
     IEnumerable<IndustryType> LoadFromFile()
     {
         //GD.Print(System.IO.Directory.GetFiles("Industrys", ".json"));
-        foreach (string file in System.IO.Directory.GetFiles("Industrys", "*.json"))
+        foreach (string file in System.IO.Directory.GetFiles("Economy/Industries", "*.json"))
         {
             using (StreamReader fi = System.IO.File.OpenText(file))
             {

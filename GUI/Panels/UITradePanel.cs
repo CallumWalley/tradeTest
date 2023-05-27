@@ -46,7 +46,7 @@ public partial class UITradePanel : Control
         // AddChild(UIStockpileList);
 
         uiIndustryList = new UIList();//p_vlist.Instantiate<UIContainers.UIListChildren>();
-        uiIndustryList.Init(installation.Industrys, p_Industry);
+        uiIndustryList.Init(installation.Industries, p_Industry);
         uiIndustryList.Vertical = true;
         //uiIndustryList
 

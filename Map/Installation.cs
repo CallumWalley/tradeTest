@@ -5,21 +5,17 @@ using System.Collections.Generic;
 public partial class Installation : EcoNode
 {
 
-    // Interface allowing object to be member of resourceOrder
-    public interface ResourceConsumer
-    {
-
-    }
-
     [Export]
     public bool isValidTradeReceiver = false;
 
     [Export]
     public bool storageFull = false;
+    List<Industry> industries = new();
+    List<Resource.IResourceConsumer> consumers = new();
 
-    public List<ResourceConsumer> ResourceConsumers { get; }
+    public List<Resource.IResourceConsumer> Consumers { get { return consumers; } }
+
     public List<Industry> Industries { get { return industries; } }
-    List<Industry> industries = new List<Industry> { };
 
     //for debuggin
     public Godot.Collections.Array<Node> Children { get { return GetChildren(true); } }
@@ -27,21 +23,21 @@ public partial class Installation : EcoNode
     public List<string> tags;
 
     // contains only POSITIVE deltas. evaluated during EFrameLate, and cleared in next EFrameEarly.
-    public Resource.RGroupList<Resource.RGroup> resourceDeltaProduced = new Resource.RGroupList<Resource.RGroup>();
+    public Resource.RGroupList<Resource.RGroup> resourceDeltaProduced = new();
     // contains only NEGATIVE deltas. evaluated during EFrameEarly, and cleared in next EFrameLate.
-    public Resource.RGroupList<Resource.RGroup> resourceDeltaConsumed = new Resource.RGroupList<Resource.RGroup>();
+    public Resource.RGroupList<Resource.RGroup> resourceDeltaConsumed = new();
     // Contains sum of deltas, used by UI elements.
-    public Resource.RGroupList<Resource.RGroup> resourceDelta = new Resource.RGroupList<Resource.RGroup>();
-
+    public Resource.RGroupList<Resource.RGroup> resourceDelta = new();
     // NET amount of resource in storage.
-    public Resource.RStorageList<Resource.RStorage> resourceStorage = new Resource.RStorageList<Resource.RStorage>();
+    public Resource.RStorageList<Resource.RStorage> resourceStorage = new();
     // TOTAL storage available.
 
     // Downline traderoutes
-    public IndustryTrade IndustryTrade;
 
     // Upline traderoute
     public TradeRoute uplineTraderoute;
+    public List<TradeRoute> downlineTraderoutes;
+
 
     public Vector2 Position { get { return GetParent<Body>().Position; } }
 
@@ -71,49 +67,58 @@ public partial class Installation : EcoNode
             RegisterIndustry(t);
         }
     }
-    public void RegisterIndustry(Industry tr)
+    public void RegisterConsumer(Resource.IResourceConsumer c)
     {
-        Industrys.Add(tr);
-        AddChild(tr);
+        Consumers.Add(c);
+        //AddChild(tr);
 
-        foreach (Resource.RGroup p in tr.Production)
-        {
-            resourceDeltaProduced.Add((Resource.RGroup)p);
-            resourceDelta.Add((Resource.RGroup)p);
-
-        }
-        foreach (IndustryInputType.Base p in tr.Consumption)
-        {
-            resourceDeltaConsumed.Add(p.Response);
-            resourceDelta.Add(p.Response);
-        }
-        foreach (Resource.RStatic p in tr.Storage)
-        {
-            resourceStorage[p.Type()].Add(p);
-            resourceStorage[p.Type()].Fill();
-        }
+        // foreach (Resource.RGroup p in tr.Production)
+        // {
+        //     resourceDeltaProduced.Add((Resource.RGroup)p);
+        //     resourceDelta.Add((Resource.RGroup)p);
+        // }
+        // foreach (Resource.BaseRequest p in tr.Consumption)
+        // {
+        //     resourceDeltaConsumed.Add(p.Response);
+        //     resourceDelta.Add(p.Response);
+        // }
+        // foreach (Resource.RStatic p in tr.Storage)
+        // {
+        //     resourceStorage[p.Type()].Add(p);
+        //     resourceStorage[p.Type()].Fill();
+        // }
     }
-    public void DeregisterIndustry(Industry tr)
+    public void DeregisterConsumer(Resource.IResourceConsumer c)
     {
-        Industrys.Remove(tr);
-        RemoveChild(tr);
+        Consumers.Remove(c);
+        // RemoveChild(tr);
 
-        foreach (Resource.RGroup p in tr.Production)
-        {
-            resourceDeltaProduced.Remove(p);
-            resourceDelta.Remove(p);
+        // foreach (Resource.RGroup p in tr.Production)
+        // {
+        //     resourceDeltaProduced.Remove(p);
+        //     resourceDelta.Remove(p);
 
-        }
-        foreach (IndustryInputType.Base p in tr.Consumption)
-        {
-            resourceDeltaConsumed.Remove(p.Response);
-            resourceDelta.Remove(p.Response);
+        // }
+        // foreach (Resource.BaseRequest p in tr.Consumption)
+        // {
+        //     resourceDeltaConsumed.Remove(p.Response);
+        //     resourceDelta.Remove(p.Response);
 
-        }
-        foreach (Resource.RStorage p in tr.Storage)
-        {
-            resourceStorage.Remove(p);
-        }
+        // }
+        // foreach (Resource.RStorage p in tr.Storage)
+        // {
+        //     resourceStorage.Remove(p);
+        // }
+    }
+    public void RegisterIndustry(Industry i)
+    {
+        AddChild(i);
+        RegisterConsumer(i.Consumer);
+    }
+    public void DeregisterIndustry(Industry i)
+    {
+        RemoveChild(i);
+        DeregisterConsumer(i.Consumer);
     }
     // public IEnumerable<IndustryTrade> GetTradeRoutes()
     // {
@@ -155,15 +160,15 @@ public partial class Installation : EcoNode
     }
     public override void EFrameEarly()
     {
-        Dictionary<int, double> lastProduced = new Dictionary<int, double>();
+        Dictionary<int, double> lastProduced = new();
         foreach (Resource.RBase r in resourceDeltaProduced)
         {
             lastProduced[r.Type()] = r.Sum();
         }
 
-        foreach (Industry Industry in Industrys)
+        foreach (Resource.IResourceConsumer rc in Consumers)
         {
-            foreach (IndustryInputType.Base input in Industry.Consumption)
+            foreach (Resource.BaseRequest input in rc.Consumed())
             {
                 int type = input.Request.Type();
                 // How much of this resource was produced last step.

@@ -138,9 +138,9 @@ public partial class UIIndustry : Control, UIContainers.IListable
         situations.MoveChild(ui, index);
     }
 
-    IEnumerable<Resource.IResource> Flatten(IEnumerable<IndustryInputType.Base> inputList)
+    IEnumerable<Resource.IResource> Flatten(IEnumerable<Resource.BaseRequest> inputList)
     {
-        foreach (IndustryInputType.Base i in inputList)
+        foreach (Resource.BaseRequest i in inputList)
         {
             yield return i.Response;
         }

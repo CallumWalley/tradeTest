@@ -4,32 +4,33 @@ using System.Collections.Generic;
 public partial class Resource
 {
     public Logger logger;
-    public interface IResource
+
+    // Interface allowing object to be member of resourceOrder
+    public interface IResourceConsumer
     {
-        double Sum();
-        int Type();
-        string Details();
-        string Name();
+        public RList<IRequestable> Consumed();
+        public RList<RGroup> Produced();
+        public System.Object Driver();
+    }
+    public interface IResource
+    // Interface for displaying basic resource icon.
+    {
+        int Type { get; }
+        string Details { get; }
+        string Name { get; }
+        double Sum { get; }
+
     }
     // Class for various resource related things.
     public abstract class RBase : IResource
     {
         protected int type;
         protected string details;
-        public int Type()
-        {
-            return type;
-        }
-        public string Details()
-        {
-            return details;
-        }
-        public string Name()
-        {
-            return Resource.Index(type).name;
-        }
-        public abstract double Sum();
-        public abstract int Count();
+        public int Type { get { return type; } }
+        public string Details { get { return details; } }
+        public string Name { get { return Resource.Index(type).name; } }
+        public abstract double Sum { get; }
+        public abstract int Count { get; }
 
     }
     public partial class RGroup : RBase, IResource
@@ -41,7 +42,14 @@ public partial class Resource
         List<IResource> multi = new List<IResource>();
 
         // Does not consider child members.
-        public override int Count() { return (add.Count + multi.Count); }
+        public override int Count
+        {
+            get { return (add.Count + multi.Count); }
+        }
+        public override double Sum
+        {
+            get { return ToSum(); }
+        }
 
         public RGroup(int _type, List<IResource> _add, string _details = "Sum")
         {
@@ -77,7 +85,7 @@ public partial class Resource
         public static explicit operator RStatic(RGroup ra)
         {
             //throw new
-            if (ra.Count() != 1) { throw new InvalidCastException("Can only cast single member Resource.IResource.RGroup to Resource.IResource.RStatic"); }
+            if (ra.Count != 1) { throw new InvalidCastException("Can only cast single member Resource.IResource.RGroup to Resource.IResource.RStatic"); }
             return (RStatic)ra.First();
         }
         public void Add(Resource.IResource ra)
@@ -91,17 +99,17 @@ public partial class Resource
             multi.Add(rm);
         }
 
-        public override double Sum()
+        public double ToSum()
         {
             double addCum = 0;
             double multiCum = 1;
             foreach (Resource.IResource i in add)
             {
-                addCum += i.Sum();
+                addCum += i.Sum;
             }
             foreach (Resource.IResource i in multi)
             {
-                multiCum += i.Sum();
+                multiCum += i.Sum;
             }
             return addCum * multiCum;
         }
@@ -133,23 +141,19 @@ public partial class Resource
         {
             sum = newValue;
         }
-        public override double Sum()
-        {
-            return sum;
-        }
+        public override double Sum { get { return sum; } }
 
-        public override int Count() { return 1; }
+        public override int Count { get { return 1; } }
         public void Clear() { return; }
         public Texture2D Icon { get { return Index(type).icon; } }
-        public double ShipWeight { get { return Index(type).shipWeight; } }
+        // public double ShipWeight { get { return Index(type).shipWeight; } }
         public bool Storable { get { return Index(type).storable; } }
 
         public override string ToString()
         {
-            return $"{Name()}:{sum}";
+            return $"{Name}:{sum}";
         }
     }
-
     public partial class RStorage : RGroup, IResource
     {
         double stockpile; //Amount in this storage.
@@ -164,12 +168,12 @@ public partial class Resource
             // returns amount space free.
             // if negative, this is resource that didn't fit.
             double leftover = Free() - value;
-            stockpile = Mathf.Min(Sum(), value + stockpile);
+            stockpile = Mathf.Min(Sum, value + stockpile);
             return leftover;
         }
         public double Free()
         {
-            return Sum() - stockpile;
+            return Sum - stockpile;
         }
         public double Stock()
         {
@@ -177,11 +181,11 @@ public partial class Resource
         }
         public void Fill()
         {
-            stockpile = Sum();
+            stockpile = Sum;
         }
         public override string ToString()
         {
-            return $"{Name()}:{Stock()}/{Sum()}";
+            return $"{Name}:{Stock()}/{Sum}";
         }
 
     }
@@ -192,27 +196,28 @@ public partial class Resource
     {
         public string name;
         public Texture2D icon;
-        public double shipWeight;
 
         // If this resrource is something that can be store, or only instant;
         public bool storable;
 
-        public ResourceType(string _name, Texture2D _icon, double _shipWeight, bool _storable)
+        public ResourceType(string _name, Texture2D _icon, bool _storable)
         {
             name = _name;
             icon = _icon;
-            shipWeight = _shipWeight;
             storable = _storable;
         }
     }
 
     static Dictionary<int, ResourceType> _index = new Dictionary<int, ResourceType>(){
-            {0, new ResourceType("Unset", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.dds"), 1f, false)},
-            {1, new ResourceType("Minerals", GD.Load<Texture2D>("res://assets/icons/resources/minerals.dds"), 1f, true)},
-            {2, new ResourceType("Fuel", GD.Load<Texture2D>("res://assets/icons/resources/energy.dds"), 0.5f, true)},
-            {3, new ResourceType("Food", GD.Load<Texture2D>("res://assets/icons/resources/food.dds"), 0.5f, true)},
-            {4, new ResourceType("H2O", GD.Load<Texture2D>("res://assets/icons/resources/h2o.png"), 1f, true)},
-            {901, new ResourceType("Freighter", GD.Load<Texture2D>("res://assets/icons/freighter.png"), -1f, false)}
+            {0, new ResourceType("Unset", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.dds"), false)},
+            {1, new ResourceType("Minerals", GD.Load<Texture2D>("res://assets/icons/resources/minerals.dds"), true)},
+            {2, new ResourceType("Fuel", GD.Load<Texture2D>("res://assets/icons/resources/energy.dds"), true)},
+            {3, new ResourceType("Food", GD.Load<Texture2D>("res://assets/icons/resources/food.dds"),  true)},
+            {4, new ResourceType("H2O", GD.Load<Texture2D>("res://assets/icons/resources/h2o.png"),  true)},
+            // {801, new ResourceType("Operational Capacity", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.dds"), false)},
+            // {802, new ResourceType("Capacity Utilisation", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.dds"), false)},
+            // {803, new ResourceType("Efficiency", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.dds"), false)},
+            {901, new ResourceType("Freighter", GD.Load<Texture2D>("res://assets/icons/freighter.png"), false)}
         };
     public static ResourceType Index(int resourceCode)
     {
@@ -222,10 +227,10 @@ public partial class Resource
     {
         return _index[resourceCode].icon;
     }
-    public static double ShipWeight(int resourceCode)
-    {
-        return _index[resourceCode].shipWeight;
-    }
+    // public static double ShipWeight(int resourceCode)
+    // {
+    //     return _index[resourceCode].shipWeight;
+    // }
 
     public partial class RList<TResource> : IEnumerable<TResource> where TResource : IResource
     {
@@ -250,12 +255,12 @@ public partial class Resource
             members = new SortedDictionary<int, TResource>();
             foreach (TResource resource in _members)
             {
-                members.Add(resource.Type(), resource);
+                members.Add(resource.Type, resource);
             }
         }
         public RList(TResource resource)
         {
-            members = new SortedDictionary<int, TResource>() { { resource.Type(), resource } };
+            members = new SortedDictionary<int, TResource>() { { resource.Type, resource } };
         }
         public RList()
         {
@@ -275,7 +280,7 @@ public partial class Resource
 
         public void Add(TResource r)
         {
-            members.Add(r.Type(), r);
+            members.Add(r.Type, r);
         }
 
         IEnumerable<TResource> GetStandard()
@@ -351,12 +356,12 @@ public partial class Resource
         {
             GD.Print("Questionable behaviour");
         }
-        public RGroupList(RStatic resource) : base((TResource)(new RGroup(resource.Type(), resource))) { }
+        public RGroupList(RStatic resource) : base((TResource)(new RGroup(resource.Type, resource))) { }
         public RGroupList(IEnumerable<RStatic> _members) : base()
         {
             foreach (RStatic m in _members)
             {
-                members.Add(m.Type(), (TResource)new RGroup(m.Type(), m));
+                members.Add(m.Type, (TResource)new RGroup(m.Type, m));
             }
         }
         protected override TResource _Get(int index)
@@ -387,7 +392,6 @@ public partial class Resource
             return members[index];
         }
     }
-
     public partial class RStaticList<TResource> : RList<TResource> where TResource : RStatic
     {
         protected override TResource _Get(int index)
@@ -399,7 +403,97 @@ public partial class Resource
             return members[index];
         }
     }
+    public interface IRequestable : IResource
+    {
+        public int State { get; protected set; }
+        public Resource.RStatic Request { get; protected set; }
+        public Resource.RStatic Response { get; protected set; }
+        // No inputs if request fulfilled.
+        public void Respond() { }
+        // No fulfilled value returned if not fulfilled.
+        public void Respond(double value) { }
+    }
+    public partial class BaseRequest : IRequestable
+    {
+        // This is a dummy request. Does nothing.
 
+        // Request is the amount of resource this consumer needs;
+        public Resource.RStatic Request { get; set; }
+
+        // Request is actual amount given
+        public Resource.RStatic Response { get; set; }
+        public int State { get; set; }
+        public int Type { get { return Request.Type; } }
+        public double Sum { get { return Response.Sum; } }
+
+        public string Details { get { return "Placeholder"; } }
+        public string Name { get { return "Placeholder"; } }
+
+        public BaseRequest(Resource.RStatic _request)
+        {
+            Request = _request;
+            Response = new Resource.RStatic(Request.Type, 0);
+        }
+        // No inputs if request fulfilled.
+        public virtual void Respond()
+        {
+            Request.Set(Request.Sum);
+            State = 0;
+        }
+        // No fulfilled value returned if not fulfilled.
+        public virtual void Respond(double value)
+        {
+            Request.Set(value);
+            State = 1;
+        }
+        public override string ToString()
+        {
+            return $"{Response.Sum}/{Request.Sum}";
+        }
+    }
+    public partial class LinearRequest : BaseRequest
+    {
+        // Linear Request.  Modifies outputs to be same as fraction of inputs received.
+        Resource.RStatic multiplier;
+        Industry industry;
+
+        public LinearRequest(Industry _industry, Resource.RStatic _request) : base(_request)
+        {
+            multiplier = new Resource.RStatic(Type, 0);
+            ((Resource.RGroup)_industry.Produced()[Type]).Multiply(multiplier);
+            _industry.AddSituation(new Situations.OutputModifier(Response, multiplier, _industry));
+        }
+        public override void Respond()
+        {
+            base.Respond();
+            multiplier.Set(1f);
+        }
+        public override void Respond(double value)
+        {
+            base.Respond(value);
+            multiplier.Set((value - Request.Sum) / Request.Sum);
+        }
+    }
+    // // Small class to handle 'request, vs receive'
+    // public class Requester
+    // {
+
+    //     public Resource.IResource.RStatic request;
+    //     // 0 fulfilled.
+    //     // 1 partially fulfilled.
+    //     // 2 unfulfilled.
+    //     public int Type { get { return request .Type(); } }
+    //     public double Sum { get { return request.Sum(); } }
+    //     public Resource.IResource.RStatic Response { get; set; }
+    //     public Requester(Resource.RStatic _request)
+    //     {
+    //         request = _request;
+    //     }
+    //     public void Respond(Resource.RStatic _response, int _status)
+    //     {
+    //         Response = _response;
+    //     }
+    // }
 }
 
 // TResource GetType(int code, bool createMissing = false)
