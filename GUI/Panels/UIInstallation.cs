@@ -11,47 +11,98 @@ public partial class UIInstallation : Control
     public Body Body { get { return GetParent<Body>(); } }
 
     Installation installation;
-    UIList uiIndustryList;
-    UIResourceList uiResourceList;
-    UIList uiStorageList;
-
-    UITradeSourceSelector uiTradeDestinationSelector;
-    static readonly PackedScene p_Industry = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/UIIndustry.tscn");
+    TabContainer tabContainer;
+    static readonly PackedScene p_uiIndustry = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/UIIndustry.tscn");
+    static readonly PackedScene p_uiTradeRoute = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/UITradeRoute.tscn");
     static readonly PackedScene p_storage = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/Display/UIStorage.tscn");
+    // static readonly PackedScene p_uiTransformer = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/Display/UIIndustry.tscn");
+
     static readonly PackedScene p_uiTradeDestination = GD.Load<PackedScene>("res://GUI/Components/UITradeSourceSelector.tscn");
 
     public void Init(Installation _installation)
     {
-        // Create trade receiver component.
+        tabContainer = new TabContainer();
         installation = _installation;
 
-        uiTradeDestinationSelector = p_uiTradeDestination.Instantiate<UITradeSourceSelector>();
-        uiTradeDestinationSelector.Init(installation);
-        AddChild(uiTradeDestinationSelector);
+        tabContainer.AddChild(SupplyPanel());
+        tabContainer.AddChild(TradePanel());
+        tabContainer.AddChild(IndustryPanel());
+
+        AddChild(tabContainer);
+        tabContainer.QueueRedraw();
+
+        VBoxContainer SupplyPanel()
+        {
+            VBoxContainer supplyPanel = new();
+            supplyPanel.Name = "Supply";
+
+            Label titleProduced = new();
+            titleProduced.Text = "Produced";
+            supplyPanel.AddChild(titleProduced);
+
+            UIResourceList uiResourceProduced = new();
+            uiResourceProduced.Init(installation.resourceProduced);
+            supplyPanel.AddChild(uiResourceProduced);
+
+            Label titleConsumed = new();
+            titleConsumed.Text = "Consumed";
+            supplyPanel.AddChild(titleConsumed);
+
+            UIResourceList uiResourceConsumed = new();
+            uiResourceConsumed.Init(installation.resourceConsumed);
+            supplyPanel.AddChild(uiResourceConsumed);
+
+            Label titleDelta = new();
+            titleDelta.Text = "Delta";
+            supplyPanel.AddChild(titleDelta);
+
+            UIResourceList uiResourceDelta = new();
+            uiResourceDelta.Init(installation.resourceDelta);
+            supplyPanel.AddChild(uiResourceDelta);
+
+            Label titleStored = new();
+            titleStored.Text = "Stored";
+            supplyPanel.AddChild(titleStored);
+
+            UIList uiStorage = new();
+            uiStorage.Init(installation.resourceStorage, p_storage);
+            supplyPanel.AddChild(uiStorage);
+
+            return supplyPanel;
+        }
+
+        VBoxContainer TradePanel()
+        {
+            VBoxContainer tradePanel = new();
+            tradePanel.Name = "Trade";
+
+            UITradeSourceSelector uiTradeDestinationSelector = p_uiTradeDestination.Instantiate<UITradeSourceSelector>();
+            uiTradeDestinationSelector.Init(installation);
+            tradePanel.AddChild(uiTradeDestinationSelector);
+
+            UIList uiTradeListDownline = new();
+            uiTradeListDownline.Vertical = true;
+            uiTradeListDownline.Init(installation.DownlineTraderoutes, p_uiTradeRoute);
+            tradePanel.AddChild(uiTradeListDownline);
+
+            return tradePanel;
+        }
+
+        VBoxContainer IndustryPanel()
+        {
+            VBoxContainer uiIndustryPanel = new();
+            uiIndustryPanel.Name = "Industry";
+
+            UIList uiIndustryList = new();
+            uiIndustryList.Init(installation.Industries, p_uiIndustry);
+            uiIndustryList.Vertical = true;
+
+            uiIndustryPanel.AddChild(uiIndustryList);
+
+            return uiIndustryPanel;
+        }
 
 
-        uiResourceList = new UIResourceList();//new UIResourceList();
-        uiResourceList.Init(installation.resourceDelta.Standard);
-        AddChild(uiResourceList);
-
-        // UResource.RList2 = p_UResource.RList.Instantiate<UResource.RList>();
-        // UResource.RList2.Init(installation.resourceDeltaConsumed);
-        // AddChild(UResource.RList2);
-
-        // UResource.RList3 = p_UResource.RList.Instantiate<UResource.RList>();
-        // UResource.RList3.Init(installation.resourceDelta);
-        // AddChild(UResource.RList3);
-        // UIStockpileList = p_UResource.RList.Instantiate<UResource.RList>();
-        // UIStockpileList.Init(installation.resourceStockpile);
-        // AddChild(UIStockpileList);
-
-        uiIndustryList = new UIList();//p_vlist.Instantiate<UIContainers.UIListChildren>();
-        uiIndustryList.Init(installation.Industries, p_Industry);
-        uiIndustryList.Vertical = true;
-        //uiIndustryList
-
-        AddChild(uiIndustryList);
-        uiIndustryList.Visible = true;
     }
     // TODO: ask noel for heeeeelppppppp
     // IEnumerable<System.Object> WhyAreYouLikeThis(Node aaaaaaaa)

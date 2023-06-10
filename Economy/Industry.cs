@@ -2,18 +2,17 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class Industry : EcoNode, Resource.IResourceConsumer
+public partial class Industry : EcoNode, Resource.IResourceTransformers
 {
     [Export]
     public string slug;
     public Resource.IResource output;
     // public Resource.RList<Resource.RGroup> Production { get; protected set; }
-    public Resource.RList<Resource.RGroup> production;
+    public Resource.RList<Resource.IResource> production;
     public Resource.RList<Resource.IRequestable> consumption;
     public Resource.RList<Resource.RStatic> stored;
 
     // public List<Resource.BaseRequest> Consumption { get; protected set; }
-
     public Resource.RList<Resource.RStatic> Storage { get; protected set; }
     public List<Situations.Base> Situations { get; protected set; }
     // 0-100 
@@ -57,7 +56,7 @@ public partial class Industry : EcoNode, Resource.IResourceConsumer
     {
         return consumption;
     }
-    public Resource.RList<Resource.RGroup> Produced()
+    public Resource.RList<Resource.IResource> Produced()
     {
         return production;
     }
@@ -76,8 +75,8 @@ public partial class Industry : EcoNode, Resource.IResourceConsumer
         Situations = new List<Situations.Base>();
 
         consumption = new Resource.RList<Resource.IRequestable>(GetInputClassFromTemplate(ttype.Consumption));
-        production = new Resource.RList<Resource.RGroup>(GetGroupFromTemplate(ttype.Production));
-        Storage = new Resource.RList<Resource.RStatic>(GetStaticFromTemplate(ttype.Storage));
+        production = new Resource.RList<Resource.IResource>(GetGroupFromTemplate(ttype.Production));
+        stored = new Resource.RList<Resource.RStatic>(GetStaticFromTemplate(ttype.Storage));
     }
 
 

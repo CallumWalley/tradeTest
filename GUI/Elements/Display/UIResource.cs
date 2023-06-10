@@ -65,7 +65,7 @@ public partial class UIResource : UIElement, UIContainers.IListable
         resource = _resource;
         if (resource != null)
         {
-            ((TextureRect)GetNode("Icon")).Texture = Resource.Icon(resourceCode: resource.Type());
+            ((TextureRect)GetNode("Icon")).Texture = Resource.Icon(resourceCode: resource.Type);
         }
         else
         {
@@ -129,8 +129,8 @@ public partial class UIResource : UIElement, UIContainers.IListable
         if (resource != null)
         {
 
-            value.Text = (resource.Sum()).ToString();
-            name.Text = $": {resource.Details()}";
+            value.Text = (resource.Sum).ToString();
+            name.Text = $": {resource.Details}";
         }
         else
         {

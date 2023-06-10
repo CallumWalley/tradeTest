@@ -12,34 +12,14 @@ public partial class TradeRoute : EcoNode
     public TradeRouteConsumer IndustrySource;
     public TradeRouteConsumer IndustryDestintation;
     public Resource.RStaticList<Resource.RStatic> Balance;
-    public List<TradeInputType> consumptionSource;
-    public List<TradeInputType> consumptionDestination;
-
-    public TradeRouteConsumer upline;
-    public TradeRouteConsumer downline;
+    // public List<TradeInputType> consumptionSource;
+    // public List<TradeInputType> consumptionDestination;
 
 
     public Body Body { get { return GetParent<Body>(); } }
     public int Index { get { return GetIndex(); } }
 
-    public partial class TradeInputType : Resource.BaseRequest
-    {
-        TradeRouteConsumer tradeRouteConsumer;
-        public TradeInputType(TradeRouteConsumer _tradeRouteConsumer, Resource.RStatic _request) : base(_request)
-        {
-            tradeRouteConsumer = _tradeRouteConsumer;
-        }
-        public new void Respond()
-        {
-            base.Respond();
-            ((Resource.RStatic)(tradeRouteConsumer).twin.Produced()[Type]).Set(Request.Sum);
-        }
-        public new void Respond(double value)
-        {
-            base.Respond(value);
-            ((Resource.RStatic)(tradeRouteConsumer).twin.Produced()[(Type)]).Set(Response.Sum);
-        }
-    }
+
 
     // Tradeweight in KTonnes
     //public Resource.IResource importTradeWeight;
@@ -58,16 +38,24 @@ public partial class TradeRoute : EcoNode
         destination = _destination;
         source = _source;
 
+        Balance = new Resource.RStaticList<Resource.RStatic>();
+
+        MatchDemand();
+        UpdateFreighterWeight();
+
+        GetNode<Line2D>("Line2D").Width = 1;
+
+        IndustrySource = new TradeRouteConsumer(IndustryDestintation, this, false);
+        IndustryDestintation = new TradeRouteConsumer(IndustrySource, this, true);
+
         //source.RegisterIndustry(IndustrySource);
         //destination.RegisterIndustry(IndustryDestintation);
-        destination.uplineTraderoute = this;
+        destination.RegisterUpline(this);
+        source.RegisterDownline(this);
 
         distance = destination.GetParent<Body>().Position.DistanceTo(source.GetParent<Body>().Position);
         Name = $"Trade route from {IndustrySource} to {IndustryDestintation}";
 
-        Balance = new Resource.RStaticList<Resource.RStatic>();
-        MatchDemand();
-        UpdateFreighterWeight();
     }
     public void DrawLine()
     {
@@ -79,38 +67,38 @@ public partial class TradeRoute : EcoNode
         double shipWeightExport = 0;
         foreach (Resource.IResource child in Balance)
         {
-            if (child.Sum() > 0)
+            if (child.Sum > 0)
             {
-                shipWeightExport += child.Sum() * Resource.ShipWeight(child.Type());
+                shipWeightExport += child.Sum;
             }
             else
             {
-                shipWeightImport += child.Sum() * Resource.ShipWeight(child.Type());
+                shipWeightImport += child.Sum;
             }
         }
         return -Math.Max(shipWeightExport, shipWeightImport);
     }
     public void Set()
     {
-        foreach (Resource.IResource r in Balance)
-        {
-            if (r.Sum > 0)
-            {
-                consumptionSource.Add(new TradeInputType(IndustrySource, new Resource.RStatic(r.Type(), r.Sum(), $"Trade to {destination.Name}")));
-            }
-            else
-            {
-                consumptionDestination.Add(new TradeInputType(IndustrySource, new Resource.RStatic(r.Type(), r.Sum(), $"Trade to {destination.Name}")));
-            }
-        }
+        // foreach (Resource.IResource r in Balance)
+        // {
+        //     if (r.Sum > 0)
+        //     {
+        //         consumptionSource.Add(new TradeInputType(IndustrySource, new Resource.RStatic(r.Type, r.Sum, $"Trade to {destination.Name}")));
+        //     }
+        //     else
+        //     {
+        //         consumptionDestination.Add(new TradeInputType(IndustrySource, new Resource.RStatic(r.Type, r.Sum, $"Trade to {destination.Name}")));
+        //     }
+        // }
     }
 
     // IEnumerable<Resource> InvertBalance()
     // {
     //     foreach (Resource r in balance)
     //     {
-    //         if (r .Type() == 901) { continue; }//Ignore trade ship cost.
-    //         yield return new Resource.IResource.RStatic(r .Type(), -r.Sum());
+    //         if (r .Type == 901) { continue; }//Ignore trade ship cost.
+    //         yield return new Resource.IResource.RStatic(r .Type, -r.Sum);
     //     }
     // }
 
@@ -118,8 +106,8 @@ public partial class TradeRoute : EcoNode
     // {
     //     foreach (Resource r in balance)
     //     {
-    //         if (r .Type() == 901) { continue; }//Ignore trade ship cost.
-    //         yield return new Resource.IResource.RStatic(r .Type(), -r.Sum());
+    //         if (r .Type == 901) { continue; }//Ignore trade ship cost.
+    //         yield return new Resource.IResource.RStatic(r .Type, -r.Sum);
     //     }
     // }
 
@@ -141,31 +129,56 @@ public partial class TradeRoute : EcoNode
         Balance.Add(tradeWeight);
     }
 
-    public class TradeRouteConsumer : Resource.IResourceConsumer
+    public class TradeRouteConsumer : Resource.IResourceTransformers
     {
         public TradeRouteConsumer twin;
         public TradeRoute tradeRoute;
         bool isUpline;
 
-        Resource.RList<Resource.IResource> produced;
-        Resource.RList<Resource.IRequestable> consumed;
+        Resource.RList<Resource.IResource> produced = new();
+        Resource.RList<Resource.IRequestable> consumed = new();
+
+        void BalanceUpdated()
+        {
+            consumed.Clear();
+            produced.Clear();
+
+            if (isUpline)
+            {
+                foreach (Resource.RStatic r in tradeRoute.Balance)
+                {
+                    if (r.Sum < 0 && isUpline)
+                    {
+                        consumed[r.Type] = new TradeInputType(twin, r);
+                    }
+                    else if (r.Sum > 0 && !isUpline)
+                    {
+                        produced[r.Type] = new Resource.RStatic(r.Type, r.Sum);
+                    }
+                }
+            }
+            else
+            {
+                foreach (Resource.RStatic r in tradeRoute.Balance)
+                {
+                    if (r.Sum < 0 && isUpline)
+                    {
+                        consumed[r.Type] = new TradeInputType(twin, new Resource.RStatic(r.Type, -r.Sum));
+                    }
+                    else if (r.Sum > 0 && !isUpline)
+                    {
+                        produced[r.Type] = new Resource.RStatic(r.Type, -r.Sum);
+                    }
+                }
+            }
+        }
 
         public TradeRouteConsumer(TradeRouteConsumer _twin, TradeRoute _tradeRoute, bool _isUpline)
         {
             twin = _twin;
             tradeRoute = _tradeRoute;
             isUpline = _isUpline;
-            foreach (Resource.RStatic r in tradeRoute.Balance)
-            {
-                if (r.Sum < 0 && isUpline)
-                {
-                    consumed[r.Type] = new TradeInputType(twin, r);
-                }
-                else if (r.Sum > 0 && !isUpline)
-                {
-                    consumed[r.Type] = new TradeInputType(twin, r);
-                }
-            }
+            BalanceUpdated();
         }
         public Resource.RList<Resource.IRequestable> Consumed()
         {
@@ -173,26 +186,38 @@ public partial class TradeRoute : EcoNode
         }
         public Resource.RList<Resource.IResource> Produced()
         {
-
+            return produced;
+        }
+        public System.Object Driver()
+        {
+            return tradeRoute;
         }
     }
-
-    upline = new TradeRouteConsumer(downline)
-
-
-    public class  : TradeRouteConsumer
+    public partial class TradeInputType : Resource.BaseRequest
     {
+        TradeRouteConsumer tradeRouteConsumer;
+        public TradeInputType(TradeRouteConsumer _tradeRouteConsumer, Resource.RStatic _request) : base(_request)
+        {
+            tradeRouteConsumer = _tradeRouteConsumer;
+        }
+        public new void Respond()
+        {
+            base.Respond();
+            ((Resource.RStatic)tradeRouteConsumer.twin.Produced()[Type]).Set(Request.Sum);
+        }
+        public new void Respond(double value)
+        {
+            base.Respond(value);
+            ((Resource.RStatic)tradeRouteConsumer.twin.Produced()[(Type)]).Set(value);
+        }
+    }
+    // public class DownlineConsumer : TradeRouteConsumer
+    // {
+    //     public Resource.RList<Resource.IRequestable> Consumed() { }
+    //     public Resource.RList<Resource.IResource> Produced() { }
+    //     public System.Object Driver() { return this; }
 
-
-    public System.Object Driver() { return this; }
-}
-public class DownlineConsumer : TradeRouteConsumer
-{
-    public Resource.RList<Resource.IRequestable> Consumed() { }
-    public Resource.RList<Resource.IResource> Produced() { }
-    public System.Object Driver() { return this; }
-
-}
+    // }
 
     // public class TradeRouteConsumer : Resource.IResourceConsumer
     // {

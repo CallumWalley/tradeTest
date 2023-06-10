@@ -6,10 +6,10 @@ public partial class Resource
     public Logger logger;
 
     // Interface allowing object to be member of resourceOrder
-    public interface IResourceConsumer
+    public interface IResourceTransformers
     {
         public RList<IRequestable> Consumed();
-        public RList<RGroup> Produced();
+        public RList<IResource> Produced();
         public System.Object Driver();
     }
     public interface IResource
@@ -243,7 +243,6 @@ public partial class Resource
         {
             get
             {
-                GD.Print("getting standard");
                 return GetStandard();
             }
         }
@@ -312,11 +311,10 @@ public partial class Resource
                 if (min <= k && k <= max)
                 {
                     yield return members[k];
-
                 }
             }
         }
-        public void Clear()
+        public virtual void Clear()
         {
             members.Clear();
         }
@@ -380,6 +378,16 @@ public partial class Resource
             }
             return members[index];
         }
+
+        // override default clear behavior.
+        // keep top level groups.
+        public override void Clear()
+        {
+            foreach (KeyValuePair<int, TResource> member in members)
+            {
+                ((RGroup)member.Value).Clear();
+            }
+        }
     }
     public partial class RStorageList<TResource> : RList<TResource> where TResource : RStorage
     {
@@ -390,6 +398,13 @@ public partial class Resource
                 members[index] = (TResource)new RStorage(index);
             }
             return members[index];
+        }
+        public override void Clear()
+        {
+            foreach (KeyValuePair<int, TResource> member in members)
+            {
+                (member.Value).Clear();
+            }
         }
     }
     public partial class RStaticList<TResource> : RList<TResource> where TResource : RStatic
@@ -482,8 +497,8 @@ public partial class Resource
     //     // 0 fulfilled.
     //     // 1 partially fulfilled.
     //     // 2 unfulfilled.
-    //     public int Type { get { return request .Type(); } }
-    //     public double Sum { get { return request.Sum(); } }
+    //     public int Type { get { return request .Type; } }
+    //     public double Sum { get { return request.Sum; } }
     //     public Resource.IResource.RStatic Response { get; set; }
     //     public Requester(Resource.RStatic _request)
     //     {
@@ -501,7 +516,7 @@ public partial class Resource
 //     // if list is 
 //     foreach (TResource r in members)
 //     {
-//         if (r.Type() == code)
+//         if (r.Type == code)
 //         {
 //             return r;
 //         }
@@ -530,7 +545,7 @@ public partial class Resource
 // Will add resource as a new (adder) element.
 // public void Add (Resource.IResource _resource)
 // {
-//     Resource.IResource rot = GetType(_resource.Type());
+//     Resource.IResource rot = GetType(_resource.Type);
 //     // If no existing element, this is it.
 //     if (rot == null)
 //     {
@@ -545,14 +560,14 @@ public partial class Resource
 //     {
 //         // Not allowed
 //         //members.Remove((TResource)rot);
-//         //Add((TResource)(new Resource.RGroup(rot.Type(), new List<IResource> { rot, _resource })));
+//         //Add((TResource)(new Resource.RGroup(rot.Type, new List<IResource> { rot, _resource })));
 //     }
 //     // Otherwise just add to agg
 //     else
 //     {
 //         // if (rot == null)
 //         // {
-//         //     rot = new Resource.RGroup(_resource.Type());
+//         //     rot = new Resource.RGroup(_resource.Type);
 //         //     members.Add((TResource)rot);
 //         // }
 //         ((Resource.RGroup)rot).Add(_resource);
@@ -568,14 +583,14 @@ public partial class Resource
 //     // 	((Resource.RGroup)existing).Add(_resource);
 //     // }else{
 //     // // If exists but is static, replace with TResource.RGroup containing both.
-//     // 	members.Add(new TResource.RGroup(existing .Type(), new List<Resource>{existing, _resource}));
+//     // 	members.Add(new TResource.RGroup(existing .Type, new List<Resource>{existing, _resource}));
 //     // 	members.Remove(existing);
 //     // }
 // }
 
 // public void Multiply(TResource _resource)
 // {
-//     (()GetType<Resource.RGroup>(_resource.Type())).Multiply(_resource);
+//     (()GetType<Resource.RGroup>(_resource.Type)).Multiply(_resource);
 
 //     // // If no elements of this type, add as static.
 //     // if (existing.Count < 1){
@@ -586,7 +601,7 @@ public partial class Resource
 //     // 	((Resource.RGroup)existing).Add(_resource);
 //     // }else{
 //     // // If exists but is static, replace with TResource.RGroup containing both.
-//     // 	members.Add(new TResource.RGroup(existing .Type(), new List<Resource>{existing, _resource}));
+//     // 	members.Add(new TResource.RGroup(existing .Type, new List<Resource>{existing, _resource}));
 //     // 	members.Remove(existing);
 //     // }
 // }
@@ -599,7 +614,7 @@ public partial class Resource
 //     int i = min;
 //     while (i <= max)
 //     {
-//         if (min <= r.Type() && r.Type() <= max)
+//         if (min <= r.Type && r.Type <= max)
 //         {
 //             yield return r;
 //         }
@@ -622,7 +637,7 @@ public partial class Resource
 // }
 // public void RemoveZeros()
 // {
-//     members.RemoveAll(m => m.Sum() == 0);
+//     members.RemoveAll(m => m.Sum == 0);
 // }
 
 

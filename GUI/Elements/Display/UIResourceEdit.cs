@@ -16,7 +16,7 @@ public partial class UIResourceEdit : UIResource
 
     public void ChangeValue(double _delta)
     {
-        ((Resource.RStatic)resource).Set(resource.Sum() + _delta);
+        ((Resource.RStatic)resource).Set(resource.Sum + _delta);
         CallDeferred("_draw");
     }
     public void SetValue(double _value)

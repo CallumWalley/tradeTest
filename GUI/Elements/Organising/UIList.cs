@@ -25,7 +25,11 @@ public partial class UIList : BoxContainer
     public override void _Draw()
     {
 
-        if (list == null) { return; }
+        if (list == null)
+        {
+            GD.Print($"UI list tring to draw null");
+            return;
+        }
         // Go over all trade routes in pool, and either update or create. 
         int index = 0;
         foreach (System.Object r in list)
@@ -38,30 +42,38 @@ public partial class UIList : BoxContainer
             Update(r, index);
             index++;
         }
-        GD.Print($"{GetChildCount()} tracking {index} objects.");
+        //GD.Print($"{GetChildCount()} tracking {index} objects.");
+
         // Any remaining elements greater than index must no longer exist.
+        // Cannot use  GetChildCount() directly as element removal is queued.
+        var cdebug = GetChildren();
         while (GetChildCount() > index)
         {
-            Control uir = GetChildOrNull<Control>(index + 1);
-            if (uir != null)
+            Control uir = GetChildOrNull<Control>(index);
+            if (uir == null)
+            {
+                GD.Print("UI element out of sync.");
+            }
+            else
             {
                 RemoveChild(uir);
                 uir.QueueFree();
             }
         }
     }
-    public override void _Ready()
-    {
-        GetNode<Global>("/root/Global").Connect("EFrameEarly", new Callable(this, "DeferredDraw"));
-    }
-    void DeferredDraw()
-    {
-        Visible = false;
-        SetDeferred("visible", true);
-    }
+    // public override void _Ready()
+    // {
+    //     GetNode<Global>("/root/Global").Connect("EFrameEarly", new Callable(this, "DeferredDraw"));
+    // }
+    // void DeferredDraw()
+    // {
+    //     Visible = false;
+    //     SetDeferred("visible", true);
+    // }
     protected void Update(System.Object r, int index)
     {
-        foreach (UIContainers.IListable uir in GetChildren())
+        var uichildren = GetChildren();
+        foreach (UIContainers.IListable uir in uichildren)
         {
             if (r == uir.GameElement)
             {

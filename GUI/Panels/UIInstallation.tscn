@@ -1,6 +1,8 @@
-[gd_scene format=3 uid="uid://k5ttslxmya3s"]
+[gd_scene load_steps=2 format=3 uid="uid://k5ttslxmya3s"]
 
-[node name="Installation" type="TabContainer"]
+[ext_resource type="Script" path="res://GUI/Panels/UIInstallation.cs" id="1_1x1tn"]
+
+[node name="Installation" type="MarginContainer"]
 custom_minimum_size = Vector2(600, 0)
 anchors_preset = 15
 anchor_right = 1.0
@@ -8,3 +10,4 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 3
+script = ExtResource("1_1x1tn")

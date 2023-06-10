@@ -1,6 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://0d7exv23yn1s"]
-
-[ext_resource type="PackedScene" uid="uid://dus21q4suwkd6" path="res://GUI/Elements/Organising/UIListHBox.tscn" id="1"]
+[gd_scene load_steps=2 format=3 uid="uid://0d7exv23yn1s"]
 
 [sub_resource type="CSharpScript" id="1"]
 script/source = "using Godot;
@@ -30,9 +28,6 @@ offset_bottom = 300.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = SubResource("1")
-
-[node name="Installation" parent="." instance=ExtResource("1")]
-layout_mode = 2
 
 [node name="HSplitContainer" type="HSplitContainer" parent="."]
 layout_mode = 2

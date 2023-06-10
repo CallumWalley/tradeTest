@@ -30,9 +30,9 @@ public partial class UITradeSourceSelector : Control
     {
         get
         {
-            if (installation.uplineTraderoute != null)
+            if (installation.UplineTraderoute != null)
             {
-                return installation.uplineTraderoute.source;
+                return installation.UplineTraderoute.source;
             }
             else
             {
@@ -154,8 +154,8 @@ public partial class UITradeSourceSelector : Control
             // If existing non-null, remove it.
             if (CurrectSourceInstallation != null)
             {
-                GetNode<PlayerTradeRoutes>("/root/Global/Player/Trade/Routes").DeregisterTradeRoute(installation.uplineTraderoute);
-                installation.uplineTraderoute = null;
+                GetNode<PlayerTradeRoutes>("/root/Global/Player/Trade/Routes").DeregisterTradeRoute(installation.UplineTraderoute);
+                installation.UplineTraderoute = null;
             }
             // If selection non-null, create new trade route.
             if (newSourceInstallation != null)

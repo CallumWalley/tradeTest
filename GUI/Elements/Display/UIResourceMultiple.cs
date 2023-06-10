@@ -19,8 +19,8 @@ public partial class UIResourceMultiple : UIResource
         if (resource != null)
         {
 
-            value.Text = string.Format("%{0:N2}", resource.Sum());
-            name.Text = $": {resource.Details()}";
+            value.Text = string.Format("%{0:N2}", resource.Sum);
+            name.Text = $": {resource.Details}";
         }
         else
         {

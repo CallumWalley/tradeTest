@@ -1,16 +1,12 @@
 using Godot;
 using System;
-using System.Collections.Generic;
-
-public partial class UIITransformer : Control, UIContainers.IListable
+public partial class UIIndustry : Control, UIContainers.IListable
 {
     // Game object this UI element follows.
     public Control Control { get { return this; } }
     public System.Object GameElement { get { return Industry; } }
     public Industry Industry;
-    public static PlayerTradeRoutes playerTradeRoutes;
-
-    static readonly PackedScene p_situation = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/UISituation.tscn");
+    static readonly PackedScene p_situation = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/UIIndustry.tscn");
 
     TextureButton moveUpButton;
     TextureButton moveDownButton;
@@ -62,40 +58,13 @@ public partial class UIITransformer : Control, UIContainers.IListable
 
 
         // uiConsumption.Init(Flatten(Industry.Consumption));
-        uiDelta.Init(Industry.Produced());
-        uiStorage.Init(Industry.Storage);
+        uiDelta.Init(Industry.production);
+        uiStorage.Init(Industry.stored);
 
     }
     public override void _Draw()
     {
         if (Industry == null) { return; }
-        //int index = tradeRoute.destination.GetIndustryTrade().tradeRoutes.IndexOf(tradeRoute);
-        int index = GetIndex();
-        moveUpButton.Disabled = false;
-        moveDownButton.Disabled = false;
-        if (index == 0)
-        {
-            moveUpButton.Disabled = true;
-        }
-        if (index == (GetParent().GetChildCount() - 1))
-        {
-            moveDownButton.Disabled = true;
-        }
-        if (index == (GetParent().GetChildCount() - 1))
-        {
-            moveDownButton.Disabled = true;
-        }
-        if (details.Visible)
-        {
-            if (Industry.Situations.Count > 0)
-            {
-                situations.GetNode<Label>("NoSituation").Visible = false;
-            }
-            else
-            {
-                situations.GetNode<Label>("NoSituation").Visible = true;
-            }
-        }
     }
 
     public void ShowDetails(bool toggled)
@@ -103,24 +72,6 @@ public partial class UIITransformer : Control, UIContainers.IListable
         details.Visible = toggled;
     }
 
-
-    public void ReorderUp()
-    {
-        Industry.GetParent<Installation>().MoveChild(Industry, Industry.GetIndex() - 1);
-        //FIXME
-        GetParent<Control>().GetParent<Control>().GetParent<Control>().Visible = false;
-        GetParent<Control>().GetParent<Control>().GetParent<Control>().Visible = true;
-
-    }
-    public void ReorderDown()
-    {
-        Installation par = Industry.GetParent<Installation>();
-        int chindex = Industry.GetIndex() + 1;
-        par.MoveChild(Industry, chindex);
-        // FIXME
-        GetParent<Control>().GetParent<Control>().GetParent<Control>().Visible = false;
-        GetParent<Control>().GetParent<Control>().GetParent<Control>().Visible = true;
-    }
     void UpdateSituations(Situations.Base s, int index)
     {
         foreach (UISituation uis in situations.GetNode<VBoxContainer>("VBoxContainer").GetChildren())
@@ -137,12 +88,5 @@ public partial class UIITransformer : Control, UIContainers.IListable
         situations.AddChild(ui);
         situations.MoveChild(ui, index);
     }
-
-    IEnumerable<Resource.IResource> Flatten(IEnumerable<Resource.BaseRequest> inputList)
-    {
-        foreach (Resource.BaseRequest i in inputList)
-        {
-            yield return i.Response;
-        }
-    }
 }
+

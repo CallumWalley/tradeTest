@@ -11,9 +11,11 @@ public partial class Installation : EcoNode
     [Export]
     public bool storageFull = false;
     List<Industry> industries = new();
-    List<Resource.IResourceConsumer> consumers = new();
 
-    public List<Resource.IResourceConsumer> Consumers { get { return consumers; } }
+    //Transformers contains list trade + industry
+    List<Resource.IResourceTransformers> transformers = new();
+
+    public List<Resource.IResourceTransformers> Transformers { get { return transformers; } }
 
     public List<Industry> Industries { get { return industries; } }
 
@@ -23,20 +25,23 @@ public partial class Installation : EcoNode
     public List<string> tags;
 
     // contains only POSITIVE deltas. evaluated during EFrameLate, and cleared in next EFrameEarly.
-    public Resource.RGroupList<Resource.RGroup> resourceDeltaProduced = new();
+    public Resource.RGroupList<Resource.RGroup> resourceProduced = new();
     // contains only NEGATIVE deltas. evaluated during EFrameEarly, and cleared in next EFrameLate.
-    public Resource.RGroupList<Resource.RGroup> resourceDeltaConsumed = new();
+    public Resource.RGroupList<Resource.RGroup> resourceConsumed = new();
     // Contains sum of deltas, used by UI elements.
     public Resource.RGroupList<Resource.RGroup> resourceDelta = new();
     // NET amount of resource in storage.
     public Resource.RStorageList<Resource.RStorage> resourceStorage = new();
+
+    Dictionary<int, double> resourceBuffer = new();
+
     // TOTAL storage available.
 
     // Downline traderoutes
 
     // Upline traderoute
-    public TradeRoute uplineTraderoute;
-    public List<TradeRoute> downlineTraderoutes;
+    public TradeRoute UplineTraderoute;
+    public List<TradeRoute> DownlineTraderoutes;
 
 
     public Vector2 Position { get { return GetParent<Body>().Position; } }
@@ -50,10 +55,12 @@ public partial class Installation : EcoNode
     public override void _Ready()
     {
         base._Ready();
-        resourceDeltaProduced.CreateMissing = true;
-        resourceDeltaConsumed.CreateMissing = true;
+        resourceProduced.CreateMissing = true;
+        resourceConsumed.CreateMissing = true;
         resourceDelta.CreateMissing = true;
         resourceStorage.CreateMissing = true;
+
+        DownlineTraderoutes = new();
 
         if (isValidTradeReceiver)
         {
@@ -67,156 +74,153 @@ public partial class Installation : EcoNode
             RegisterIndustry(t);
         }
     }
-    public void RegisterConsumer(Resource.IResourceConsumer c)
+    public void RegisterTransformer(Resource.IResourceTransformers c)
     {
-        Consumers.Add(c);
-        //AddChild(tr);
-
-        // foreach (Resource.RGroup p in tr.Production)
-        // {
-        //     resourceDeltaProduced.Add((Resource.RGroup)p);
-        //     resourceDelta.Add((Resource.RGroup)p);
-        // }
-        // foreach (Resource.BaseRequest p in tr.Consumption)
-        // {
-        //     resourceDeltaConsumed.Add(p.Response);
-        //     resourceDelta.Add(p.Response);
-        // }
-        // foreach (Resource.RStatic p in tr.Storage)
-        // {
-        //     resourceStorage[p.Type()].Add(p);
-        //     resourceStorage[p.Type()].Fill();
-        // }
+        Transformers.Add(c);
     }
-    public void DeregisterConsumer(Resource.IResourceConsumer c)
+    public void DeregisterTransformer(Resource.IResourceTransformers c)
     {
-        Consumers.Remove(c);
-        // RemoveChild(tr);
-
-        // foreach (Resource.RGroup p in tr.Production)
-        // {
-        //     resourceDeltaProduced.Remove(p);
-        //     resourceDelta.Remove(p);
-
-        // }
-        // foreach (Resource.BaseRequest p in tr.Consumption)
-        // {
-        //     resourceDeltaConsumed.Remove(p.Response);
-        //     resourceDelta.Remove(p.Response);
-
-        // }
-        // foreach (Resource.RStorage p in tr.Storage)
-        // {
-        //     resourceStorage.Remove(p);
-        // }
+        Transformers.Remove(c);
     }
     public void RegisterIndustry(Industry i)
     {
         AddChild(i);
-        RegisterConsumer(i.Consumer);
+        industries.Add(i);
+        RegisterTransformer(i);
     }
     public void DeregisterIndustry(Industry i)
     {
         RemoveChild(i);
-        DeregisterConsumer(i.Consumer);
+        industries.Remove(i);
+        DeregisterTransformer(i);
     }
-    // public IEnumerable<IndustryTrade> GetTradeRoutes()
-    // {
-    //     foreach (Industry t in GetChildren())
-    //     {
-    //         if (t is IndustryTrade)
-    //         {
-    //             yield return IndustryTrade;
-    //         }
-    //     }
-    // }
+    public void RegisterUpline(TradeRoute i)
+    {
+        UplineTraderoute = i;
+        RegisterTransformer(i.IndustryDestintation);
+    }
+    public void DeregisterUpline(TradeRoute i, bool upline = false)
+    {
+        UplineTraderoute = null;
+        DeregisterTransformer(i.IndustryDestintation);
+    }
+    public void RegisterDownline(TradeRoute i)
+    {
+        DownlineTraderoutes.Add(i);
+        RegisterTransformer(i.IndustrySource);
+    }
+    public void DeregisterDownline(TradeRoute i)
+    {
+        DownlineTraderoutes.Remove(i);
+        DeregisterTransformer(i.IndustrySource);
+    }
 
     // this is so messy, i hate it. aaaaaaaaaaah
     public override void EFrameLate()
     {
 
-        // // Re count storage
-        // foreach (Resource.RGroup r in resourceStorage)
-        // {
-        // 	r.Clear();
-        // }
-        // //Get production from each Industry.
-        // foreach (Resource r in resourceDeltaProduced)
-        // {
-        // 	r.Clear();
-        // }
-        // foreach (Industry Industry in GetChildren())
-        // {
-        // 	foreach (Resource r in Industry.Production)
-        // 	{
-        // 		resourceDeltaProduced.Add(r);
-        // 		resourceDelta.Add(r);
-        // 	}
-        // 	foreach (Resource r in Industry.Storage)
-        // 	{
-        // 		resourceStorage.Add(r);
-        // 	}
-        // }
     }
     public override void EFrameEarly()
     {
-        Dictionary<int, double> lastProduced = new();
-        foreach (Resource.RBase r in resourceDeltaProduced)
+
+        // contains only NEGATIVE deltas. evaluated during EFrameEarly, and cleared in next EFrameLate.
+        // Contains sum of deltas, used by UI elements.
+        //resourceDelta = new();
+
+        // NET amount of resource in storage.
+
+
+        resourceDelta.Clear();
+        resourceConsumed.Clear();
+        resourceStorage.Clear();
+
+        resourceBuffer.Clear();
+
+        foreach (Resource.RBase r in resourceProduced)
         {
-            lastProduced[r.Type()] = r.Sum();
+            resourceBuffer[r.Type] = r.Sum;
         }
 
-        foreach (Resource.IResourceConsumer rc in Consumers)
+        resourceProduced.Clear();
+
+        GetStorage();
+
+        GetProducers();
+
+        GetConsumers();
+
+    }
+
+
+    void GetStorage()
+    {
+        foreach (Industry industry in Industries)
+        {
+            if (industry.stored == null) { continue; }
+            foreach (Resource.RStatic output in industry.stored)
+            {
+                resourceStorage[output.Type].Add(output);
+            }
+        }
+    }
+
+    void GetProducers()
+    {
+        foreach (Resource.IResourceTransformers rp in Transformers)
+        {
+            foreach (Resource.RBase output in rp.Produced())
+            {
+                resourceProduced[output.Type].Add(output);
+                resourceDelta[output.Type].Add(output);
+            }
+        }
+    }
+
+    void GetConsumers()
+    {
+        foreach (Resource.IResourceTransformers rc in Transformers)
         {
             foreach (Resource.BaseRequest input in rc.Consumed())
             {
-                int type = input.Request.Type();
+                int type = input.Request.Type;
                 // How much of this resource was produced last step.
                 Resource.RStorage storage = (Resource.RStorage)resourceStorage[type];
-                double requested = input.Request.Sum();
+                double requested = input.Request.Sum;
                 // this should just be somewhere else.
-                if (!lastProduced.ContainsKey(type))
+                if (!resourceBuffer.ContainsKey(type))
                 {
-                    lastProduced[type] = 0;
+                    resourceBuffer[type] = 0;
                 }
                 // Amount of extra DELTA required to cover this request.
-                double remainderDelta = (lastProduced[type] + requested); //+ it.Request.Sum();
+                double remainderDelta = (resourceBuffer[type] + requested); //+ it.Request.Sum;
 
-                // GD.Print(String.Format("Produced: {0:N1}\nConsumed: {1:N1}\nRequested: {2:N1}\nDelta: {3:N1}\nStored: {4:N1}\nRemainder: {5:N1}", produced, consumed, requested, remainderDelta, stockpile, remainderNet));
                 // Amount of extra NET required to cover this request.	
                 if (remainderDelta >= 0)
                 {
                     input.Respond();
-                    lastProduced[type] += requested;
+                    resourceBuffer[type] += requested;
                 }
                 else if (storage.Stock() >= -remainderDelta)
                 {
                     input.Respond();
-                    //storage.Deposit(remainderDelta);
-                    lastProduced[type] += requested;
+                    storage.Deposit(remainderDelta);
+                    resourceBuffer[type] += requested;
                 }
                 else
                 {
                     // Fullfill partial request.
                     input.Respond(-storage.Stock());
                     //storage.Deposit(-storage.Stock());
-                    lastProduced[type] = 0;
+                    resourceBuffer[type] = 0;
                 }
-
-                // Add response to lists.
-                // resourceDeltaConsumed.Add(it.Response);
-                // resourceDelta.Add(it.Response);
 
                 // Deduct remainder from storage.
                 // Emit some sort of storage message.
             }
         }
-        foreach (KeyValuePair<int, double> kvp in lastProduced)
+        foreach (KeyValuePair<int, double> kvp in resourceBuffer)
         {
-            if (resourceStorage.ContainsKey(kvp.Key))
-            {
-                resourceStorage[kvp.Key].Deposit(kvp.Value);
-            }
+            resourceStorage[kvp.Key].Deposit(kvp.Value);
         }
     }
 }
