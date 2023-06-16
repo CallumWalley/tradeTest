@@ -1,8 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://beg6361ypfbvu"]
+[gd_scene load_steps=5 format=3 uid="uid://820m8bihxw7o"]
 
 [ext_resource type="Script" path="res://GUI/Components/UITradeSource.cs" id="1"]
 [ext_resource type="PackedScene" uid="uid://ba6odg6pardaw" path="res://GUI/Elements/Display/UIResource.tscn" id="2"]
-[ext_resource type="PackedScene" uid="uid://b7t25sbq6d517" path="res://GUI/Components/UIInstallationSummary.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://dtsv3vtiwfiuf" path="res://GUI/Components/Entities/UI_Installation_Small.tscn" id="3"]
 [ext_resource type="PackedScene" uid="uid://b57ncssi2lkcq" path="res://GUI/Elements/Display/UINumerical.tscn" id="4"]
 
 [node name="TradeSource" type="Control"]

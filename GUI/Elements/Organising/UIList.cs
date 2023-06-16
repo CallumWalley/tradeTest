@@ -83,7 +83,6 @@ public partial class UIList : BoxContainer
         }
         // If doesn't exist, add it and insert at postition.
         UIContainers.IListable ui = (UIContainers.IListable)prefab.Instantiate();
-        GD.Print("instantiated list item");
         ui.Init(r);
         AddChild(ui.Control);
         MoveChild(ui.Control, index);

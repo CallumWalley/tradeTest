@@ -1,12 +1,14 @@
 using Godot;
 using System;
-public partial class UIIndustry : Control, UIContainers.IListable
+public partial class UI_Industry_Full : Control, UIContainers.IListable
 {
     // Game object this UI element follows.
     public Control Control { get { return this; } }
     public System.Object GameElement { get { return Industry; } }
     public Industry Industry;
-    static readonly PackedScene p_situation = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/UIIndustry.tscn");
+    static readonly PackedScene p_situation = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/Entities/UI_Industry_Full.tscn");
+    static readonly PackedScene p_UIstorage = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/Display/UIResourceStorage.tscn");
+    static readonly PackedScene p_uirequest = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/Display/UIResourceRequest.tscn");
 
     TextureButton moveUpButton;
     TextureButton moveDownButton;
@@ -49,18 +51,17 @@ public partial class UIIndustry : Control, UIContainers.IListable
         details.GetNode<Label>("VBoxContainer/Description").Text = Industry.Description;
 
         // Init resource pool display. // new UIResourceList();
-        UIResourceList uiDelta = new UIResourceList(); //leftSide.GetNode<UIResourceList>("/Production");
-        //UIResourceList uiConsumption = new UIResourceList();//details.GetNode<UIResourceList>("VBoxContainer/HSplitContainer/Left/Consumption");
-        UIResourceList uiStorage = new UIResourceList(); //details.GetNode<UIResourceList>("VBoxContainer/HSplitContainer/Left/Storage");
+        UIResourceList uiDelta = new(); //leftSide.GetNode<UIResourceList>("/Production");
+        UIList uiConsumption = new();//details.GetNode<UIResourceList>("VBoxContainer/HSplitContainer/Left/Consumption");
+        UIResourceList uiStorage = new(); //details.GetNode<UIResourceList>("VBoxContainer/HSplitContainer/Left/Storage");
         leftSide.AddChild(uiDelta);
-        // leftSide.AddChild(uiConsumption);
+        leftSide.AddChild(uiConsumption);
         leftSide.AddChild(uiStorage);
 
 
-        // uiConsumption.Init(Flatten(Industry.Consumption));
+        uiConsumption.Init(Industry.consumption, p_uirequest);
         uiDelta.Init(Industry.production);
         uiStorage.Init(Industry.stored);
-
     }
     public override void _Draw()
     {

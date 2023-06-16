@@ -7,18 +7,16 @@ using System.Linq;
 public partial class TradeRoute : EcoNode
 {
     [Export]
-    public Installation destination;
-    public Installation source;
+    public Installation Tail { get; set; }
+    public Installation Head { get; set; }
     public TradeRouteConsumer IndustrySource;
     public TradeRouteConsumer IndustryDestintation;
     public Resource.RStaticList<Resource.RStatic> Balance;
     // public List<TradeInputType> consumptionSource;
     // public List<TradeInputType> consumptionDestination;
 
-
     public Body Body { get { return GetParent<Body>(); } }
     public int Index { get { return GetIndex(); } }
-
 
 
     // Tradeweight in KTonnes
@@ -35,8 +33,8 @@ public partial class TradeRoute : EcoNode
     // Called from TradeReciver
     public void Init(Installation _destination, Installation _source)
     {
-        destination = _destination;
-        source = _source;
+        Tail = _destination;
+        Head = _source;
 
         Balance = new Resource.RStaticList<Resource.RStatic>();
 
@@ -50,16 +48,16 @@ public partial class TradeRoute : EcoNode
 
         //source.RegisterIndustry(IndustrySource);
         //destination.RegisterIndustry(IndustryDestintation);
-        destination.RegisterUpline(this);
-        source.RegisterDownline(this);
+        Tail.RegisterUpline(this);
+        Head.RegisterDownline(this);
 
-        distance = destination.GetParent<Body>().Position.DistanceTo(source.GetParent<Body>().Position);
+        distance = Tail.GetParent<Body>().Position.DistanceTo(Head.GetParent<Body>().Position);
         Name = $"Trade route from {IndustrySource} to {IndustryDestintation}";
 
     }
     public void DrawLine()
     {
-        GetNode<Line2D>("Line2D").Points = new Vector2[] { destination.Position, source.Position };
+        GetNode<Line2D>("Line2D").Points = new Vector2[] { Tail.Position, Head.Position };
     }
     public double GetFrieghterWeight()
     {
@@ -116,9 +114,10 @@ public partial class TradeRoute : EcoNode
     {
         Balance.Clear();
 
-        foreach (Resource.IResource r in destination.resourceDelta)
+        foreach (Resource.IResource r in Tail.resourceDelta)
         {
             Balance[r.Type].Set(r.Sum);
+            //Balance[r.Type].Name = $"Trade to {tradeRoute.destination}"
         }
         //Balance.RemoveZeros();
     }
@@ -153,7 +152,7 @@ public partial class TradeRoute : EcoNode
                     }
                     else if (r.Sum > 0 && !isUpline)
                     {
-                        produced[r.Type] = new Resource.RStatic(r.Type, r.Sum);
+                        produced[r.Type] = new Resource.RStatic(r.Type, r.Sum, $"Trade from {tradeRoute.Head.Name}");
                     }
                 }
             }
@@ -163,11 +162,11 @@ public partial class TradeRoute : EcoNode
                 {
                     if (r.Sum < 0 && isUpline)
                     {
-                        consumed[r.Type] = new TradeInputType(twin, new Resource.RStatic(r.Type, -r.Sum));
+                        consumed[r.Type] = new TradeInputType(twin, new Resource.RStatic(r.Type, r.Sum, $"Trade to {tradeRoute.Head.Name}"));
                     }
                     else if (r.Sum > 0 && !isUpline)
                     {
-                        produced[r.Type] = new Resource.RStatic(r.Type, -r.Sum);
+                        produced[r.Type] = new Resource.RStatic(r.Type, r.Sum, $"Trade from {tradeRoute.Tail.Name}");
                     }
                 }
             }
@@ -208,7 +207,7 @@ public partial class TradeRoute : EcoNode
         public new void Respond(double value)
         {
             base.Respond(value);
-            ((Resource.RStatic)tradeRouteConsumer.twin.Produced()[(Type)]).Set(value);
+            ((Resource.RStatic)tradeRouteConsumer.twin.Produced()[Type]).Set(value);
         }
     }
     // public class DownlineConsumer : TradeRouteConsumer

@@ -4,7 +4,6 @@ using System;
 public partial class UIResource : UIElement, UIContainers.IListable
 {
     public Resource.IResource resource;
-    public Resource.IResource request;
 
     public Control Control { get { return this; } }
     public System.Object GameElement { get { return resource; } }
@@ -36,32 +35,37 @@ public partial class UIResource : UIElement, UIContainers.IListable
     // 	}
     // }
 
-    public bool NameVisible
-    { get { return name.Visible; } set { name.Visible = value; } }
+    public bool NameVisible { get; set; } = false;
+    //     { get { return name.Visible; }
+    // set { name.Visible = value; } }
 
     // Prefabs
-    static readonly PackedScene p_UIResourceBreakdown = GD.Load<PackedScene>("res://GUI/Components/UIResourceBreakdown.tscn");
-    static readonly PackedScene p_resourceIcon = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/Display/UIResource.tscn");
+    protected static readonly PackedScene p_uipopover = GD.Load<PackedScene>("res://GUI/Elements/UIPopover.tscn");
+    protected static readonly PackedScene p_resourceIcon = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/Display/UIResource.tscn");
 
     // Child components
     protected Control details;
     protected Label value;
     protected Label name;
-    bool showDetails = true;
+    protected UIPopover detailsPopover;
+    public bool showDetails = true;
 
-    public void Init(Resource.IResource _resource, Resource.IResource _request)
-    {
-        request = _request;
-        Init(_resource);
-    }
-
-    public void Init(System.Object _go)
+    public virtual void Init(System.Object _go)
     {
         Init((Resource.IResource)_go);
     }
+    // public void Init(Resource.IResource _resource)
+    // {
+    //     Init(_resource);
+    // }
     public void Init(Resource.IResource _resource, bool _showDetails = true)
     {
         showDetails = _showDetails;
+        if (showDetails)
+        {
+            ShowDetailsCallback = ShowDetails;
+        }
+
         resource = _resource;
         if (resource != null)
         {
@@ -83,52 +87,61 @@ public partial class UIResource : UIElement, UIContainers.IListable
         // Assign children
         value = GetNode<Label>("Value");
         name = GetNode<Label>("Name");
-
-
-
+        name.Visible = NameVisible;
         // details assigned on first call of ShowDetails
     }
 
-    void CreateDetails()
+    protected void ExpandDetails(Resource.RBase r1, VBoxContainer vbc1)
     {
-        details = p_UIResourceBreakdown.Instantiate<UIResourceBreakdown>();
-        ((UIResourceBreakdown)details).Init(resource);
-        AddChild(details);
-        // Add details panel
-        // if (resource is Resource.IResource.RGroup){
-        // 	UResource.RList rl = p_UResource.RList.Instantiate<UResource.RList>();
-        // 	rl.Init(((Resource.RGroup)resource).add);
-        // 	details.GetNode<Control>("PanelContainer").AddChild(rl);
-        // }else{
-        // 	Label label = new Label();
-        // 	label.Text="Details"; //=resource.Name;
-        // 	details.GetNode<Control>("PanelContainer").AddChild(label);
-        // }
+        // Create element representing this.
+        UIResource uir = p_resourceIcon.Instantiate<UIResource>();
+        uir.Init(r1, false);
+        uir.NameVisible = true;
+        vbc1.AddChild(uir);
+
+        // If has children, create element to nest inside.
+        if (r1.Count > 0)
+        {
+            HBoxContainer hbc = new();
+            VBoxContainer vbc2 = new();
+            hbc.AddChild(new VSeparator());
+            hbc.AddChild(vbc2);
+            foreach (Resource.RBase r2 in ((Resource.RGroup)r1).GetAdd)
+            {
+                ExpandDetails(r2, vbc2);
+            }
+            vbc1.AddChild(hbc);
+        }
     }
 
-    protected override void ShowDetails()
+    protected virtual void ShowDetails()
     {
         // Create details panel if first time.
-        if (details is null)
+        if (detailsPopover is null)
         {
-            CreateDetails();
+            detailsPopover = p_uipopover.Instantiate<UIPopover>();
+            detailsPopover.Focus = true;
+            detailsPopover.offset = Position;
+            VBoxContainer vbc = new();
+            ExpandDetails((Resource.RBase)resource, vbc);
+
+            detailsPopover.AddChild(vbc);
+            GetParent<Control>().AddChild(detailsPopover);
+            detailsPopover.GlobalPosition = GlobalPosition;
+            detailsPopover.CloseCallback = ClosePopover;
         }
-        base.ShowDetails();
-        details.GlobalPosition = GlobalPosition + new Vector2(2, 0);
-        details.Show();
     }
 
-    protected override void HideDetails()
+    protected void ClosePopover()
     {
-        base.HideDetails();
-        details.Hide();
+        detailsPopover.QueueFree();
+        detailsPopover = null;
     }
 
     public override void _Draw()
     {
         if (resource != null)
         {
-
             value.Text = (resource.Sum).ToString();
             name.Text = $": {resource.Details}";
         }

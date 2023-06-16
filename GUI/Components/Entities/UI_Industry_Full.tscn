@@ -1,21 +1,21 @@
-[gd_scene load_steps=7 format=3 uid="uid://dk3h522ygearv"]
+[gd_scene load_steps=7 format=3 uid="uid://dno0erlbbtari"]
 
-[ext_resource type="PackedScene" uid="uid://cqr0hghxxwc2r" path="res://GUI/Elements/UIDragIndicator.tscn" id="1"]
-[ext_resource type="Theme" uid="uid://b1bxyq2lrfdqf" path="res://base_theme.tres" id="1_qfx26"]
-[ext_resource type="Script" path="res://GUI/Components/UIIndustry.cs" id="1_skxiy"]
-[ext_resource type="PackedScene" uid="uid://c555jlpytxxpv" path="res://GUI/Elements/Button/UIIncriment.tscn" id="2"]
-[ext_resource type="PackedScene" uid="uid://bkkqvb27camyn" path="res://GUI/Elements/Button/UICancel.tscn" id="4"]
-[ext_resource type="PackedScene" uid="uid://c6t0t72k1w2o4" path="res://GUI/Elements/UIAccordian.tscn" id="5"]
+[ext_resource type="Theme" uid="uid://b1bxyq2lrfdqf" path="res://base_theme.tres" id="1_ox12g"]
+[ext_resource type="Script" path="res://GUI/Components/Entities/UI_Industry_Full.cs" id="2_q88kr"]
+[ext_resource type="PackedScene" uid="uid://c6t0t72k1w2o4" path="res://GUI/Elements/UIAccordian.tscn" id="3_ykxqb"]
+[ext_resource type="PackedScene" uid="uid://cqr0hghxxwc2r" path="res://GUI/Elements/UIDragIndicator.tscn" id="4_olpyq"]
+[ext_resource type="PackedScene" uid="uid://c555jlpytxxpv" path="res://GUI/Elements/Button/UIIncriment.tscn" id="5_pamn8"]
+[ext_resource type="PackedScene" uid="uid://bkkqvb27camyn" path="res://GUI/Elements/Button/UICancel.tscn" id="6_w8vsf"]
 
 [node name="Industry" type="PanelContainer"]
 offset_right = 339.0
 offset_bottom = 44.0
 size_flags_horizontal = 7
 size_flags_vertical = 7
-theme = ExtResource("1_qfx26")
-script = ExtResource("1_skxiy")
+theme = ExtResource("1_ox12g")
+script = ExtResource("2_q88kr")
 
-[node name="Accordian" parent="." instance=ExtResource("5")]
+[node name="Accordian" parent="." instance=ExtResource("3_ykxqb")]
 layout_mode = 2
 size_flags_stretch_ratio = 0.0
 theme = null
@@ -51,19 +51,19 @@ alignment = 2
 modulate = Color(0.482353, 0.482353, 0.482353, 1)
 layout_mode = 2
 
-[node name="Drag" parent="Accordian/Button/AlignRight" instance=ExtResource("1")]
+[node name="Drag" parent="Accordian/Button/AlignRight" instance=ExtResource("4_olpyq")]
 visible = false
 modulate = Color(0.509804, 0.509804, 0.509804, 1)
 layout_mode = 2
 
-[node name="Incriment" parent="Accordian/Button/AlignRight" instance=ExtResource("2")]
+[node name="Incriment" parent="Accordian/Button/AlignRight" instance=ExtResource("5_pamn8")]
 layout_mode = 2
 
 [node name="VSeparator2" type="VSeparator" parent="Accordian/Button/AlignRight"]
 modulate = Color(0.482353, 0.482353, 0.482353, 1)
 layout_mode = 2
 
-[node name="Cancel" parent="Accordian/Button/AlignRight" instance=ExtResource("4")]
+[node name="Cancel" parent="Accordian/Button/AlignRight" instance=ExtResource("6_w8vsf")]
 visible = false
 layout_mode = 2
 

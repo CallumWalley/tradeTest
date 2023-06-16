@@ -4,16 +4,6 @@ using System;
 public partial class UIResourceMultiple : UIResource
 {
 
-    protected override void ShowDetails()
-    {
-
-    }
-
-    protected override void HideDetails()
-    {
-
-    }
-
     public override void _Draw()
     {
         if (resource != null)

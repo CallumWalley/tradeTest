@@ -12,11 +12,12 @@ public partial class UIInstallation : Control
 
     Installation installation;
     TabContainer tabContainer;
-    static readonly PackedScene p_uiIndustry = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/UIIndustry.tscn");
-    static readonly PackedScene p_uiTradeRoute = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/UITradeRoute.tscn");
-    static readonly PackedScene p_storage = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/Display/UIStorage.tscn");
+    static readonly PackedScene p_uiIndustry = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/Entities/UI_Industry_Full.tscn");
+    static readonly PackedScene p_uiTradeRoute = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/Entities/UI_TradeRoute_Full.tscn");
+    static readonly PackedScene p_uistorage = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/Display/UIResourceStorage.tscn");
+    static readonly PackedScene p_resource = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/Display/UIResource.tscn");
+    static readonly PackedScene p_uirequest = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/Display/UIResourceRequest.tscn");
     // static readonly PackedScene p_uiTransformer = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/Display/UIIndustry.tscn");
-
     static readonly PackedScene p_uiTradeDestination = GD.Load<PackedScene>("res://GUI/Components/UITradeSourceSelector.tscn");
 
     public void Init(Installation _installation)
@@ -65,7 +66,7 @@ public partial class UIInstallation : Control
             supplyPanel.AddChild(titleStored);
 
             UIList uiStorage = new();
-            uiStorage.Init(installation.resourceStorage, p_storage);
+            uiStorage.Init(installation.resourceStorage, p_uistorage);
             supplyPanel.AddChild(uiStorage);
 
             return supplyPanel;
@@ -76,9 +77,23 @@ public partial class UIInstallation : Control
             VBoxContainer tradePanel = new();
             tradePanel.Name = "Trade";
 
+            //TextureRect netIncoming = new();
+            //netIncomingValue
+            //netIncoming.Texture = "res://assets/icons/trade_value.dds";
+            //UIResource netOutgoing = p_resource.Instantiate<UIResource>();
+
+
+            HBoxContainer tradeBalance = new();
+            // tradeBalance.AddChild(netIncoming);
+            // tradeBalance.AddChild(netOutgoing);
+
+            tradePanel.AddChild(tradeBalance);
+
             UITradeSourceSelector uiTradeDestinationSelector = p_uiTradeDestination.Instantiate<UITradeSourceSelector>();
             uiTradeDestinationSelector.Init(installation);
             tradePanel.AddChild(uiTradeDestinationSelector);
+
+            tradePanel.AddChild(new HSeparator());
 
             UIList uiTradeListDownline = new();
             uiTradeListDownline.Vertical = true;
@@ -101,9 +116,16 @@ public partial class UIInstallation : Control
 
             return uiIndustryPanel;
         }
-
-
     }
+
+    // public override void _Ready()
+    // {
+    //     // Redraw every eframe
+
+    //     GetNode<Global>("/root/Global").Connect("EFrameEarly", new Callable(this, "QueueRedrawWrap"));
+    // }
+
+
     // TODO: ask noel for heeeeelppppppp
     // IEnumerable<System.Object> WhyAreYouLikeThis(Node aaaaaaaa)
     // {

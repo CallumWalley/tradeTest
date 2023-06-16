@@ -17,7 +17,8 @@ public partial class UITradeSourceSelector : Control
 
     // Children members
     TextureButton textureButton;
-    UIPopover popoverList;
+    VBoxContainer dropdownList;
+    UIPopover uIPopover;
     Label noTradeLabel;
     UITradeSource currentTradeSourcePanel;
     VBoxContainer vBox;
@@ -32,7 +33,7 @@ public partial class UITradeSourceSelector : Control
         {
             if (installation.UplineTraderoute != null)
             {
-                return installation.UplineTraderoute.source;
+                return installation.UplineTraderoute.Head;
             }
             else
             {
@@ -50,12 +51,17 @@ public partial class UITradeSourceSelector : Control
 
     public override void _Ready()
     {
+
         // Global elements
         playerTradeRoutes = GetNode<PlayerTradeRoutes>("/root/Global/Player/Trade/Routes");
 
-        textureButton = (TextureButton)GetNode("AlignRight/VBoxContainer/Settings");
-        popoverList = (UIPopover)GetNode("PopoverList");
-        vBox = popoverList.GetNode<VBoxContainer>("VBoxContainer");
+        textureButton = GetNode<TextureButton>("AlignRight/VBoxContainer/Settings");
+        uIPopover = GetNode<UIPopover>("Popover");
+        uIPopover.HidePeriod = 9999;
+        dropdownList = new();
+        uIPopover.AddChild(dropdownList);
+        uIPopover.CloseCallback = DropDownClose;
+
         //currentTradeSourcePanel = GetNode<UITradeSource>("AlignLeft/TradeSource");
         //label = GetNode<Label>("AlignLeft/CurrentDestination/Text");
 
@@ -64,7 +70,9 @@ public partial class UITradeSourceSelector : Control
         GetNode("AlignLeft").AddChild(currentTradeSourcePanel);
         currentTradeSourcePanel.GetNode<Button>("Button").Flat = true;
         currentTradeSourcePanel.GetNode<Button>("Button").Disabled = true;
-        textureButton.Connect("pressed", new Callable(this, "DropDown"));
+        textureButton.Connect("pressed", new Callable(this, "DropDownOpen"));
+
+        PopulateList();
     }
 
     public override void _Process(double delta)
@@ -76,8 +84,6 @@ public partial class UITradeSourceSelector : Control
     public override void _Draw()
     {
         base._Draw();
-        validTradeSources = GetNode<PlayerTradeReciever>("/root/Global/Player/Trade/Receivers").list.FindAll(x => ((x != installation)));
-        validTradeSources.Insert(0, null);
 
         if (!(validTradeSources is null) && validTradeSources.Count < 2)
         {
@@ -91,61 +97,42 @@ public partial class UITradeSourceSelector : Control
         }
     }
 
-    void DropDown()
+    void PopulateList()
     {
-        // //tradeDestSelectorButton.Clear();
-        // // Todo better structure to avoid this check.
-        // //tradeDestSelectorButton.AddIconItem(freighterIcon, " 0 - No Route Assigned", 0);
-        // int indexId = 1; //Start at 1 to allow for 'none' in []
-        // indexOfExisting = 0;
-
-        //Filter to only valid options
-        //validDestinations.Sort
-
-        //Add 'none' destination
-        int index = 0;
+        foreach (UITradeSource uits in dropdownList.GetChildren())
+        {
+            uits.HideTradeRoute();
+            uits.QueueFree();
+        }
+        // Get list of valid trade sources;
+        // This could be done async;
+        validTradeSources = GetNode<PlayerTradeReciever>("/root/Global/Player/Trade/Receivers").list.FindAll(x => ((x != installation)));
+        validTradeSources.Insert(0, null);
 
         foreach (Installation i in validTradeSources)
         {
-            UpdateTradeDestination(i, index);
-            index++;
+            UITradeSource uits = p_tradeSource.Instantiate<UITradeSource>();
+            uits.Init(installation, i, this);
+            dropdownList.AddChild(uits);
         }
-
-        // Any remaining elements greater than index must no longer exist.
-        while (vBox.GetChildCount() > index)
-        {
-            UIResource uir = vBox.GetChildOrNull<UIResource>(index);
-            vBox.RemoveChild(uir);
-            uir.QueueFree();
-        }
-        popoverList.Show();
-        popoverList.GlobalPosition = GlobalPosition;
-
-        // show current dest somehow.
     }
 
-    void UpdateTradeDestination(Installation i, int index)
+    void DropDownOpen()
     {
-        foreach (UITradeSource uir in vBox.GetChildren())
-        {
-            if (i == uir.sourceInstallation)
-            {
-                vBox.MoveChild(uir, index);
-                return;
-            }
-        }
-        // If doesn't exist, add it and insert at postition.
-        UITradeSource uitd = (UITradeSource)p_tradeSource.Instantiate();
-        uitd.Init(installation, i, this);
-        vBox.AddChild(uitd);
-        vBox.MoveChild(uitd, index);
+        uIPopover.Show();
+        PopulateList();
     }
+
+    void DropDownClose()
+    {
+        uIPopover.Hide();
+    }
+
     public void SetTradeSource(Installation newSourceInstallation)
     {
         // Called from child buttons.
 
-        // Hide List
-        popoverList.Visible = false;
+        DropDownClose();
 
         GD.Print($"Existing trade route index {CurrectSourceInstallation}, selected {newSourceInstallation}");
         // If this is true, no change has been made.

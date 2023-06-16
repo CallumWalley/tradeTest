@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://dilham44dintp"]
+[gd_scene load_steps=3 format=3 uid="uid://cubm1qep2nbv7"]
 
 [ext_resource type="Texture2D" path="res://assets/icons/resources/unity_grey.dds" id="1"]
-[ext_resource type="Script" path="res://GUI/Elements/Display/UIStorage.cs" id="2"]
-[ext_resource type="PackedScene" uid="uid://cxvej6yt1hxc0" path="res://GUI/Elements/UIPopover.tscn" id="3"]
+[ext_resource type="Script" path="res://GUI/Elements/Display/UIResourceStorage.cs" id="2"]
 
 [node name="UIStorage" type="HBoxContainer"]
 anchors_preset = 8
@@ -24,11 +23,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 text = "0"
 
-[node name="Details" parent="." instance=ExtResource("3")]
-
-[node name="Tooltip" type="Label" parent="Details"]
-offset_left = 4.0
-offset_top = 4.0
-offset_right = 96.0
-offset_bottom = 96.0
-text = "SOME TEXT"
+[node name="Name" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"

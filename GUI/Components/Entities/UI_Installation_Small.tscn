@@ -1,8 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://b7t25sbq6d517"]
+[gd_scene load_steps=5 format=3 uid="uid://dtsv3vtiwfiuf"]
 
 [ext_resource type="Texture2D" path="res://assets/icons/computers/ship_part_computer_default.dds" id="1"]
 [ext_resource type="Theme" uid="uid://b1bxyq2lrfdqf" path="res://base_theme.tres" id="1_mcrjj"]
-[ext_resource type="Script" path="res://GUI/Components/UIInstallationSummary.cs" id="2"]
+[ext_resource type="Script" path="res://GUI/Components/Entities/UI_Installation_Small.cs" id="2"]
 [ext_resource type="PackedScene" uid="uid://dug2mtbjwyc37" path="res://GUI/Elements/Button/UIFoucs.tscn" id="3"]
 
 [node name="InstallationSummary" type="HBoxContainer"]

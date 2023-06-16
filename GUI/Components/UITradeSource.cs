@@ -2,16 +2,17 @@ using Godot;
 using System;
 using System.Linq;
 using System.Collections;
+using System.Collections.Generic;
 
 public partial class UITradeSource : UIElement
 {
-    public Installation installation;
-    public Installation sourceInstallation;
+    Installation installation;
+    Installation sourceInstallation;
 
     // Element in change of this element.
     UITradeSourceSelector driverControl;
 
-    UIInstallationSummary installationSummary;
+    UI_Installation_Small installationSummary;
     UIResource frieghtersAvailable;
     Label labelRight;
     Label labelLeft;
@@ -21,7 +22,12 @@ public partial class UITradeSource : UIElement
 
     // If not active, show button flat, and not clicking.
     public bool active = true;
-
+    public void Init(Installation _installation, Installation _sourceInstallation, UITradeSourceSelector _driverControl = null)
+    {
+        driverControl = _driverControl;
+        installation = _installation;
+        sourceInstallation = _sourceInstallation;
+    }
     public override void _Ready()
     {
         base._Ready();
@@ -29,7 +35,7 @@ public partial class UITradeSource : UIElement
         labelRight = button.GetNode<Label>("AlignRight/Label");
         labelLeft = button.GetNode<Label>("AlignLeft/Label");
         frieghtersAvailable = button.GetNode<UIResource>("AlignRight/Available");
-        installationSummary = button.GetNode<UIInstallationSummary>("AlignLeft/InstallationSummary");
+        installationSummary = button.GetNode<UI_Installation_Small>("AlignLeft/InstallationSummary");
 
         // If no destination, hide summary, show no trade route message.
         if (sourceInstallation == null)
@@ -54,12 +60,7 @@ public partial class UITradeSource : UIElement
             //.Connect("pressed", new Callable(this, "Pressed")); //sourceInstallation
         }
     }
-    public void Init(Installation _installation, Installation _sourceInstallation, UITradeSourceSelector _driverControl = null)
-    {
-        driverControl = _driverControl;
-        installation = _installation;
-        sourceInstallation = _sourceInstallation;
-    }
+
     public override void _Draw()
     {
         base._Draw();
@@ -70,33 +71,24 @@ public partial class UITradeSource : UIElement
             double time = GetNode<PlayerTech>("/root/Global/Player/Tech").GetFreighterTons(1, dist);
             labelRight.Text = string.Format("{0} - {1}", UnitTypes.DistanceSI(dist), UnitTypes.TimeSol(time));
         }
-
-        {
-
-            //line2D.GlobalPosition = sourceInstallation.Position;
-        }
-
-
     }
 
-    void ShowTradeRoute()
+    public void ShowTradeRoute()
     {
         if (sourceInstallation != null)
         {
             line2D = new Line2D();
             GetNode("/root/Global/UI").AddChild(line2D);
-
+            line2D.Width = 4;
             line2D.Points = new Vector2[] { sourceInstallation.Position, installation.Position };
-            GD.Print("Line added");
         }
     }
-    void HideTradeRoute()
+    public void HideTradeRoute()
     {
         if (line2D != null)
         {
             line2D.QueueFree();
             line2D = null;
-            GD.Print("Line removed");
         }
     }
     void Pressed()

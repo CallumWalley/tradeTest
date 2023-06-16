@@ -16,7 +16,7 @@ public partial class UIResourcePrioroty : Control
     UIList uiStorageList;
 
     UITradeSourceSelector uiTradeDestinationSelector;
-    static readonly PackedScene p_Industry = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/UIIndustry.tscn");
+    static readonly PackedScene p_Industry = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/Entities/UI_Industry_Full.tscn");
     static readonly PackedScene p_storage = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/Display/UIStorage.tscn");
     static readonly PackedScene p_uiTradeDestination = GD.Load<PackedScene>("res://GUI/Components/UITradeSourceSelector.tscn");
 

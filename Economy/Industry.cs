@@ -101,7 +101,7 @@ public partial class Industry : EcoNode, Resource.IResourceTransformers
         if (template == null) { yield break; }
         foreach (KeyValuePair<int, double> kvp in template)
         {
-            yield return new Resource.RGroup(kvp.Key, new Resource.RStatic(kvp.Key, kvp.Value, Name));
+            yield return new Resource.RGroup(kvp.Key, new Resource.RStatic(kvp.Key, kvp.Value, "Base Yield"), Name);
         }
     }
 

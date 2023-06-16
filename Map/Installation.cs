@@ -62,6 +62,8 @@ public partial class Installation : EcoNode
 
         DownlineTraderoutes = new();
 
+        Name = $"{Body.Name} station";
+
         if (isValidTradeReceiver)
         {
             GetNode<PlayerTradeReciever>("/root/Global/Player/Trade/Receivers").RegisterInstallation(this);
@@ -214,6 +216,8 @@ public partial class Installation : EcoNode
                     resourceBuffer[type] = 0;
                 }
 
+                resourceConsumed[input.Type].Add(input);
+                resourceDelta[input.Type].Add(input);
                 // Deduct remainder from storage.
                 // Emit some sort of storage message.
             }

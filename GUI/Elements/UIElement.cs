@@ -6,23 +6,32 @@ public partial class UIElement : Control
 {
     protected Logger logger;
     protected bool mouseOver;
-    bool showDetails = false;
+    bool active = false;
     double count = 0f;
 
+    // 
+
+
     // How long to hover before showing details.
+
+    public Action ShowDetailsCallback;
+    public Action HideDetailsCallback;
+
 
     static readonly double showPeriod = 0.6f;
 
     // How long before hiding details after mouse leave.
     static readonly double hidePeriod = 0.6f;
 
-
     public override void _Ready()
     {
         base._Ready();
         count = showPeriod;
         logger = new Logger(this);
-        GD.Print("new object.");
+
+        // Should get this from inheritence, this should be temp
+        GetNode<Global>("/root/Global").Connect("EFrameEarly", new Callable(this, "QueueRedrawWrap"));
+        GetNode<Global>("/root/Global").Connect("EFrameLate", new Callable(this, "QueueRedrawWrap"));
 
         // // defaultVisibile = Visible;
         Connect("mouse_entered", new Callable(this, "MouseEnter"));
@@ -38,15 +47,6 @@ public partial class UIElement : Control
     {
         mouseOver = false;
     }
-    protected virtual void ShowDetails()
-    {
-        showDetails = true;
-    }
-    protected virtual void HideDetails()
-    {
-        showDetails = false;
-    }
-
 
     public override void _Draw()
     {
@@ -58,7 +58,12 @@ public partial class UIElement : Control
             Visible = false;
         }
     }
-
+    //Dunno why I cant call directly.
+    void QueueRedrawWrap()
+    {
+        QueueRedraw();
+        //GD.Print("QR");
+    }
     // TODO replace with co-routine?
     public override void _Process(double delta)
     {
@@ -66,24 +71,24 @@ public partial class UIElement : Control
 
         if (Visible)
         {
-            if (showDetails != mouseOver)
+            if (active != mouseOver)
             {
                 count -= delta;
             }
 
             if (count < 0)
             {
-                if (showDetails)
+                if (active)
                 {
-                    HideDetails();
+                    active = false;
                     count = showPeriod;
-
+                    HideDetailsCallback?.Invoke();
                 }
                 else
                 {
-                    ShowDetails();
+                    active = true;
                     count = hidePeriod;
-
+                    ShowDetailsCallback?.Invoke();
                 }
             }
         }

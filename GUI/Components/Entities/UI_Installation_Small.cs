@@ -3,8 +3,8 @@ using System;
 using System.Linq;
 using System.Collections;
 
-public partial class UIInstallationSummary : UIElement
-{   
+public partial class UI_Installation_Small : UIElement
+{
     Installation installation;
     Label labelName;
 
@@ -15,11 +15,11 @@ public partial class UIInstallationSummary : UIElement
     }
     public void Init(Installation _installation)
     {
-        installation=_installation;
+        installation = _installation;
     }
     public override void _Draw()
     {
-        if (installation == null){return;}
+        if (installation == null) { return; }
         labelName.Text = installation.Name;
         base._Draw();
     }

@@ -26,9 +26,9 @@ public partial class Resource
     {
         protected int type;
         protected string details;
-        public int Type { get { return type; } }
-        public string Details { get { return details; } }
-        public string Name { get { return Resource.Index(type).name; } }
+        public virtual int Type { get { return type; } }
+        public virtual string Details { get { return details; } }
+        public virtual string Name { get { return Resource.Index(type).name; } }
         public abstract double Sum { get; }
         public abstract int Count { get; }
 
@@ -143,7 +143,7 @@ public partial class Resource
         }
         public override double Sum { get { return sum; } }
 
-        public override int Count { get { return 1; } }
+        public override int Count { get { return 0; } }
         public void Clear() { return; }
         public Texture2D Icon { get { return Index(type).icon; } }
         // public double ShipWeight { get { return Index(type).shipWeight; } }
@@ -428,7 +428,7 @@ public partial class Resource
         // No fulfilled value returned if not fulfilled.
         public void Respond(double value) { }
     }
-    public partial class BaseRequest : IRequestable
+    public partial class BaseRequest : RBase, IRequestable
     {
         // This is a dummy request. Does nothing.
 
@@ -437,12 +437,10 @@ public partial class Resource
 
         // Request is actual amount given
         public Resource.RStatic Response { get; set; }
-        public int State { get; set; }
-        public int Type { get { return Request.Type; } }
-        public double Sum { get { return Response.Sum; } }
-
-        public string Details { get { return "Placeholder"; } }
-        public string Name { get { return "Placeholder"; } }
+        public int State { get; set; } = -1;
+        public override int Type { get { return Request.Type; } }
+        public override double Sum { get { return Response.Sum; } }
+        public override int Count { get { return 0; } }
 
         public BaseRequest(Resource.RStatic _request)
         {

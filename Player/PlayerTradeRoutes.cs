@@ -12,8 +12,8 @@ public partial class PlayerTradeRoutes : Node
     }
     public void DeregisterTradeRoute(TradeRoute tr)
     {
-        tr.source.DeregisterDownline(tr);
-        tr.destination.DeregisterUpline(tr);
+        tr.Head.DeregisterDownline(tr);
+        tr.Tail.DeregisterUpline(tr);
 
         RemoveChild(tr);
         tr.QueueFree();
