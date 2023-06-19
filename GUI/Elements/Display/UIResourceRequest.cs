@@ -3,16 +3,16 @@ using System;
 
 public partial class UIResourceRequest : UIResource
 {
-    public Resource.BaseRequest request;
+    public Resource.RRequestBase request;
     public new System.Object GameElement { get { return request; } }
 
     Color colorBad = new(1, 0, 0);
 
     public override void Init(System.Object _go)
     {
-        Init((Resource.BaseRequest)_go);
+        Init((Resource.RRequestBase)_go);
     }
-    public void Init(Resource.BaseRequest _request)
+    public void Init(Resource.RRequestBase _request)
     {
         base.Init(_request);
         request = _request;

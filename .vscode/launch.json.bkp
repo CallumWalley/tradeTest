@@ -1,0 +1,21 @@
+// Use IntelliSense to learn about possible attributes.
+// Hover to view descriptions of existing attributes.
+{
+    "version": "0.2.0",
+    "configurations": [
+        // For these launch configurations to work, you need to setup a GODOT4
+        // environment variable. On mac or linux, this can be done by adding
+        // the following to your .zshrc, .bashrc, or .bash_profile file:
+        // export GODOT4="/Applications/Godot.app/Contents/MacOS/Godot"
+        {
+            "name": "Play",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "/usr/local/bin/godot",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+        }
+    ]
+}

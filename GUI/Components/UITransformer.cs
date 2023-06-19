@@ -138,9 +138,9 @@ public partial class UIITransformer : Control, UIContainers.IListable
         situations.MoveChild(ui, index);
     }
 
-    IEnumerable<Resource.IResource> Flatten(IEnumerable<Resource.BaseRequest> inputList)
+    IEnumerable<Resource.IResource> Flatten(IEnumerable<Resource.RRequestBase> inputList)
     {
-        foreach (Resource.BaseRequest i in inputList)
+        foreach (Resource.RRequestBase i in inputList)
         {
             yield return i.Response;
         }

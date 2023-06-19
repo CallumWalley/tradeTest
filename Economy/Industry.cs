@@ -114,12 +114,12 @@ public partial class Industry : EcoNode, Resource.IResourceTransformers
         }
     }
 
-    IEnumerable<Resource.BaseRequest> GetInputClassFromTemplate(Dictionary<int, double> template)
+    IEnumerable<Resource.RRequestBase> GetInputClassFromTemplate(Dictionary<int, double> template)
     {
         if (template == null) { yield break; }
         foreach (KeyValuePair<int, double> kvp in template)
         {
-            yield return new Resource.BaseRequest(new Resource.RStatic(kvp.Key, kvp.Value, Name));
+            yield return new Resource.RRequestBase(new Resource.RStatic(kvp.Key, kvp.Value, _details: "Base Yield"));
         }
     }
     public void AddSituation(Situations.Base s)

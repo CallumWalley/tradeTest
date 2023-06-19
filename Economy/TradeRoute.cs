@@ -22,7 +22,7 @@ public partial class TradeRoute : EcoNode
     // Tradeweight in KTonnes
     //public Resource.IResource importTradeWeight;
     //public Resource.IResource exportTradeWeight;
-    public Resource.RStatic tradeWeight;
+    public Resource.RStatic TradeWeight { get; set; }
     public double distance;
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -38,8 +38,6 @@ public partial class TradeRoute : EcoNode
 
         Balance = new Resource.RStaticList<Resource.RStatic>();
 
-        MatchDemand();
-        UpdateFreighterWeight();
 
         GetNode<Line2D>("Line2D").Width = 1;
 
@@ -53,6 +51,11 @@ public partial class TradeRoute : EcoNode
 
         distance = Tail.GetParent<Body>().Position.DistanceTo(Head.GetParent<Body>().Position);
         Name = $"Trade route from {IndustrySource} to {IndustryDestintation}";
+
+        TradeWeight = new Resource.RStatic(901, GetFrieghterWeight(), $"{Name}");
+
+        MatchDemand();
+        UpdateFreighterWeight();
 
     }
     public void DrawLine()
@@ -124,8 +127,7 @@ public partial class TradeRoute : EcoNode
 
     void UpdateFreighterWeight()
     {
-        tradeWeight = new Resource.RStatic(901, GetFrieghterWeight());
-        Balance.Add(tradeWeight);
+        TradeWeight.Set(GetFrieghterWeight());
     }
 
     public class TradeRouteConsumer : Resource.IResourceTransformers
@@ -192,7 +194,7 @@ public partial class TradeRoute : EcoNode
             return tradeRoute;
         }
     }
-    public partial class TradeInputType : Resource.BaseRequest
+    public partial class TradeInputType : Resource.RRequestBase
     {
         TradeRouteConsumer tradeRouteConsumer;
         public TradeInputType(TradeRouteConsumer _tradeRouteConsumer, Resource.RStatic _request) : base(_request)

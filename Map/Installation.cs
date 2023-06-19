@@ -9,7 +9,8 @@ public partial class Installation : EcoNode
     public bool isValidTradeReceiver = false;
 
     [Export]
-    public bool storageFull = false;
+    public Godot.Collections.Dictionary<int, double> StartingResources { get; set; } = new();
+
     List<Industry> industries = new();
 
     //Transformers contains list trade + industry
@@ -29,6 +30,7 @@ public partial class Installation : EcoNode
     // contains only NEGATIVE deltas. evaluated during EFrameEarly, and cleared in next EFrameLate.
     public Resource.RGroupList<Resource.RGroup> resourceConsumed = new();
     // Contains sum of deltas, used by UI elements.
+    public Resource.RGroupList<Resource.RGroup> resourceTraded = new();
     public Resource.RGroupList<Resource.RGroup> resourceDelta = new();
     // NET amount of resource in storage.
     public Resource.RStorageList<Resource.RStorage> resourceStorage = new();
@@ -59,6 +61,7 @@ public partial class Installation : EcoNode
         resourceConsumed.CreateMissing = true;
         resourceDelta.CreateMissing = true;
         resourceStorage.CreateMissing = true;
+        resourceTraded.CreateMissing = true;
 
         DownlineTraderoutes = new();
 
@@ -74,6 +77,12 @@ public partial class Installation : EcoNode
             // Remove self so not trigger warning when added.
             RemoveChild(t);
             RegisterIndustry(t);
+        }
+        // Initial storage count.
+        GetStorage();
+        foreach (KeyValuePair<int, double> kvp in StartingResources)
+        {
+            resourceStorage[kvp.Key].Deposit(kvp.Value);
         }
     }
     public void RegisterTransformer(Resource.IResourceTransformers c)
@@ -150,7 +159,6 @@ public partial class Installation : EcoNode
         GetProducers();
 
         GetConsumers();
-
     }
 
 
@@ -182,7 +190,7 @@ public partial class Installation : EcoNode
     {
         foreach (Resource.IResourceTransformers rc in Transformers)
         {
-            foreach (Resource.BaseRequest input in rc.Consumed())
+            foreach (Resource.RRequestBase input in rc.Consumed())
             {
                 int type = input.Request.Type;
                 // How much of this resource was produced last step.
@@ -194,30 +202,33 @@ public partial class Installation : EcoNode
                     resourceBuffer[type] = 0;
                 }
                 // Amount of extra DELTA required to cover this request.
-                double remainderDelta = (resourceBuffer[type] + requested); //+ it.Request.Sum;
+                double remainderDelta = requested - resourceBuffer[type]; //+ it.Request.Sum;
 
                 // Amount of extra NET required to cover this request.	
-                if (remainderDelta >= 0)
+                // No extra required
+                if (remainderDelta <= 0)
                 {
                     input.Respond();
-                    resourceBuffer[type] += requested;
+                    resourceBuffer[type] -= requested;
                 }
-                else if (storage.Stock() >= -remainderDelta)
+                // Covering shortfall out of storage.
+                else if (storage.Stock() >= remainderDelta)
                 {
                     input.Respond();
-                    storage.Deposit(remainderDelta);
-                    resourceBuffer[type] += requested;
+                    //storage.Deposit(remainderDelta);
+                    resourceBuffer[type] -= requested;
                 }
+                // Partial cover shortfall out of storage.
                 else
                 {
                     // Fullfill partial request.
-                    input.Respond(-storage.Stock());
+                    input.Respond(storage.Stock());
                     //storage.Deposit(-storage.Stock());
                     resourceBuffer[type] = 0;
                 }
 
                 resourceConsumed[input.Type].Add(input);
-                resourceDelta[input.Type].Add(input);
+                resourceDelta[input.Type].Add(new Resource.RStaticInvert(input.Response));
                 // Deduct remainder from storage.
                 // Emit some sort of storage message.
             }

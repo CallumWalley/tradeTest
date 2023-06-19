@@ -31,7 +31,7 @@ public partial class UI_TradeRoute_Full : Control, UIContainers.IListable
         // Set button text.
         // GetNode<Label>("Summary/SummaryContent/Source").Text = $"→ system - {tradeRoute.destination.Name}";
         UIResource freighterIcon = GetNode<UIResource>("VBoxContainer/Name/SummaryContent/Freighters");
-        freighterIcon.Init(tradeRoute.tradeWeight);
+        freighterIcon.Init(tradeRoute.TradeWeight);
 
         // Set reorder buttons.
         GetNode<TextureButton>("VBoxContainer/Name/AlignRight/Cancel/").Connect("pressed", new Callable(this, "Remove"));

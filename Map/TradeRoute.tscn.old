@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://bb4o0mflqiodt"]
+[gd_scene load_steps=2 format=3 uid="uid://riv3ohpdvbyp"]
 
 [ext_resource type="Script" path="res://Economy/TradeRoute.cs" id="1_5t8b0"]
 

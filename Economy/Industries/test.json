@@ -3,7 +3,7 @@
         "name": "Freighter Dockyard",
         "slug": "f_dockyard",
         "consumption": {
-            "2": -1
+            "2": 1
         },
         "production": {
             "901": 12
@@ -76,7 +76,7 @@
         "name": "Surface Mine",
         "slug": "mine_surf_old",
         "consumption": {
-            "2": -1
+            "2": 1
         },
         "production": {
             "1": 2
@@ -105,7 +105,7 @@
         "name": "Chemical Fuel Plant",
         "slug": "cfuel_water",
         "consumption": {
-            "4": -1
+            "4": 1
         },
         "production": {
             "2": 2
