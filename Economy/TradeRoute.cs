@@ -117,7 +117,7 @@ public partial class TradeRoute : EcoNode
     {
         Balance.Clear();
 
-        foreach (Resource.IResource r in Tail.resourceDelta)
+        foreach (Resource.IResource r in Tail.RDelta)
         {
             Balance[r.Type].Set(r.Sum);
             //Balance[r.Type].Name = $"Trade to {tradeRoute.destination}"
@@ -185,7 +185,7 @@ public partial class TradeRoute : EcoNode
         {
             return consumed;
         }
-        public Resource.RList<Resource.IResource> Produced()
+        public Resource.RList<Resource.IResource> Production
         {
             return produced;
         }
@@ -204,18 +204,18 @@ public partial class TradeRoute : EcoNode
         public new void Respond()
         {
             base.Respond();
-            ((Resource.RStatic)tradeRouteConsumer.twin.Produced()[Type]).Set(Request.Sum);
+            ((Resource.RStatic)tradeRouteConsumer.twin.Production[Type]).Set(Request.Sum);
         }
         public new void Respond(double value)
         {
             base.Respond(value);
-            ((Resource.RStatic)tradeRouteConsumer.twin.Produced()[Type]).Set(value);
+            ((Resource.RStatic)tradeRouteConsumer.twin.Production[Type]).Set(value);
         }
     }
     // public class DownlineConsumer : TradeRouteConsumer
     // {
     //     public Resource.RList<Resource.IRequestable> Consumed() { }
-    //     public Resource.RList<Resource.IResource> Produced() { }
+    //     public Resource.RList<Resource.IResource> Production { }
     //     public System.Object Driver() { return this; }
 
     // }
@@ -260,7 +260,7 @@ public partial class TradeRoute : EcoNode
     //     {
     //         return consumption;
     //     }
-    //     public Resource.RList<Resource.BaseRequest> Produced()
+    //     public Resource.RList<Resource.BaseRequest> Production
     //     {
     //         return twin.Consumed();
     //     }

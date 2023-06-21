@@ -63,7 +63,7 @@ public partial class UIITransformer : Control, UIContainers.IListable
 
         // uiConsumption.Init(Flatten(Industry.Consumption));
         uiDelta.Init(Industry.Produced());
-        uiStorage.Init(Industry.Storage);
+        uiStorage.Init(Industry.StorageAdded);
 
     }
     public override void _Draw()

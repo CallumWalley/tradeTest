@@ -31,7 +31,7 @@ public partial class UIResourcePrioroty : Control
 
 
         uiResourceList = new UIResourceList();//new UIResourceList();
-        uiResourceList.Init(installation.resourceDelta.Standard);
+        uiResourceList.Init(installation.RDelta.Standard);
         AddChild(uiResourceList);
 
         // UResource.RList2 = p_UResource.RList.Instantiate<UResource.RList>();

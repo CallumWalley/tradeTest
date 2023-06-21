@@ -6,15 +6,12 @@ public partial class Industry : EcoNode, Resource.IResourceTransformers
 {
     [Export]
     public string slug;
-    public Resource.IResource output;
-    // public Resource.RList<Resource.RGroup> Production { get; protected set; }
-    public Resource.RList<Resource.IResource> production;
-    public Resource.RList<Resource.IRequestable> consumption;
-    public Resource.RList<Resource.RStatic> stored;
-
-    // public List<Resource.BaseRequest> Consumption { get; protected set; }
-    public Resource.RList<Resource.RStatic> Storage { get; protected set; }
+    public Resource.RList<Resource.IResource> Production { get; set; }
+    public Resource.RList<Resource.IRequestable> Consumption { get; set; }
+    public Resource.RList<Resource.RStatic> StorageAdded { get; protected set; }
     public List<Situations.Base> Situations { get; protected set; }
+
+    public System.Object Driver { get { return this; } }
     // 0-100 
 
     //////////////////////////
@@ -47,20 +44,7 @@ public partial class Industry : EcoNode, Resource.IResourceTransformers
     public string Description { get; set; }
     public int Prioroty { get; set; }
 
-    public System.Object Driver()
-    {
-        return this;
-    }
     // this could be made less confusing.
-    public Resource.RList<Resource.IRequestable> Consumed()
-    {
-        return consumption;
-    }
-    public Resource.RList<Resource.IResource> Produced()
-    {
-        return production;
-    }
-
 
     public override void _Ready()
     {
@@ -74,9 +58,9 @@ public partial class Industry : EcoNode, Resource.IResourceTransformers
         Prioroty = ttype.defaultPrioroty;
         Situations = new List<Situations.Base>();
 
-        consumption = new Resource.RList<Resource.IRequestable>(GetInputClassFromTemplate(ttype.Consumption));
-        production = new Resource.RList<Resource.IResource>(GetGroupFromTemplate(ttype.Production));
-        stored = new Resource.RList<Resource.RStatic>(GetStaticFromTemplate(ttype.Storage));
+        Consumption = new(GetInputClassFromTemplate(ttype.Consumption));
+        Production = new(GetGroupFromTemplate(ttype.Production));
+        StorageAdded = new Resource.RList<Resource.RStatic>(GetStaticFromTemplate(ttype.Storage));
     }
 
 
@@ -96,12 +80,12 @@ public partial class Industry : EcoNode, Resource.IResourceTransformers
     //         yield return new Requester(new Resource.IResource.RStatic(kvp.Key, kvp.Value, Name));
     //     }
     // }
-    IEnumerable<Resource.RGroup> GetGroupFromTemplate(Dictionary<int, double> template)
+    IEnumerable<Resource.IResource> GetGroupFromTemplate(Dictionary<int, double> template)
     {
         if (template == null) { yield break; }
         foreach (KeyValuePair<int, double> kvp in template)
         {
-            yield return new Resource.RGroup(kvp.Key, new Resource.RStatic(kvp.Key, kvp.Value, "Base Yield"), Name);
+            yield return new Resource.RGroup<Resource.IResource>(kvp.Key, new Resource.RStatic(kvp.Key, kvp.Value, "Base Yield"), Name, Description);
         }
     }
 
@@ -114,7 +98,7 @@ public partial class Industry : EcoNode, Resource.IResourceTransformers
         }
     }
 
-    IEnumerable<Resource.RRequestBase> GetInputClassFromTemplate(Dictionary<int, double> template)
+    IEnumerable<Resource.IRequestable> GetInputClassFromTemplate(Dictionary<int, double> template)
     {
         if (template == null) { yield break; }
         foreach (KeyValuePair<int, double> kvp in template)

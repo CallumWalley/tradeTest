@@ -9,7 +9,7 @@ public partial class EcoNode : Node
         GetNode<Global>("/root/Global").Connect("EFrameLate", new Callable(this, "EFrameLate"));
     }
 
-    public virtual void EFrameEarly()
+    public virtual void EFrame()
     {
     }
     public virtual void EFrameLate()

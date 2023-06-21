@@ -50,7 +50,7 @@ public partial class UIInstallation : Control
             supplyPanel.AddChild(titleConsumed);
 
             UIResourceList uiResourceConsumed = new();
-            uiResourceConsumed.Init(installation.resourceConsumed);
+            uiResourceConsumed.Init(installation.RConsumedLocal);
             supplyPanel.AddChild(uiResourceConsumed);
 
             Label titleDelta = new();
@@ -58,7 +58,7 @@ public partial class UIInstallation : Control
             supplyPanel.AddChild(titleDelta);
 
             UIResourceList uiResourceDelta = new();
-            uiResourceDelta.Init(installation.resourceDelta);
+            uiResourceDelta.Init(installation.RDelta);
             supplyPanel.AddChild(uiResourceDelta);
 
             Label titleStored = new();

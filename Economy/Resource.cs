@@ -5,13 +5,7 @@ public partial class Resource
 {
     public Logger logger;
 
-    // Interface allowing object to be member of resourceOrder
-    public interface IResourceTransformers
-    {
-        public RList<IRequestable> Consumed();
-        public RList<IResource> Produced();
-        public System.Object Driver();
-    }
+
     public interface IResource
     // Interface for displaying basic resource icon.
     {
@@ -19,99 +13,101 @@ public partial class Resource
         string Details { get; }
         string Name { get; }
         double Sum { get; }
-
     }
-    // Class for various resource related things.
-    public abstract class RBase : IResource
-    {
-        protected int type;
-        protected string details;
-        public virtual int Type { get { return type; } }
-        public virtual string Details { get { return details; } }
-        public virtual string Name { get { return Resource.Index(type).name; } }
-        public abstract double Sum { get; }
-        public abstract int Count { get; }
 
+    public partial class RStatic : IResource
+    {
+        // A static resource is the most simple resource. It will be a number and stay that way until changed.
+        public virtual double Sum { get; protected set; }
+        public int Type { get; }
+        public string Details { get; set; }
+        public string Name { get; set; }
+        public virtual int Count { get { return 0; } }
+
+        public RStatic(int _type, double _sum = 0, string _name = "Unknown", string _details = "Base value")
+        {
+            Type = _type;
+            Sum = _sum;
+            Details = _details;
+            Name = _name;
+        }
+        // Cast static to group.
+        // public static implicit operator RGroup(RStatic rs)
+        // {
+        //     return new RGroup(rs.Type, new List<IResource> { rs });
+        // }
+        public virtual void Set(double newValue)
+        {
+            Sum = newValue;
+        }
+        public static void Clear() { return; }
+        public Texture2D Icon { get { return Index(Type).icon; } }
+        // public double ShipWeight { get { return Index(type).shipWeight; } }
+        public bool Storable { get { return Index(Type).storable; } }
+
+        public override string ToString()
+        {
+            return $"{Name}:{Sum}";
+        }
     }
-    public partial class RGroup : RBase
+    public partial class RGroup<TResource> : RStatic where TResource : IResource
     {
-        public IEnumerable<IResource> GetAdd { get { return add; } }
-        public IEnumerable<IResource> GetMulti { get { return multi; } }
-        public IEnumerable<IResource> GetRequested { get { return multi; } }
+        public List<TResource> Adders { get; protected set; }
+        public List<TResource> Muxxers { get; protected set; }
 
-        protected List<IResource> add;
-        protected List<IResource> multi = new List<IResource>();
-
-        // Does not consider child members.
+        // Does not consider grandchild members.
         public override int Count
         {
-            get { return (add.Count + multi.Count); }
+            get { return (Adders.Count + Muxxers.Count); }
         }
         public override double Sum
         {
             get { return _Sum(); }
         }
-        // public override double SumRequested
-        // {
-        //     get { return _Sum(); }
-        // }
-        public RGroup(int _type, List<IResource> _add, string _details = "Sum")
+
+        public RGroup(int _type, IEnumerable<TResource> _add, string _name = "Sum", string _details = "Sum") : base(_type)
         {
-            type = _type;
-            add = _add;
-            details = _details;
+            Adders = (List<TResource>)_add;
+            Muxxers = new List<TResource>();
+            Name = _name;
+            Details = _details;
         }
-        public RGroup(int _type, IResource r, string _details = "Sum")
+        public RGroup(int _type, TResource r, string _name = "Sum", string _details = "Sum") : this(_type, new List<TResource>() { r }, _name, _details) { }
+        public RGroup(int _type, string _name = "Sum", string _details = "Sum") : this(_type, new List<TResource>(), _name, _details) { }
+
+        public void Add(TResource ra)
         {
-            // add to empty group rather than replace.
-            type = _type;
-            add = new List<IResource>() { r };
-            details = _details;
+            //throw new
+            Adders.Add(ra);
         }
-        public RGroup(int _type, string _details = "Sum")
+        public void Multiply(TResource rm)
         {
-            type = _type;
-            details = _details;
-            add = new List<IResource>();
+            Muxxers.Add(rm);
         }
 
         public IResource First()
         {
-            return add[0];
+            return Adders[0];
         }
-
-        public void Clear()
+        public override void Set(double newValue)
         {
-            add.Clear();
-            multi.Clear();
+            { throw new InvalidOperationException("Set method is not valid for groups"); }
         }
-
-        // public static explicit operator RStatic(RGroup ra)
-        // {
-        //     //throw new
-        //     if (ra.Count != 1) { throw new InvalidCastException("Can only cast single member Resource.IResource.RGroup to Resource.IResource.RStatic"); }
-        //     return (RStatic)ra.First();
-        // }
-        public void Add(IResource ra)
+        public new void Clear()
         {
-            //throw new
-            add.Add(ra);
-        }
-        public void Multiply(IResource rm)
-        {
-            //throw new
-            multi.Add(rm);
+            Adders.Clear();
+            Muxxers.Clear();
         }
 
         double _Sum()
         {
             double addCum = 0;
             double multiCum = 1;
-            foreach (IResource i in add)
+            foreach (IResource i in Adders)
             {
                 addCum += i.Sum;
             }
-            foreach (IResource i in multi)
+            foreach (IResource i in Muxxers)
             {
                 multiCum += i.Sum;
             }
@@ -120,7 +116,7 @@ public partial class Resource
         public override string ToString()
         {
             string returnString = "";
-            foreach (IResource r in add)
+            foreach (IResource r in Adders)
             {
                 returnString += r.ToString() + ", ";
             }
@@ -128,171 +124,148 @@ public partial class Resource
         }
     }
 
-    // public partial class RGroupRequests : RGroup
-    // {
-    //     public RGroupRequests(int _type, List<IRequestable> _add, string _details = "Sum") : base(_type, (List<IResource>)_add, _details)
-    //     {
+    public partial class RGroupRequests : RGroup<IRequestable>
+    {
+        // Same as in group but also sum requests.
 
-    //     }
-    //     double[] _SumRequests()
+        public RGroupRequests(int _type, IEnumerable<IRequestable> _add, string _name = "Sum", string _details = "Sum") : base(_type, _add, _name, _details) { }
+        public RGroupRequests(int _type, IRequestable _add, string _name = "Sum", string _details = "Sum") : base(_type, _add, _name, _details) { }
+        public RGroupRequests(int _type, string _name = "Sum", string _details = "Sum") : base(_type, _name, _details) { }
+
+
+        public double[] _RequestSum()
+        {
+
+            double addCum = 0;
+            double requestCum = 0;
+            double multiCum = 1;
+            foreach (IRequestable i in Adders)
+            {
+                addCum += i.Sum;
+                requestCum += i.Request.Sum;
+            }
+            foreach (IRequestable i in Muxxers)
+            {
+                multiCum += i.Sum;
+            }
+            return new double[] { addCum * multiCum, requestCum * multiCum };
+        }
+    }
+
+    // public partial class RStaticInvert : IResource
+    // {
+    //     // wrapper class that returns negative value of leader.
+    //     static RStatic leader;
+    //     public RStaticInvert(RStatic _leader)
     //     {
-    //         double addCum = 0;
-    //         double multiCum = 1;
-    //         double requestedCum = 0;
-    //         foreach (IResource i in add)
-    //         {
-    //             addCum += i.Sum;
-    //             addCum += i.Sum;
-    //         }
-    //         foreach (IResource i in multi)
-    //         {
-    //             multiCum += i.Sum;
-    //         }
-    //         return[]
+    //         leader = _leader;
+    //     }
+    //     public double Sum { get { return -leader.Sum; } }
+    //     public int Count { get { return leader.Count; } }
+    //     public int Type { get { return leader.Type; } }
+    //     public string Details { get { return leader.Details; } set }
+    //     public string Name { get { return leader.Name; } }
+
+    //     public new string ToString()
+    //     {
+    //         return $"{Name}:{Sum}";
     //     }
     // }
-
-
-    public partial class RStatic : RBase, IResource
+    // Interface allowing object to be member of resourceOrder
+    public interface IResourceTransformers
     {
-        double sum;
-        public RStatic(int _type, double _sum, string _details = "Base value")
-        {
-            type = _type;
-            sum = _sum;
-            details = _details;
-        }
-        // cast static to agr.
-        public static implicit operator RGroup(RStatic rs)
-        {
-            return new RGroup(rs.type, new List<IResource> { rs });
-        }
-        public void Set(double newValue)
-        {
-            sum = newValue;
-        }
-        public override double Sum { get { return sum; } }
-
-        public override int Count { get { return 0; } }
-        public void Clear() { return; }
-
-        public Texture2D Icon { get { return Index(type).icon; } }
-        // public double ShipWeight { get { return Index(type).shipWeight; } }
-        public bool Storable { get { return Index(type).storable; } }
-
-        public override string ToString()
-        {
-            return $"{Name}:{sum}";
-        }
+        public RList<IRequestable> Consumption { get; protected set; }
+        public RList<IResource> Production { get; protected set; }
+        public System.Object Driver { get; }
     }
 
-    public partial class RStaticInvert : RBase, IResource
-    {
-        // wrapper class that returns negative value of leader.
-        static RStatic leader;
-        public RStaticInvert(RStatic _leader)
-        {
-            leader = _leader;
-        }
-        public override double Sum { get { return -leader.Sum; } }
-        public override int Count { get { return leader.Count; } }
-        public override int Type { get { return leader.Type; } }
-        public override string Details { get { return leader.Details; } }
-        public override string Name { get { return leader.Name; } }
 
-        public override string ToString()
-        {
-            return $"{Name}:{Sum}";
-        }
-    }
+    // public partial class RStorage : RGroup, IResource
+    // {
+    //     double stockpile; //Amount in this storage.
+    //     public RStorage(int type) : base(type) { stockpile = 0; }
+    //     public RStorage(int _type, List<IResource> _add, double initValue = 0) : base(_type, _add)
+    //     {
+    //         stockpile = initValue;
+    //     }
 
-    public partial class RStorage : RGroup, IResource
-    {
-        double stockpile; //Amount in this storage.
-        public RStorage(int type) : base(type) { stockpile = 0; }
-        public RStorage(int _type, List<IResource> _add, double initValue = 0) : base(_type, _add)
-        {
-            stockpile = initValue;
-        }
+    //     public double Deposit(double value)
+    //     {
+    //         // returns amount space free.
+    //         // if negative, this is resource that didn't fit.
+    //         double leftover = Free() - value;
+    //         stockpile = Mathf.Min(Sum, value + stockpile);
+    //         return leftover;
+    //     }
+    //     public double Withdraw(double value)
+    //     {
+    //         // returns amount space free.
+    //         // if negative, this is resource that didn't fit.
+    //         stockpile = Mathf.Min(Sum, value + stockpile);
+    //         return Deposit(-value);
+    //     }
+    //     public double Free()
+    //     {
+    //         return Sum - stockpile;
+    //     }
+    //     public double Stock()
+    //     {
+    //         return stockpile;
+    //     }
+    //     public void Fill()
+    //     {
+    //         stockpile = Sum;
+    //     }
+    //     public override string ToString()
+    //     {
+    //         return $"{Name}:{Stock()}/{Sum}";
+    //     }
 
-        public double Deposit(double value)
-        {
-            // returns amount space free.
-            // if negative, this is resource that didn't fit.
-            double leftover = Free() - value;
-            stockpile = Mathf.Min(Sum, value + stockpile);
-            return leftover;
-        }
-        public double Withdraw(double value)
-        {
-            // returns amount space free.
-            // if negative, this is resource that didn't fit.
-            stockpile = Mathf.Min(Sum, value + stockpile);
-            return Deposit(-value);
-        }
-        public double Free()
-        {
-            return Sum - stockpile;
-        }
-        public double Stock()
-        {
-            return stockpile;
-        }
-        public void Fill()
-        {
-            stockpile = Sum;
-        }
-        public override string ToString()
-        {
-            return $"{Name}:{Stock()}/{Sum}";
-        }
-
-    }
+    // }
     // Type of resource.
+
     public interface IRequestable : IResource
     {
         public int State { get; protected set; }
+        //     // 0 fulfilled.
+        //     // 1 partially fulfilled.
+        //     // 2 unfulfilled.
         public Resource.RStatic Request { get; protected set; }
-        public Resource.RStatic Response { get; protected set; }
+        public double SumRequest { get; }
         // No inputs if request fulfilled.
         public void Respond() { }
         // No fulfilled value returned if not fulfilled.
         public void Respond(double value) { }
     }
-    public partial class RRequestBase : RBase, IRequestable
+    public partial class RRequestBase : RStatic, IRequestable
     {
         // This is a dummy request. Does nothing.
-
-        // Request is the amount of resource this consumer needs;
-        public Resource.RStatic Request { get; set; }
+        // Request is the amount of resource this consumer needs and points at another resource.
+        public RStatic Request { get; set; }
+        public double SumRequest { get { return Request.Sum; } }
 
         // Request is actual amount given
-        public Resource.RStatic Response { get; set; }
         public int State { get; set; } = -1;
-        public override int Type { get { return Request.Type; } }
-        public override double Sum { get { return Response.Sum; } }
-        public override int Count { get { return 0; } }
 
-        public RRequestBase(Resource.RStatic _request)
+        public RRequestBase(Resource.RStatic _request) : base(_request.Type, 0, _request.Name, _request.Name)
         {
             Request = _request;
-            Response = new Resource.RStatic(Request.Type, 0, Request.Details);
         }
         // No inputs if request fulfilled.
         public virtual void Respond()
         {
-            Response.Set(Request.Sum);
+            base.Set(Request.Sum);
             State = 0;
         }
         // No fulfilled value returned if not fulfilled.
         public virtual void Respond(double value)
         {
-            Response.Set(value);
+            base.Set(value);
             State = 1;
         }
         public override string ToString()
         {
-            return $"{Response.Sum}/{Request.Sum}";
+            return $"{Sum}/{Request.Sum}";
         }
     }
     public partial class RRequestLinear : RRequestBase
@@ -304,8 +277,8 @@ public partial class Resource
         public RRequestLinear(Industry _industry, Resource.RStatic _request) : base(_request)
         {
             multiplier = new Resource.RStatic(Type, 0);
-            ((Resource.RGroup)_industry.Produced()[Type]).Multiply(multiplier);
-            _industry.AddSituation(new Situations.OutputModifier(Response, multiplier, _industry));
+            ((Resource.RGroup<IResource>)_industry.Production[Type]).Multiply(multiplier);
+            _industry.AddSituation(new Situations.OutputModifier(this, multiplier, _industry));
         }
         public override void Respond()
         {
@@ -319,14 +292,34 @@ public partial class Resource
         }
     }
 
+    public partial class RGroupRequests<TResource> : RGroup<TResource> where TResource : IRequestable
+    {
+        public RGroupRequests(int _type, IEnumerable<TResource> _add, string _name = "Sum", string _details = "Sum") : base(_type, _add, _name, _details) { }
+        public double SumRequest { get { return _SumRequests()[1]; } }
+        double[] _SumRequests()
+        // Do not net to call cum seperately.
+        {
+            double addCum = 0;
+            double multiCum = 1;
+            double requestCum = 0;
+            foreach (TResource i in Adders)
+            {
+                addCum += i.Sum;
+                addCum += i.Sum;
+                requestCum += i.Request.Sum;
+            }
+            foreach (TResource i in Muxxers)
+            {
+                multiCum += i.Sum;
+            }
+            return new double[] { addCum * multiCum, requestCum * multiCum };
+        }
+    }
     // // Small class to handle 'request, vs receive'
     // public class Requester
     // {
 
     //     public Resource.IResource.RStatic request;
-    //     // 0 fulfilled.
-    //     // 1 partially fulfilled.
-    //     // 2 unfulfilled.
     //     public int Type { get { return request .Type; } }
     //     public double Sum { get { return request.Sum; } }
     //     public Resource.IResource.RStatic Response { get; set; }
@@ -339,23 +332,23 @@ public partial class Resource
     //         Response = _response;
     //     }
     // }
-}
-public struct ResourceType
-{
-    public string name;
-    public Texture2D icon;
 
-    // If this resrource is something that can be store, or only instant;
-    public bool storable;
-
-    public ResourceType(string _name, Texture2D _icon, bool _storable)
+    public struct ResourceType
     {
-        name = _name;
-        icon = _icon;
-        storable = _storable;
+        public string name;
+        public Texture2D icon;
+
+        // If this resrource is something that can be store, or only instant;
+        public bool storable;
+
+        public ResourceType(string _name, Texture2D _icon, bool _storable)
+        {
+            name = _name;
+            icon = _icon;
+            storable = _storable;
+        }
     }
-}
-static Dictionary<int, ResourceType> _index = new Dictionary<int, ResourceType>(){
+    static Dictionary<int, ResourceType> _index = new Dictionary<int, ResourceType>(){
             {0, new ResourceType("Unset", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.dds"), false)},
             {1, new ResourceType("Minerals", GD.Load<Texture2D>("res://assets/icons/resources/minerals.dds"), true)},
             {2, new ResourceType("Fuel", GD.Load<Texture2D>("res://assets/icons/resources/energy.dds"), true)},
@@ -366,208 +359,194 @@ static Dictionary<int, ResourceType> _index = new Dictionary<int, ResourceType>(
             // {803, new ResourceType("Efficiency", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.dds"), false)},
             {901, new ResourceType("Freighter", GD.Load<Texture2D>("res://assets/icons/freighter.png"), false)}
         };
-public static ResourceType Index(int resourceCode)
-{
-    return _index[resourceCode];
-}
-public static Texture2D Icon(int resourceCode)
-{
-    return _index[resourceCode].icon;
-}
-// public static double ShipWeight(int resourceCode)
-// {
-//     return _index[resourceCode].shipWeight;
-// }
-
-
-// Structures
-public partial class RList<TResource> : IEnumerable<TResource> where TResource : IResource
-{
-
-    // if true, element will be created rather than returning null
-    public bool CreateMissing = false;
-
-    // Returns standard resources.
-    public IEnumerable<TResource> Standard
+    public static ResourceType Index(int resourceCode)
     {
-        get
+        return _index[resourceCode];
+    }
+    public static Texture2D Icon(int resourceCode)
+    {
+        return _index[resourceCode].icon;
+    }
+    // public static double ShipWeight(int resourceCode)
+    // {
+    //     return _index[resourceCode].shipWeight;
+    // }
+
+    // Lists
+    public partial class RList<TResource> : IEnumerable<TResource> where TResource : IResource
+    {
+        // if true, element will be created rather than returning null
+        public bool CreateMissing = false;
+
+        // Returns standard resources.
+        public IEnumerable<TResource> Standard
         {
-            return GetStandard();
-        }
-    }
-
-    // TResource list is a list of resources...
-    protected SortedDictionary<int, TResource> members;
-    public RList(IEnumerable<TResource> _members)
-    {
-        members = new SortedDictionary<int, TResource>();
-        foreach (TResource resource in _members)
-        {
-            members.Add(resource.Type, resource);
-        }
-    }
-    public RList(TResource resource)
-    {
-        members = new SortedDictionary<int, TResource>() { { resource.Type, resource } };
-    }
-    public RList()
-    {
-        members = new SortedDictionary<int, TResource>();
-    }
-    // If true, top level elements will be added as static
-    public TResource this[int index]
-    {
-        get { return _Get(index); }
-        set { _Set(index, value); }
-    }
-
-    protected virtual void _Set(int index, TResource value)
-    {
-        members.Add(index, value);
-    }
-
-    public void Add(TResource r)
-    {
-        members.Add(r.Type, r);
-    }
-
-    IEnumerable<TResource> GetStandard()
-    {
-        return GetRange(1, 100);
-    }
-    protected virtual TResource _Get(int index)
-    {
-        if (!members.ContainsKey(index))
-        {
-            return default(TResource);
-        }
-        return members[index];
-    }
-    public IEnumerator<TResource> GetEnumerator()
-    {
-        return members.Values.GetEnumerator();
-    }
-
-    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-    {
-        return this.GetEnumerator();
-    }
-
-    public IEnumerable<TResource> GetRange(int min, int max)
-    {
-        foreach (int k in members.Keys)
-        {
-            if (min <= k && k <= max)
+            get
             {
-                yield return members[k];
+                return GetStandard();
             }
         }
-    }
-    public virtual void Clear()
-    {
-        members.Clear();
-    }
-    public bool ContainsKey(int key)
-    {
-        return members.ContainsKey(key);
-    }
-    public void Remove(TResource r)
-    {
-        foreach (KeyValuePair<int, TResource> kvp in members)
-        {
-            if (kvp.Value.Equals(r))
-            {
-                members.Remove(kvp.Key);
-                return;
-            }
-        }
-    }
-    public override string ToString()
-    {
-        string returnString = "";
-        foreach (TResource r in members.Values)
-        {
-            returnString += r.ToString() + ", ";
-        }
-        return returnString;
-    }
-}
-public partial class RGroupList<TResource> : RList<TResource> where TResource : RGroup
-{
-    // Same as RList, except all elements are groups.
-    public RGroupList() : base() { }
-    public RGroupList(RGroup rGroup) : base((TResource)rGroup) { }
 
-    // Currently if is inited with only groups, they will become the members.
-    public RGroupList(TResource resource) : base(resource)
-    {
-        GD.Print("Questionable behaviour");
-    }
-    public RGroupList(RStatic resource) : base((TResource)(new RGroup(resource.Type, resource))) { }
-    public RGroupList(IEnumerable<RStatic> _members) : base()
-    {
-        foreach (RStatic m in _members)
+        // TResource list is a list of resources...
+        protected SortedDictionary<int, TResource> members;
+        public RList(IEnumerable<TResource> _members)
         {
-            members.Add(m.Type, (TResource)new RGroup(m.Type, m));
-        }
-    }
-    protected override TResource _Get(int index)
-    {
-        if (!members.ContainsKey(index))
-        {
-            if (CreateMissing)
+            members = new SortedDictionary<int, TResource>();
+            foreach (TResource resource in _members)
             {
-                members[index] = (TResource)new RGroup(index);
+                members.Add(resource.Type, resource);
             }
-            else
+        }
+        public RList(TResource resource)
+        {
+            members = new SortedDictionary<int, TResource>() { { resource.Type, resource } };
+        }
+        public RList()
+        {
+            members = new SortedDictionary<int, TResource>();
+        }
+        // If true, top level elements will be added as static
+        public TResource this[int index]
+        {
+            get { return _Get(index); }
+            set { _Set(index, value); }
+        }
+
+        protected virtual void _Set(int index, TResource value)
+        {
+            members.Add(index, value);
+        }
+
+        public void Add(TResource r)
+        {
+            members.Add(r.Type, r);
+        }
+
+        IEnumerable<TResource> GetStandard()
+        {
+            return GetRange(1, 100);
+        }
+        protected virtual TResource _Get(int index)
+        {
+            if (!members.ContainsKey(index))
             {
                 return default(TResource);
             }
-
+            return members[index];
         }
-        return members[index];
+        public IEnumerator<TResource> GetEnumerator()
+        {
+            return members.Values.GetEnumerator();
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
+        }
+
+        public IEnumerable<TResource> GetRange(int min, int max)
+        {
+            foreach (int k in members.Keys)
+            {
+                if (min <= k && k <= max)
+                {
+                    yield return members[k];
+                }
+            }
+        }
+        public virtual void Clear()
+        {
+            members.Clear();
+        }
+        public bool ContainsKey(int key)
+        {
+            return members.ContainsKey(key);
+        }
+        public void Remove(TResource r)
+        {
+            foreach (KeyValuePair<int, TResource> kvp in members)
+            {
+                if (kvp.Value.Equals(r))
+                {
+                    members.Remove(kvp.Key);
+                    return;
+                }
+            }
+        }
+        public override string ToString()
+        {
+            string returnString = "";
+            foreach (TResource r in members.Values)
+            {
+                returnString += r.ToString() + ", ";
+            }
+            return returnString;
+        }
+
+    }
+    // A list but the top level elements must be groups.
+    public partial class RGroupList<TResource> : RList<RGroup<TResource>> where TResource : IResource
+    {
+        // Same as RList, except all elements are groups.
+        public RGroupList() : base() { }
+        public RGroupList(RGroup<TResource> rGroup) : base(rGroup) { }
+
+        // Currently if is inited with only groups, they will become the members.
+        public RGroupList(TResource resource) : base((new RGroup<TResource>(resource.Type, resource))) { }
+        public RGroupList(IEnumerable<TResource> _members) : base()
+        {
+            foreach (TResource m in _members)
+            {
+                members.Add(m.Type, new RGroup<TResource>(m.Type, m));
+            }
+        }
+
+        // override default clear behavior.
+        // keep top level groups.
+        public override void Clear()
+        {
+            foreach (KeyValuePair<int, RGroup<TResource>> member in members)
+            {
+                (member.Value).Clear();
+            }
+        }
+        public void Insert(TResource r)
+        {
+            this[r.Type].Add(r);
+        }
     }
 
-    // override default clear behavior.
-    // keep top level groups.
-    public override void Clear()
+
+    // public partial class RStorageList<TResource> : RList<TResource> where TResource : RStorage
+    // {
+    //     protected override TResource _Get(int index)
+    //     {
+    //         if (!members.ContainsKey(index))
+    //         {
+    //             members[index] = (TResource)new RStorage(index);
+    //         }
+    //         return members[index];
+    //     }
+    //     public override void Clear()
+    //     {
+    //         foreach (KeyValuePair<int, TResource> member in members)
+    //         {
+    //             (member.Value).Clear();
+    //         }
+    //     }
+    // }
+    public partial class RStaticList : RList<RStatic>
     {
-        foreach (KeyValuePair<int, TResource> member in members)
+        protected override RStatic _Get(int index)
         {
-            ((RGroup)member.Value).Clear();
+            if (!members.ContainsKey(index))
+            {
+                members[index] = new RStatic(index, 0);
+            }
+            return members[index];
         }
     }
 }
-public partial class RStorageList<TResource> : RList<TResource> where TResource : RStorage
-{
-    protected override TResource _Get(int index)
-    {
-        if (!members.ContainsKey(index))
-        {
-            members[index] = (TResource)new RStorage(index);
-        }
-        return members[index];
-    }
-    public override void Clear()
-    {
-        foreach (KeyValuePair<int, TResource> member in members)
-        {
-            (member.Value).Clear();
-        }
-    }
-}
-public partial class RStaticList<TResource> : RList<TResource> where TResource : RStatic
-{
-    protected override TResource _Get(int index)
-    {
-        if (!members.ContainsKey(index))
-        {
-            members[index] = (TResource)new RStatic(index, 0);
-        }
-        return members[index];
-    }
-}
-
 
 // TResource GetType(int code, bool createMissing = false)
 // {
