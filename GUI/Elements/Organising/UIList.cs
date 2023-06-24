@@ -63,7 +63,7 @@ public partial class UIList : BoxContainer
     }
     // public override void _Ready()
     // {
-    //     GetNode<Global>("/root/Global").Connect("EFrameEarly", new Callable(this, "DeferredDraw"));
+    //     GetNode<Global>("/root/Global").Connect("EFrame", new Callable(this, "DeferredDraw"));
     // }
     // void DeferredDraw()
     // {

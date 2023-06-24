@@ -30,8 +30,7 @@ public partial class UIElement : Control
         logger = new Logger(this);
 
         // Should get this from inheritence, this should be temp
-        GetNode<Global>("/root/Global").Connect("EFrameEarly", new Callable(this, "QueueRedrawWrap"));
-        GetNode<Global>("/root/Global").Connect("EFrameLate", new Callable(this, "QueueRedrawWrap"));
+        GetNode<Global>("/root/Global").Connect("EFrame", new Callable(this, "QueueRedrawWrap"));
 
         // // defaultVisibile = Visible;
         Connect("mouse_entered", new Callable(this, "MouseEnter"));

@@ -9,7 +9,7 @@ public partial class UIInputType : UIResource
     public void Init(Resource.RRequestBase _inputType)
     {
         inputType = _inputType;
-        base.Init(inputType.Response);
+        base.Init(inputType);
 
     }
 
@@ -17,7 +17,7 @@ public partial class UIInputType : UIResource
     {
         if (inputType != null)
         {
-            value.Text = String.Format("{0:N1}/{1:N1}", inputType.Response.Sum, inputType.Request.Sum);
+            value.Text = String.Format("{0:N1}/{1:N1}", inputType.Sum, inputType.Request.Sum);
         }
         else
         {

@@ -24,7 +24,7 @@ public partial class TimeControl : Container
         labelEFramePeriod = (Label)GetNode("Count/eframePeriod");
 
         global = (Global)GetNode("/root/Global");
-        global.Connect("EFrameEarly", new Callable(this, "EFrameEarly"));
+        global.Connect("EFrame", new Callable(this, "EFrame"));
 
     }
 
@@ -39,7 +39,7 @@ public partial class TimeControl : Container
         labelEFramePeriod.Text = $"Seconds Between Economy Frames: {global.timePerEframe.ToString()}";
     }
 
-    void EFrameEarly()
+    void EFrame()
     {
         eframeCount += 1;
         PrintOrphanNodes();

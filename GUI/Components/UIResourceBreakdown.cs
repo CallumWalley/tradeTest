@@ -31,23 +31,23 @@ public partial class UIResourceBreakdown : UIPopover
         UIResource newResource = p_resource.Instantiate<UIResource>();
         newResource.Init(resource, false);
 
-        if (r is Resource.RGroup)
+        if (r is Resource.RGroup<Resource.IResource>)
         {
             UIAccordian newAccordian = p_accordian.Instantiate<UIAccordian>();
             parent.AddChild(newAccordian);
 
             newAccordian.GetNode<Button>("Button").AddChild(newResource);
 
-            foreach (Resource.IResource r2 in ((Resource.RGroup)r).GetAdd)
+            foreach (Resource.IResource r2 in ((Resource.RGroup<Resource.IResource>)r).Adders)
             {
                 Render(r2, newAccordian.GetNode<Container>("Container"));
             }
-            foreach (Resource.IResource r2 in ((Resource.RGroup)r).GetMulti)
+            foreach (Resource.IResource r2 in ((Resource.RGroup<Resource.IResource>)r).Muxxers)
             {
                 newAccordian.AddChild(new HSeparator());
                 break;
             }
-            foreach (Resource.IResource r2 in ((Resource.RGroup)r).GetMulti)
+            foreach (Resource.IResource r2 in ((Resource.RGroup<Resource.IResource>)r).Muxxers)
             {
                 Render(r2, newAccordian.GetNode<Container>("Container"), true);
             }

@@ -91,7 +91,7 @@ public partial class UIResource : UIElement, UIContainers.IListable
         // details assigned on first call of ShowDetails
     }
 
-    protected void ExpandDetails(Resource.RBase r1, VBoxContainer vbc1)
+    private void ExpandDetails(Resource.IResource r1, VBoxContainer vbc1)
     {
         // Create element representing this.
         UIResource uir = p_resourceIcon.Instantiate<UIResource>();
@@ -106,7 +106,7 @@ public partial class UIResource : UIElement, UIContainers.IListable
             VBoxContainer vbc2 = new();
             hbc.AddChild(new VSeparator());
             hbc.AddChild(vbc2);
-            foreach (Resource.RBase r2 in ((Resource.RGroup)r1).GetAdd)
+            foreach (Resource.IResource r2 in ((Resource.RGroup<Resource.IResource>)r1).Adders)
             {
                 ExpandDetails(r2, vbc2);
             }
@@ -123,9 +123,10 @@ public partial class UIResource : UIElement, UIContainers.IListable
             detailsPopover.Focus = true;
             detailsPopover.offset = Position;
             VBoxContainer vbc = new();
-            ExpandDetails((Resource.RBase)resource, vbc);
+            ExpandDetails(resource, vbc);
 
             detailsPopover.AddChild(vbc);
+
             GetParent<Control>().AddChild(detailsPopover);
             detailsPopover.GlobalPosition = GlobalPosition;
             detailsPopover.CloseCallback = ClosePopover;

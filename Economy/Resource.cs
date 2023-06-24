@@ -13,6 +13,7 @@ public partial class Resource
         string Details { get; }
         string Name { get; }
         double Sum { get; }
+        int Count { get; }
     }
 
     public partial class RStatic : IResource
@@ -512,7 +513,15 @@ public partial class Resource
         }
         public void Insert(TResource r)
         {
-            this[r.Type].Add(r);
+            if (!members.ContainsKey(r.Type))
+            {
+                members[r.Type] = new RGroup<TResource>(r.Type, "Sum", "Sum");
+            }
+            else
+            {
+                this[r.Type].Add(r);
+            }
+
         }
     }
 

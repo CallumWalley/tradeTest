@@ -23,6 +23,9 @@ public partial class UIInstallation : Control
     public void Init(Installation _installation)
     {
         tabContainer = new TabContainer();
+        tabContainer.ClipChildren = 0;
+        tabContainer.ClipTabs = false;
+
         installation = _installation;
 
         tabContainer.AddChild(SupplyPanel());
@@ -42,15 +45,15 @@ public partial class UIInstallation : Control
             supplyPanel.AddChild(titleProduced);
 
             UIResourceList uiResourceProduced = new();
-            uiResourceProduced.Init(installation.resourceProduced);
+            uiResourceProduced.Init(installation.RPool.produced.total);
             supplyPanel.AddChild(uiResourceProduced);
 
             Label titleConsumed = new();
             titleConsumed.Text = "Consumed";
             supplyPanel.AddChild(titleConsumed);
 
-            UIResourceList uiResourceConsumed = new();
-            uiResourceConsumed.Init(installation.RConsumedLocal);
+            UIList uiResourceConsumed = new();
+            uiResourceConsumed.Init(installation.RPool.consumed.total, p_uirequest);
             supplyPanel.AddChild(uiResourceConsumed);
 
             Label titleDelta = new();
@@ -58,16 +61,16 @@ public partial class UIInstallation : Control
             supplyPanel.AddChild(titleDelta);
 
             UIResourceList uiResourceDelta = new();
-            uiResourceDelta.Init(installation.RDelta);
+            uiResourceDelta.Init(installation.RPool.delta.total);
             supplyPanel.AddChild(uiResourceDelta);
 
             Label titleStored = new();
             titleStored.Text = "Stored";
             supplyPanel.AddChild(titleStored);
 
-            UIList uiStorage = new();
-            uiStorage.Init(installation.resourceStorage, p_uistorage);
-            supplyPanel.AddChild(uiStorage);
+            // UIList uiStorage = new();
+            // uiStorage.Init(installation.resourceStorage, p_uistorage);
+            // supplyPanel.AddChild(uiStorage);
 
             return supplyPanel;
         }
@@ -122,7 +125,7 @@ public partial class UIInstallation : Control
     // {
     //     // Redraw every eframe
 
-    //     GetNode<Global>("/root/Global").Connect("EFrameEarly", new Callable(this, "QueueRedrawWrap"));
+    //     GetNode<Global>("/root/Global").Connect("EFrame", new Callable(this, "QueueRedrawWrap"));
     // }
 
 

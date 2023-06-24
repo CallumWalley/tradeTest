@@ -59,9 +59,9 @@ public partial class UI_Industry_Full : Control, UIContainers.IListable
         leftSide.AddChild(uiStorage);
 
 
-        uiConsumption.Init(Industry.consumption, p_uirequest);
-        uiDelta.Init(Industry.production);
-        uiStorage.Init(Industry.stored);
+        uiConsumption.Init(Industry.Consumption, p_uirequest);
+        uiDelta.Init(Industry.Production);
+        // uiStorage.Init(Industry.stored);
     }
     public override void _Draw()
     {

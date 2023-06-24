@@ -9,11 +9,13 @@ public partial class TradeRoute : EcoNode
     [Export]
     public Installation Tail { get; set; }
     public Installation Head { get; set; }
-    public TradeRouteConsumer IndustrySource;
-    public TradeRouteConsumer IndustryDestintation;
-    public Resource.RStaticList<Resource.RStatic> Balance;
+    public TransformerTradeRouteHead TransformerHead;
+    public TransformerTradeRouteTail TransformerTail;
+    public Resource.RStaticList Balance;
+    private static TradeRoute tradeRoute;
     // public List<TradeInputType> consumptionSource;
     // public List<TradeInputType> consumptionDestination;
+
 
     public Body Body { get { return GetParent<Body>(); } }
     public int Index { get { return GetIndex(); } }
@@ -35,14 +37,15 @@ public partial class TradeRoute : EcoNode
     {
         Tail = _destination;
         Head = _source;
+        tradeRoute = this;
 
-        Balance = new Resource.RStaticList<Resource.RStatic>();
+        // Balance = new Resource.RStaticList<Resource.RStatic>();
 
 
         GetNode<Line2D>("Line2D").Width = 1;
 
-        IndustrySource = new TradeRouteConsumer(IndustryDestintation, this, false);
-        IndustryDestintation = new TradeRouteConsumer(IndustrySource, this, true);
+        TransformerTail = new TransformerTradeRouteTail();
+        TransformerHead = new TransformerTradeRouteHead(TransformerTail);
 
         //source.RegisterIndustry(IndustrySource);
         //destination.RegisterIndustry(IndustryDestintation);
@@ -50,11 +53,10 @@ public partial class TradeRoute : EcoNode
         Head.RegisterDownline(this);
 
         distance = Tail.GetParent<Body>().Position.DistanceTo(Head.GetParent<Body>().Position);
-        Name = $"Trade route from {IndustrySource} to {IndustryDestintation}";
+        Name = $"Trade route from {TransformerHead} to {TransformerTail}";
 
         TradeWeight = new Resource.RStatic(901, GetFrieghterWeight(), $"{Name}");
 
-        MatchDemand();
         UpdateFreighterWeight();
 
     }
@@ -113,156 +115,206 @@ public partial class TradeRoute : EcoNode
     // }
 
     // Sets trade route equal to destination deficit/production
-    public void MatchDemand()
-    {
-        Balance.Clear();
+    // public void MatchDemand()
+    // {
+    //     Balance.Clear();
 
-        foreach (Resource.IResource r in Tail.RDelta)
-        {
-            Balance[r.Type].Set(r.Sum);
-            //Balance[r.Type].Name = $"Trade to {tradeRoute.destination}"
-        }
-        //Balance.RemoveZeros();
-    }
+    //     foreach (Resource.IResource r in Tail.RDelta)
+    //     {
+    //         Balance[r.Type].Set(r.Sum);
+    //         //Balance[r.Type].Name = $"Trade to {tradeRoute.destination}"
+    //     }
+    //     //Balance.RemoveZeros();
+    // }
 
     void UpdateFreighterWeight()
     {
         TradeWeight.Set(GetFrieghterWeight());
     }
 
-    public class TradeRouteConsumer : Resource.IResourceTransformers
+    public class TransformerTradeRoute : Resource.IResourceTransformers
     {
-        public TradeRouteConsumer twin;
-        public TradeRoute tradeRoute;
-        bool isUpline;
-
-        Resource.RList<Resource.IResource> produced = new();
-        Resource.RList<Resource.IRequestable> consumed = new();
-
-        void BalanceUpdated()
+        public TradeRoute tr;
+        public TransformerTradeRoute()
         {
-            consumed.Clear();
-            produced.Clear();
-
-            if (isUpline)
+            tr = tradeRoute;
+        }
+        public IEnumerable<Resource.IRequestable> _Consumption(TransformerTradeRoute tr)
+        {
+            foreach (Resource.RGroup<Resource.IResource> r in tradeRoute.Tail.RPool.delta.total.Standard)
             {
-                foreach (Resource.RStatic r in tradeRoute.Balance)
-                {
-                    if (r.Sum < 0 && isUpline)
-                    {
-                        consumed[r.Type] = new TradeInputType(twin, r);
-                    }
-                    else if (r.Sum > 0 && !isUpline)
-                    {
-                        produced[r.Type] = new Resource.RStatic(r.Type, r.Sum, $"Trade from {tradeRoute.Head.Name}");
-                    }
-                }
+                if (r.Sum > 0) { continue; }
+                yield return new Resource.RRequestBase(new Resource.RStatic(r.Type, -r.Sum, tradeRoute.Name, tradeRoute.Name));
             }
-            else
+        }
+        public IEnumerable<Resource.IRequestable> _Production(TransformerTradeRoute tr)
+        {
+            foreach (Resource.RGroup<Resource.IResource> r in tradeRoute.Tail.RPool.delta.total.Standard)
             {
-                foreach (Resource.RStatic r in tradeRoute.Balance)
-                {
-                    if (r.Sum < 0 && isUpline)
-                    {
-                        consumed[r.Type] = new TradeInputType(twin, new Resource.RStatic(r.Type, r.Sum, $"Trade to {tradeRoute.Head.Name}"));
-                    }
-                    else if (r.Sum > 0 && !isUpline)
-                    {
-                        produced[r.Type] = new Resource.RStatic(r.Type, r.Sum, $"Trade from {tradeRoute.Tail.Name}");
-                    }
-                }
+                if (r.Sum > 0) { continue; }
+                yield return new Resource.RRequestBase(new Resource.RStatic(r.Type, -r.Sum, tradeRoute.Name, tradeRoute.Name));
             }
         }
 
-        public TradeRouteConsumer(TradeRouteConsumer _twin, TradeRoute _tradeRoute, bool _isUpline)
+        public virtual Resource.RList<Resource.IResource> Production { get; set; }
+        public virtual Resource.RList<Resource.IRequestable> Consumption { get; set; }
+        public System.Object Driver { get { return tradeRoute; } }
+    }
+    public class TransformerTradeRouteHead : TransformerTradeRoute
+    {
+        TransformerTradeRoute twin;
+
+        public TransformerTradeRouteHead(TransformerTradeRoute _twin) : base()
         {
             twin = _twin;
-            tradeRoute = _tradeRoute;
-            isUpline = _isUpline;
-            BalanceUpdated();
         }
-        public Resource.RList<Resource.IRequestable> Consumed()
+        public override Resource.RList<Resource.IRequestable> Consumption
         {
-            return consumed;
+            get
+            {
+                return new Resource.RList<Resource.IRequestable>(_Consumption(twin));
+            }
         }
-        public Resource.RList<Resource.IResource> Production
+        public override Resource.RList<Resource.IResource> Production
         {
-            return produced;
-        }
-        public System.Object Driver()
-        {
-            return tradeRoute;
+            get
+            {
+                return new Resource.RList<Resource.IResource>(_Production(twin));
+            }
         }
     }
-    public partial class TradeInputType : Resource.RRequestBase
+
+    public class TransformerTradeRouteTail : TransformerTradeRoute
     {
-        TradeRouteConsumer tradeRouteConsumer;
-        public TradeInputType(TradeRouteConsumer _tradeRouteConsumer, Resource.RStatic _request) : base(_request)
-        {
-            tradeRouteConsumer = _tradeRouteConsumer;
-        }
-        public new void Respond()
-        {
-            base.Respond();
-            ((Resource.RStatic)tradeRouteConsumer.twin.Production[Type]).Set(Request.Sum);
-        }
-        public new void Respond(double value)
-        {
-            base.Respond(value);
-            ((Resource.RStatic)tradeRouteConsumer.twin.Production[Type]).Set(value);
-        }
+        public override Resource.RList<Resource.IRequestable> Consumption { get { return new Resource.RList<Resource.IRequestable>(_Consumption(this)); } }
+        public override Resource.RList<Resource.IResource> Production { get { return new Resource.RList<Resource.IResource>(_Production(this)); } }
+
     }
-    // public class DownlineConsumer : TradeRouteConsumer
+
+    // void BalanceUpdated()
     // {
-    //     public Resource.RList<Resource.IRequestable> Consumed() { }
-    //     public Resource.RList<Resource.IResource> Production { }
-    //     public System.Object Driver() { return this; }
+    //     consumed.Clear();
+    //     produced.Clear();
 
-    // }
-
-    // public class TradeRouteConsumer : Resource.IResourceConsumer
-    // {
-    //     public TradeRoute tradeRoute;
-    //     public TradeRouteConsumer twin;
-    //     public bool isSource;
-    //     string name;
-    //     string description;
-    //     List<TradeInputType> consumption;
-    //     public List<Resource.IResourceConsumer> Consumers { get { return consumers; } }
-    //     public System.Object Driver() { return this; }
-    //     public void Init(TradeRoute _tradeRoute, bool _isSource = false)
+    //     if (isUpline)
     //     {
-    //         tradeRoute = _tradeRoute;
-    //         isSource = _isSource;
-    //         if (isSource)
+    //         foreach (Resource.RStatic r in tradeRoute.Balance)
     //         {
-    //             twin = tradeRoute.IndustryDestintation;
-    //             consumption = tradeRoute.consumptionSource;
-    //         }
-    //         else
-    //         {
-    //             twin = tradeRoute.IndustrySource;
-    //             consumption = tradeRoute.consumptionDestination;
-    //         }
-    //         description = $"A Trade Route connecting {tradeRoute.destination.Name}, {tradeRoute.destination.Body.Name} to {tradeRoute.source.Name}, {tradeRoute.source.Body.Name}";
-
-    //         if (isSource)
-    //         {
-    //             name = $"Trade to {tradeRoute.destination.Body.Name}";
-    //         }
-    //         else
-    //         {
-    //             name = $"Trade from {tradeRoute.source.Body.Name}";
+    //             if (r.Sum < 0 && isUpline)
+    //             {
+    //                 consumed[r.Type] = new TradeInputType(twin, r);
+    //             }
+    //             else if (r.Sum > 0 && !isUpline)
+    //             {
+    //                 produced[r.Type] = new Resource.RStatic(r.Type, r.Sum, $"Trade from {tradeRoute.Head.Name}");
+    //             }
     //         }
     //     }
-
-    //     public Resource.RList<Resource.BaseRequest> Consumed()
+    //     else
     //     {
-    //         return consumption;
+    //         foreach (Resource.RStatic r in tradeRoute.Balance)
+    //         {
+    //             if (r.Sum < 0 && isUpline)
+    //             {
+    //                 consumed[r.Type] = new TradeInputType(twin, new Resource.RStatic(r.Type, r.Sum, $"Trade to {tradeRoute.Head.Name}"));
+    //             }
+    //             else if (r.Sum > 0 && !isUpline)
+    //             {
+    //                 produced[r.Type] = new Resource.RStatic(r.Type, r.Sum, $"Trade from {tradeRoute.Tail.Name}");
+    //             }
+    //         }
     //     }
-    //     public Resource.RList<Resource.BaseRequest> Production
-    //     {
-    //         return twin.Consumed();
-    //     }
-    // }
 }
+
+// public TransformerTradeRoute(TransformerTradeRoute _twin, TradeRoute _tradeRoute, bool _isUpline)
+// {
+//     twin = _twin;
+//     tradeRoute = _tradeRoute;
+//     isUpline = _isUpline;
+//     BalanceUpdated();
+// }
+// public Resource.RList<Resource.IRequestable> Consumed()
+// {
+//     return consumed;
+// }
+// public Resource.RList<Resource.IResource> Production
+// {
+//             return produced;
+// }
+// public System.Object Driver()
+// {
+//     return tradeRoute;
+// }
+// }
+// public partial class TradeInputType : Resource.RRequestBase
+// {
+//     TransformerTradeRoute tradeRouteConsumer;
+//     public TradeInputType(TransformerTradeRoute _tradeRouteConsumer, Resource.RStatic _request) : base(_request)
+//     {
+//         tradeRouteConsumer = _tradeRouteConsumer;
+//     }
+//     public new void Respond()
+//     {
+//         base.Respond();
+//         ((Resource.RStatic)tradeRouteConsumer.twin.Production[Type]).Set(Request.Sum);
+//     }
+//     public new void Respond(double value)
+//     {
+//         base.Respond(value);
+//         ((Resource.RStatic)tradeRouteConsumer.twin.Production[Type]).Set(value);
+//     }
+// }
+// public class DownlineConsumer : TradeRouteConsumer
+// {
+//     public Resource.RList<Resource.IRequestable> Consumed() { }
+//     public Resource.RList<Resource.IResource> Production { }
+//     public System.Object Driver() { return this; }
+
+// }
+
+// public class TradeRouteConsumer : Resource.IResourceConsumer
+// {
+//     public TradeRoute tradeRoute;
+//     public TradeRouteConsumer twin;
+//     public bool isSource;
+//     string name;
+//     string description;
+//     List<TradeInputType> consumption;
+//     public List<Resource.IResourceConsumer> Consumers { get { return consumers; } }
+//     public System.Object Driver() { return this; }
+//     public void Init(TradeRoute _tradeRoute, bool _isSource = false)
+//     {
+//         tradeRoute = _tradeRoute;
+//         isSource = _isSource;
+//         if (isSource)
+//         {
+//             twin = tradeRoute.IndustryDestintation;
+//             consumption = tradeRoute.consumptionSource;
+//         }
+//         else
+//         {
+//             twin = tradeRoute.IndustrySource;
+//             consumption = tradeRoute.consumptionDestination;
+//         }
+//         description = $"A Trade Route connecting {tradeRoute.destination.Name}, {tradeRoute.destination.Body.Name} to {tradeRoute.source.Name}, {tradeRoute.source.Body.Name}";
+
+//         if (isSource)
+//         {
+//             name = $"Trade to {tradeRoute.destination.Body.Name}";
+//         }
+//         else
+//         {
+//             name = $"Trade from {tradeRoute.source.Body.Name}";
+//         }
+//     }
+
+//     public Resource.RList<Resource.BaseRequest> Consumed()
+//     {
+//         return consumption;
+//     }
+//     public Resource.RList<Resource.BaseRequest> Production
+//     {
+//         return twin.Consumed();
+//     }
+// }
+

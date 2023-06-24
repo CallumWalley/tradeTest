@@ -30,6 +30,7 @@ public partial class UIPopover : Control
         TopLevel = true;
         count = HidePeriod;
 
+
         // // defaultVisibile = Visible;
         Connect("mouse_entered", new Callable(this, "MouseEnter"));
         Connect("mouse_exited", new Callable(this, "MouseExit"));

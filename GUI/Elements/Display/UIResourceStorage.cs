@@ -4,15 +4,15 @@ using System;
 public partial class UIResourceStorage : UIResource
 {
 
-    public Resource.RStorage storage;
+    public Installation.StorageElement storage;
     Color colorBad = new(1, 0, 0);
 
     static readonly PackedScene p_UIEditValue = GD.Load<PackedScene>("res://GUI/Elements/Input/UIEditValue.tscn");
     public override void Init(System.Object _go)
     {
-        Init((Resource.RStorage)_go);
+        Init((Installation.StorageElement)_go);
     }
-    public void Init(Resource.RStorage _storage)
+    public void Init(Installation.StorageElement _storage)
     {
         base.Init(_storage);
         storage = _storage;
@@ -22,7 +22,7 @@ public partial class UIResourceStorage : UIResource
     {
         if (storage == null) { return; }
 
-        value.Text = string.Format("{0:N1}/{1:N1}", storage.Stock(), storage.Sum);
+        value.Text = string.Format("{0:N1}/{1:N1}", storage.Capacity, storage.Level);
         name.Text = $": {resource.Details}";
         value.AddThemeColorOverride("font_color", colorBad);
     }

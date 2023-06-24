@@ -62,7 +62,7 @@ public partial class UIITransformer : Control, UIContainers.IListable
 
 
         // uiConsumption.Init(Flatten(Industry.Consumption));
-        uiDelta.Init(Industry.Produced());
+        uiDelta.Init(Industry.Production);
         uiStorage.Init(Industry.StorageAdded);
 
     }
@@ -136,13 +136,5 @@ public partial class UIITransformer : Control, UIContainers.IListable
         ui.Init(s);
         situations.AddChild(ui);
         situations.MoveChild(ui, index);
-    }
-
-    IEnumerable<Resource.IResource> Flatten(IEnumerable<Resource.RRequestBase> inputList)
-    {
-        foreach (Resource.RRequestBase i in inputList)
-        {
-            yield return i.Response;
-        }
     }
 }

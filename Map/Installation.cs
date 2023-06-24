@@ -14,27 +14,16 @@ public partial class Installation : EcoNode
     //Transformers contains list trade + industry
 
     // These are PRIMARY characteristics. To add or remove requires call of function.
-    public List<Resource.IResourceTransformers> Transformers { get; }
-    public List<Industry> Industries { get; }
-    public TradeRoute UplineTraderoute { get; protected set; }
-    public List<TradeRoute> DownlineTraderoutes { get; protected set; } = new();
+    public List<Resource.IResourceTransformers> Transformers { get; } = new();
+    public List<Industry> Industries { get; } = new();
+    public TradeRoute UplineTraderoute { get; set; }
+    public List<TradeRoute> DownlineTraderoutes { get; set; } = new();
     public List<string> Tags { get; set; } = new List<string> { };
 
     // These are SECONDRY characteristics. Recomputed at every EFrame.
 
     // Is this resource relevent. (used for UI)
-    List<int> resourcePresent;
-    public Dictionary<string, Dictionary<string, Resource.RGroupList<Resource.IResource>>> RPool { get; protected set; } = new();
-
-    // contains only POSITIVE deltas. evaluated during EFrameLate, and cleared in next EFrameEarly.
-    public Resource.RGroupList<Resource.IResource> RProducedLocal { get; protected set; } = new();
-    // contains only NEGATIVE deltas. evaluated during EFrameEarly, and cleared in next EFrameLate.
-    public Resource.RGroupList<Resource.IRequestable> RConsumedLocal { get; protected set; } = new();
-    public Resource.RGroupList<Resource.IResource> RProducedTrade { get; protected set; } = new();
-    public Resource.RGroupList<Resource.IRequestable> RConsumedTrade { get; protected set; } = new();
-    public Resource.RGroupList<Resource.IResource> RDeltaLocal { get; protected set; } = new();
-    public Resource.RGroupList<Resource.IResource> RDeltaTrade { get; protected set; } = new();
-    public Resource.RGroupList<Resource.IResource> RDeltaTotal { get; protected set; } = new();
+    public RGrid RPool { get; protected set; }
 
     // RProducedLocal + RConsumedLocal = RDeltaLocal
     // RProducedTrade + RConsumedTrade = RDeltaTrade
@@ -45,7 +34,7 @@ public partial class Installation : EcoNode
 
     // Used to carry through numbers to next step.
     protected Dictionary<int, double> productionBuffer = new();
-
+    protected Dictionary<int, double> consumptionBuffer = new();
     // Helper methods
     public Godot.Collections.Array<Node> Children { get { return GetChildren(true); } }
 
@@ -56,225 +45,230 @@ public partial class Installation : EcoNode
 
     public double shipWeight;
 
+    public class RVec<TType> where TType : Resource.IResource
+    {
+        public Resource.RGroupList<TType> local = new();
+        public Resource.RGroupList<TType> trade = new();
+        public Resource.RGroupList<TType> total = new();
+        public void Clear()
+        {
+            local.Clear();
+            trade.Clear();
+            total.Clear();
+        }
+        public void AddType(int type)
+        {
+            local[type] = new Resource.RGroup<TType>(type);
+            trade[type] = new Resource.RGroup<TType>(type);
+            total[type] = new Resource.RGroup<TType>(type);
+        }
+        public void Insert(TType r)
+        {
+            local.Insert(r);
+            trade.Insert(r);
+            total.Insert(r);
+        }
+    }
+
+    public class RGrid
+    {
+        public List<int> resourcePresent = new();
+        public RVec<Resource.IResource> produced = new();
+        public RVec<Resource.IRequestable> consumed = new();
+        public RVec<Resource.IResource> delta = new();
+        public void AddType(int type)
+        {
+            resourcePresent.Add(type);
+            produced.AddType(type);
+            consumed.AddType(type);
+            delta.AddType(type);
+        }
+    }
     // Convenience function. Makes children at start of scene into members.
     public override void _Ready()
     {
         base._Ready();
 
-        RPool["local"] =
-        new(){
-        { "consumed", new Resource.RGroupList<Resource.IResource>() { } },
-        { "produced", new Resource.RGroupList<Resource.IResource>() { } },
-        { "delta", new Resource.RGroupList<Resource.IResource>() { } }
-        };
-    }
-    Name = $"{Body.Name} station";
+        RPool = new RGrid();
+
+        Name = $"{Body.Name} station";
 
         if (ValidTradeReceiver)
         {
             GetNode<PlayerTradeReciever>("/root/Global/Player/Trade/Receivers").RegisterInstallation(this);
-}
-// If added in inspector. Regester Industrys.
-foreach (Industry t in Children)
-{
-    // Remove self so not trigger warning when added.
-    RemoveChild(t);
-    RegisterIndustry(t);
-}
-// Initial storage count.
-GetStorage();
-foreach (KeyValuePair<int, double> kvp in StartingResources)
-{
-    RStorage[kvp.Key].Deposit(kvp.Value);
-}
+        }
+        // If added in inspector. Regester Industrys.
+        foreach (Industry t in Children)
+        {
+            // Remove self so not trigger warning when added.
+            RemoveChild(t);
+            RegisterIndustry(t);
+        }
+        // Initial storage count.
+        // GetStorage();
+        // foreach (KeyValuePair<int, double> kvp in StartingResources)
+        // {
+        //     RStorage[kvp.Key].Deposit(kvp.Value);
+        // }
     }
     public void RegisterTransformer(Resource.IResourceTransformers c)
-{
-    Transformers.Add(c);
-}
-public void DeregisterTransformer(Resource.IResourceTransformers c)
-{
-    Transformers.Remove(c);
-}
-public void RegisterIndustry(Industry i)
-{
-    AddChild(i);
-    Industries.Add(i);
-    RegisterTransformer(i);
-}
-public void DeregisterIndustry(Industry i)
-{
-    RemoveChild(i);
-    Industries.Remove(i);
-    DeregisterTransformer(i);
-}
-public void RegisterUpline(TradeRoute i)
-{
-    UplineTraderoute = i;
-    RegisterTransformer(i.IndustryDestintation);
-}
-public void DeregisterUpline(TradeRoute i, bool upline = false)
-{
-    UplineTraderoute = null;
-    DeregisterTransformer(i.IndustryDestintation);
-}
-public void RegisterDownline(TradeRoute i)
-{
-    DownlineTraderoutes.Add(i);
-    RegisterTransformer(i.IndustrySource);
-}
-public void DeregisterDownline(TradeRoute i)
-{
-    DownlineTraderoutes.Remove(i);
-    DeregisterTransformer(i.IndustrySource);
-}
-
-// this is so messy, i hate it. aaaaaaaaaaah
-public override void EFrame()
-{
-
-    // contains only NEGATIVE deltas. evaluated during EFrameEarly, and cleared in next EFrameLate.
-    // Contains sum of deltas, used by UI elements.
-    //resourceDelta = new();
-
-    // NET amount of resource in storage.
-
-    RDeltaTotal.Clear();
-    RDeltaLocal.Clear();
-    RDeltaTrade.Clear();
-
-    RConsumedTrade.Clear();
-    RConsumedLocal.Clear();
-
-    productionBuffer.Clear();
-
-    foreach (Resource.RBase r in RConsumedLocal)
     {
-        resourceBuffer[r.Type] = r.Sum;
+        Transformers.Add(c);
+    }
+    public void DeregisterTransformer(Resource.IResourceTransformers c)
+    {
+        Transformers.Remove(c);
+    }
+    public void RegisterIndustry(Industry i)
+    {
+        AddChild(i);
+        Industries.Add(i);
+        RegisterTransformer(i);
+    }
+    public void DeregisterIndustry(Industry i)
+    {
+        RemoveChild(i);
+        Industries.Remove(i);
+        DeregisterTransformer(i);
+    }
+    public void RegisterUpline(TradeRoute i)
+    {
+        UplineTraderoute = i;
+        RegisterTransformer(i.TransformerTail);
+    }
+    public void DeregisterUpline(TradeRoute i, bool upline = false)
+    {
+        UplineTraderoute = null;
+        DeregisterTransformer(i.TransformerHead);
+    }
+    public void RegisterDownline(TradeRoute i)
+    {
+        DownlineTraderoutes.Add(i);
+        RegisterTransformer(i.TransformerHead);
+    }
+    public void DeregisterDownline(TradeRoute i)
+    {
+        DownlineTraderoutes.Remove(i);
+        DeregisterTransformer(i.TransformerHead);
     }
 
-    RProducedLocal.Clear();
-
-    GetStorage();
-
-    GetProducers();
-
-    GetConsumers();
-}
-
-// void GetStorage()
-// {
-//     foreach (Industry industry in Industries)
-//     {
-//         if (industry.stored == null) { continue; }
-//         foreach (Resource.RStatic output in industry.stored)
-//         {
-//             resourceStorage[output.Type].Add(output);
-//         }
-//     }
-// }
-
-// A resource is not tracked until it is used.
-void AddType(int type)
-{
-    resourcePresent.Add(type);
-    RProducedLocal[type] = new Resource.RGroup<Resource.IResource>(type);
-    RConsumedLocal[type] = new Resource.RGroup<Resource.IRequestable>(type);
-    RDeltaLocal[type] = new Resource.RGroup<Resource.IResource>(type);
-    RProducedTrade[type] = new Resource.RGroup<Resource.IResource>(type);
-    RConsumedTrade[type] = new Resource.RGroup<Resource.IRequestable>(type);
-    RDeltaTrade[type] = new Resource.RGroup<Resource.IResource>(type);
-    RDeltaTotal[type] = new Resource.RGroup<Resource.IResource>(type);
-}
-
-void GetProducers()
-{
-    foreach (Resource.IResourceTransformers rp in Transformers)
+    // this is so messy, i hate it. aaaaaaaaaaah
+    public override void EFrame()
     {
-        foreach (Resource.IResource output in rp.Production)
+
+
+        productionBuffer.Clear();
+
+        foreach (Resource.IResource r in RPool.produced.total)
         {
-            if (!resourcePresent.Contains(output.Type))
-            {
-                AddType(output.Type);
-            }
-            RProducedLocal.Insert(output);
-            RDeltaLocal.Insert(output);
-            RDeltaTotal.Insert(output);
+            productionBuffer[r.Type] = r.Sum;
         }
+
+        RPool.delta.Clear();
+        RPool.consumed.Clear();
+        RPool.produced.Clear();
+
+        // GetStorage();
+
+        GetProducers();
+        GetConsumers();
     }
-}
 
-void GetConsumers()
-{
-    // Running total, first step.
-    Dictionary<int, double> consumptionBuffer = new();
+    // void GetStorage()
+    // {
+    //     foreach (Industry industry in Industries)
+    //     {
+    //         if (industry.stored == null) { continue; }
+    //         foreach (Resource.RStatic output in industry.stored)
+    //         {
+    //             resourceStorage[output.Type].Add(output);
+    //         }
+    //     }
+    // }
 
-    foreach (Resource.IResourceTransformers rc in Transformers)
+    // A resource is not tracked until it is used.
+
+
+    void GetProducers()
     {
-        foreach (Resource.IRequestable input in rc.Consumption)
+        foreach (Resource.IResourceTransformers rp in Transformers)
         {
-            if (!resourcePresent.Contains(input.Type))
+            foreach (Resource.IResource output in rp.Production)
             {
-                AddType(input.Type);
-                consumptionBuffer[input.Type] = 0;
+                RPool.produced.trade.Insert(output);
+                RPool.produced.total.Insert(output);
+                RPool.delta.trade.Insert(output);
+                RPool.delta.total.Insert(output);
             }
-            RConsumedLocal.Insert(input);
-            RDeltaLocal.Insert(input);
-            RDeltaTotal.Insert(r: input);
-            consumptionBuffer[input.Type] -= input.SumRequest;
         }
     }
 
-    foreach (int i in resourcePresent)
+    void GetConsumers()
     {
-        double deficit = productionBuffer[i] - consumptionBuffer[i];
+        // Running total, first step.
+        consumptionBuffer = new();
+
+        foreach (Resource.IResourceTransformers rp in Transformers)
+        {
+            foreach (Resource.IRequestable input in rp.Consumption)
+            {
+                RPool.consumed.trade.Insert(input);
+                RPool.consumed.total.Insert(input);
+                RPool.delta.trade.Insert(input);
+                RPool.delta.total.Insert(input);
+            }
+        }
+
+        foreach (Resource.RGroup<Resource.IResource> i in RPool.delta.total.Standard)
+        {
+            consumptionBuffer[i.Type] = i.Sum;
+            // double deficit = productionBuffer[i] - consumptionBuffer[i];
+        }
+
     }
-
-
     // foreach (KeyValuePair<int, double> kvp in resourceBuffer)
     // {
     //     resourceStorage[kvp.Key].Deposit(kvp.Value);
     // }
-}
-// // Amount of extra DELTA required to cover this request.
-//                 double remainderDelta = requested - resourceBuffer[type]; //+ it.Request.Sum;
 
-//                 // Amount of extra NET required to cover this request.	
-//                 // No extra required
-//                 if (remainderDelta <= 0)
-//                 {
-//                     input.Respond();
-//                     resourceBuffer[type] -= requested;
-//                 }
-//                 // Covering shortfall out of storage.
-//                 else if (storage.Stock() >= remainderDelta)
-//                 {
-//                     input.Respond();
-//                     //storage.Deposit(remainderDelta);
-//                     resourceBuffer[type] -= requested;
-//                 }
-//                 // Partial cover shortfall out of storage.
-//                 else
-//                 {
-//                     // Fullfill partial request.
-//                     input.Respond(storage.Stock());
-//                     //storage.Deposit(-storage.Stock());
-//                     resourceBuffer[type] = 0;
-//                 }
+    // // Amount of extra DELTA required to cover this request.
+    //                 double remainderDelta = requested - resourceBuffer[type]; //+ it.Request.Sum;
 
-//                 RConsumedLocal[input.Type].Add(input);
-//                 RDelta[input.Type].Add(new Resource.RStaticInvert(input.Response));
-//                 // Deduct remainder from storage.
-//                 // Emit some sort of storage message.
-public class StorageElement
-{
-    public double Capacity { get; protected set; }
-    public double Level { get; protected set; }
-    StorageElement(double _capacity, double _level)
+    //                 // Amount of extra NET required to cover this request.	
+    //                 // No extra required
+    //                 if (remainderDelta <= 0)
+    //                 {
+    //                     input.Respond();
+    //                     resourceBuffer[type] -= requested;
+    //                 }
+    //                 // Covering shortfall out of storage.
+    //                 else if (storage.Stock() >= remainderDelta)
+    //                 {
+    //                     input.Respond();
+    //                     //storage.Deposit(remainderDelta);
+    //                     resourceBuffer[type] -= requested;
+    //                 }
+    //                 // Partial cover shortfall out of storage.
+    //                 else
+    //                 {
+    //                     // Fullfill partial request.
+    //                     input.Respond(storage.Stock());
+    //                     //storage.Deposit(-storage.Stock());
+    //                     resourceBuffer[type] = 0;
+    //                 }
+
+    //                 RConsumedLocal[input.Type].Add(input);
+    //                 RDelta[input.Type].Add(new Resource.RStaticInvert(input.Response));
+    //                 // Deduct remainder from storage.
+    //                 // Emit some sort of storage message.
+    public class StorageElement
     {
-        Level = _level;
-        Capacity = _capacity;
+        public double Capacity { get; protected set; }
+        public double Level { get; protected set; }
+        public StorageElement(double _capacity, double _level)
+        {
+            Level = _level;
+            Capacity = _capacity;
+        }
     }
-}
-
 }
