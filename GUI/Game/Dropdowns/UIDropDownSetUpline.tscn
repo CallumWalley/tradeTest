@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://62aogrhossi1"]
 
-[ext_resource type="PackedScene" uid="uid://bavs2y7iv74ef" path="res://GUI/Elements/UIDropDown.tscn" id="1_bc3l5"]
+[ext_resource type="PackedScene" uid="uid://bavs2y7iv74ef" path="res://GUI/Game/Panels/UIPanelTrade.tscn" id="1_bc3l5"]
 [ext_resource type="Script" path="res://GUI/Game/Dropdowns/UIDropDownSetUpline.cs" id="2_fgq8u"]
 
 [node name="DropDown" instance=ExtResource("1_bc3l5")]

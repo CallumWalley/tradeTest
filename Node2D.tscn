@@ -1,15 +1,13 @@
-[gd_scene load_steps=12 format=3 uid="uid://bx17oyuqg3ytr"]
+[gd_scene load_steps=10 format=3 uid="uid://bx17oyuqg3ytr"]
 
 [ext_resource type="PackedScene" uid="uid://cwj52641j5qo2" path="res://Map/Body.tscn" id="1"]
-[ext_resource type="Script" path="res://Player/PlayerTradeRoutes.cs" id="2"]
-[ext_resource type="Script" path="res://Player/PlayerTradeReciever.cs" id="3"]
 [ext_resource type="Script" path="res://Camera2D.cs" id="4"]
+[ext_resource type="PackedScene" uid="uid://con3ea5txcdnn" path="res://Player/Player.tscn" id="4_7bqim"]
 [ext_resource type="Script" path="res://Global.cs" id="5"]
 [ext_resource type="PackedScene" uid="uid://bo1hgnmlheekb" path="res://Economy/TradeRoute.tscn" id="5_6dsy0"]
 [ext_resource type="PackedScene" uid="uid://d1oe4qnb04s6k" path="res://Map/Industry.tscn" id="6"]
 [ext_resource type="PackedScene" uid="uid://ciwbehe3i51ge" path="res://GUI/screen.tscn" id="6_eohnr"]
 [ext_resource type="Script" path="res://IndustryRegister.cs" id="8"]
-[ext_resource type="Script" path="res://Player/PlayerTech.cs" id="9"]
 [ext_resource type="PackedScene" uid="uid://ch66j0x6btq21" path="res://Map/Installation.tscn" id="10"]
 
 [node name="Global" type="Node"]
@@ -19,23 +17,11 @@ script = ExtResource("5")
 process_priority = -1000
 script = ExtResource("8")
 
-[node name="Player" type="Node" parent="."]
+[node name="Player" parent="." instance=ExtResource("4_7bqim")]
 
-[node name="Trade" type="Node" parent="Player"]
-script = ExtResource("3")
-
-[node name="Routes" type="Node" parent="Player/Trade"]
-script = ExtResource("2")
-
-[node name="TradeRoute" parent="Player/Trade/Routes" node_paths=PackedStringArray("Tail", "Head") instance=ExtResource("5_6dsy0")]
-Tail = NodePath("../../../../Systems/System1/Mars/Installation")
-Head = NodePath("../../../../Systems/System1/Jupyter/Installation")
-
-[node name="Receivers" type="Node" parent="Player/Trade"]
-script = ExtResource("3")
-
-[node name="Tech" type="Node" parent="Player"]
-script = ExtResource("9")
+[node name="TradeRoute" parent="Player/PlayerTradeRoutes" index="0" node_paths=PackedStringArray("Tail", "Head") instance=ExtResource("5_6dsy0")]
+Tail = NodePath("../../../Systems/System1/Mars/Installation")
+Head = NodePath("../../../Systems/System1/Jupyter/Installation")
 
 [node name="Screen" parent="." instance=ExtResource("6_eohnr")]
 
@@ -113,6 +99,7 @@ color = Color(0.513726, 0.513726, 0.513726, 1)
 anchor_mode = 0
 script = ExtResource("4")
 
+[editable path="Player"]
 [editable path="Systems/System1/Sun"]
 [editable path="Systems/System1/Mars"]
 [editable path="Systems/System1/Saturn"]

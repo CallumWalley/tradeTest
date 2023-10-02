@@ -9,8 +9,7 @@ public partial class UIWindowTrade : UIWindow
 	static readonly PackedScene prefab_Insallation = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Listables/Installation/UIInstallationSmall.tscn");
 	static readonly PackedScene prefab_TradeRoute = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Listables/TradeRoute/UITradeRouteFull.tscn");
 
-	PlayerTradeReciever playerTradeReciever;
-	PlayerTradeRoutes playerTradeRoutes;
+	Player player;
 
 	public Button toggleButton;
 
@@ -22,8 +21,7 @@ public partial class UIWindowTrade : UIWindow
 		base._Ready();
 		GetNode<Global>("/root/Global").Connect("EFrameEarly", new Callable(this, "EFrameEarly"));
 
-		playerTradeReciever = GetNode<PlayerTradeReciever>("/root/Global/Player/Trade/Receivers");
-		playerTradeRoutes = GetNode<PlayerTradeRoutes>("/root/Global/Player/Trade/Routes");
+		player = GetNode<Player>("/root/Global/Player");
 
 		tabReceivers = GetNode<VBoxContainer>("TabContainer/Shipyards");
 		tabTradeRoutes = GetNode<VBoxContainer>("TabContainer/Trade Routes");
@@ -34,8 +32,8 @@ public partial class UIWindowTrade : UIWindow
 		installationList.Vertical = true;
 		tradeRouteList.Vertical = true;
 
-		installationList.Init(playerTradeReciever.list, prefab_Insallation);
-		tradeRouteList.Init(playerTradeRoutes.GetChildren(), prefab_TradeRoute);
+		installationList.Init(player.tradeHeads, prefab_Insallation);
+		tradeRouteList.Init(player.tradeRoutes, prefab_TradeRoute);
 
 		tabReceivers.AddChild(installationList);
 		tabTradeRoutes.AddChild(tradeRouteList);

@@ -12,5 +12,4 @@ public partial class Player : Node
 		tradeHeads = GetNode<PlayerTradeHeads>("PlayerTradeHeads");
 		tradeRoutes = GetNode<PlayerTradeRoutes>("PlayerTradeRoutes");
 	}
-
 }

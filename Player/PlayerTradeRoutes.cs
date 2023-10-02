@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class PlayerTradeRoutes : Node
+public partial class PlayerTradeRoutes : Node, IEnumerable<TradeRoute>
 {
     static readonly PackedScene ps_TradeRoute = (PackedScene)GD.Load<PackedScene>("res://Map/TradeRoute.tscn");
 
@@ -29,11 +29,16 @@ public partial class PlayerTradeRoutes : Node
         tr.QueueFree();
         GD.Print("Removed trade route.");
     }
-    public IEnumerable<TradeRoute> GetChildren()
+    public IEnumerator<TradeRoute> GetEnumerator()
     {
-        foreach (TradeRoute c in base.GetChildren())
+        foreach (TradeRoute tradeRoute in GetChildren())
         {
-            yield return c;
+            yield return tradeRoute;
         }
+    }
+
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+    {
+        return this.GetEnumerator();
     }
 }
