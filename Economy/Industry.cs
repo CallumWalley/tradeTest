@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class Industry : EcoNode, Resource.IResourceTransformers
+public partial class Industry : Node, Resource.IResourceTransformers
 {
     [Export]
     public string slug;
@@ -48,9 +48,8 @@ public partial class Industry : EcoNode, Resource.IResourceTransformers
 
     public override void _Ready()
     {
-        base._Ready();
-
         // If instantiated in editor
+
         ttype ??= GetNode<IndustryRegister>("/root/Global/IndustryRegister").GetFromSlug(slug);
         Name = ttype.Name;
         Tags = ttype.Tags;

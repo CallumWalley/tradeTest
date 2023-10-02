@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3 uid="uid://cw8vm3r012wqd"]
+
+[ext_resource type="PackedScene" uid="uid://buxuawvkkpc1b" path="res://GUI/Game/Listables/Installation/UIInstallationTiny.tscn" id="2_txdf8"]
+[ext_resource type="PackedScene" uid="uid://70kwk7o2qa82" path="res://GUI/Game/Listables/UIResourceWithDetails.tscn" id="4_skee1"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ygrda"]
+font_size = 10
+
+[node name="ValidTradeRoute" type="PanelContainer"]
+offset_right = 639.0
+offset_bottom = 26.0
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 0
+alignment = 1
+
+[node name="InstallationSummary" parent="HBoxContainer" instance=ExtResource("2_txdf8")]
+layout_mode = 2
+
+[node name="Distance" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "xxx LY"
+label_settings = SubResource("LabelSettings_ygrda")
+horizontal_alignment = 3
+
+[node name="UIResource" parent="HBoxContainer" instance=ExtResource("4_skee1")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+alignment = 2

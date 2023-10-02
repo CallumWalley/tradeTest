@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://6wjkdosf0h6b"]
+
+[ext_resource type="PackedScene" uid="uid://sbn5brvrw7lr" path="res://GUI/Game/Listables/UIResource.tscn" id="1_58u5a"]
+[ext_resource type="Script" path="res://GUI/Game/Panels/UIResourceStorage.cs" id="2_jv7yj"]
+
+[node name="UIResourceStorage" instance=ExtResource("1_58u5a")]
+script = ExtResource("2_jv7yj")
+
+[node name="Value" parent="." index="2"]
+mouse_filter = 1
+
+[node name="Details" parent="." index="3"]
+tooltip_text = "TEST"
+mouse_force_pass_scroll_events = false

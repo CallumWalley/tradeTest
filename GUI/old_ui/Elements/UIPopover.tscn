@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://cxvej6yt1hxc0"]
+
+[ext_resource type="Script" path="res://GUI/Elements/UIPopover.cs" id="1"]
+
+[node name="UIPopover" type="PanelContainer"]
+top_level = true
+mouse_filter = 2
+mouse_default_cursor_shape = 2
+script = ExtResource("1")

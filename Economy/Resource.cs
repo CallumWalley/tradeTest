@@ -5,7 +5,7 @@ public partial class Resource
 {
     public Logger logger;
 
-
+    // Interface
     public interface IResource
     // Interface for displaying basic resource icon.
     {
@@ -14,6 +14,19 @@ public partial class Resource
         string Name { get; }
         double Sum { get; }
         int Count { get; }
+    }
+    public interface IRequestable : IResource
+    {
+        public int State { get; protected set; }
+        //     // 0 fulfilled.
+        //     // 1 partially fulfilled.
+        //     // 2 unfulfilled.
+        public Resource.RStatic Request { get; protected set; }
+        public double SumRequest { get; }
+        // No inputs if request fulfilled.
+        public void Respond() { }
+        // No fulfilled value returned if not fulfilled.
+        public void Respond(double value) { }
     }
 
     public partial class RStatic : IResource
@@ -50,24 +63,29 @@ public partial class Resource
         {
             return $"{Name}:{Sum}";
         }
+
     }
-    public partial class RGroup<TResource> : RStatic where TResource : IResource
+    public partial class RGroup<TResource> : IResource where TResource : IResource
     {
+        public int Type { get; }
+        public string Details { get; set; }
+        public string Name { get; set; }
         public List<TResource> Adders { get; protected set; }
         public List<TResource> Muxxers { get; protected set; }
 
         // Does not consider grandchild members.
-        public override int Count
+        public int Count
         {
             get { return (Adders.Count + Muxxers.Count); }
         }
-        public override double Sum
+        public double Sum
         {
             get { return _Sum(); }
         }
 
-        public RGroup(int _type, IEnumerable<TResource> _add, string _name = "Sum", string _details = "Sum") : base(_type)
+        public RGroup(int _type, IEnumerable<TResource> _add, string _name = "Sum", string _details = "Sum")
         {
+            Type = _type;
             Adders = (List<TResource>)_add;
             Muxxers = new List<TResource>();
             Name = _name;
@@ -90,11 +108,11 @@ public partial class Resource
         {
             return Adders[0];
         }
-        public override void Set(double newValue)
+        public void Set(double newValue)
         {
             { throw new InvalidOperationException("Set method is not valid for groups"); }
         }
-        public new void Clear()
+        public void Clear()
         {
             Adders.Clear();
             Muxxers.Clear();
@@ -124,17 +142,14 @@ public partial class Resource
             return returnString;
         }
     }
-
     public partial class RGroupRequests : RGroup<IRequestable>
     {
         // Same as in group but also sum requests.
-
         public RGroupRequests(int _type, IEnumerable<IRequestable> _add, string _name = "Sum", string _details = "Sum") : base(_type, _add, _name, _details) { }
         public RGroupRequests(int _type, IRequestable _add, string _name = "Sum", string _details = "Sum") : base(_type, _add, _name, _details) { }
         public RGroupRequests(int _type, string _name = "Sum", string _details = "Sum") : base(_type, _name, _details) { }
 
-
-        public double[] _RequestSum()
+        public double[] RequestSum()
         {
 
             double addCum = 0;
@@ -152,27 +167,6 @@ public partial class Resource
             return new double[] { addCum * multiCum, requestCum * multiCum };
         }
     }
-
-    // public partial class RStaticInvert : IResource
-    // {
-    //     // wrapper class that returns negative value of leader.
-    //     static RStatic leader;
-    //     public RStaticInvert(RStatic _leader)
-    //     {
-    //         leader = _leader;
-    //     }
-    //     public double Sum { get { return -leader.Sum; } }
-    //     public int Count { get { return leader.Count; } }
-    //     public int Type { get { return leader.Type; } }
-    //     public string Details { get { return leader.Details; } set }
-    //     public string Name { get { return leader.Name; } }
-
-    //     public new string ToString()
-    //     {
-    //         return $"{Name}:{Sum}";
-    //     }
-    // }
-    // Interface allowing object to be member of resourceOrder
     public interface IResourceTransformers
     {
         public RList<IRequestable> Consumption { get; protected set; }
@@ -225,19 +219,7 @@ public partial class Resource
     // }
     // Type of resource.
 
-    public interface IRequestable : IResource
-    {
-        public int State { get; protected set; }
-        //     // 0 fulfilled.
-        //     // 1 partially fulfilled.
-        //     // 2 unfulfilled.
-        public Resource.RStatic Request { get; protected set; }
-        public double SumRequest { get; }
-        // No inputs if request fulfilled.
-        public void Respond() { }
-        // No fulfilled value returned if not fulfilled.
-        public void Respond(double value) { }
-    }
+
     public partial class RRequestBase : RStatic, IRequestable
     {
         // This is a dummy request. Does nothing.
@@ -292,7 +274,6 @@ public partial class Resource
             multiplier.Set((value - Request.Sum) / Request.Sum);
         }
     }
-
     public partial class RGroupRequests<TResource> : RGroup<TResource> where TResource : IRequestable
     {
         public RGroupRequests(int _type, IEnumerable<TResource> _add, string _name = "Sum", string _details = "Sum") : base(_type, _add, _name, _details) { }
@@ -521,7 +502,6 @@ public partial class Resource
             {
                 this[r.Type].Add(r);
             }
-
         }
     }
 
