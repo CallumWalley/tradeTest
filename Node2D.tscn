@@ -1,12 +1,13 @@
-[gd_scene load_steps=11 format=3 uid="uid://p3c0db4ca0y6"]
+[gd_scene load_steps=12 format=3 uid="uid://bx17oyuqg3ytr"]
 
 [ext_resource type="PackedScene" uid="uid://cwj52641j5qo2" path="res://Map/Body.tscn" id="1"]
 [ext_resource type="Script" path="res://Player/PlayerTradeRoutes.cs" id="2"]
 [ext_resource type="Script" path="res://Player/PlayerTradeReciever.cs" id="3"]
 [ext_resource type="Script" path="res://Camera2D.cs" id="4"]
 [ext_resource type="Script" path="res://Global.cs" id="5"]
+[ext_resource type="PackedScene" uid="uid://bo1hgnmlheekb" path="res://Economy/TradeRoute.tscn" id="5_6dsy0"]
 [ext_resource type="PackedScene" uid="uid://d1oe4qnb04s6k" path="res://Map/Industry.tscn" id="6"]
-[ext_resource type="Script" path="res://TimeControl.cs" id="7"]
+[ext_resource type="PackedScene" uid="uid://ciwbehe3i51ge" path="res://GUI/screen.tscn" id="6_eohnr"]
 [ext_resource type="Script" path="res://IndustryRegister.cs" id="8"]
 [ext_resource type="Script" path="res://Player/PlayerTech.cs" id="9"]
 [ext_resource type="PackedScene" uid="uid://ch66j0x6btq21" path="res://Map/Installation.tscn" id="10"]
@@ -26,69 +27,17 @@ script = ExtResource("3")
 [node name="Routes" type="Node" parent="Player/Trade"]
 script = ExtResource("2")
 
+[node name="TradeRoute" parent="Player/Trade/Routes" node_paths=PackedStringArray("Tail", "Head") instance=ExtResource("5_6dsy0")]
+Tail = NodePath("../../../../Systems/System1/Mars/Installation")
+Head = NodePath("../../../../Systems/System1/Jupyter/Installation")
+
 [node name="Receivers" type="Node" parent="Player/Trade"]
 script = ExtResource("3")
 
 [node name="Tech" type="Node" parent="Player"]
 script = ExtResource("9")
 
-[node name="UI" type="CanvasLayer" parent="."]
-
-[node name="TopRight" type="Panel" parent="UI"]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -339.0
-offset_bottom = 159.0
-grow_horizontal = 0
-
-[node name="TimeControl" type="VBoxContainer" parent="UI/TopRight"]
-layout_mode = 0
-offset_right = 1152.0
-offset_bottom = 648.0
-script = ExtResource("7")
-
-[node name="Count" type="VBoxContainer" parent="UI/TopRight/TimeControl"]
-custom_minimum_size = Vector2(100, 20)
-layout_mode = 2
-
-[node name="eframePeriod" type="Label" parent="UI/TopRight/TimeControl/Count"]
-layout_mode = 2
-text = "safafaaaaaaaaaa"
-
-[node name="eframes" type="Label" parent="UI/TopRight/TimeControl/Count"]
-layout_mode = 2
-text = "safafaaaaaaaaaa"
-
-[node name="frames" type="Label" parent="UI/TopRight/TimeControl/Count"]
-layout_mode = 2
-text = "safffffff"
-
-[node name="walltime" type="Label" parent="UI/TopRight/TimeControl/Count"]
-layout_mode = 2
-text = "asfffffffffffffffffffffff"
-
-[node name="Control" type="HBoxContainer" parent="UI/TopRight/TimeControl"]
-layout_mode = 2
-
-[node name="Speed" type="Label" parent="UI/TopRight/TimeControl/Control"]
-layout_mode = 2
-
-[node name="HSlider" type="HSlider" parent="UI/TopRight/TimeControl/Control"]
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
-min_value = 1.0
-max_value = 10.0
-value = 5.0
-tick_count = 10
-
-[node name="Pause" type="CheckButton" parent="UI/TopRight/TimeControl/Control"]
-layout_mode = 2
-text = "Pause"
-
-[node name="AdvanceOne" type="Button" parent="UI/TopRight/TimeControl/Control"]
-layout_mode = 2
-text = ">"
+[node name="Screen" parent="." instance=ExtResource("6_eohnr")]
 
 [node name="Systems" type="Node" parent="."]
 
@@ -123,6 +72,7 @@ nPoints = 16
 color = Color(0.278431, 0.364706, 0.913725, 1)
 
 [node name="Installation" parent="Systems/System1/Earth" instance=ExtResource("10")]
+ValidTradeReceiver = true
 
 [node name="Freighter Dockyard" parent="Systems/System1/Earth/Installation" instance=ExtResource("6")]
 slug = "f_dockyard"
@@ -137,8 +87,9 @@ radius = 20.0
 color = Color(0.678431, 0.380392, 0.184314, 1)
 
 [node name="Installation" parent="Systems/System1/Jupyter" instance=ExtResource("10")]
+ValidTradeReceiver = true
 StartingResources = {
-4: 200.0
+4: 400.0
 }
 
 [node name="Chemical Fuel Plant" parent="Systems/System1/Jupyter/Installation" instance=ExtResource("6")]
@@ -161,9 +112,6 @@ color = Color(0.513726, 0.513726, 0.513726, 1)
 [node name="Camera2D" type="Camera2D" parent="Systems/System1"]
 anchor_mode = 0
 script = ExtResource("4")
-
-[connection signal="value_changed" from="UI/TopRight/TimeControl/Control/HSlider" to="." method="_time_slider_value_changed"]
-[connection signal="toggled" from="UI/TopRight/TimeControl/Control/Pause" to="." method="PauseToggled"]
 
 [editable path="Systems/System1/Sun"]
 [editable path="Systems/System1/Mars"]

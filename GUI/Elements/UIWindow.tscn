@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://hayfw1l6yk1x"]
+
+[ext_resource type="Script" path="res://GUI/Elements/UIWindow.cs" id="1_t8qrw"]
+
+[node name="Window" type="Window"]
+script = ExtResource("1_t8qrw")

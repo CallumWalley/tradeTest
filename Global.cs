@@ -5,7 +5,7 @@ public partial class Global : Node
 {
 
     [Signal]
-    public delegate void EFrameEventHandler();
+    public delegate void EFrameEarlyEventHandler();
 
     bool paused = false;
 
@@ -42,8 +42,7 @@ public partial class Global : Node
     }
     public void Eframe()
     {
-        EmitSignal(SignalName.EFrame);
-        //EmitSignal("EFrame");
+        EmitSignal(SignalName.EFrameEarly);
     }
     public void _time_slider_value_changed(double value)
     {

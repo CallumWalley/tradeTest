@@ -1,0 +1,82 @@
+[gd_scene load_steps=5 format=3 uid="uid://b2ald11lrjjui"]
+
+[ext_resource type="Theme" uid="uid://b1bxyq2lrfdqf" path="res://base_theme.tres" id="1_ox12g"]
+[ext_resource type="PackedScene" uid="uid://cqr0hghxxwc2r" path="res://GUI/old_ui/Elements/UIDragIndicator.tscn" id="4_olpyq"]
+[ext_resource type="PackedScene" uid="uid://c555jlpytxxpv" path="res://GUI/old_ui/Elements/Button/UIIncriment.tscn" id="5_pamn8"]
+[ext_resource type="PackedScene" uid="uid://bkkqvb27camyn" path="res://GUI/old_ui/Elements/Button/UICancel.tscn" id="6_w8vsf"]
+
+[node name="Industry" type="PanelContainer"]
+offset_right = 339.0
+offset_bottom = 44.0
+size_flags_horizontal = 7
+size_flags_vertical = 7
+theme = ExtResource("1_ox12g")
+
+[node name="Accordian@Container@VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Accordian@Button@SummaryContent" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Accordian@Button@AlignRight" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 2
+
+[node name="Accordian@Button@SummaryContent@Summary" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 1
+text = "TransformerName"
+
+[node name="Accordian@Button@AlignRight@VSeparator" type="VSeparator" parent="."]
+modulate = Color(0.482353, 0.482353, 0.482353, 1)
+layout_mode = 2
+
+[node name="Accordian@Button@AlignRight@Drag" parent="." instance=ExtResource("4_olpyq")]
+visible = false
+modulate = Color(0.509804, 0.509804, 0.509804, 1)
+layout_mode = 2
+
+[node name="Accordian@Button@AlignRight@Incriment" parent="." instance=ExtResource("5_pamn8")]
+layout_mode = 2
+
+[node name="Accordian@Button@AlignRight@VSeparator2" type="VSeparator" parent="."]
+modulate = Color(0.482353, 0.482353, 0.482353, 1)
+layout_mode = 2
+
+[node name="Accordian@Button@AlignRight@Cancel" parent="." instance=ExtResource("6_w8vsf")]
+visible = false
+layout_mode = 2
+
+[node name="Accordian@Container@VBoxContainer@Description" type="Label" parent="."]
+layout_mode = 2
+text = "Description"
+
+[node name="Accordian@Container@VBoxContainer@HSplitContainer" type="HSplitContainer" parent="."]
+layout_mode = 2
+
+[node name="Accordian@Container@VBoxContainer@HSplitContainer@Left" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Accordian@Container@VBoxContainer@HSplitContainer@Left@HSeparator" type="HSeparator" parent="."]
+layout_mode = 2
+
+[node name="Accordian@Container@VBoxContainer@HSplitContainer@TabContainer" type="TabContainer" parent="."]
+layout_mode = 2
+
+[node name="Accordian@Container@VBoxContainer@HSplitContainer@TabContainer@Situation" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Accordian@Container@VBoxContainer@HSplitContainer@TabContainer@Situation@NoSituation" type="Label" parent="."]
+visible = false
+layout_mode = 2
+text = "Situation Nominal"
+
+[node name="Accordian@Container@VBoxContainer@HSplitContainer@TabContainer@Situation@VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2

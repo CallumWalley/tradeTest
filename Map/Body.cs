@@ -11,10 +11,10 @@ public partial class Body : Node2D
     [Export]
     public Color color = new Color(1, 0, 0);
 
-    public UIBodyCard uiBody;
+    public UIWindowBody uiBody;
 
     public IEnumerable<Installation> Installations { get { return GetInstallations(); } }
-    static readonly PackedScene p_uiBody = (PackedScene)GD.Load<PackedScene>("res://GUI/Cards/UIBodyCard.tscn");
+    static readonly PackedScene p_uiBody = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Windows/UIWindowBody.tscn");
 
     bool focus = false;
 
@@ -74,7 +74,7 @@ public partial class Body : Node2D
             {
                 if (uiBody == null)
                 {
-                    uiBody = p_uiBody.Instantiate<UIBodyCard>();
+                    uiBody = p_uiBody.Instantiate<UIWindowBody>();
                     uiBody.Init(this);
                     AddChild(uiBody);
                 }

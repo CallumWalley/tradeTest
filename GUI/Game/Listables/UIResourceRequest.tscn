@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://dbdcokcj5xasm"]
+
+[ext_resource type="PackedScene" uid="uid://sbn5brvrw7lr" path="res://GUI/Game/Listables/UIResource.tscn" id="1_7mjkk"]
+[ext_resource type="Script" path="res://GUI/Game/Listables/UIResourceRequest.cs" id="1_bjmj1"]
+
+[node name="UIResource" instance=ExtResource("1_7mjkk")]
+script = ExtResource("1_bjmj1")

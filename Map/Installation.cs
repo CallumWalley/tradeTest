@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class Installation : EcoNode
+public partial class Installation : Node
 {
 
     [Export]
@@ -23,14 +23,13 @@ public partial class Installation : EcoNode
     // These are SECONDRY characteristics. Recomputed at every EFrame.
 
     // Is this resource relevent. (used for UI)
-    public RGrid RPool { get; protected set; }
 
     // RProducedLocal + RConsumedLocal = RDeltaLocal
     // RProducedTrade + RConsumedTrade = RDeltaTrade
     // RDeltaLocal + RDeltaTrade = RDeltaTotal
 
     // NET amount of resource in storage.
-    public List<StorageElement> RStorage { get; protected set; } = new();
+    public Store Storage { get; protected set; } = new();
 
     // Used to carry through numbers to next step.
     protected Dictionary<int, double> productionBuffer = new();
@@ -45,57 +44,29 @@ public partial class Installation : EcoNode
 
     public double shipWeight;
 
-    public class RVec<TType> where TType : Resource.IResource
-    {
-        public Resource.RGroupList<TType> local = new();
-        public Resource.RGroupList<TType> trade = new();
-        public Resource.RGroupList<TType> total = new();
-        public void Clear()
-        {
-            local.Clear();
-            trade.Clear();
-            total.Clear();
-        }
-        public void AddType(int type)
-        {
-            local[type] = new Resource.RGroup<TType>(type);
-            trade[type] = new Resource.RGroup<TType>(type);
-            total[type] = new Resource.RGroup<TType>(type);
-        }
-        public void Insert(TType r)
-        {
-            local.Insert(r);
-            trade.Insert(r);
-            total.Insert(r);
-        }
-    }
 
-    public class RGrid
-    {
-        public List<int> resourcePresent = new();
-        public RVec<Resource.IResource> produced = new();
-        public RVec<Resource.IRequestable> consumed = new();
-        public RVec<Resource.IResource> delta = new();
-        public void AddType(int type)
-        {
-            resourcePresent.Add(type);
-            produced.AddType(type);
-            consumed.AddType(type);
-            delta.AddType(type);
-        }
-    }
+    public List<int> resourcePresent = new();
+    public Dictionary<int, double> resourceBuffer = new();
+    public List<Resource.IResource> produced = new();
+    public List<Resource.IRequestable> consumed = new();
+    public List<Resource.IResource> delta = new();
+
+    // public void AddType(int type)
+    // {
+    //     resourcePresent.Add(type);
+    //     delta.AddType(type);
+    // }
     // Convenience function. Makes children at start of scene into members.
     public override void _Ready()
     {
         base._Ready();
-
-        RPool = new RGrid();
+        GetNode<Global>("/root/Global").Connect("EFrameEarly", new Callable(this, "EFrameEarly"));
 
         Name = $"{Body.Name} station";
 
         if (ValidTradeReceiver)
         {
-            GetNode<PlayerTradeReciever>("/root/Global/Player/Trade/Receivers").RegisterInstallation(this);
+            GetNode<Player>("/root/Global/Player").tradeHeads.RegisterInstallation(this);
         }
         // If added in inspector. Regester Industrys.
         foreach (Industry t in Children)
@@ -106,10 +77,10 @@ public partial class Installation : EcoNode
         }
         // Initial storage count.
         // GetStorage();
-        // foreach (KeyValuePair<int, double> kvp in StartingResources)
-        // {
-        //     RStorage[kvp.Key].Deposit(kvp.Value);
-        // }
+        foreach (KeyValuePair<int, double> kvp in StartingResources)
+        {
+            Storage.Add(kvp.Key, kvp.Value);
+        }
     }
     public void RegisterTransformer(Resource.IResourceTransformers c)
     {
@@ -134,44 +105,53 @@ public partial class Installation : EcoNode
     public void RegisterUpline(TradeRoute i)
     {
         UplineTraderoute = i;
-        RegisterTransformer(i.TransformerTail);
+        //RegisterTransformer(i.TransformerTail);
     }
     public void DeregisterUpline(TradeRoute i, bool upline = false)
     {
         UplineTraderoute = null;
-        DeregisterTransformer(i.TransformerHead);
+        //DeregisterTransformer(i.TransformerHead);
     }
     public void RegisterDownline(TradeRoute i)
     {
         DownlineTraderoutes.Add(i);
-        RegisterTransformer(i.TransformerHead);
+        GD.Print("Downline registered");
+        //RegisterTransformer(i.TransformerHead);
     }
     public void DeregisterDownline(TradeRoute i)
     {
         DownlineTraderoutes.Remove(i);
-        DeregisterTransformer(i.TransformerHead);
+        //DeregisterTransformer(i.TransformerHead);
     }
 
     // this is so messy, i hate it. aaaaaaaaaaah
-    public override void EFrame()
+    public void EFrameEarly()
     {
+        // Add result of last step to storage.
+        foreach (KeyValuePair<int, double> kvp in resourceBuffer)
+        {
+            Storage.Add(kvp.Key, kvp.Value);
+            resourceBuffer.Remove(kvp.Key);
+        }
 
-
-        productionBuffer.Clear();
-
-        foreach (Resource.IResource r in RPool.produced.total)
+        foreach (Resource.IResource r in produced)
         {
             productionBuffer[r.Type] = r.Sum;
         }
 
-        RPool.delta.Clear();
-        RPool.consumed.Clear();
-        RPool.produced.Clear();
-
-        // GetStorage();
+        delta.Clear();
+        consumed.Clear();
+        produced.Clear();
 
         GetProducers();
         GetConsumers();
+        foreach (Resource.IResource r in delta)
+        {
+            if (r.Type < 500)
+            {
+                resourceBuffer.Add(r.Type, r.Sum);
+            }
+        }
     }
 
     // void GetStorage()
@@ -187,43 +167,35 @@ public partial class Installation : EcoNode
     // }
 
     // A resource is not tracked until it is used.
-
-
     void GetProducers()
     {
         foreach (Resource.IResourceTransformers rp in Transformers)
         {
             foreach (Resource.IResource output in rp.Production)
             {
-                RPool.produced.trade.Insert(output);
-                RPool.produced.total.Insert(output);
-                RPool.delta.trade.Insert(output);
-                RPool.delta.total.Insert(output);
+                produced.Add(output);
+                delta.Add(output);
             }
         }
     }
 
     void GetConsumers()
     {
-        // Running total, first step.
-        consumptionBuffer = new();
 
         foreach (Resource.IResourceTransformers rp in Transformers)
         {
             foreach (Resource.IRequestable input in rp.Consumption)
             {
-                RPool.consumed.trade.Insert(input);
-                RPool.consumed.total.Insert(input);
-                RPool.delta.trade.Insert(input);
-                RPool.delta.total.Insert(input);
+                consumed.Add(input);
+                delta.Add(input);
             }
         }
 
-        foreach (Resource.RGroup<Resource.IResource> i in RPool.delta.total.Standard)
-        {
-            consumptionBuffer[i.Type] = i.Sum;
-            // double deficit = productionBuffer[i] - consumptionBuffer[i];
-        }
+        // foreach (Resource.RGroup<Resource.IResource> i in RPool.delta.total.Standard)
+        // {
+        //     consumptionBuffer[i.Type] = i.Sum;
+        //     // double deficit = productionBuffer[i] - consumptionBuffer[i];
+        // }
 
     }
     // foreach (KeyValuePair<int, double> kvp in resourceBuffer)
@@ -263,12 +235,44 @@ public partial class Installation : EcoNode
     //                 // Emit some sort of storage message.
     public class StorageElement
     {
-        public double Capacity { get; protected set; }
-        public double Level { get; protected set; }
+        public double Capacity { get; set; }
+        public double Level { get; set; }
+
+        //public int Type { get; protected set; }
         public StorageElement(double _capacity, double _level)
         {
             Level = _level;
             Capacity = _capacity;
         }
     }
+
+    public class Store : IEnumerable<KeyValuePair<int, StorageElement>>
+    {
+        Dictionary<int, StorageElement> elements = new();
+
+        public IEnumerator<KeyValuePair<int, StorageElement>> GetEnumerator()
+        {
+            foreach (KeyValuePair<int, StorageElement> element in elements)
+            {
+                yield return element;
+            }
+        }
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public void Add(int type, double sum)
+        {
+            if (elements.ContainsKey(type))
+            {
+                elements[type].Level += sum;
+            }
+            else
+            {
+                elements.Add(type, new StorageElement(1000, sum));
+            }
+        }
+    }
+
 }

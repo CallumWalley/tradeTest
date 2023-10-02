@@ -1,0 +1,23 @@
+using Godot;
+using System;
+
+public partial class UIInputType : UIResource
+{
+    // modification for inputType class (e.g, show requested and delivered)
+    public Resource.RRequestBase inputType;
+
+    public void Init(Resource.RRequestBase _inputType)
+    {
+        inputType = _inputType;
+        base.Init(inputType);
+
+    }
+
+    public override void _Draw()
+    {
+        // if (inputType != null)
+        // {
+        //     value.Text = String.Format("{0:N1}/{1:N1}", inputType.Sum, inputType.Request.Sum);
+        // }
+    }
+}

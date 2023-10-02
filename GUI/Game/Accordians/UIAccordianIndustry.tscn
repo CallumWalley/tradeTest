@@ -1,0 +1,39 @@
+[gd_scene load_steps=3 format=3 uid="uid://s8835tkwmq4q"]
+
+[ext_resource type="Theme" uid="uid://b1bxyq2lrfdqf" path="res://base_theme.tres" id="1"]
+[ext_resource type="Script" path="res://GUI/Elements/UIAccordian.cs" id="2"]
+
+[node name="Accordian" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 7
+size_flags_vertical = 7
+theme = ExtResource("1")
+script = ExtResource("2")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 2
+toggle_mode = true
+text = " "
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Button"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="Button/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "Text"
+
+[node name="Container" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="Container"]
+layout_mode = 2
+text = "more text
+"

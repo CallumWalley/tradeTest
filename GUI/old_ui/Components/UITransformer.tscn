@@ -1,0 +1,100 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="PackedScene" uid="uid://cqr0hghxxwc2r" path="res://GUI/Elements/UIDragIndicator.tscn" id="1"]
+[ext_resource type="Theme" uid="uid://b1bxyq2lrfdqf" path="res://base_theme.tres" id="1_qfx26"]
+[ext_resource type="PackedScene" uid="uid://c555jlpytxxpv" path="res://GUI/Elements/Button/UIIncriment.tscn" id="2"]
+[ext_resource type="Script" path="res://GUI/Components/UITransformer.cs" id="3"]
+[ext_resource type="PackedScene" uid="uid://bkkqvb27camyn" path="res://GUI/Elements/Button/UICancel.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://c6t0t72k1w2o4" path="res://GUI/UIAccordian.tscn" id="5"]
+
+[node name="Transformer" type="PanelContainer"]
+offset_right = 339.0
+offset_bottom = 44.0
+size_flags_horizontal = 7
+size_flags_vertical = 7
+theme = ExtResource("1_qfx26")
+script = ExtResource("3")
+
+[node name="Accordian" parent="." instance=ExtResource("5")]
+layout_mode = 2
+size_flags_stretch_ratio = 0.0
+theme = null
+
+[node name="Button" parent="Accordian" index="0"]
+custom_minimum_size = Vector2(0, 30)
+
+[node name="SummaryContent" type="HBoxContainer" parent="Accordian/Button" index="0"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 0
+anchor_right = 0.65
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Summary" type="Label" parent="Accordian/Button/SummaryContent"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 1
+text = "TransformerName"
+
+[node name="AlignRight" type="HBoxContainer" parent="Accordian/Button" index="1"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 0
+anchor_left = 0.65
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 2
+
+[node name="VSeparator" type="VSeparator" parent="Accordian/Button/AlignRight"]
+modulate = Color(0.482353, 0.482353, 0.482353, 1)
+layout_mode = 2
+
+[node name="Drag" parent="Accordian/Button/AlignRight" instance=ExtResource("1")]
+visible = false
+modulate = Color(0.509804, 0.509804, 0.509804, 1)
+layout_mode = 2
+
+[node name="Incriment" parent="Accordian/Button/AlignRight" instance=ExtResource("2")]
+layout_mode = 2
+
+[node name="VSeparator2" type="VSeparator" parent="Accordian/Button/AlignRight"]
+modulate = Color(0.482353, 0.482353, 0.482353, 1)
+layout_mode = 2
+
+[node name="Cancel" parent="Accordian/Button/AlignRight" instance=ExtResource("4")]
+visible = false
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Accordian/Container" index="0"]
+layout_mode = 2
+
+[node name="Description" type="Label" parent="Accordian/Container/VBoxContainer"]
+layout_mode = 2
+text = "Description"
+
+[node name="HSplitContainer" type="HSplitContainer" parent="Accordian/Container/VBoxContainer"]
+layout_mode = 2
+
+[node name="Left" type="VBoxContainer" parent="Accordian/Container/VBoxContainer/HSplitContainer"]
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="Accordian/Container/VBoxContainer/HSplitContainer/Left"]
+layout_mode = 2
+
+[node name="TabContainer" type="TabContainer" parent="Accordian/Container/VBoxContainer/HSplitContainer"]
+layout_mode = 2
+
+[node name="Situation" type="VBoxContainer" parent="Accordian/Container/VBoxContainer/HSplitContainer/TabContainer"]
+layout_mode = 2
+
+[node name="NoSituation" type="Label" parent="Accordian/Container/VBoxContainer/HSplitContainer/TabContainer/Situation"]
+visible = false
+layout_mode = 2
+text = "Situation Nominal"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Accordian/Container/VBoxContainer/HSplitContainer/TabContainer/Situation"]
+layout_mode = 2
+
+[editable path="Accordian"]

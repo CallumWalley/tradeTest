@@ -1,0 +1,60 @@
+[gd_scene load_steps=3 format=3 uid="uid://bavs2y7iv74ef"]
+
+[ext_resource type="Script" path="res://GUI/Elements/UIDropDown.cs" id="1_ew7po"]
+[ext_resource type="PackedScene" uid="uid://bl0j2u53o3wm6" path="res://GUI/Game/Buttons/UISettings.tscn" id="2_2ys5m"]
+
+[node name="DropDown" type="Control"]
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 40.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+size_flags_vertical = 2
+script = ExtResource("1_ew7po")
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 38.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
+layout_mode = 2
+
+[node name="Container" type="MarginContainer" parent="Panel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ContainerUnset" type="MarginContainer" parent="Panel/HBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Panel/HBoxContainer/ContainerUnset"]
+layout_mode = 2
+text = "Unset"
+horizontal_alignment = 1
+
+[node name="Settings" parent="Panel/HBoxContainer" instance=ExtResource("2_2ys5m")]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 1
+toggle_mode = true
+stretch_mode = 3
+
+[node name="Popup" type="Popup" parent="."]
+size = Vector2i(200, 100)
+
+[node name="PanelContainer" type="PanelContainer" parent="Popup"]
+custom_minimum_size = Vector2(200, 0)
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 31.0
+grow_horizontal = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Popup/PanelContainer"]
+layout_mode = 2

@@ -1,0 +1,18 @@
+[gd_scene load_steps=5 format=3 uid="uid://8nc0quh0aqm7"]
+
+[ext_resource type="Script" path="res://Player/PlayerTradeReciever.cs" id="1_1sc4i"]
+[ext_resource type="Script" path="res://Player.cs" id="1_x60mj"]
+[ext_resource type="Script" path="res://Player/PlayerTradeRoutes.cs" id="2_28bt1"]
+[ext_resource type="Script" path="res://Player/PlayerTech.cs" id="4_3oxjp"]
+
+[node name="Player" type="Node"]
+script = ExtResource("1_x60mj")
+
+[node name="PlayerTech" type="Node" parent="."]
+script = ExtResource("4_3oxjp")
+
+[node name="PlayerTradeRoutes" type="Node" parent="."]
+script = ExtResource("2_28bt1")
+
+[node name="PlayerTradeHeads" type="Node" parent="."]
+script = ExtResource("1_1sc4i")
