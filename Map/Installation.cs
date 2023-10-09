@@ -16,7 +16,7 @@ public partial class Installation : Node
     // These are PRIMARY characteristics. To add or remove requires call of function.
     public List<Resource.IResourceTransformers> Transformers { get; } = new();
     public List<Industry> Industries { get; } = new();
-    public TradeRoute UplineTraderoute { get; set; }
+    public TradeRoute UplineTraderoute { get; set; } = null;
     public List<TradeRoute> DownlineTraderoutes { get; set; } = new();
     public List<string> Tags { get; set; } = new List<string> { };
 
@@ -66,7 +66,7 @@ public partial class Installation : Node
 
         if (ValidTradeReceiver)
         {
-            GetNode<Player>("/root/Global/Player").tradeHeads.RegisterInstallation(this);
+            GetNode<Player>("/root/Global/Player").trade.Heads.Add(this);
         }
         // If added in inspector. Regester Industrys.
         foreach (Industry t in Children)

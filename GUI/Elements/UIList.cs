@@ -9,14 +9,22 @@ public partial class UIList<T> : BoxContainer
     protected PackedScene prefab;
 
     Control unset;
-    List<UIContainers.IListable<T>> uichildren = new(); // Because godot arrays are a pain.
+    List<IListable<T>> uichildren = new(); // Because godot arrays are a pain.
 
-    // public virtual void Init(IEnumerable<System.Object> _list, PackedScene _prefab)
-    // {
-    //     list = _list;
-    //     prefab = _prefab;
-    // }
-    // if prefab exists, try that. Else use class.
+    public interface IListable<I>
+    {
+        public T GameElement { get; }
+        public void Init(T @object);
+        public void _Draw();
+
+        public bool Destroy { set; }// If flag true, must destroy self.
+
+    }
+    public interface IOrderable<I> : UIList<I>.IListable<I>
+    {
+
+    }
+
     public virtual void Init(IEnumerable<T> _list, PackedScene _prefab)
     {
         list = _list;
@@ -47,7 +55,7 @@ public partial class UIList<T> : BoxContainer
 
         // }
 
-        foreach (UIContainers.IListable<T> uichild in uichildren)
+        foreach (IListable<T> uichild in uichildren)
         {
             uichild.Destroy = true;
         }
@@ -97,7 +105,7 @@ public partial class UIList<T> : BoxContainer
     // }
     protected void Update(T r)
     {
-        foreach (UIContainers.IListable<T> uir in uichildren)
+        foreach (IListable<T> uir in uichildren)
         {
             if (ReferenceEquals(uir.GameElement, r))
             {
@@ -106,7 +114,7 @@ public partial class UIList<T> : BoxContainer
             }
         }
         // If doesn't exist, add it and insert at postition.
-        UIContainers.IListable<T> newui = (UIContainers.IListable<T>)prefab.Instantiate();
+        IListable<T> newui = (IListable<T>)prefab.Instantiate();
         newui.Init(r);
         AddChild((Control)newui);
         uichildren.Add(newui);

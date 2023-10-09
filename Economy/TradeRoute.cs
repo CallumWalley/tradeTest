@@ -30,11 +30,11 @@ public partial class TradeRoute : Node
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        base._Ready();
         UpdateFreighterWeight();
         DrawLine();
         // GetNode<Global>("/root/Global").Connect("EFrameEarly", callable: new Callable(this, "EFrameEarly"));
     }
+
     // Called from TradeReciver
     public void Init()
     {
@@ -57,10 +57,10 @@ public partial class TradeRoute : Node
 
         TradeWeight.Name = Name;
     }
-    public void Init(Installation _destination, Installation _source)
+    public void Init(Installation _head, Installation _tail)
     {
-        Tail = _destination;
-        Head = _source;
+        (Head, Tail) = (_head, _tail);
+        Init();
     }
     public void DrawLine()
     {
@@ -118,7 +118,7 @@ public partial class TradeRoute : Node
 
     void UpdateFreighterWeight()
     {
-        TradeWeight.Set(TradeRoutes.GetFrieghterWeight());
+        TradeWeight.Set(newValue: TradeRoutes.GetFrieghterWeight());
     }
 
     // public class TransformerTradeRoute : Resource.IResourceTransformers

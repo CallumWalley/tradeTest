@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://chy6hnvyi7yb7"]
+
+[ext_resource type="Texture2D" path="res://assets/icons/Buttons/button_20_20_reject.dds" id="1_e8s76"]
+
+[sub_resource type="AtlasTexture" id="1"]
+atlas = ExtResource("1_e8s76")
+region = Rect2(-1, 1, 31, 28)
+
+[sub_resource type="AtlasTexture" id="2"]
+atlas = ExtResource("1_e8s76")
+region = Rect2(30, 0, 30, 30)
+
+[sub_resource type="AtlasTexture" id="3"]
+atlas = ExtResource("1_e8s76")
+region = Rect2(60, 0, 30, 30)
+
+[node name="Pause" type="TextureButton"]
+modulate = Color(1, 1, 0, 1)
+self_modulate = Color(1, 1, 0, 1)
+offset_left = 19.0
+offset_right = 50.0
+offset_bottom = 28.0
+grow_vertical = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture_normal = SubResource("1")
+texture_pressed = SubResource("2")
+texture_hover = SubResource("3")

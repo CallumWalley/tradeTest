@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://GUI/Game/Lists/Listables/UIResource.tscn" id="1_ofwue"]
+[ext_resource type="Script" path="res://GUI/Game/Lists/Listables/UIResourceRequestWithDetails.cs" id="2_6yyq7"]
+
+[node name="UIResourceRequest" instance=ExtResource("1_ofwue")]
+script = ExtResource("2_6yyq7")

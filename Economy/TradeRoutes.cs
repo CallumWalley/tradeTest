@@ -6,24 +6,7 @@ using System.Linq;
 
 public static partial class TradeRoutes
 {
-    public partial class ValidTradeHead
-    {
-        public ValidTradeHead(Installation head, Installation tail)
-        {
-            Tail = tail;
-            Head = head;
-        }
-        public Installation Tail { get; private set; }
-        public Installation Head { get; private set; }
-    }
 
-    public static IEnumerable<ValidTradeHead> GetValidTradeHeads(Player player, Installation Tail)
-    {
-        foreach (Installation head in player.tradeHeads)
-        {
-            yield return new ValidTradeHead(head, Tail);
-        }
-    }
     public static double GetFrieghterWeight()
     {
         // double shipWeightImport = 0;

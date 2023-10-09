@@ -7,7 +7,7 @@ public partial class Global : Node
     [Signal]
     public delegate void EFrameEarlyEventHandler();
 
-    bool paused = false;
+    public bool paused = false;
 
     public double timePerEframe = 1;
 
@@ -44,12 +44,11 @@ public partial class Global : Node
     {
         EmitSignal(SignalName.EFrameEarly);
     }
-    public void _time_slider_value_changed(double value)
+    public void TimeRateChanged(int value)
     {
         double[] timescale = { 30, 20, 15, 10, 8, 6, 4, 2, 1, 0.5f, 0.1f };
         double newTimePerEframe = timescale[(int)value];
         timeLeft = (timeLeft / timePerEframe) * newTimePerEframe;
         timePerEframe = newTimePerEframe;
-        //GD.Print(timePerEframe);
     }
 }

@@ -15,12 +15,12 @@ public partial class UIPanelInstallation : Control
     // static readonly PackedScene p_uiIndustry = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/Entities/UI_Industry_Full.tscn");
     // static readonly PackedScene p_uiTradeRoute = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/Entities/UITradeRouteFull.tscn");
     static readonly PackedScene p_uistorage = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Panels/UIResourceStorage.tscn");
-    // static readonly PackedScene p_resource = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Listables/UIResource.tscn");
-    static readonly PackedScene p_uirequest = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Listables/UIResourceRequestWithDetails.tscn");
+    // static readonly PackedScene p_resource = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/UIResource.tscn");
+    static readonly PackedScene p_uirequest = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/UIResourceRequestWithDetails.tscn");
     static readonly PackedScene p_uiDropDown = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/UIDropDown.tscn");
     // static readonly PackedScene p_uiTradeDestination = GD.Load<PackedScene>("res://GUI/Components/UIDropDown.tscn");
-    static readonly PackedScene prefab_TradeRoute = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Listables/TradeRoute/UITradeRouteFull.tscn");
-    static readonly PackedScene prefab_UplineSelector = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Dropdowns/UIDropDownSetUpline.tscn");
+    static readonly PackedScene prefab_TradeRoute = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/TradeRoute/UITradeRouteFull.tscn");
+    static readonly PackedScene prefab_UplineSelector = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Dropdowns/UIDropDownSetHead.tscn");
 
     public void Init(Installation _installation)
     {
@@ -39,6 +39,7 @@ public partial class UIPanelInstallation : Control
         VBoxContainer SupplyPanel()
         {
             VBoxContainer supplyPanel = new();
+            supplyPanel.SizeFlagsHorizontal = SizeFlags.ShrinkBegin;
             supplyPanel.Name = "Supply";
 
             Label titleProduced = new();
@@ -80,13 +81,15 @@ public partial class UIPanelInstallation : Control
         {
             VBoxContainer tradePanel = new();
             UIList<TradeRoute> tradeRouteList;
-            UIDropDown setUpline;
+            UIDropDownSetHead setUpline;
+            tradePanel.SizeFlagsHorizontal = SizeFlags.ShrinkBegin;
 
 
             tradePanel.Name = "Trade";
 
             tradeRouteList = new();
-            setUpline = prefab_UplineSelector.Instantiate<UIDropDownSetUpline>();
+            setUpline = prefab_UplineSelector.Instantiate<UIDropDownSetHead>();
+            setUpline.Init(installation);
 
             tradeRouteList.Init(installation.DownlineTraderoutes, prefab_TradeRoute);
             tradePanel.AddChild(setUpline);

@@ -25,7 +25,9 @@ singletons=[]
 
 [gui]
 
+theme/custom="res://base_theme.tres"
 common/drop_mouse_on_gui_input_disabled=true
+gui/theme/custom="base_theme.tres"
 
 [input]
 

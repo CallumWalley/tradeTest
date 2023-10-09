@@ -6,8 +6,8 @@ public partial class UIWindowTrade : UIWindow
 	UIList<Installation> installationList;
 	UIList<TradeRoute> tradeRouteList;
 
-	static readonly PackedScene prefab_Insallation = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Listables/Installation/UIInstallationSmall.tscn");
-	static readonly PackedScene prefab_TradeRoute = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Listables/TradeRoute/UITradeRouteFull.tscn");
+	static readonly PackedScene prefab_Insallation = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables//Installation/UIInstallationSmall.tscn");
+	static readonly PackedScene prefab_TradeRoute = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/TradeRoute/UITradeRouteFull.tscn");
 
 	Player player;
 
@@ -32,8 +32,8 @@ public partial class UIWindowTrade : UIWindow
 		installationList.Vertical = true;
 		tradeRouteList.Vertical = true;
 
-		installationList.Init(player.tradeHeads, prefab_Insallation);
-		tradeRouteList.Init(player.tradeRoutes, prefab_TradeRoute);
+		installationList.Init(player.trade.Heads, prefab_Insallation);
+		tradeRouteList.Init(player.trade.Routes, prefab_TradeRoute);
 
 		tabReceivers.AddChild(installationList);
 		tabTradeRoutes.AddChild(tradeRouteList);

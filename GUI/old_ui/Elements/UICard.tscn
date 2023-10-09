@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://11qxmxjg3o8t"]
-
-[ext_resource type="Theme" uid="uid://b1bxyq2lrfdqf" path="res://base_theme.tres" id="1"]
-
-[node name="InfoCard" type="Window"]
-theme = ExtResource("1")

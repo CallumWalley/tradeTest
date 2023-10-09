@@ -10,7 +10,6 @@ public partial class UIWindow : Window
 	}
 	protected virtual void OnCloseRequested()
 	{
-		GD.Print("Close Requested");
 		Hide();
 	}
 

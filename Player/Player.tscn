@@ -1,18 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://con3ea5txcdnn"]
+[gd_scene load_steps=4 format=3 uid="uid://con3ea5txcdnn"]
 
-[ext_resource type="Script" path="res://Player/PlayerTradeHeads.cs" id="1_1sc4i"]
 [ext_resource type="Script" path="res://Player/Player.cs" id="1_ee032"]
-[ext_resource type="Script" path="res://Player/PlayerTradeRoutes.cs" id="2_28bt1"]
+[ext_resource type="Script" path="res://Player/PlayerTrade.cs" id="3_3mavi"]
 [ext_resource type="Script" path="res://Player/PlayerTech.cs" id="4_3oxjp"]
 
 [node name="Player" type="Node"]
 script = ExtResource("1_ee032")
 
-[node name="PlayerTradeHeads" type="Node" parent="."]
-script = ExtResource("1_1sc4i")
-
 [node name="PlayerTech" type="Node" parent="."]
 script = ExtResource("4_3oxjp")
 
-[node name="PlayerTradeRoutes" type="Node" parent="."]
-script = ExtResource("2_28bt1")
+[node name="PlayerTrade" type="Node" parent="."]
+script = ExtResource("3_3mavi")

@@ -1,6 +1,6 @@
 using Godot;
 using System;
-public partial class UIAccordianIndustry : UIAccordian, UIContainers.IListable<Industry>
+public partial class UIAccordianIndustry : UIAccordian, UIList<Industry>.IListable<Industry>
 {
     // Game object this UI element follows.
     public Industry GameElement { get { return Industry; } }
@@ -77,19 +77,19 @@ public partial class UIAccordianIndustry : UIAccordian, UIContainers.IListable<I
 
     void UpdateSituations(Situations.Base s, int index)
     {
-        foreach (UISituation uis in situations.GetNode<VBoxContainer>("VBoxContainer").GetChildren())
-        {
-            if (uis.situation == s)
-            {
-                situations.MoveChild(uis, index);
-                return;
-            }
-        }
-        // If doesn't exist, add it and insert at postition.
-        UISituation ui = (UISituation)p_situation.Instantiate();
-        ui.Init(s);
-        situations.AddChild(ui);
-        situations.MoveChild(ui, index);
+        // foreach (UISituation uis in situations.GetNode<VBoxContainer>("VBoxContainer").GetChildren())
+        // {
+        //     if (uis.situation == s)
+        //     {
+        //         situations.MoveChild(uis, index);
+        //         return;
+        //     }
+        // }
+        // // If doesn't exist, add it and insert at postition.
+        // UISituation ui = (UISituation)p_situation.Instantiate();
+        // ui.Init(s);
+        // situations.AddChild(ui);
+        // situations.MoveChild(ui, index);
     }
 }
 

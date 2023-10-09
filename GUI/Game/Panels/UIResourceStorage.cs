@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class UIResourceStorage : Control, UIContainers.IListable<KeyValuePair<int, Installation.StorageElement>>
+public partial class UIResourceStorage : Control, UIList<KeyValuePair<int, Installation.StorageElement>>.IListable<KeyValuePair<int, Installation.StorageElement>>
 {
     public KeyValuePair<int, Installation.StorageElement> storage;
     public bool Destroy { get; set; } = false;
@@ -11,9 +11,8 @@ public partial class UIResourceStorage : Control, UIContainers.IListable<KeyValu
     protected Control details;
     protected Label value;
     protected Label name;
-    protected UIPopover storeDetailsPopover;
     public KeyValuePair<int, Installation.StorageElement> GameElement { get { return storage; } }
-    static readonly PackedScene p_resourceIcon = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Listables/UIResource.tscn");
+    static readonly PackedScene p_resourceIcon = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/UIResource.tscn");
 
     public void Init(KeyValuePair<int, Installation.StorageElement> _storage)
     {

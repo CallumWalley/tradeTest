@@ -1,7 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://cqr0hghxxwc2r"]
-
-[ext_resource type="Texture2D" uid="uid://bsnaayvp1neto" path="res://assets/icons/drag_indicator.svg" id="1"]
-
-[node name="Reorder" type="TextureButton"]
-texture_normal = ExtResource("1")
-stretch_mode = 3
