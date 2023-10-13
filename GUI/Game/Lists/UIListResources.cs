@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class UIResourceList : UIList<Resource.IResource>
+public partial class UIListResources : UIList<Resource.IResource>
 {
     // wrapper for UI list
     public void Init(IEnumerable<Resource.IResource> _object)

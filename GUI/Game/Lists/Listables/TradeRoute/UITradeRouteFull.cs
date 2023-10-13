@@ -12,13 +12,13 @@ public partial class UITradeRouteFull : Control, UIList<TradeRoute>.IListable<Tr
     LineEdit labelName;
     UIInstallationTiny installationHead;
     UIInstallationTiny installationTail;
-    UIResourceList resourcesHead;
-    UIResourceList resourcesTail;
+    UIListResources resourcesHead;
+    UIListResources resourcesTail;
     UIResource friegherRequirement;
     public TextureButton cancelButton;
     ScrollContainer details;
 
-    public static PlayerTrade playerTrade;
+    public static Player player;
     public Control Control { get { return this; } }
     public TradeRoute GameElement { get { return tradeRoute; } }
 
@@ -75,6 +75,10 @@ public partial class UITradeRouteFull : Control, UIList<TradeRoute>.IListable<Tr
     public override void _Ready()
     {
         base._Ready();
+
+        player = GetNode<Player>("/root/Global/Player");
+
+
         labelName = GetNode<LineEdit>("VBoxContainer/Panel/LineEdit");
         labelName.Text = tradeRoute.Name;
 
@@ -111,7 +115,7 @@ public partial class UITradeRouteFull : Control, UIList<TradeRoute>.IListable<Tr
 
     public void Remove()
     {
-        playerTrade.DeregisterTradeRoute(tradeRoute);
+        player.trade.DeregisterTradeRoute(tradeRoute);
         Control parent = GetParent<Control>();
         parent.RemoveChild(this);
         parent.QueueRedraw();

@@ -5,10 +5,13 @@
 [ext_resource type="Script" path="res://Player/PlayerTech.cs" id="4_3oxjp"]
 
 [node name="Player" type="Node"]
+process_priority = -100
 script = ExtResource("1_ee032")
 
 [node name="PlayerTech" type="Node" parent="."]
+process_priority = -99
 script = ExtResource("4_3oxjp")
 
 [node name="PlayerTrade" type="Node" parent="."]
+process_priority = -99
 script = ExtResource("3_3mavi")

@@ -4,3 +4,5 @@
 
 [node name="Installation" type="Node"]
 script = ExtResource("1")
+
+[node name="Industries" type="Node" parent="."]

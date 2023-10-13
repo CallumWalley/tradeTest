@@ -41,7 +41,7 @@ color = Color(0.415686, 0.219608, 0.219608, 1)
 
 [node name="Installation" parent="Systems/System1/Mars" instance=ExtResource("10")]
 
-[node name="Surface Mine" parent="Systems/System1/Mars/Installation" instance=ExtResource("6")]
+[node name="Surface Mine" parent="Systems/System1/Mars/Installation/Industries" index="0" instance=ExtResource("6")]
 slug = "mine_surf_old"
 
 [node name="Saturn" parent="Systems/System1" instance=ExtResource("1")]
@@ -58,12 +58,12 @@ nPoints = 16
 color = Color(0.278431, 0.364706, 0.913725, 1)
 
 [node name="Installation" parent="Systems/System1/Earth" instance=ExtResource("10")]
-ValidTradeReceiver = true
+_validTradeReceiver = true
 
-[node name="Freighter Dockyard" parent="Systems/System1/Earth/Installation" instance=ExtResource("6")]
+[node name="Freighter Dockyard" parent="Systems/System1/Earth/Installation/Industries" index="0" instance=ExtResource("6")]
 slug = "f_dockyard"
 
-[node name="Fuel Reserves" parent="Systems/System1/Earth/Installation" instance=ExtResource("6")]
+[node name="Fuel Reserves" parent="Systems/System1/Earth/Installation/Industries" index="1" instance=ExtResource("6")]
 slug = "orbit_storage_fuel"
 
 [node name="Jupyter" parent="Systems/System1" instance=ExtResource("1")]
@@ -73,18 +73,18 @@ radius = 20.0
 color = Color(0.678431, 0.380392, 0.184314, 1)
 
 [node name="Installation" parent="Systems/System1/Jupyter" instance=ExtResource("10")]
-ValidTradeReceiver = true
+_validTradeReceiver = true
 StartingResources = {
 4: 400.0
 }
 
-[node name="Chemical Fuel Plant" parent="Systems/System1/Jupyter/Installation" instance=ExtResource("6")]
+[node name="Chemical Fuel Plant" parent="Systems/System1/Jupyter/Installation/Industries" index="0" instance=ExtResource("6")]
 slug = "cfuel_water"
 
-[node name="Water Tanks" parent="Systems/System1/Jupyter/Installation" instance=ExtResource("6")]
+[node name="Water Tanks" parent="Systems/System1/Jupyter/Installation/Industries" index="1" instance=ExtResource("6")]
 slug = "orbit_storage_h20"
 
-[node name="Fuel Reserves" parent="Systems/System1/Jupyter/Installation" instance=ExtResource("6")]
+[node name="Fuel Reserves" parent="Systems/System1/Jupyter/Installation/Industries" index="2" instance=ExtResource("6")]
 slug = "orbit_storage_fuel"
 
 [node name="Moon" parent="Systems/System1" instance=ExtResource("1")]
@@ -103,7 +103,10 @@ script = ExtResource("4")
 [editable path="Screen"]
 [editable path="Systems/System1/Sun"]
 [editable path="Systems/System1/Mars"]
+[editable path="Systems/System1/Mars/Installation"]
 [editable path="Systems/System1/Saturn"]
 [editable path="Systems/System1/Earth"]
+[editable path="Systems/System1/Earth/Installation"]
 [editable path="Systems/System1/Jupyter"]
+[editable path="Systems/System1/Jupyter/Installation"]
 [editable path="Systems/System1/Moon"]

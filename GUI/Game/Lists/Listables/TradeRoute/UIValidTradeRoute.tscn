@@ -1,11 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://ce8scx58klaca"]
+[gd_scene load_steps=4 format=3 uid="uid://ce8scx58klaca"]
 
 [ext_resource type="Script" path="res://GUI/Game/Lists/Listables/TradeRoute/UIValidTradeRoute.cs" id="1_a35q7"]
 [ext_resource type="PackedScene" uid="uid://fiabywy3cj4i" path="res://GUI/Game/Lists/Listables/Installation/UIInstallationTiny.tscn" id="2_txdf8"]
 [ext_resource type="PackedScene" path="res://GUI/Game/Lists/Listables/UIResource.tscn" id="3_fkh11"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_ygrda"]
-font_size = 10
 
 [node name="ValidTradeRoute" type="Button"]
 custom_minimum_size = Vector2(50, 30)
@@ -30,8 +27,8 @@ layout_mode = 2
 
 [node name="Distance" type="Label" parent="HBoxContainer"]
 layout_mode = 2
+theme_type_variation = &"LabelContext"
 text = "xxx LY"
-label_settings = SubResource("LabelSettings_ygrda")
 horizontal_alignment = 3
 
 [node name="UIResource" parent="HBoxContainer" instance=ExtResource("3_fkh11")]

@@ -22,7 +22,13 @@ public partial class PlayerTrade : Node
 	}
 
 	// Initialise trade routes added in editor.
+
 	public override void _Ready()
+	{
+		GetNode<Global>("/root/Global").Connect("EFrameSetup", callable: new Callable(this, "EFrameSetup"));
+	}
+
+	void EFrameSetup()
 	{
 		foreach (TradeRoute t in GetChildren())
 		{
@@ -38,8 +44,8 @@ public partial class PlayerTrade : Node
 	}
 	public void DeregisterTradeRoute(TradeRoute tr)
 	{
-		tr.Head.DeregisterDownline(tr);
-		tr.Tail.DeregisterUpline(tr);
+		tr.Head.Trade.DeregisterDownline(tr);
+		tr.Tail.Trade.DeregisterUpline(tr);
 
 		RemoveChild(tr);
 		tr.QueueFree();
@@ -57,6 +63,7 @@ public partial class PlayerTrade : Node
 		public ValidTradeHead(PlayerTrade _player, Installation _head, Installation _tail)
 		{
 			(player, Head, Tail) = (_player, _head, _tail);
+			distance = Tail.GetParent<Body>().Position.DistanceTo(Head.GetParent<Body>().Position);
 		}
 		public float distance;
 		float duration;

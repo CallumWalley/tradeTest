@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://d12wkgyi7jaxd"]
+[gd_scene load_steps=3 format=3 uid="uid://d12wkgyi7jaxd"]
 
 [ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="1_glwbc"]
+[ext_resource type="Script" path="res://GUI/Elements/UIList.cs" id="2_f8rkv"]
 
 [node name="UIList" type="BoxContainer"]
 anchors_preset = 15
@@ -9,6 +10,7 @@ anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("1_glwbc")
+script = ExtResource("2_f8rkv")
 
 [node name="Label" type="Label" parent="."]
 visible = false

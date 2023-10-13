@@ -7,6 +7,16 @@ public partial class Global : Node
     [Signal]
     public delegate void EFrameEarlyEventHandler();
 
+    [Signal]
+
+    public delegate void EFrameLateEventHandler();
+
+    // Called at start of game once.
+    // Step for objects that have an init, but have been added in editor.
+    [Signal]
+
+    public delegate void EFrameSetupEventHandler();
+
     public bool paused = false;
 
     public double timePerEframe = 1;
@@ -17,6 +27,7 @@ public partial class Global : Node
     public override void _Ready()
     {
         timeLeft = timePerEframe;
+        EmitSignal(SignalName.EFrameSetup);
         Eframe();
     }
 
@@ -43,6 +54,8 @@ public partial class Global : Node
     public void Eframe()
     {
         EmitSignal(SignalName.EFrameEarly);
+        EmitSignal(SignalName.EFrameLate);
+
     }
     public void TimeRateChanged(int value)
     {

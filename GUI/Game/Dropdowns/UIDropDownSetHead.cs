@@ -45,7 +45,7 @@ public partial class UIDropDownSetHead : UIDropDown
 	public override void _Draw()
 	{
 		base._Draw();
-		if (installation.UplineTraderoute == null)
+		if (installation.Trade.UplineTraderoute == null)
 		{
 			buttonDefault.Text = "No Upline Trade Route Set";
 			buttonDefaultVisible = true;
@@ -76,10 +76,10 @@ public partial class UIDropDownSetHead : UIDropDown
 		{
 			child.QueueFree();
 		}
-		if (installation.UplineTraderoute != null)
+		if (installation.Trade.UplineTraderoute != null)
 		{
 			UITradeRouteFull uitrf = prefab_UITradeRouteFull.Instantiate<UITradeRouteFull>();
-			uitrf.Init(installation.UplineTraderoute);
+			uitrf.Init(installation.Trade.UplineTraderoute);
 			buttonContent.AddChild(uitrf);
 			// TODO make less messy.
 			uitrf.cancelButton.Connect("pressed", callable: new Callable(this, "SetButtonContent"));

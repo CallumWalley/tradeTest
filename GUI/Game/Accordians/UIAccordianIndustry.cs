@@ -46,9 +46,9 @@ public partial class UIAccordianIndustry : UIAccordian, UIList<Industry>.IListab
         container.GetNode<Label>("Label").Text = Industry.Description;
 
         // Init resource pool display. // new UIResourceList();
-        UIResourceList uiProduction = new(); //leftSide.GetNode<UIResourceList>("/Production");
+        UIListResources uiProduction = new(); //leftSide.GetNode<UIResourceList>("/Production");
         UIList<Resource.IRequestable> uiConsumption = new();//details.GetNode<UIResourceList>("VBoxContainer/HSplitContainer/Left/Consumption");
-        UIResourceList uiStorage = new(); //details.GetNode<UIResourceList>("VBoxContainer/HSplitContainer/Left/Storage");
+        UIListResources uiStorage = new(); //details.GetNode<UIResourceList>("VBoxContainer/HSplitContainer/Left/Storage");
 
         // leftSide.AddChild(uiProduction);
         // leftSide.AddChild(uiConsumption);

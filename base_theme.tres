@@ -11,4 +11,6 @@ shadow_offset = Vector2(3, 3)
 [resource]
 default_font = ExtResource("1_2e4sy")
 default_font_size = 16
+LabelContext/base_type = &"Label"
+LabelContext/font_sizes/font_size = 10
 Panel/styles/panel = SubResource("StyleBoxFlat_anr8v")

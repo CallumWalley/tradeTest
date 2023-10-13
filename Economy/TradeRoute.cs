@@ -13,12 +13,23 @@ public partial class TradeRoute : Node
     // public TransformerTradeRouteHead TransformerHead;
     // public TransformerTradeRouteTail TransformerTail;
     public Resource.RStaticList Balance;
-    private static TradeRoute tradeRoute;
+
+    public int Order
+    {
+        get
+        {
+            return Head.Order;
+        }
+    }
+    public string Network
+    {
+        get
+        {
+            return Head.Network;
+        }
+    }
     // public List<TradeInputType> consumptionSource;
     // public List<TradeInputType> consumptionDestination;
-
-
-    public Body Body { get { return GetParent<Body>(); } }
     public int Index { get { return GetIndex(); } }
 
 
@@ -35,10 +46,9 @@ public partial class TradeRoute : Node
         // GetNode<Global>("/root/Global").Connect("EFrameEarly", callable: new Callable(this, "EFrameEarly"));
     }
 
-    // Called from TradeReciver
+    // TODO: Move parts that are shared with PlayerTrade.ValidTradeHead there.
     public void Init()
     {
-        tradeRoute = this;
 
         // Balance = new Resource.RStaticList<Resource.RStatic>();
 
@@ -49,8 +59,8 @@ public partial class TradeRoute : Node
 
         //source.RegisterIndustry(IndustrySource);
         //destination.RegisterIndustry(IndustryDestintation);
-        Tail.RegisterUpline(this);
-        Head.RegisterDownline(this);
+        Tail.Trade.RegisterUpline(this);
+        Head.Trade.RegisterDownline(this);
 
         distance = Tail.GetParent<Body>().Position.DistanceTo(Head.GetParent<Body>().Position);
         Name = $"Trade route from {Head.Name} to {Tail.Name}";

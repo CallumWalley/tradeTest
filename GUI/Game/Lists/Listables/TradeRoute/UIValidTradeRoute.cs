@@ -4,12 +4,15 @@ using System;
 public partial class UIValidTradeRoute : Button // UIList.IListable<PlayerTrade.ValidTradeHead>
 {
 	public PlayerTrade.ValidTradeHead validTradeHead;
+
 	// public PlayerTrade.ValidTradeHead GameElement { get { return validTradeHead; } }
 	// public bool Destroy { get; set; }
 
 	public void Init(PlayerTrade.ValidTradeHead _validTradeHead)
 	{
 		validTradeHead = _validTradeHead;
+
+		// These should be in '_Ready' but at moment, trying to instantiate summary without target causes error.
 		GetNode<UIInstallationTiny>("HBoxContainer/InstallationSummary").Init(validTradeHead.Head);
 		GetNode<UIResource>("HBoxContainer/UIResource").Init(validTradeHead.TradeWeight);
 	}

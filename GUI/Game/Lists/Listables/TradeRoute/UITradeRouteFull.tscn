@@ -53,6 +53,7 @@ text = "->"
 
 [node name="HeadResources" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer" instance=ExtResource("3_w388m")]
 layout_mode = 2
+script = null
 
 [node name="Container" type="MarginContainer" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer"]
 layout_mode = 2
@@ -62,6 +63,7 @@ layout_mode = 2
 
 [node name="TailResources" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer" instance=ExtResource("3_w388m")]
 layout_mode = 2
+script = null
 
 [node name="Tail" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer"]
 layout_mode = 2

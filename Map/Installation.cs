@@ -6,7 +6,24 @@ public partial class Installation : Node
 {
 
     [Export]
-    public bool ValidTradeReceiver { get; protected set; } = false;
+
+    bool _validTradeReceiver = false;
+    public bool ValidTradeReceiver
+    {
+        get { return _validTradeReceiver; }
+        protected set
+        {
+            if (value)
+            {
+                player.trade.Heads.Add(this);
+            }
+            else
+            {
+                player.trade.Heads.Remove(this);
+            }
+            _validTradeReceiver = value;
+        }
+    }
 
     [Export]
     public Godot.Collections.Dictionary<int, double> StartingResources { get; set; } = new();
@@ -15,11 +32,13 @@ public partial class Installation : Node
 
     // These are PRIMARY characteristics. To add or remove requires call of function.
     public List<Resource.IResourceTransformers> Transformers { get; } = new();
-    public List<Industry> Industries { get; } = new();
-    public TradeRoute UplineTraderoute { get; set; } = null;
-    public List<TradeRoute> DownlineTraderoutes { get; set; } = new();
-    public List<string> Tags { get; set; } = new List<string> { };
+    public Node Industries;
 
+    public int Order { get; set; }
+
+    public string Network { get; set; }
+
+    public List<string> Tags { get; set; } = new List<string> { };
     // These are SECONDRY characteristics. Recomputed at every EFrame.
 
     // Is this resource relevent. (used for UI)
@@ -42,8 +61,10 @@ public partial class Installation : Node
     // BODY IS PARENT
     public Body Body { get { return GetParent<Body>(); } }
 
+    public _Trade Trade;
     public double shipWeight;
 
+    Player player;
 
     public List<int> resourcePresent = new();
     public Dictionary<int, double> resourceBuffer = new();
@@ -62,67 +83,35 @@ public partial class Installation : Node
         base._Ready();
         GetNode<Global>("/root/Global").Connect("EFrameEarly", new Callable(this, "EFrameEarly"));
 
+        player = GetNode<Player>("/root/Global/Player");
+        Industries = GetNode<Node>("Industries");
+
+
+        ValidTradeReceiver = _validTradeReceiver;
+
         Name = $"{Body.Name} station";
 
         if (ValidTradeReceiver)
         {
             GetNode<Player>("/root/Global/Player").trade.Heads.Add(this);
         }
-        // If added in inspector. Regester Industrys.
-        foreach (Industry t in Children)
-        {
-            // Remove self so not trigger warning when added.
-            RemoveChild(t);
-            RegisterIndustry(t);
-        }
+
         // Initial storage count.
         // GetStorage();
         foreach (KeyValuePair<int, double> kvp in StartingResources)
         {
             Storage.Add(kvp.Key, kvp.Value);
         }
+        Trade = new _Trade(this);
+
+        if (Trade.UplineTraderoute == null)
+        {
+            this.Order = 1;
+            this.Network = string.Format("{0} Trade Network", Name);
+        }
     }
-    public void RegisterTransformer(Resource.IResourceTransformers c)
-    {
-        Transformers.Add(c);
-    }
-    public void DeregisterTransformer(Resource.IResourceTransformers c)
-    {
-        Transformers.Remove(c);
-    }
-    public void RegisterIndustry(Industry i)
-    {
-        AddChild(i);
-        Industries.Add(i);
-        RegisterTransformer(i);
-    }
-    public void DeregisterIndustry(Industry i)
-    {
-        RemoveChild(i);
-        Industries.Remove(i);
-        DeregisterTransformer(i);
-    }
-    public void RegisterUpline(TradeRoute i)
-    {
-        UplineTraderoute = i;
-        //RegisterTransformer(i.TransformerTail);
-    }
-    public void DeregisterUpline(TradeRoute i, bool upline = false)
-    {
-        UplineTraderoute = null;
-        //DeregisterTransformer(i.TransformerHead);
-    }
-    public void RegisterDownline(TradeRoute i)
-    {
-        DownlineTraderoutes.Add(i);
-        GD.Print("Downline registered");
-        //RegisterTransformer(i.TransformerHead);
-    }
-    public void DeregisterDownline(TradeRoute i)
-    {
-        DownlineTraderoutes.Remove(i);
-        //DeregisterTransformer(i.TransformerHead);
-    }
+
+
 
     // this is so messy, i hate it. aaaaaaaaaaah
     public void EFrameEarly()
@@ -169,7 +158,7 @@ public partial class Installation : Node
     // A resource is not tracked until it is used.
     void GetProducers()
     {
-        foreach (Resource.IResourceTransformers rp in Transformers)
+        foreach (Industry rp in Industries.GetChildren())
         {
             foreach (Resource.IResource output in rp.Production)
             {
@@ -182,7 +171,7 @@ public partial class Installation : Node
     void GetConsumers()
     {
 
-        foreach (Resource.IResourceTransformers rp in Transformers)
+        foreach (Industry rp in Industries.GetChildren())
         {
             foreach (Resource.IRequestable input in rp.Consumption)
             {
@@ -275,4 +264,46 @@ public partial class Installation : Node
         }
     }
 
+
+    // Class for orgasnisng
+    public class _Trade
+    {
+        Installation installation;
+        public _Trade(Installation _installation) { installation = _installation; }
+        public TradeRoute UplineTraderoute = null;
+        public List<TradeRoute> DownlineTraderoutes = new List<TradeRoute>();
+        public void RegisterUpline(TradeRoute i)
+        {
+            UplineTraderoute = i;
+            //RegisterTransformer(i.TransformerTail);
+        }
+        public void DeregisterUpline(TradeRoute i, bool upline = false)
+        {
+            UplineTraderoute = null;
+            // 0 is not in network. 
+            installation.Order = Math.Max(DownlineTraderoutes.Count, 1);
+            //DeregisterTransformer(i.TransformerHead);
+        }
+        public void RegisterDownline(TradeRoute i)
+        {
+            DownlineTraderoutes.Add(i);
+            GD.Print("Downline registered");
+            //RegisterTransformer(i.TransformerHead);
+        }
+        public void DeregisterDownline(TradeRoute i)
+        {
+            DownlineTraderoutes.Remove(i);
+            //DeregisterTransformer(i.TransformerHead);
+        }
+    }
+
+
+    public void UpdateOrder()
+    {
+        foreach (TradeRoute tr in Trade.DownlineTraderoutes)
+        {
+            tr.Tail.Order = Order + 1;
+            tr.Tail.Network = Network;
+        }
+    }
 }

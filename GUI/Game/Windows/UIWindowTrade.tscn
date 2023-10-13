@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://GUI/Game/Windows/UIWindowTrade.cs" id="1_nlaim"]
 
-[node name="UITradeWindow" type="Window"]
+[node name="UIWindowTrade" type="Window"]
 size = Vector2i(600, 400)
 min_size = Vector2i(600, 400)
 script = ExtResource("1_nlaim")
