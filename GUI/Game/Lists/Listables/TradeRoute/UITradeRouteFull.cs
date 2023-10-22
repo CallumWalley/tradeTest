@@ -22,10 +22,7 @@ public partial class UITradeRouteFull : Control, UIList<TradeRoute>.IListable<Tr
     public Control Control { get { return this; } }
     public TradeRoute GameElement { get { return tradeRoute; } }
 
-    public virtual void Init(System.Object gameObject)
-    {
-        Init((TradeRoute)gameObject);
-    }
+
     public void Init(TradeRoute _tradeRoute)
     {
         tradeRoute = _tradeRoute;
@@ -86,6 +83,18 @@ public partial class UITradeRouteFull : Control, UIList<TradeRoute>.IListable<Tr
         installationTail = GetNode<UIInstallationTiny>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Tail/InstallationSummary");
         installationHead.Init(tradeRoute.Head);
         installationTail.Init(tradeRoute.Tail);
+
+        UIListResources headDelta = new();
+        UIListResources tailDelta = new();
+
+        headDelta.Init(tradeRoute.Head.delta);
+        tailDelta.Init(tradeRoute.Tail.delta);
+
+        headDelta.Vertical = false;
+        tailDelta.Vertical = false;
+
+        GetNode<HBoxContainer>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/HeadResources").AddChild(headDelta);
+        GetNode<HBoxContainer>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/TailResources").AddChild(tailDelta);
 
         friegherRequirement = GetNode<UIResource>("VBoxContainer/HBoxContainer/HSplitContainer/UIResource");
         friegherRequirement.Init(tradeRoute.TradeWeight, false, false, true);

@@ -19,7 +19,7 @@ public partial class UIWindowTrade : UIWindow
 	public override void _Ready()
 	{
 		base._Ready();
-		GetNode<Global>("/root/Global").Connect("EFrameEarly", new Callable(this, "EFrameEarly"));
+		GetNode<Global>("/root/Global").Connect("EFrameUI", new Callable(this, "EFrame"));
 
 		player = GetNode<Player>("/root/Global/Player");
 
@@ -45,7 +45,7 @@ public partial class UIWindowTrade : UIWindow
 		toggleButton.ButtonPressed = false;
 	}
 
-	public void EFrameEarly()
+	public void EFrame()
 	{
 
 	}

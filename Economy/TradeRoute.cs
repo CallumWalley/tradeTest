@@ -59,8 +59,10 @@ public partial class TradeRoute : Node
 
         //source.RegisterIndustry(IndustrySource);
         //destination.RegisterIndustry(IndustryDestintation);
-        Tail.Trade.RegisterUpline(this);
+
+        // Downline must be resistered first else upline doesn't know it is a trade netwrowk
         Head.Trade.RegisterDownline(this);
+        Tail.Trade.RegisterUpline(this);
 
         distance = Tail.GetParent<Body>().Position.DistanceTo(Head.GetParent<Body>().Position);
         Name = $"Trade route from {Head.Name} to {Tail.Name}";

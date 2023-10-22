@@ -34,7 +34,33 @@ public partial class Installation : Node
     public List<Resource.IResourceTransformers> Transformers { get; } = new();
     public Node Industries;
 
-    public int Order { get; set; }
+    private int _order = 0;
+    public int Order
+    {
+        get { return _order; }
+        set
+        {
+            _order = value;
+            if (value == 0)
+            {
+                this.Network = "No market";
+                return;
+            }
+            else if (value == 1)
+            {
+                NameNetwork();
+            }
+
+            // If this has downline trade routes, they need to be updated.
+            foreach (TradeRoute tradeRoute in Trade.DownlineTraderoutes)
+            {
+                tradeRoute.Tail.Order = value + 1;
+                tradeRoute.Tail.Network = Network;
+                GD.Print(string.Format("{0} has had its order set to '{1}' by '{2}'", tradeRoute.Tail.Name, Order, Name));
+
+            }
+        }
+    }
 
     public string Network { get; set; }
 
@@ -81,7 +107,9 @@ public partial class Installation : Node
     public override void _Ready()
     {
         base._Ready();
+        GetNode<Global>("/root/Global").Connect("EFrameSetup", new Callable(this, "EFrameSetup"));
         GetNode<Global>("/root/Global").Connect("EFrameEarly", new Callable(this, "EFrameEarly"));
+        GetNode<Global>("/root/Global").Connect("EFrameLate", new Callable(this, "EFrameLate"));
 
         player = GetNode<Player>("/root/Global/Player");
         Industries = GetNode<Node>("Industries");
@@ -91,11 +119,6 @@ public partial class Installation : Node
 
         Name = $"{Body.Name} station";
 
-        if (ValidTradeReceiver)
-        {
-            GetNode<Player>("/root/Global/Player").trade.Heads.Add(this);
-        }
-
         // Initial storage count.
         // GetStorage();
         foreach (KeyValuePair<int, double> kvp in StartingResources)
@@ -103,18 +126,22 @@ public partial class Installation : Node
             Storage.Add(kvp.Key, kvp.Value);
         }
         Trade = new _Trade(this);
-
-        if (Trade.UplineTraderoute == null)
-        {
-            this.Order = 1;
-            this.Network = string.Format("{0} Trade Network", Name);
-        }
     }
 
 
 
     // this is so messy, i hate it. aaaaaaaaaaah
     public void EFrameEarly()
+    {
+        if (Order > 1)
+        {
+            // Not market head.
+            return;
+        }
+        CalculateRequests();
+
+    }
+    public void EFrameLate()
     {
         // Add result of last step to storage.
         foreach (KeyValuePair<int, double> kvp in resourceBuffer)
@@ -141,6 +168,21 @@ public partial class Installation : Node
                 resourceBuffer.Add(r.Type, r.Sum);
             }
         }
+    }
+
+    public void EFrameSetup() { }
+
+    public IEnumerable<Resource.IResource> CalculateRequests()
+    {
+        GD.Print(string.Format("Calculating Requests for {0} order {1}", Order, Name));
+        foreach (TradeRoute downline in Trade.DownlineTraderoutes)
+        {
+            foreach (Resource.IResource resource in downline.Tail.CalculateRequests())
+            {
+                delta.Add(resource);
+            }
+        }
+        return delta;
     }
 
     // void GetStorage()
@@ -275,35 +317,45 @@ public partial class Installation : Node
         public void RegisterUpline(TradeRoute i)
         {
             UplineTraderoute = i;
-            //RegisterTransformer(i.TransformerTail);
+            // Order is set in setter of parent order.
         }
         public void DeregisterUpline(TradeRoute i, bool upline = false)
         {
             UplineTraderoute = null;
             // 0 is not in network. 
-            installation.Order = Math.Max(DownlineTraderoutes.Count, 1);
+            installation.Order = Math.Min(DownlineTraderoutes.Count, 1);
+
             //DeregisterTransformer(i.TransformerHead);
         }
         public void RegisterDownline(TradeRoute i)
         {
+            // If made head of trade network, set order to 1;
             DownlineTraderoutes.Add(i);
+            installation.Order = 1;
+            if (installation.Order < 2)
+            {
+
+                GD.Print(string.Format("{0} is the head of the new '{1}' network.", installation.Name, installation.Network));
+            }
+
             GD.Print("Downline registered");
-            //RegisterTransformer(i.TransformerHead);
         }
         public void DeregisterDownline(TradeRoute i)
         {
             DownlineTraderoutes.Remove(i);
-            //DeregisterTransformer(i.TransformerHead);
+            // If no longer part of a trade network, set order to 0;
+            if (installation.Order == 1 && DownlineTraderoutes.Count < 1)
+            {
+                GD.Print(string.Format("{0} is not longer part of a network, so order is set to '0'", installation.Name));
+                installation.Order = 0;
+            }
         }
     }
-
-
-    public void UpdateOrder()
+    private void NameNetwork()
+    //Gnerates name for this trade network.
     {
-        foreach (TradeRoute tr in Trade.DownlineTraderoutes)
-        {
-            tr.Tail.Order = Order + 1;
-            tr.Tail.Network = Network;
-        }
+        this.Network = Name + " Market";
     }
+
+    public override string ToString() { return Name; }
 }

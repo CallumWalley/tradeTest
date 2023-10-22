@@ -37,7 +37,8 @@ toggle_mode = true
 stretch_mode = 3
 
 [node name="Popup" type="Popup" parent="."]
-always_on_top = true
+transparent_bg = true
+size = Vector2i(100, 0)
 transparent = true
 content_scale_mode = 1
 

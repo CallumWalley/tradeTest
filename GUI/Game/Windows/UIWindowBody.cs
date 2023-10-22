@@ -35,10 +35,21 @@ public partial class UIWindowBody : UIWindow
         tabContainer.QueueRedraw();
 
     }
-    // public Installation installation;
 
-    // public UIBody uiBody;
 
+    public override void _Ready()
+    {
+        base._Ready();
+        GetNode<Global>("/root/Global").Connect("EFrameUI", callable: new Callable(this, "EFrame"));
+    }
+
+    public void EFrame()
+    {
+        foreach (Control panel in tabContainer.GetChildren())
+        {
+            panel.QueueRedraw();
+        }
+    }
 
 
     // bool focus = false;

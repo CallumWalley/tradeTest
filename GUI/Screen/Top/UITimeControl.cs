@@ -24,7 +24,7 @@ public partial class UITimeControl : Container
         labelEFramePeriod = (Label)GetNode("Count/eframePeriod");
 
         global = (Global)GetNode("/root/Global");
-        global.Connect("EFrameEarly", new Callable(this, "EFrameEarly"));
+        global.Connect("EFrameUI", new Callable(this, "EFrame"));
         GetNode<CheckButton>("Control/Pause").Connect("toggled", new Callable(global, "PauseToggled"));
         GetNode<HSlider>("Control/HSlider").Connect("value_changed", new Callable(global, "TimeRateChanged"));
 
@@ -51,7 +51,7 @@ public partial class UITimeControl : Container
 
     //{ 30, 20, 15, 10, 8, 6, 4, 2, 1, 0.5f, 0.1f }
 
-    void EFrameEarly()
+    void EFrame()
     {
         eframeCount += 1;
         PrintOrphanNodes();

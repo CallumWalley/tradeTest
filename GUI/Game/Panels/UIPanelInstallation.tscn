@@ -59,13 +59,9 @@ size_flags_horizontal = 0
 [node name="Network" type="HBoxContainer" parent="VBoxContainer/TabContainer/Trade"]
 layout_mode = 2
 
-[node name="16" type="Label" parent="VBoxContainer/TabContainer/Trade/Network"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Trade/Network"]
 layout_mode = 2
-text = "Order 1"
-
-[node name="17" type="Label" parent="VBoxContainer/TabContainer/Trade/Network"]
-layout_mode = 2
-text = "Earth station Trade Network"
+text = "No Market"
 
 [node name="DropDown" parent="VBoxContainer/TabContainer/Trade" instance=ExtResource("6_52qtd")]
 layout_mode = 2

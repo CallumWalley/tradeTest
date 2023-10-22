@@ -14,6 +14,7 @@ public partial class UIPanelInstallation : Control
     TabContainer tabContainer;
     BoxContainer supplyPanel;
     BoxContainer tradePanel;
+    Label tradePanelNetwork;
 
 
     // static readonly PackedScene p_uiIndustry = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/Entities/UI_Industry_Full.tscn");
@@ -29,7 +30,6 @@ public partial class UIPanelInstallation : Control
     public void Init(Installation _installation)
     {
         tabContainer = GetNode<VBoxContainer>("VBoxContainer").GetNode<TabContainer>("TabContainer");
-
         installation = _installation;
 
         // tabContainer.AddChild(SupplyPanel());
@@ -38,7 +38,7 @@ public partial class UIPanelInstallation : Control
 
         supplyPanel = tabContainer.GetNode<BoxContainer>("Supply");
         tradePanel = tabContainer.GetNode<BoxContainer>("Trade");
-
+        tradePanelNetwork = tradePanel.GetNode<Label>("Network/Label");
 
         UIListResources uiResourceProduced = new();
         UIList<Resource.IRequestable> uiResourceConsumed = new();
@@ -63,5 +63,22 @@ public partial class UIPanelInstallation : Control
         tradePanel.AddChild(tradeRouteList);
 
         tabContainer.QueueRedraw();
+
+    }
+
+
+
+    public override void _Draw()
+    {
+        base._Draw();
+        if (installation.Order > 0)
+        {
+            tradePanelNetwork.Text = string.Format("{0} order member of {1}", installation.Order, installation.Network);
+            //tradePanelNetwork.Visible = true;
+        }
+        else
+        {
+            //tradePanelNetwork.Visible = false;
+        }
     }
 }

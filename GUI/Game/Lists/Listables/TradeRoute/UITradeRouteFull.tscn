@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://b6r5n5gf38mqj"]
 
 [ext_resource type="Script" path="res://GUI/Game/Lists/Listables/TradeRoute/UITradeRouteFull.cs" id="1_acrdv"]
+[ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="3_1gv37"]
 [ext_resource type="PackedScene" uid="uid://fiabywy3cj4i" path="res://GUI/Game/Lists/Listables/Installation/UIInstallationTiny.tscn" id="3_cmyw0"]
-[ext_resource type="PackedScene" uid="uid://d12wkgyi7jaxd" path="res://GUI/Elements/UIList.tscn" id="3_w388m"]
 [ext_resource type="PackedScene" uid="uid://chy6hnvyi7yb7" path="res://GUI/Game/Buttons/UIButtonPause.tscn" id="4_dfy41"]
 [ext_resource type="PackedScene" path="res://GUI/Game/Lists/Listables/UIResource.tscn" id="4_htsp3"]
 
@@ -51,9 +51,11 @@ layout_mode = 2
 layout_mode = 2
 text = "->"
 
-[node name="HeadResources" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer" instance=ExtResource("3_w388m")]
+[node name="HeadResources" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer"]
 layout_mode = 2
-script = null
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("3_1gv37")
 
 [node name="Container" type="MarginContainer" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer"]
 layout_mode = 2
@@ -61,9 +63,11 @@ layout_mode = 2
 [node name="Container2" type="MarginContainer" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer"]
 layout_mode = 2
 
-[node name="TailResources" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer" instance=ExtResource("3_w388m")]
+[node name="TailResources" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer"]
 layout_mode = 2
-script = null
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("3_1gv37")
 
 [node name="Tail" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer"]
 layout_mode = 2

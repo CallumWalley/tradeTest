@@ -10,6 +10,7 @@ public partial class UIDropDownSetHead : UIDropDown
 
 	static readonly PackedScene prefab_UIValidTradeRoute = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/TradeRoute/UIValidTradeRoute.tscn");
 	static readonly PackedScene prefab_UITradeRouteFull = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/TradeRoute/UITradeRouteFull.tscn");
+	IEnumerable<PlayerTrade.ValidTradeHead> validTradeHeads;
 
 	public void Init(Installation _installation)
 	{
@@ -23,28 +24,28 @@ public partial class UIDropDownSetHead : UIDropDown
 	}
 	public override void _AboutToPopup()
 	{
-		foreach (PlayerTrade.ValidTradeHead vth in player.trade.GetValidTradeHeads(installation))
+		foreach (UIValidTradeRoute vth in popupPanelList.GetChildren())
+		{
+			vth.Free();
+		}
+		foreach (PlayerTrade.ValidTradeHead vth in validTradeHeads)
 		{
 			UIValidTradeRoute vtr = prefab_UIValidTradeRoute.Instantiate<UIValidTradeRoute>();
 			vtr.Init(vth);
 			popupPanelList.AddChild(vtr);
-			GD.Print($"Trade route from {vth.Head.Name} to {vth.Tail.Name}");
 		}
 		base._AboutToPopup();
 	}
 
 	public override void _PopupHide()
 	{
-		foreach (UIValidTradeRoute vth in popupPanelList.GetChildren())
-		{
-			vth.QueueFree();
-		}
 		base._PopupHide();
 	}
 
 	public override void _Draw()
 	{
 		base._Draw();
+		validTradeHeads = player.trade.GetValidTradeHeads(installation);
 		if (installation.Trade.UplineTraderoute == null)
 		{
 			buttonDefault.Text = "No Upline Trade Route Set";
@@ -55,7 +56,7 @@ public partial class UIDropDownSetHead : UIDropDown
 			buttonDefaultVisible = false;
 		}
 
-		if (player.trade.GetValidTradeHeads(installation).Count() < 1)
+		if (validTradeHeads.Count() < 1)
 		{
 			buttonDefault.Text = "No Upline Trade Routes Available";
 			buttonDefaultVisible = true;

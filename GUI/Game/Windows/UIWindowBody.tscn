@@ -11,7 +11,7 @@ Panel/styles/panel = SubResource("StyleBoxFlat_aoo5e")
 
 [node name="Window" type="Window"]
 position = Vector2i(50, 50)
-size = Vector2i(400, 300)
+size = Vector2i(500, 300)
 min_size = Vector2i(400, 300)
 content_scale_aspect = 1
 theme = SubResource("Theme_b56gc")

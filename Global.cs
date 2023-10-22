@@ -15,6 +15,12 @@ public partial class Global : Node
     // Step for objects that have an init, but have been added in editor.
     [Signal]
 
+    public delegate void EFrameUIEventHandler();
+
+    // Called called after late frame, for UI only.
+
+    [Signal]
+
     public delegate void EFrameSetupEventHandler();
 
     public bool paused = false;
@@ -55,6 +61,8 @@ public partial class Global : Node
     {
         EmitSignal(SignalName.EFrameEarly);
         EmitSignal(SignalName.EFrameLate);
+        EmitSignal(SignalName.EFrameUI);
+
 
     }
     public void TimeRateChanged(int value)
