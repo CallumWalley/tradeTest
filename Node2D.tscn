@@ -44,6 +44,9 @@ color = Color(0.415686, 0.219608, 0.219608, 1)
 [node name="Surface Mine" parent="Systems/System1/Mars/Installation/Industries" index="0" instance=ExtResource("6")]
 slug = "mine_surf_old"
 
+[node name="Reclaimation Facility" parent="Systems/System1/Mars/Installation/Industries" index="1" instance=ExtResource("6")]
+slug = "reclaim"
+
 [node name="Saturn" parent="Systems/System1" instance=ExtResource("1")]
 position = Vector2(656, 199)
 nPoints = 16

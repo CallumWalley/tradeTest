@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class UIResourceStorage : Control, UIList<KeyValuePair<int, Installation.StorageElement>>.IListable<KeyValuePair<int, Installation.StorageElement>>
+public partial class UIResourceStorage : Control, Lists.IListable<KeyValuePair<int, Installation.StorageElement>>
 {
     public KeyValuePair<int, Installation.StorageElement> storage;
     public bool Destroy { get; set; } = false;
@@ -27,6 +27,7 @@ public partial class UIResourceStorage : Control, UIList<KeyValuePair<int, Insta
         value = GetNode<Label>("Value");
         name = GetNode<Label>("Name");
         details = GetNode<Label>("Details");
+        TooltipText = Resource.Name(storage.Key);
     }
 
     public void Update()

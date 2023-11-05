@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://k6ouo061mlns"]
+
+[ext_resource type="Script" path="res://GUI/Game/Panels/UIPanelLedger.cs" id="1_x1yaa"]
+
+[node name="Ledger" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -710.0
+offset_bottom = -281.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_x1yaa")

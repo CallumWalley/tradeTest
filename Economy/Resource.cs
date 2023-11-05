@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 public partial class Resource
 {
     public Logger logger;
@@ -21,8 +22,8 @@ public partial class Resource
         //     // 0 fulfilled.
         //     // 1 partially fulfilled.
         //     // 2 unfulfilled.
-        public Resource.RStatic Request { get; protected set; }
-        public double SumRequest { get; }
+        public Resource.RStatic Request { get; }
+        public double RequestSum { get; }
         // No inputs if request fulfilled.
         public void Respond() { }
         // No fulfilled value returned if not fulfilled.
@@ -56,6 +57,7 @@ public partial class Resource
         }
         public static void Clear() { return; }
         public Texture2D Icon { get { return Index(Type).icon; } }
+
         // public double ShipWeight { get { return Index(type).shipWeight; } }
         public bool Storable { get { return Index(Type).storable; } }
 
@@ -70,7 +72,7 @@ public partial class Resource
         public int Type { get; }
         public string Details { get; set; }
         public string Name { get; set; }
-        public List<TResource> Adders { get; protected set; }
+        public virtual List<TResource> Adders { get; protected set; }
         public List<TResource> Muxxers { get; protected set; }
 
         // Does not consider grandchild members.
@@ -80,14 +82,25 @@ public partial class Resource
         }
         public double Sum
         {
-            get { return _Sum(); }
+            get
+            {
+                double addCum = 0;
+                foreach (IResource i in Adders)
+                {
+                    addCum += i.Sum;
+                }
+                // foreach (IResource i in Muxxers)
+                // {
+                //     multiCum += i.Sum;
+                // }
+                return addCum;
+            }
         }
 
         public RGroup(int _type, IEnumerable<TResource> _add, string _name = "Sum", string _details = "Sum")
         {
             Type = _type;
             Adders = (List<TResource>)_add;
-            Muxxers = new List<TResource>();
             Name = _name;
             Details = _details;
         }
@@ -99,11 +112,6 @@ public partial class Resource
             //throw new
             Adders.Add(ra);
         }
-        public void Multiply(TResource rm)
-        {
-            Muxxers.Add(rm);
-        }
-
         public IResource First()
         {
             return Adders[0];
@@ -115,61 +123,58 @@ public partial class Resource
         public void Clear()
         {
             Adders.Clear();
-            Muxxers.Clear();
         }
 
-        double _Sum()
-        {
-            double addCum = 0;
-            double multiCum = 1;
-            foreach (IResource i in Adders)
-            {
-                addCum += i.Sum;
-            }
-            foreach (IResource i in Muxxers)
-            {
-                multiCum += i.Sum;
-            }
-            return addCum * multiCum;
-        }
         public override string ToString()
         {
-            string returnString = "";
-            foreach (IResource r in Adders)
-            {
-                returnString += r.ToString() + ", ";
-            }
-            return returnString;
+            return $"{Name}:{Sum}";
         }
+        // public override string ToString()
+        // {
+        //     string returnString = "";
+        //     foreach (IResource r in Adders)
+        //     {
+        //         returnString += r.ToString() + ", ";
+        //     }
+        //     return returnString;
+        // }
     }
-    public partial class RGroupRequests : RGroup<IRequestable>
+    public partial class RGroupRequests : RGroup<IRequestable>, IRequestable
     {
         // Same as in group but also sum requests.
         public RGroupRequests(int _type, IEnumerable<IRequestable> _add, string _name = "Sum", string _details = "Sum") : base(_type, _add, _name, _details) { }
         public RGroupRequests(int _type, IRequestable _add, string _name = "Sum", string _details = "Sum") : base(_type, _add, _name, _details) { }
         public RGroupRequests(int _type, string _name = "Sum", string _details = "Sum") : base(_type, _name, _details) { }
 
-        public double[] RequestSum()
-        {
 
-            double addCum = 0;
-            double requestCum = 0;
-            double multiCum = 1;
-            foreach (IRequestable i in Adders)
+        public override List<IRequestable> Adders { get; protected set; }
+        public RStatic Request { get; set; }
+
+        // Request is a second
+        public double RequestSum
+        {
+            get
             {
-                addCum += i.Sum;
-                requestCum += i.Request.Sum;
+                double requestCum = 0;
+                foreach (IRequestable i in Adders)
+                {
+                    requestCum += i.Request.Sum;
+                }
+                return requestCum;
             }
-            foreach (IRequestable i in Muxxers)
-            {
-                multiCum += i.Sum;
-            }
-            return new double[] { addCum * multiCum, requestCum * multiCum };
         }
+
+        // IEnumerable<IRequestable> EnumRequests()
+        // {
+        //     foreach (IRequestable r in Adders) { yield return r.Request }
+        // }
+
+        // Request is actual amount given
+        public int State { get; set; } = -1;
     }
     public interface IResourceTransformers
     {
-        public RList<IRequestable> Consumption { get; protected set; }
+        public RList<IResource> Consumption { get; protected set; }
         public RList<IResource> Production { get; protected set; }
         public System.Object Driver { get; }
     }
@@ -219,13 +224,52 @@ public partial class Resource
     // }
     // Type of resource.
 
+    public partial class RExchange : IRequestable
+    {
+        /// <summary>
+        /// Represents a request from one ledger to another.
+        /// </summary>
+        /// <param name="_from"></param>
+        /// 
+
+        // Parameters unique to responder.
+        public string Details { get; set; }
+        public string Name { get; set; }
+
+        // Requester is 'real' request
+        public RRequestBase Requester;
+
+
+        // Look through to requester.
+
+        public int Type { get { return Requester.Type; } }
+        public double Sum { get { return -Requester.Sum; } }
+        public int Count { get; } //unused
+        public int State { get { return Requester.State; } set { Requester.State = value; } }
+        public Resource.RStatic Request { get; set; }
+        public double RequestSum { get; }
+        // No inputs if request fulfilled.
+        public void Respond()
+        {
+
+        }
+        // No fulfilled value returned if not fulfilled.
+        public void Respond(double value) { }
+
+        public RExchange(RRequestBase _from, string _name = "unset", string _details = "unset")
+        {
+            Requester = _from;
+            Name = _name;
+            Details = _details;
+        }
+    }
 
     public partial class RRequestBase : RStatic, IRequestable
     {
         // This is a dummy request. Does nothing.
         // Request is the amount of resource this consumer needs and points at another resource.
         public RStatic Request { get; set; }
-        public double SumRequest { get { return Request.Sum; } }
+        public double RequestSum { get { return Request.Sum; } }
 
         // Request is actual amount given
         public int State { get; set; } = -1;
@@ -260,7 +304,7 @@ public partial class Resource
         public RRequestLinear(Industry _industry, Resource.RStatic _request) : base(_request)
         {
             multiplier = new Resource.RStatic(Type, 0);
-            ((Resource.RGroup<IResource>)_industry.Production[Type]).Multiply(multiplier);
+            // ((Resource.RGroup<IResource>)_industry.Production[Type]).Multiply(multiplier);
             _industry.AddSituation(new Situations.OutputModifier(this, multiplier, _industry));
         }
         public override void Respond()
@@ -348,6 +392,14 @@ public partial class Resource
     public static Texture2D Icon(int resourceCode)
     {
         return _index[resourceCode].icon;
+    }
+
+    ///<summary>
+    ///Returns generic name of a resource for a specified code.
+    ///</summary>
+    public static string Name(int resourceCode)
+    {
+        return _index[resourceCode].name;
     }
     // public static double ShipWeight(int resourceCode)
     // {
@@ -467,6 +519,23 @@ public partial class Resource
 
     }
     // A list but the top level elements must be groups.
+
+    /// <summary>
+    /// Child class of resource list with that constructs resources with correct descriptions.
+    /// </summary>
+    public class TradeRouteResourceList : RStaticList
+    {
+        string name;
+        string description;
+        public TradeRouteResourceList(string _name, string _description)
+        {
+            name = _name; description = _description;
+        }
+        protected override RStatic CreateNewMember(int index)
+        {
+            return new RStatic(index, 0, string.Format(name, Name(index)), string.Format(description, Name(index)));
+        }
+    }
     public partial class RGroupList<TResource> : RList<RGroup<TResource>> where TResource : IResource
     {
         // Same as RList, except all elements are groups.
@@ -530,10 +599,186 @@ public partial class Resource
         {
             if (!members.ContainsKey(index))
             {
-                members[index] = new RStatic(index, 0);
+                members[index] = CreateNewMember(index);
             }
             return members[index];
         }
+        protected virtual RStatic CreateNewMember(int index)
+        {
+            return new RStatic(index, 0);
+        }
+    }
+
+    public class ResourceRequest : IResource
+    {
+        public Ledger ledger;
+        public IResource request;
+        public int Type { get { return request.Type; } }
+        public string Name { get; set; }
+        public string Details { get; set; }
+        public double Sum
+        {
+            get { return -request.Sum; }
+        }
+        public int Count { get; set; }
+        public ResourceRequest(Ledger _ledger, IResource _request)
+        {
+            ledger = _ledger;
+            request = _request;
+        }
+
+    }
+
+    // public class ResourceRequestGroup : IResource
+    // {
+    //     List<ResourceRequest> _resourceRequests;
+    // }
+    public class Ledger : IEnumerable<KeyValuePair<int, Ledger.Entry>>
+    {
+        /// <summary>
+        /// Ledger is the complete list of all the resources at a specific location. 
+        /// </summary>
+        public class Entry
+        {
+            /// <summary>
+            /// Represents a resource, and a place. Can be either request or resource.
+            /// </summary>
+
+
+            public Resource.RGroup<Resource.IResource> Production; // How much is produced here. 
+            public Resource.RGroup<Resource.IResource> Consumption; // How much requested to be consumed here.
+
+            public Resource.RStatic ExportSurplus; // Surplus to parent
+            public Resource.RStatic ImportDemand; // How much I request of parent.
+
+            // public Resource.RGroup<Resource.IResource> ExportSurplus;  // + paying requests to children;
+
+            public Resource.RGroup<Resource.IResource> Export; // ExportSurplus + Export to children.
+            public Resource.RGroup<Resource.IResource> Import; // Surplus from children + receiving request from parents.
+
+            // These should be linked to trade routes
+            public Resource.RGroup<ResourceRequest> ExportDemand;  // How much my children request of me.
+            // Export demand contains a reference to an Import Demand in child.
+
+            public int Type { get; set; }
+            public Entry(int _type)
+            {
+                Production = new Resource.RGroup<Resource.IResource>(_type, "Total", "Sum Produced");
+                Consumption = new Resource.RGroup<Resource.IResource>(_type, "Total", "Sum Requests");
+
+                ExportSurplus = new Resource.RStatic(_type, 0, "Total", "Surplus Beign Exported to parent");
+                ImportDemand = new Resource.RStatic(_type, 0, "Total", "Demanding this from parent");
+
+                Import = new Resource.RGroup<Resource.IResource>(_type, "Total", "Imports");
+                ExportDemand = new(_type);
+
+                Export = new Resource.RGroup<Resource.IResource>(_type, "Total", "Exports");
+                //Surplus = new Resource.RGroup<Resource.IResource>(_type, "Exports", "Total Exports");
+                Type = _type;
+            }
+
+            public void Clear()
+            {
+                Production.Clear();
+                Consumption.Clear();
+                Export.Clear();
+                ImportDemand.Set(0);
+            }
+            /// <summary>
+            /// Return flat requested and actual, for buffer.
+            /// </summary>
+            /// <returns></returns>
+            // public double Net()
+            // {
+            //     return Production.Sum + Surplus.Sum + Consumption.Sum + Demand.Sum;
+            // }
+
+            public override string ToString()
+            {
+                return $"{Resource.Name(Type)}: {Production.Sum} {Consumption.Sum} {Export.Sum} {ImportDemand.Sum}";
+            }
+        }
+        Dictionary<int, Entry> _dictionary = new();
+
+        public void Clear()
+        {
+            foreach (KeyValuePair<int, Ledger.Entry> kvp in _dictionary)
+            {
+                kvp.Value.Clear();
+            }
+        }
+
+        public Entry this[int type]
+
+        {
+            get
+            {
+                if (_dictionary.ContainsKey(type))
+                {
+                    return _dictionary[type];
+                }
+                else
+                {
+                    Entry nre = new Entry(type);
+                    _dictionary[type] = nre;
+                    return nre;
+                }
+            }
+        }
+
+        public IEnumerator<KeyValuePair<int, Entry>> GetEnumerator()
+        {
+            foreach (KeyValuePair<int, Entry> element in _dictionary)
+            {
+                yield return element;
+            }
+        }
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public IEnumerable<Entry> Values()
+        {
+            foreach (KeyValuePair<int, Ledger.Entry> kvp in _dictionary)
+            {
+                yield return kvp.Value;
+            }
+        }
+        public override string ToString()
+        {
+            return string.Join("\n", _dictionary.Select(x => x.Value.ToString()).ToArray());
+        }
+        // public void AddRequest(Resource.IRequestable r)
+        // {
+        //     this[r.Type].Consumption.Add(r);
+        // }
+        // public void AddResource(Resource.IResource r)
+        // {
+        //     this[r.Type].Production.Add(r);
+        // }
+        // public void AddSurplus(Resource.IResource r)
+        // {
+        //     this[r.Type].Surplus.Add(r);
+        // }
+        // public void AddDemand(Resource.IRequestable r)
+        // {
+        //     this[r.Type].Demand.Add(r);
+        // }
+
+        /// <summary>
+        /// Return flat 'sum' of resource difference for use in next step.
+        /// </summary>
+        /// <returns></returns>
+        // public IEnumerable<KeyValuePair<int, double[]>> GetBuffer()
+        // {
+        //     foreach (KeyValuePair<int, Entry> entry in _dictionary)
+        //     {
+        //         yield return new KeyValuePair<int, double[]>(
+        //             entry.Key, new double[] { entry.Value.Production.Sum + entry.Value.Consumption.Sum + entry.Value.Surplus.Sum + entry.Value.Demand.Sum,
+        //             entry.Value.Consumption.Sum, entry.Value.Surplus.Sum, entry.Value.Demand.Sum });
+        //     }
+        // }
     }
 }
 

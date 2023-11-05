@@ -19,37 +19,38 @@ layout_mode = 2
 [node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
 layout_mode = 2
 
-[node name="Supply" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+[node name="Supply" type="HBoxContainer" parent="VBoxContainer/TabContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="Produced" type="VBoxContainer" parent="VBoxContainer/TabContainer/Supply"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Supply"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Supply/Produced"]
+[node name="Production" type="Label" parent="VBoxContainer/TabContainer/Supply/VBoxContainer"]
 layout_mode = 2
-text = "Produced"
+text = "Production"
 
-[node name="Consumed" type="VBoxContainer" parent="VBoxContainer/TabContainer/Supply"]
+[node name="Consumption" type="Label" parent="VBoxContainer/TabContainer/Supply/VBoxContainer"]
 layout_mode = 2
+text = "Consumption"
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Supply/Consumed"]
+[node name="Import" type="Label" parent="VBoxContainer/TabContainer/Supply/VBoxContainer"]
 layout_mode = 2
-text = "Consumed"
+text = "Import"
 
-[node name="Delta" type="VBoxContainer" parent="VBoxContainer/TabContainer/Supply"]
+[node name="Export" type="Label" parent="VBoxContainer/TabContainer/Supply/VBoxContainer"]
 layout_mode = 2
+text = "Export"
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Supply/Delta"]
-layout_mode = 2
-text = "Delta"
-
-[node name="Storage" type="VBoxContainer" parent="VBoxContainer/TabContainer/Supply"]
+[node name="Label3" type="Label" parent="VBoxContainer/TabContainer/Supply/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Supply/Storage"]
+[node name="Label2" type="Label" parent="VBoxContainer/TabContainer/Supply/VBoxContainer"]
 layout_mode = 2
-text = "Stored"
+
+[node name="Storage" type="Label" parent="VBoxContainer/TabContainer/Supply/VBoxContainer"]
+layout_mode = 2
+text = "Storage"
 
 [node name="Trade" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
 visible = false

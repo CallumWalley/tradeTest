@@ -7,7 +7,7 @@ public partial class Industry : Node, Resource.IResourceTransformers
     [Export]
     public string slug;
     public Resource.RList<Resource.IResource> Production { get; set; }
-    public Resource.RList<Resource.IRequestable> Consumption { get; set; }
+    public Resource.RList<Resource.IResource> Consumption { get; set; }
     public Resource.RList<Resource.RStatic> StorageAdded { get; protected set; }
     public List<Situations.Base> Situations { get; protected set; }
 
@@ -57,7 +57,7 @@ public partial class Industry : Node, Resource.IResourceTransformers
         Prioroty = ttype.defaultPrioroty;
         Situations = new List<Situations.Base>();
 
-        Consumption = new(GetInputClassFromTemplate(ttype.Consumption));
+        Consumption = new(GetGroupFromTemplate(ttype.Consumption));
         Production = new(GetGroupFromTemplate(ttype.Production));
         StorageAdded = new Resource.RList<Resource.RStatic>(GetStaticFromTemplate(ttype.Storage));
     }
@@ -102,7 +102,7 @@ public partial class Industry : Node, Resource.IResourceTransformers
         if (template == null) { yield break; }
         foreach (KeyValuePair<int, double> kvp in template)
         {
-            yield return new Resource.RRequestBase(new Resource.RStatic(kvp.Key, kvp.Value, _details: "Base Yield"));
+            yield return new Resource.RRequestBase(new Resource.RStatic(kvp.Key, kvp.Value, $"{TypeName} Upkeep", "Base Yield"));
         }
     }
     public void AddSituation(Situations.Base s)

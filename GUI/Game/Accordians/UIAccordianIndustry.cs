@@ -1,6 +1,6 @@
 using Godot;
 using System;
-public partial class UIAccordianIndustry : UIAccordian, UIList<Industry>.IListable<Industry>
+public partial class UIAccordianIndustry : UIAccordian, Lists.IListable<Industry>
 {
     // Game object this UI element follows.
     public Industry GameElement { get { return Industry; } }
@@ -46,9 +46,9 @@ public partial class UIAccordianIndustry : UIAccordian, UIList<Industry>.IListab
         container.GetNode<Label>("Label").Text = Industry.Description;
 
         // Init resource pool display. // new UIResourceList();
-        UIListResources uiProduction = new(); //leftSide.GetNode<UIResourceList>("/Production");
-        UIList<Resource.IRequestable> uiConsumption = new();//details.GetNode<UIResourceList>("VBoxContainer/HSplitContainer/Left/Consumption");
-        UIListResources uiStorage = new(); //details.GetNode<UIResourceList>("VBoxContainer/HSplitContainer/Left/Storage");
+        Lists.UIListResources uiProduction = new(); //leftSide.GetNode<UIResourceList>("/Production");
+        Lists.UIListRequestable uiConsumption = new();//details.GetNode<UIResourceList>("VBoxContainer/HSplitContainer/Left/Consumption");
+        Lists.UIListResources uiStorage = new(); //details.GetNode<UIResourceList>("VBoxContainer/HSplitContainer/Left/Storage");
 
         // leftSide.AddChild(uiProduction);
         // leftSide.AddChild(uiConsumption);

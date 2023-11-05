@@ -1,0 +1,4 @@
+[gd_scene format=3 uid="uid://dpi7fob8xjjdi"]
+
+[node name="5" type="BoxContainer"]
+vertical = true

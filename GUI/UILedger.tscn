@@ -1,0 +1,90 @@
+[gd_scene load_steps=5 format=3 uid="uid://1u7qhworn077"]
+
+[ext_resource type="PackedScene" path="res://GUI/Game/Lists/Listables/UIResource.tscn" id="1_lq6qy"]
+[ext_resource type="Texture2D" path="res://assets/icons/resources/energy.dds" id="2_q0jus"]
+[ext_resource type="Texture2D" uid="uid://spry3x7tpnw" path="res://assets/icons/resources/h2o.png" id="3_fdy5k"]
+[ext_resource type="Texture2D" path="res://assets/icons/resources/minerals.dds" id="4_h2u05"]
+
+[node name="UILedger" type="PanelContainer"]
+offset_right = 184.0
+offset_bottom = 86.0
+
+[node name="GridContainer" type="GridContainer" parent="."]
+layout_mode = 2
+columns = 4
+
+[node name="Domestic" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Domestic: "
+
+[node name="UIResource3" parent="GridContainer" instance=ExtResource("1_lq6qy")]
+layout_mode = 2
+
+[node name="Icon" parent="GridContainer/UIResource3" index="1"]
+texture = ExtResource("2_q0jus")
+
+[node name="UIResource4" parent="GridContainer" instance=ExtResource("1_lq6qy")]
+layout_mode = 2
+
+[node name="Icon" parent="GridContainer/UIResource4" index="1"]
+texture = ExtResource("3_fdy5k")
+
+[node name="UIResource5" parent="GridContainer" instance=ExtResource("1_lq6qy")]
+layout_mode = 2
+
+[node name="Icon" parent="GridContainer/UIResource5" index="1"]
+texture = ExtResource("4_h2u05")
+
+[node name="Produced2" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Trade:"
+
+[node name="UIResource6" parent="GridContainer" instance=ExtResource("1_lq6qy")]
+layout_mode = 2
+
+[node name="Icon" parent="GridContainer/UIResource6" index="1"]
+texture = ExtResource("2_q0jus")
+
+[node name="UIResource7" parent="GridContainer" instance=ExtResource("1_lq6qy")]
+layout_mode = 2
+
+[node name="Icon" parent="GridContainer/UIResource7" index="1"]
+texture = ExtResource("3_fdy5k")
+
+[node name="UIResource8" parent="GridContainer" instance=ExtResource("1_lq6qy")]
+layout_mode = 2
+
+[node name="Icon" parent="GridContainer/UIResource8" index="1"]
+texture = ExtResource("4_h2u05")
+
+[node name="Demand" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Net: "
+
+[node name="UIResource9" parent="GridContainer" instance=ExtResource("1_lq6qy")]
+layout_mode = 2
+
+[node name="Icon" parent="GridContainer/UIResource9" index="1"]
+texture = ExtResource("2_q0jus")
+
+[node name="UIResource10" parent="GridContainer" instance=ExtResource("1_lq6qy")]
+layout_mode = 2
+
+[node name="Icon" parent="GridContainer/UIResource10" index="1"]
+texture = ExtResource("3_fdy5k")
+
+[node name="UIResource11" parent="GridContainer" instance=ExtResource("1_lq6qy")]
+layout_mode = 2
+
+[node name="Icon" parent="GridContainer/UIResource11" index="1"]
+texture = ExtResource("4_h2u05")
+
+[editable path="GridContainer/UIResource3"]
+[editable path="GridContainer/UIResource4"]
+[editable path="GridContainer/UIResource5"]
+[editable path="GridContainer/UIResource6"]
+[editable path="GridContainer/UIResource7"]
+[editable path="GridContainer/UIResource8"]
+[editable path="GridContainer/UIResource9"]
+[editable path="GridContainer/UIResource10"]
+[editable path="GridContainer/UIResource11"]

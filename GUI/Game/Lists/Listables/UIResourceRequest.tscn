@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://dcasdyjneoik4"]
 
 [ext_resource type="PackedScene" path="res://GUI/Game/Lists/Listables/UIResource.tscn" id="1_7mjkk"]
 [ext_resource type="Script" path="res://GUI/Game/Lists/Listables/UIResourceRequest.cs" id="1_bjmj1"]

@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class UITradeRouteFull : Control, UIList<TradeRoute>.IListable<TradeRoute>
+public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
 {
     public TradeRoute tradeRoute;
 
@@ -84,20 +84,23 @@ public partial class UITradeRouteFull : Control, UIList<TradeRoute>.IListable<Tr
         installationHead.Init(tradeRoute.Head);
         installationTail.Init(tradeRoute.Tail);
 
-        UIListResources headDelta = new();
-        UIListResources tailDelta = new();
+        // Lists.UIListRequestable demand = new();
+        // Lists.UIListResources surplus = new();
 
-        headDelta.Init(tradeRoute.Head.delta);
-        tailDelta.Init(tradeRoute.Tail.delta);
+        // demand.Init(tradeRoute.Demand);
+        // surplus.Init(tradeRoute.Surplus);
 
-        headDelta.Vertical = false;
-        tailDelta.Vertical = false;
+        // demand.Vertical = false;
+        // surplus.Vertical = false;
+        // demand.ShowBreakdown = true;
+        // surplus.ShowBreakdown = true;
 
-        GetNode<HBoxContainer>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/HeadResources").AddChild(headDelta);
-        GetNode<HBoxContainer>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/TailResources").AddChild(tailDelta);
+        // GetNode<HBoxContainer>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/HeadResources").AddChild(demand);
+        // GetNode<HBoxContainer>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/TailResources").AddChild(surplus);
 
         friegherRequirement = GetNode<UIResource>("VBoxContainer/HBoxContainer/HSplitContainer/UIResource");
-        friegherRequirement.Init(tradeRoute.TradeWeight, false, false, true);
+        friegherRequirement.Init(tradeRoute.TradeWeight);
+        friegherRequirement.ShowBreakdown = true;
         details = GetNode<ScrollContainer>("VBoxContainer/HBoxContainer/HSplitContainer/Details");
         cancelButton = GetNode<TextureButton>("VBoxContainer/HBoxContainer/AlignRight/Cancel");
         // Link components

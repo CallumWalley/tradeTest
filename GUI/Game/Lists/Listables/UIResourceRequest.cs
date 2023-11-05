@@ -2,57 +2,96 @@ using Godot;
 using System;
 using System.Collections;
 
-public partial class UIResourceRequest : Control, UIList<Resource.IRequestable>.IListable<Resource.IRequestable>
+public partial class UIResourceRequest : Control, Lists.IListable<Resource.IRequestable>
 {
-    // Prefabs
-    public Resource.IRequestable GameElement { get { return request; } }
     public Resource.IRequestable request;
+    public Resource.IRequestable GameElement { get { return request; } }
     public bool Destroy { get; set; } = false;
+    public bool ShowName { get; set; } = false;
+    public bool ShowDetails { get; set; } = false;
+    public bool ShowBreakdown { get; set; } = false;
 
     // Child components
     public Label value;
     public Label name;
     private Label details;
 
-    bool showName;
-    bool showDetails;
+    protected static readonly PackedScene p_resourceIcon = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/UIResourceRequest.tscn");
+
     Color colorBad = new(1, 0, 0);
 
     public void Init(Resource.IRequestable _request)
     {
-        Init(_request, false, false);
-    }
-    public void Init(Resource.IRequestable _request, bool _showName = false, bool _showDetails = false)
-    {
         request = _request;
-        showName = _showName;
-    }
-    public override void _Ready()
-    {
-        // Assign children
         value = GetNode<Label>("Value");
         name = GetNode<Label>("Name");
         details = GetNode<Label>("Details");
-        details.Visible = showDetails;
-        name.Visible = showName;
-
         ((TextureRect)GetNode("Icon")).Texture = Resource.Icon(resourceCode: request.Type);
+
+        TooltipText = request.Name;
     }
 
-    public void Update()
+    public override void _Draw()
     {
-        if (request.State != 0)
+        if (Destroy)
         {
-            value.Text = $"{request.Sum}/{request.Request.Sum}";
-            name.Text = $": {request.Details}";
-            value.AddThemeColorOverride("font_color", colorBad);
-            name.AddThemeColorOverride("font_color", colorBad);
-
+            Visible = false;
+            QueueFree();
         }
         else
         {
-            value.RemoveThemeColorOverride("font_color");
-            base._Draw();
+            details.Visible = ShowDetails;
+            name.Visible = ShowName;
+            name.Text = $"{request.Name} : ";
+
+            if (request.State != 0)
+            {
+                value.Text = $"{request.Sum}/{request.Request.Sum}";
+                name.Text = $"{request.Name}";
+                value.AddThemeColorOverride("font_color", colorBad);
+                name.AddThemeColorOverride("font_color", colorBad);
+            }
+            else
+            {
+                value.Text = (request.Sum).ToString();
+                name.Text = $"{request.Name} : ";
+                value.RemoveThemeColorOverride("font_color");
+            }
+        }
+    }
+
+    public override Control _MakeCustomTooltip(string forText)
+    {
+        if (!ShowBreakdown)
+        {
+            return null;
+        }
+        VBoxContainer vbc1 = new();
+        ExpandDetails(request, vbc1);
+        return vbc1;
+    }
+
+    private void ExpandDetails(Resource.IRequestable r1, VBoxContainer vbc1)
+    {
+        // Don't know why, but this is called before ready.
+        // Create element representing this.
+        UIResourceRequest uir = p_resourceIcon.Instantiate<UIResourceRequest>();
+        uir.Init(r1);
+        uir.ShowName = true;
+        vbc1.AddChild(uir);
+
+        // If has children, create element to nest inside.
+        if (r1.Count > 0)
+        {
+            HBoxContainer hbc = new();
+            VBoxContainer vbc2 = new();
+            hbc.AddChild(new VSeparator());
+            hbc.AddChild(vbc2);
+            foreach (Resource.IRequestable r2 in ((Resource.RGroup<Resource.IRequestable>)r1).Adders)
+            {
+                ExpandDetails(r2, vbc2);
+            }
+            vbc1.AddChild(hbc);
         }
     }
 

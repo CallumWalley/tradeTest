@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public partial class Installation : Node
 {
@@ -28,7 +29,7 @@ public partial class Installation : Node
     [Export]
     public Godot.Collections.Dictionary<int, double> StartingResources { get; set; } = new();
 
-    //Transformers contains list trade + industry
+    // Transformers contains list trade + industry
 
     // These are PRIMARY characteristics. To add or remove requires call of function.
     public List<Resource.IResourceTransformers> Transformers { get; } = new();
@@ -76,6 +77,7 @@ public partial class Installation : Node
     // NET amount of resource in storage.
     public Store Storage { get; protected set; } = new();
 
+    public Resource.Ledger Ledger = new();
     // Used to carry through numbers to next step.
     protected Dictionary<int, double> productionBuffer = new();
     protected Dictionary<int, double> consumptionBuffer = new();
@@ -91,12 +93,20 @@ public partial class Installation : Node
     public double shipWeight;
 
     Player player;
+    Global global;
 
-    public List<int> resourcePresent = new();
-    public Dictionary<int, double> resourceBuffer = new();
-    public List<Resource.IResource> produced = new();
-    public List<Resource.IRequestable> consumed = new();
-    public List<Resource.IResource> delta = new();
+    // public List<int> resourcePresent = new();
+    // public List<Resource.IResource> resourceBuffer = new();
+    // public Dictionary<int, double[]> resourceBuffer2 = new();
+    // public List<Resource.IResource> produced = new();
+    // public List<Resource.IRequestable> consumed = new();
+    // public List<Resource.IResource> export = new();
+    // public List<Resource.IRequestable> import = new();
+
+    // These are aggrigates
+    // public List<Resource.IResource> delta = new();
+    // public List<Resource.IResource> traded = new();
+
 
     // public void AddType(int type)
     // {
@@ -107,9 +117,11 @@ public partial class Installation : Node
     public override void _Ready()
     {
         base._Ready();
-        GetNode<Global>("/root/Global").Connect("EFrameSetup", new Callable(this, "EFrameSetup"));
-        GetNode<Global>("/root/Global").Connect("EFrameEarly", new Callable(this, "EFrameEarly"));
-        GetNode<Global>("/root/Global").Connect("EFrameLate", new Callable(this, "EFrameLate"));
+
+        global = GetNode<Global>("/root/Global");
+        global.Connect("EFrameSetup", new Callable(this, "EFrameSetup"));
+        global.Connect("EFrameEarly", new Callable(this, "EFrameEarly"));
+        global.Connect("EFrameLate", new Callable(this, "EFrameLate"));
 
         player = GetNode<Player>("/root/Global/Player");
         Industries = GetNode<Node>("Industries");
@@ -133,57 +145,16 @@ public partial class Installation : Node
     // this is so messy, i hate it. aaaaaaaaaaah
     public void EFrameEarly()
     {
-        if (Order > 1)
-        {
-            // Not market head.
-            return;
-        }
-        CalculateRequests();
-
+        Logistics.ExportToParent.EFrameEarly(this);
     }
     public void EFrameLate()
     {
-        // Add result of last step to storage.
-        foreach (KeyValuePair<int, double> kvp in resourceBuffer)
-        {
-            Storage.Add(kvp.Key, kvp.Value);
-            resourceBuffer.Remove(kvp.Key);
-        }
-
-        foreach (Resource.IResource r in produced)
-        {
-            productionBuffer[r.Type] = r.Sum;
-        }
-
-        delta.Clear();
-        consumed.Clear();
-        produced.Clear();
-
-        GetProducers();
-        GetConsumers();
-        foreach (Resource.IResource r in delta)
-        {
-            if (r.Type < 500)
-            {
-                resourceBuffer.Add(r.Type, r.Sum);
-            }
-        }
+        Logistics.ExportToParent.EFrameLate(this);
     }
 
     public void EFrameSetup() { }
 
-    public IEnumerable<Resource.IResource> CalculateRequests()
-    {
-        GD.Print(string.Format("Calculating Requests for {0} order {1}", Order, Name));
-        foreach (TradeRoute downline in Trade.DownlineTraderoutes)
-        {
-            foreach (Resource.IResource resource in downline.Tail.CalculateRequests())
-            {
-                delta.Add(resource);
-            }
-        }
-        return delta;
-    }
+
 
     // void GetStorage()
     // {
@@ -198,27 +169,26 @@ public partial class Installation : Node
     // }
 
     // A resource is not tracked until it is used.
-    void GetProducers()
+    public void GetProducers()
     {
         foreach (Industry rp in Industries.GetChildren())
         {
             foreach (Resource.IResource output in rp.Production)
             {
-                produced.Add(output);
-                delta.Add(output);
+                Ledger[output.Type].Production.Add(output);
             }
         }
     }
 
-    void GetConsumers()
+    public void GetConsumers()
     {
 
         foreach (Industry rp in Industries.GetChildren())
         {
-            foreach (Resource.IRequestable input in rp.Consumption)
+            foreach (Resource.IResource input in rp.Consumption)
             {
-                consumed.Add(input);
-                delta.Add(input);
+                Ledger[input.Type].Consumption.Add(input);
+
             }
         }
 
@@ -227,7 +197,6 @@ public partial class Installation : Node
         //     consumptionBuffer[i.Type] = i.Sum;
         //     // double deficit = productionBuffer[i] - consumptionBuffer[i];
         // }
-
     }
     // foreach (KeyValuePair<int, double> kvp in resourceBuffer)
     // {
@@ -305,6 +274,7 @@ public partial class Installation : Node
             }
         }
     }
+
 
 
     // Class for orgasnisng

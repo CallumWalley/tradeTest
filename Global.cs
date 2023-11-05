@@ -29,6 +29,9 @@ public partial class Global : Node
 
     double timeLeft;
 
+    public int eframeCount = 0;
+
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -63,6 +66,7 @@ public partial class Global : Node
         EmitSignal(SignalName.EFrameLate);
         EmitSignal(SignalName.EFrameUI);
 
+        eframeCount += 1;
 
     }
     public void TimeRateChanged(int value)

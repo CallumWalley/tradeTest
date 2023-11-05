@@ -20,8 +20,7 @@ public partial class UIPanelInstallation : Control
     // static readonly PackedScene p_uiIndustry = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/Entities/UI_Industry_Full.tscn");
     // static readonly PackedScene p_uiTradeRoute = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/Entities/UITradeRouteFull.tscn");
     static readonly PackedScene p_uistorage = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Panels/UIResourceStorage.tscn");
-    // static readonly PackedScene p_resource = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/UIResource.tscn");
-    static readonly PackedScene p_uirequest = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/UIResourceRequestWithDetails.tscn");
+    static readonly PackedScene p_uirequest = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/UIResourceRequest.tscn");
     static readonly PackedScene p_uiDropDown = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/UIDropDown.tscn");
     // static readonly PackedScene p_uiTradeDestination = GD.Load<PackedScene>("res://GUI/Components/UIDropDown.tscn");
     static readonly PackedScene prefab_TradeRoute = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/TradeRoute/UITradeRouteFull.tscn");
@@ -40,20 +39,32 @@ public partial class UIPanelInstallation : Control
         tradePanel = tabContainer.GetNode<BoxContainer>("Trade");
         tradePanelNetwork = tradePanel.GetNode<Label>("Network/Label");
 
-        UIListResources uiResourceProduced = new();
-        UIList<Resource.IRequestable> uiResourceConsumed = new();
-        UIListResources uiResourceDelta = new();
-        UIList<KeyValuePair<int, Installation.StorageElement>> uiStorage = new();
+        UIPanelLedger panelLedger = new();
+        panelLedger.Ledger = installation.Ledger;
+        supplyPanel.AddChild(panelLedger);
 
-        uiResourceProduced.Init(installation.produced);
-        uiResourceConsumed.Init(installation.consumed, p_uirequest);
-        uiResourceDelta.Init(installation.delta);
-        uiStorage.Init(installation.Storage, p_uistorage);
+        // Lists.UIListResources uiResourceProduced = new();
+        // Lists.UIListRequestable uiResourceConsumed = new();
+        // Lists.UIListResources uiResourceDelta = new();
+        // Lists.UIListResources uiResourceTraded = new();
 
-        supplyPanel.GetNode<VBoxContainer>("Produced").AddChild(uiResourceProduced);
-        supplyPanel.GetNode<VBoxContainer>("Consumed").AddChild(uiResourceConsumed); ;
-        supplyPanel.GetNode<VBoxContainer>("Delta").AddChild(uiResourceDelta); ;
-        supplyPanel.GetNode<VBoxContainer>("Storage").AddChild(uiStorage); ;
+        // UIList<KeyValuePair<int, Installation.StorageElement>> uiStorage = new();
+
+        // uiResourceProduced.Init(installation.produced);
+        // uiResourceConsumed.Init(installation.consumed);
+        // uiResourceConsumed.ShowBreakdown = true;
+        // uiResourceProduced.ShowBreakdown = true;
+
+        // uiResourceTraded.Init(installation.traded);
+
+        // uiResourceDelta.Init(installation.delta);
+        // uiStorage.Init(installation.Storage, p_uistorage);
+
+        // supplyPanel.GetNode<VBoxContainer>("Produced").AddChild(uiResourceProduced);
+        // supplyPanel.GetNode<VBoxContainer>("Consumed").AddChild(uiResourceConsumed);
+        // supplyPanel.GetNode<VBoxContainer>("Traded").AddChild(uiResourceTraded);
+        // supplyPanel.GetNode<VBoxContainer>("Delta").AddChild(uiResourceDelta);
+        // supplyPanel.GetNode<VBoxContainer>("Storage").AddChild(uiStorage);
 
         UIList<TradeRoute> tradeRouteList = new();
         UIDropDownSetHead setUpline = tradePanel.GetNode<UIDropDownSetHead>("DropDown");

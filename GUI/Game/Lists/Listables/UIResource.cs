@@ -1,53 +1,50 @@
 using Godot;
 using System;
-public partial class UIResource : Control, UIList<Resource.IResource>.IListable<Resource.IResource>
+// [Tool]
+public partial class UIResource : Control, Lists.IListable<Resource.IResource>
 {
     public Resource.IResource resource;
     public Resource.IResource GameElement { get { return resource; } }
     public bool Destroy { get; set; } = false;
+    public bool ShowName { get; set; } = false;
+    public bool ShowDetails { get; set; } = false;
+    public bool ShowBreakdown { get; set; } = false;
+
+
+    // For use in editor only.
+    // [Export(PropertyHint.Flags, "Water:1,Energy:2,Minerals:3")]
+    // public int _resource;
 
     // Child components
     public Label value;
     public Label name;
     private Label details;
 
-    bool showName;
-    bool showDetails;
-    bool showBreakdown;
     protected static readonly PackedScene p_resourceIcon = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/UIResource.tscn");
 
     public void Init(Resource.IResource _resource)
     {
-        Init(_resource, false, false);
+        resource = _resource;
     }
-    public void Init(Resource.IResource _resource, bool _showName = false, bool _showDetails = false, bool _showBreakdown = true)
-    {
-        (resource, showName, showDetails, showBreakdown) = (_resource, _showName, _showDetails, _showBreakdown);
-    }
+
 
     public override void _Ready()
     {
-
-    }
-
-
-    public virtual void Update()
-    {
-        value.Text = (resource.Sum).ToString();
-        name.Text = $"{resource.Name} : ";
+        // //
+        // if (Engine.IsEditorHint())
+        // {
+        //     Init(new Resource.RStatic(_resource));
+        // }
+        base._Ready();
+        value = GetNode<Label>("Value");
+        name = GetNode<Label>("Name");
+        details = GetNode<Label>("Details");
+        ((TextureRect)GetNode("Icon")).Texture = Resource.Icon(resourceCode: resource.Type);
+        TooltipText = resource.Name;
     }
 
     public override void _Draw()
     {
-        // Assign children
-        value = GetNode<Label>("Value");
-        name = GetNode<Label>("Name");
-        details = GetNode<Label>("Details");
-        details.Visible = showDetails;
-        name.Visible = showName;
-
-        ((TextureRect)GetNode("Icon")).Texture = Resource.Icon(resourceCode: resource.Type);
-
         if (Destroy)
         {
             Visible = false;
@@ -55,34 +52,21 @@ public partial class UIResource : Control, UIList<Resource.IResource>.IListable<
         }
         else
         {
-            Update();
+            details.Visible = ShowDetails;
+            name.Visible = ShowName;
+            value.Text = (resource.Sum).ToString();
+            name.Text = $"{resource.Name} : ";
+
         }
     }
     public override Control _MakeCustomTooltip(string forText)
     {
-        if (!showBreakdown)
+        if (!ShowBreakdown)
         {
             return null;
         }
         VBoxContainer vbc1 = new();
         ExpandDetails(resource, vbc1);
-        //Connect("mouse_entered", new Callable(vbc1, "OnMouseEnter"));
-
-        // Label details = new Label();
-        // details.Text = resource.Details;
-        // vbc1.AddChild(details);
-        // if (resource.Count > 0)
-        // {
-        //     HBoxContainer hbc = new();
-        //     VBoxContainer vbc2 = new();
-        //     hbc.AddChild(new VSeparator());
-        //     hbc.AddChild(vbc2);
-        //     foreach (Resource.IResource r2 in ((Resource.RGroup<Resource.IResource>)resource).Adders)
-        //     {
-        //         ExpandDetails(r2, vbc2);
-        //     }
-        //     vbc1.AddChild(hbc);
-        // }
         return vbc1;
     }
 
@@ -91,7 +75,8 @@ public partial class UIResource : Control, UIList<Resource.IResource>.IListable<
         // Don't know why, but this is called before ready.
         // Create element representing this.
         UIResource uir = p_resourceIcon.Instantiate<UIResource>();
-        uir.Init(r1, true, false, false);
+        uir.Init(r1);
+        uir.ShowName = true;
         vbc1.AddChild(uir);
 
         // If has children, create element to nest inside.

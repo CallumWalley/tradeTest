@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using System.Collections;
 
-public partial class UIInstallationSmall : Control, UIList<Installation>.IListable<Installation>
+public partial class UIInstallationSmall : Control, Lists.IListable<Installation>
 {
     Installation installation;
     public Installation GameElement { get { return installation; } }

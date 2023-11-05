@@ -13,7 +13,6 @@ public partial class UITimeControl : Container
     Global global;
     static ulong startTime = Time.GetTicksMsec();
     int frameCount = 0;
-    int eframeCount = 0;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -37,7 +36,7 @@ public partial class UITimeControl : Container
         frameCount += 1;
 
         labelWalltime.Text = $"Walltime: {(Time.GetTicksMsec() - startTime).ToString()}";
-        labelEframes.Text = $"Economy Frames: {eframeCount.ToString()}";
+        labelEframes.Text = $"Economy Frames: {global.eframeCount.ToString()}";
         labelFrames.Text = $"Frames: {frameCount.ToString()}";
         if (global.paused)
         {
@@ -53,7 +52,6 @@ public partial class UITimeControl : Container
 
     void EFrame()
     {
-        eframeCount += 1;
         PrintOrphanNodes();
     }
 }
