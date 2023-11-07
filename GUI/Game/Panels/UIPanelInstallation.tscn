@@ -43,12 +43,15 @@ layout_mode = 2
 text = "Export"
 
 [node name="Label3" type="Label" parent="VBoxContainer/TabContainer/Supply/VBoxContainer"]
+visible = false
 layout_mode = 2
 
 [node name="Label2" type="Label" parent="VBoxContainer/TabContainer/Supply/VBoxContainer"]
+visible = false
 layout_mode = 2
 
 [node name="Storage" type="Label" parent="VBoxContainer/TabContainer/Supply/VBoxContainer"]
+visible = false
 layout_mode = 2
 text = "Storage"
 

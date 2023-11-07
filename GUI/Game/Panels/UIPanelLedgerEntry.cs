@@ -10,30 +10,35 @@ public partial class UIPanelLedgerEntry : VBoxContainer, Lists.IListable<Resourc
 	public void Init(Resource.Ledger.Entry _ledgerEntry)
 	{
 		ledgerEntry = _ledgerEntry;
-	}
-	public override void _Ready()
-	{
 		UIResource production = GetNode<UIResource>("Production");
 		UIResource consumption = GetNode<UIResource>("Consumption");
 		UIResource import = GetNode<UIResource>("Import");
 		UIResource export = GetNode<UIResource>("Export");
-		UIResource importDemand = GetNode<UIResource>("ImportDemand");
-		UIResource exportDemand = GetNode<UIResource>("ExportDemand");
+		// UIResource importDemand = GetNode<UIResource>("ImportDemand");
+		// UIResource exportDemand = GetNode<UIResource>("ExportDemand");
 
 
 		//UIResourceStorage storage = GetNode<UIResourceStorage>("Storage");
-
 		production.Init(ledgerEntry.Production);
-		consumption.Init(ledgerEntry.Consumption);
-		// import.Init(ledgerEntry.Import);
-		// export.Init(ledgerEntry.Export);
-		// importDemand.Init(ledgerEntry.ImportDemand);
-		// exportDemand.Init(ledgerEntry.ExportDemand);
-		//storage.Init(ledgerEntry);
-	}
+		consumption.Init(ledgerEntry.ConsumptionRequest);
+		import.Init(ledgerEntry.Import);
+		export.Init(ledgerEntry.Export);
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
+		production.ShowBreakdown = true;
+		consumption.ShowBreakdown = true;
+		import.ShowBreakdown = true;
+		export.ShowBreakdown = true;
+
+		// importDemand.Init(ledgerEntry.ImportDemand);
+	}
+	public override void _Ready()
 	{
 	}
+
+    // Called every frame. 'delta' is the elapsed time since the previous frame.
+    public override void _Draw()
+    {
+        base._Draw();
+		// GD.Print(ledgerEntry);
+    }
 }

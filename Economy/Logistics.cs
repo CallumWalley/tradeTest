@@ -113,11 +113,15 @@ public partial class Logistics
             }
             // For each element in ledger calculate net resource and set ImportDemand / Export appropriately.
             foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in installation.Ledger)
-            {
+            {   
+
+                foreach (TradeRoute tr in installation.Trade.DownlineTraderoutes){
+                    kvp.Value.Import.Add(tr.HeadImport[kvp.Key]);
+                }
 
                 // if (kvp.Key > 500) { }
                 double net = kvp.Value.Production.Sum +
-                                kvp.Value.Consumption.Sum +
+                                kvp.Value.ConsumptionRequest.Sum +
                                 installation.Trade.DownlineTraderoutes.Sum((x => x.HeadImport[kvp.Key].Sum)) +
                                 installation.Trade.DownlineTraderoutes.Sum((x => x.HeadExportRequest[kvp.Key].Sum)) +
                                 kvp.Value.ExportDemand.Sum;
@@ -133,6 +137,7 @@ public partial class Logistics
                 else
                 {
                     kvp.Value.ExportSurplus.Set(-net);
+                    kvp.Value.Export.Add( kvp.Value.ExportSurplus );
                     kvp.Value.ImportDemand.Set(0);
                 }
             }

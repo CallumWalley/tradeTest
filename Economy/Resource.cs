@@ -646,7 +646,7 @@ public partial class Resource
 
 
             public Resource.RGroup<Resource.IResource> Production; // How much is produced here. 
-            public Resource.RGroup<Resource.IResource> Consumption; // How much requested to be consumed here.
+            public Resource.RGroup<Resource.IResource> ConsumptionRequest; // How much requested to be consumed here.
 
             public Resource.RStatic ExportSurplus; // Surplus to parent
             public Resource.RStatic ImportDemand; // How much I request of parent.
@@ -662,11 +662,12 @@ public partial class Resource
 
             public int Type { get; set; }
             public Entry(int _type)
-            {
+            {   
+                //Local = 
                 Production = new Resource.RGroup<Resource.IResource>(_type, "Total", "Sum Produced");
-                Consumption = new Resource.RGroup<Resource.IResource>(_type, "Total", "Sum Requests");
+                ConsumptionRequest = new Resource.RGroup<Resource.IResource>(_type, "Total", "Sum Requests");
 
-                ExportSurplus = new Resource.RStatic(_type, 0, "Total", "Surplus Beign Exported to parent");
+                ExportSurplus = new Resource.RStatic(_type, 0, "Total", "Surplus Being Exported to parent");
                 ImportDemand = new Resource.RStatic(_type, 0, "Total", "Demanding this from parent");
 
                 Import = new Resource.RGroup<Resource.IResource>(_type, "Total", "Imports");
@@ -680,9 +681,11 @@ public partial class Resource
             public void Clear()
             {
                 Production.Clear();
-                Consumption.Clear();
-                Export.Clear();
+                ConsumptionRequest.Clear();
+                ExportSurplus.Set(0);   
                 ImportDemand.Set(0);
+
+                Export.Clear();
             }
             /// <summary>
             /// Return flat requested and actual, for buffer.
@@ -695,7 +698,7 @@ public partial class Resource
 
             public override string ToString()
             {
-                return $"{Resource.Name(Type)}: {Production.Sum} {Consumption.Sum} {Export.Sum} {ImportDemand.Sum}";
+                return $"{Resource.Name(Type)}: {Production.Sum} {ConsumptionRequest.Sum} {Export.Sum} {ImportDemand.Sum}";
             }
         }
         Dictionary<int, Entry> _dictionary = new();
