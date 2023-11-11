@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 
 
@@ -66,6 +67,8 @@ public partial class Logistics
                 return;
             }
             CalculateRequests(installation);
+            CalculateResources(installation);
+
         }
         public static void EFrameLate(Installation installation)
         {
@@ -97,8 +100,13 @@ public partial class Logistics
             //     }
             // }
         }
+        /// <summary>
+        /// This will go down the tree and work out unfulfilled demand for each child.
+        /// </summary>
+        /// <param name="installation"></param>
         public static void CalculateRequests(Installation installation)
         {
+
             // For each child trade route
             foreach (TradeRoute downline in installation.Trade.DownlineTraderoutes)
             {
@@ -107,39 +115,89 @@ public partial class Logistics
                 // Iterate over ledger. add their ExportSurplus to my Import and their ImportDemand to my ExportDemand. 
                 foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in downline.Tail.Ledger)
                 {
-                    downline.HeadImport[kvp.Key].Set(-kvp.Value.ExportSurplus.Sum); // Set trade route to export surplus of child.
-                    downline.HeadExportRequest[kvp.Key].Set(-kvp.Value.ImportDemand.Sum); // Set trade route to request shortfall 
+                    // if surplus, do surplus stuff.
+                    if (kvp.Value.ResourceParent.Sum > 0)
+                    {
+                        downline.HeadImport[kvp.Key].Set(-kvp.Value.ResourceParent.Sum); // Set trade route to export surplus of child.
+                        installation.Ledger[kvp.Key].ResourceChildren.Add(downline.HeadImport[kvp.Key]); // Add this to general import list.
+                    }
+                    // Else do deficit stuff.
+                    else
+                    {
+                        downline.HeadExportRequest[kvp.Key].Set(-kvp.Value.RequestParent.Sum); // Set trade route to request shortfall 
+                        installation.Ledger[kvp.Key].RequestChildren.Add(new Resource.RRequest(kvp.Key, downline.HeadImport[kvp.Key].Sum)); // Add this to general import list.
+                    }
                 }
             }
             // For each element in ledger calculate net resource and set ImportDemand / Export appropriately.
             foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in installation.Ledger)
-            {   
+            {
 
-                foreach (TradeRoute tr in installation.Trade.DownlineTraderoutes){
-                    kvp.Value.Import.Add(tr.HeadImport[kvp.Key]);
+                foreach (TradeRoute tr in installation.Trade.DownlineTraderoutes)
+                {
+                    kvp.Value.ResourceChildren.Add(tr.HeadImport[kvp.Key]);
                 }
 
                 // if (kvp.Key > 500) { }
-                double net = kvp.Value.Production.Sum +
-                                kvp.Value.ConsumptionRequest.Sum +
-                                installation.Trade.DownlineTraderoutes.Sum((x => x.HeadImport[kvp.Key].Sum)) +
-                                installation.Trade.DownlineTraderoutes.Sum((x => x.HeadExportRequest[kvp.Key].Sum)) +
-                                kvp.Value.ExportDemand.Sum;
+
+                double request = installation.Trade.DownlineTraderoutes.Sum((x => x.HeadExportRequest[kvp.Key].Sum)) + kvp.Value.RequestLocal.Request;
+                double resource = installation.Trade.DownlineTraderoutes.Sum((x => x.HeadImport[kvp.Key].Sum)) + kvp.Value.ResourceLocal.Sum;
+                double net = resource + request;
 
                 // If balance is negative. Request the difference from parent.
                 if (net < 0)
                 {
-                    kvp.Value.ExportSurplus.Set(0);
-                    kvp.Value.ImportDemand.Set(-net);
+                    kvp.Value.ResourceParent.Set(0);
+                    kvp.Value.RequestParent.Request = -net;
 
                 }
                 // Otherwise, set export surplus to difference.
                 else
                 {
-                    kvp.Value.ExportSurplus.Set(-net);
-                    kvp.Value.Export.Add( kvp.Value.ExportSurplus );
-                    kvp.Value.ImportDemand.Set(0);
+                    kvp.Value.ResourceParent.Set(-net);
+                    kvp.Value.RequestParent.Request = 0;
                 }
+            }
+        }
+
+        public static void CalculateResources(Installation installation)
+        {
+            foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in installation.Ledger)
+            {
+                // If non accruable, skip.
+                if (kvp.Key > 500) { continue; }
+                if (kvp.Value.RequestLocal.Request == 0)
+                {
+                    // TODO: investigate why this zero.
+                    continue;
+                }
+                double netResource = kvp.Value.ResourceLocal.Sum + installation.Trade.DownlineTraderoutes.Sum((x => x.HeadImport[kvp.Key].Sum));
+                double supplyFaction = netResource / -kvp.Value.RequestLocal.Request;
+
+                // Supply local.
+                foreach (Resource.RRequest r in kvp.Value.RequestLocal)
+                {
+                    // Respond with fraction.
+                    if (supplyFaction < 1)
+                    {
+                        r.Respond(r.Request * supplyFaction);
+                    }
+                    else
+                    {
+                        r.Respond();
+                    }
+
+                    kvp.Value.ResourceLocal.Add(r);
+                }
+
+                // foreach (Resource.RRequest r in kvp.Value. .Adders)
+                // {
+                //     r.Respond(supplyFaction * r.Request);
+                //     kvp.Value.Production.Add(r);
+                // }
+                //=                //double netRequestRemote = installation.Trade.DownlineTraderoutes.Sum((x => x.HeadExportRequest[kvp.Key].Sum));
+
+
             }
         }
     }

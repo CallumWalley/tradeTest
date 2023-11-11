@@ -11,18 +11,31 @@ public partial class UIPanelLedgerEntry : VBoxContainer, Lists.IListable<Resourc
 	{
 		ledgerEntry = _ledgerEntry;
 		UIResource production = GetNode<UIResource>("Production");
-		UIResource consumption = GetNode<UIResource>("Consumption");
+		UIResourceRequest consumption = GetNode<UIResourceRequest>("ConsumptionRequest");
 		UIResource import = GetNode<UIResource>("Import");
 		UIResource export = GetNode<UIResource>("Export");
+		UIResourceStorage storage = GetNode<UIResourceStorage>("Storage");
 		// UIResource importDemand = GetNode<UIResource>("ImportDemand");
 		// UIResource exportDemand = GetNode<UIResource>("ExportDemand");
 
 
 		//UIResourceStorage storage = GetNode<UIResourceStorage>("Storage");
-		production.Init(ledgerEntry.Production);
-		consumption.Init(ledgerEntry.ConsumptionRequest);
-		import.Init(ledgerEntry.Import);
-		export.Init(ledgerEntry.Export);
+		production.Init(ledgerEntry.ResourceLocal);
+		consumption.Init(ledgerEntry.RequestLocal);
+		import.Init(ledgerEntry.ResourceChildren);
+		export.Init(ledgerEntry.NetLocal);
+
+		// IF accruable also make storage.
+		if (ledgerEntry.Type < 500)
+		{
+			storage.Init(((Resource.Ledger.EntryAccrul)ledgerEntry));
+			storage.Visible = true;
+		}
+		else
+		{
+			storage.QueueFree();
+		}
+
 
 		production.ShowBreakdown = true;
 		consumption.ShowBreakdown = true;
@@ -35,10 +48,10 @@ public partial class UIPanelLedgerEntry : VBoxContainer, Lists.IListable<Resourc
 	{
 	}
 
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Draw()
-    {
-        base._Draw();
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	public override void _Draw()
+	{
+		base._Draw();
 		// GD.Print(ledgerEntry);
-    }
+	}
 }

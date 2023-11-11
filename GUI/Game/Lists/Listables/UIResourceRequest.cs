@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections;
 
-public partial class UIResourceRequest : Control, Lists.IListable<Resource.IRequestable>
+public partial class UIResourceRequest : UIDrawEFrame, Lists.IListable<Resource.IRequestable>
 {
     public Resource.IRequestable request;
     public Resource.IRequestable GameElement { get { return request; } }
@@ -46,7 +46,7 @@ public partial class UIResourceRequest : Control, Lists.IListable<Resource.IRequ
 
             if (request.State != 0)
             {
-                value.Text = $"{request.Sum}/{request.Request.Sum}";
+                value.Text = $"{request.Sum}/{request.Request}";
                 name.Text = $"{request.Name}";
                 value.AddThemeColorOverride("font_color", colorBad);
                 name.AddThemeColorOverride("font_color", colorBad);
@@ -56,6 +56,7 @@ public partial class UIResourceRequest : Control, Lists.IListable<Resource.IRequ
                 value.Text = (request.Sum).ToString();
                 name.Text = $"{request.Name} : ";
                 value.RemoveThemeColorOverride("font_color");
+                name.RemoveThemeColorOverride("font_color");
             }
         }
     }
@@ -67,32 +68,34 @@ public partial class UIResourceRequest : Control, Lists.IListable<Resource.IRequ
             return null;
         }
         VBoxContainer vbc1 = new();
-        ExpandDetails(request, vbc1);
+        ExpandDetails((Resource.RGroupRequests<Resource.IRequestable>)request, vbc1);
         return vbc1;
     }
-
     private void ExpandDetails(Resource.IRequestable r1, VBoxContainer vbc1)
     {
-        // Don't know why, but this is called before ready.
-        // Create element representing this.
+        UIResourceRequest uir = p_resourceIcon.Instantiate<UIResourceRequest>();
+        uir.Init(r1);
+        uir.ShowName = true;
+        vbc1.AddChild(uir);
+    }
+    private void ExpandDetails(Resource.RGroupRequests<Resource.IRequestable> r1, VBoxContainer vbc1)
+    {
         UIResourceRequest uir = p_resourceIcon.Instantiate<UIResourceRequest>();
         uir.Init(r1);
         uir.ShowName = true;
         vbc1.AddChild(uir);
 
-        // If has children, create element to nest inside.
-        if (r1.Count > 0)
+
+        HBoxContainer hbc = new();
+        VBoxContainer vbc2 = new();
+        hbc.AddChild(new VSeparator());
+        hbc.AddChild(vbc2);
+        foreach (Resource.IRequestable r2 in ((Resource.RGroup<Resource.IRequestable>)r1))
         {
-            HBoxContainer hbc = new();
-            VBoxContainer vbc2 = new();
-            hbc.AddChild(new VSeparator());
-            hbc.AddChild(vbc2);
-            foreach (Resource.IRequestable r2 in ((Resource.RGroup<Resource.IRequestable>)r1).Adders)
-            {
-                ExpandDetails(r2, vbc2);
-            }
-            vbc1.AddChild(hbc);
+            ExpandDetails(r2, vbc2);
         }
+        vbc1.AddChild(hbc);
     }
+
 
 }

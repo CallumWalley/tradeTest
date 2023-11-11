@@ -62,11 +62,20 @@ color = Color(0.278431, 0.364706, 0.913725, 1)
 
 [node name="Installation" parent="Systems/System1/Earth" instance=ExtResource("10")]
 _validTradeReceiver = true
+StartingResources = {
+2: 200.0
+}
 
 [node name="Freighter Dockyard" parent="Systems/System1/Earth/Installation/Industries" index="0" instance=ExtResource("6")]
 slug = "f_dockyard"
 
-[node name="Fuel Reserves" parent="Systems/System1/Earth/Installation/Industries" index="1" instance=ExtResource("6")]
+[node name="Chemical Fuel Plant" parent="Systems/System1/Earth/Installation/Industries" index="1" instance=ExtResource("6")]
+slug = "cfuel_water"
+
+[node name="Ice Mine" parent="Systems/System1/Earth/Installation/Industries" index="2" instance=ExtResource("6")]
+slug = "mine_h20_surf_old"
+
+[node name="Fuel Reserves" parent="Systems/System1/Earth/Installation/Industries" index="3" instance=ExtResource("6")]
 slug = "orbit_storage_fuel"
 
 [node name="Jupyter" parent="Systems/System1" instance=ExtResource("1")]

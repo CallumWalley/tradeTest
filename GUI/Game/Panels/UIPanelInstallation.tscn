@@ -42,6 +42,10 @@ text = "Import"
 layout_mode = 2
 text = "Export"
 
+[node name="Storage" type="Label" parent="VBoxContainer/TabContainer/Supply/VBoxContainer"]
+layout_mode = 2
+text = "Storage"
+
 [node name="Label3" type="Label" parent="VBoxContainer/TabContainer/Supply/VBoxContainer"]
 visible = false
 layout_mode = 2
@@ -49,11 +53,6 @@ layout_mode = 2
 [node name="Label2" type="Label" parent="VBoxContainer/TabContainer/Supply/VBoxContainer"]
 visible = false
 layout_mode = 2
-
-[node name="Storage" type="Label" parent="VBoxContainer/TabContainer/Supply/VBoxContainer"]
-visible = false
-layout_mode = 2
-text = "Storage"
 
 [node name="Trade" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
 visible = false

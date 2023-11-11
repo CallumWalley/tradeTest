@@ -6,7 +6,10 @@ public partial class Resource
 {
     public Logger logger;
 
-    // Interface
+    // Interfaces
+    /// <summary>
+    /// Basic type representing a resource.
+    /// </summary>
     public interface IResource
     // Interface for displaying basic resource icon.
     {
@@ -14,30 +17,49 @@ public partial class Resource
         string Details { get; }
         string Name { get; }
         double Sum { get; }
-        int Count { get; }
     }
+    /// <summary>
+    ///  Basic type representing a resource request.
+    /// </summary>
     public interface IRequestable : IResource
     {
+
+        /// <summary> Represents current state of request </summary>
         public int State { get; protected set; }
-        //     // 0 fulfilled.
-        //     // 1 partially fulfilled.
-        //     // 2 unfulfilled.
-        public Resource.RStatic Request { get; }
-        public double RequestSum { get; }
+        /// 0 fulfilled.
+        //  1 partially fulfilled.
+        //  2 unfulfilled.
+
+        /// <summary> How much is being requested DOES NOT REPRESENT ACTUAL RESOURCE </summary>
+        public double Request { get; set; }
         // No inputs if request fulfilled.
+        /// <summary>
+        /// Sets the resource value.
+        /// </summary>
         public void Respond() { }
         // No fulfilled value returned if not fulfilled.
         public void Respond(double value) { }
     }
 
+    /// <summary>
+    ///  A collection of multiple resources of the same type. Enumerable.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public interface IResourceGroup<T> : IResource where T : IResource
+    {
+        public IEnumerator<T> GetEnumerator();
+        public int Count { get; }
+    }
+
+    /// <summary>
+    ///  A static resource is the most simple resource. It will be a number and stay that way until changed.
+    /// </summary>
     public partial class RStatic : IResource
     {
-        // A static resource is the most simple resource. It will be a number and stay that way until changed.
         public virtual double Sum { get; protected set; }
         public int Type { get; }
         public string Details { get; set; }
         public string Name { get; set; }
-        public virtual int Count { get { return 0; } }
 
         public RStatic(int _type, double _sum = 0, string _name = "Unknown", string _details = "Base value")
         {
@@ -67,54 +89,60 @@ public partial class Resource
         }
 
     }
-    public partial class RGroup<TResource> : IResource where TResource : IResource
+    public partial class RGroup<T> : IEnumerable<T>, IResourceGroup<T> where T : IResource
     {
         public int Type { get; }
         public string Details { get; set; }
         public string Name { get; set; }
-        public virtual List<TResource> Adders { get; protected set; }
-        public List<TResource> Muxxers { get; protected set; }
+        protected List<T> _members { get; set; }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            foreach (T element in _members)
+            {
+                yield return element;
+            }
+        }
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
 
         // Does not consider grandchild members.
         public int Count
         {
-            get { return (Adders.Count + Muxxers.Count); }
+            get { return (_members.Count); }
         }
         public double Sum
         {
-            get
-            {
-                double addCum = 0;
-                foreach (IResource i in Adders)
-                {
-                    addCum += i.Sum;
-                }
-                // foreach (IResource i in Muxxers)
-                // {
-                //     multiCum += i.Sum;
-                // }
-                return addCum;
-            }
+            get { return _members.Sum(x => x.Sum); }
         }
-
-        public RGroup(int _type, IEnumerable<TResource> _add, string _name = "Sum", string _details = "Sum")
+        public RGroup(int _type, string _name = "Sum", string _details = "Sum")
         {
             Type = _type;
-            Adders = (List<TResource>)_add;
             Name = _name;
             Details = _details;
+            _members = new();
         }
-        public RGroup(int _type, TResource r, string _name = "Sum", string _details = "Sum") : this(_type, new List<TResource>() { r }, _name, _details) { }
-        public RGroup(int _type, string _name = "Sum", string _details = "Sum") : this(_type, new List<TResource>(), _name, _details) { }
+        public RGroup(int _type, IEnumerable<T> _add, string _name = "Sum", string _details = "Sum") : this(_type, _name, _details)
+        {
+            _members = (List<T>)_add;
+        }
+        public RGroup(int _type, T _add, string _name = "Sum", string _details = "Sum") : this(_type, _name, _details)
+        {
+            _members = new();
+            _members.Add(_add);
+        }
 
-        public void Add(TResource ra)
+        public void Add(T ra)
         {
             //throw new
-            Adders.Add(ra);
+            _members.Add(ra);
         }
         public IResource First()
         {
-            return Adders[0];
+            return _members[0];
         }
         public void Set(double newValue)
         {
@@ -122,7 +150,7 @@ public partial class Resource
         }
         public void Clear()
         {
-            Adders.Clear();
+            _members.Clear();
         }
 
         public override string ToString()
@@ -139,42 +167,37 @@ public partial class Resource
         //     return returnString;
         // }
     }
-    public partial class RGroupRequests : RGroup<IRequestable>, IRequestable
+    public partial class RGroupRequests<T> : RGroup<IRequestable>, IRequestable
     {
         // Same as in group but also sum requests.
         public RGroupRequests(int _type, IEnumerable<IRequestable> _add, string _name = "Sum", string _details = "Sum") : base(_type, _add, _name, _details) { }
         public RGroupRequests(int _type, IRequestable _add, string _name = "Sum", string _details = "Sum") : base(_type, _add, _name, _details) { }
         public RGroupRequests(int _type, string _name = "Sum", string _details = "Sum") : base(_type, _name, _details) { }
 
-
-        public override List<IRequestable> Adders { get; protected set; }
-        public RStatic Request { get; set; }
-
         // Request is a second
-        public double RequestSum
+        public double Request
         {
             get
             {
                 double requestCum = 0;
-                foreach (IRequestable i in Adders)
+                foreach (IRequestable i in _members)
                 {
-                    requestCum += i.Request.Sum;
+                    requestCum += i.Request;
                 }
                 return requestCum;
             }
+            set
+            {
+                { throw new InvalidOperationException("Set method is not valid for groups"); }
+            }
         }
-
-        // IEnumerable<IRequestable> EnumRequests()
-        // {
-        //     foreach (IRequestable r in Adders) { yield return r.Request }
-        // }
 
         // Request is actual amount given
         public int State { get; set; } = -1;
     }
     public interface IResourceTransformers
     {
-        public RList<IResource> Consumption { get; protected set; }
+        public RList<IRequestable> Consumption { get; protected set; }
         public RList<IResource> Production { get; protected set; }
         public System.Object Driver { get; }
     }
@@ -224,64 +247,63 @@ public partial class Resource
     // }
     // Type of resource.
 
-    public partial class RExchange : IRequestable
-    {
-        /// <summary>
-        /// Represents a request from one ledger to another.
-        /// </summary>
-        /// <param name="_from"></param>
-        /// 
+    // public partial class RExchange : IRequestable
+    // {
+    //     /// <summary>
+    //     /// Represents a request from one ledger to another.
+    //     /// </summary>
+    //     /// <param name="_from"></param>
+    //     /// 
 
-        // Parameters unique to responder.
-        public string Details { get; set; }
-        public string Name { get; set; }
+    //     // Parameters unique to responder.
+    //     public string Details { get; set; }
+    //     public string Name { get; set; }
 
-        // Requester is 'real' request
-        public RRequestBase Requester;
+    //     // Requester is 'real' request
+    //     public RRequest Requester;
 
 
-        // Look through to requester.
+    //     // Look through to requester.
 
-        public int Type { get { return Requester.Type; } }
-        public double Sum { get { return -Requester.Sum; } }
-        public int Count { get; } //unused
-        public int State { get { return Requester.State; } set { Requester.State = value; } }
-        public Resource.RStatic Request { get; set; }
-        public double RequestSum { get; }
-        // No inputs if request fulfilled.
-        public void Respond()
-        {
+    //     public int Type { get { return Requester.Type; } }
+    //     public double Sum { get { return -Requester.Sum; } }
+    //     public int Count { get { return 1; } } //unused
+    //     public int State { get { return Requester.State; } set { Requester.State = value; } }
+    //     public Resource.RStatic Request { get; set; }
+    //     public double RequestSum { get; }
+    //     // No inputs if request fulfilled.
+    //     public void Respond()
+    //     {
 
-        }
-        // No fulfilled value returned if not fulfilled.
-        public void Respond(double value) { }
+    //     }
+    //     // No fulfilled value returned if not fulfilled.
+    //     public void Respond(double value) { }
 
-        public RExchange(RRequestBase _from, string _name = "unset", string _details = "unset")
-        {
-            Requester = _from;
-            Name = _name;
-            Details = _details;
-        }
-    }
+    //     public RExchange(RRequest _from, string _name = "unset", string _details = "unset")
+    //     {
+    //         Requester = _from;
+    //         Name = _name;
+    //         Details = _details;
+    //     }
+    // }
 
-    public partial class RRequestBase : RStatic, IRequestable
+    public partial class RRequest : RStatic, IRequestable
     {
         // This is a dummy request. Does nothing.
         // Request is the amount of resource this consumer needs and points at another resource.
-        public RStatic Request { get; set; }
-        public double RequestSum { get { return Request.Sum; } }
+        public double Request { get; set; }
 
         // Request is actual amount given
         public int State { get; set; } = -1;
 
-        public RRequestBase(Resource.RStatic _request) : base(_request.Type, 0, _request.Name, _request.Name)
+        public RRequest(int _type, double _request, string _name = "Unknown", string _details = "Base value") : base(_type, 0, _name, _details: _details)
         {
             Request = _request;
         }
         // No inputs if request fulfilled.
         public virtual void Respond()
         {
-            base.Set(Request.Sum);
+            base.Set(Request);
             State = 0;
         }
         // No fulfilled value returned if not fulfilled.
@@ -292,55 +314,54 @@ public partial class Resource
         }
         public override string ToString()
         {
-            return $"{Sum}/{Request.Sum}";
+            return $"{Sum}/{Request}";
         }
     }
-    public partial class RRequestLinear : RRequestBase
-    {
-        // Linear Request.  Modifies outputs to be same as fraction of inputs received.
-        Resource.RStatic multiplier;
-        Industry industry;
+    // public partial class RRequestLinear : RRequest
+    // {
+    //     // Linear Request.  Modifies outputs to be same as fraction of inputs received.
+    //     Resource.RStatic multiplier;
+    //     Industry industry;
 
-        public RRequestLinear(Industry _industry, Resource.RStatic _request) : base(_request)
-        {
-            multiplier = new Resource.RStatic(Type, 0);
-            // ((Resource.RGroup<IResource>)_industry.Production[Type]).Multiply(multiplier);
-            _industry.AddSituation(new Situations.OutputModifier(this, multiplier, _industry));
-        }
-        public override void Respond()
-        {
-            base.Respond();
-            multiplier.Set(1f);
-        }
-        public override void Respond(double value)
-        {
-            base.Respond(value);
-            multiplier.Set((value - Request.Sum) / Request.Sum);
-        }
-    }
-    public partial class RGroupRequests<TResource> : RGroup<TResource> where TResource : IRequestable
-    {
-        public RGroupRequests(int _type, IEnumerable<TResource> _add, string _name = "Sum", string _details = "Sum") : base(_type, _add, _name, _details) { }
-        public double SumRequest { get { return _SumRequests()[1]; } }
-        double[] _SumRequests()
-        // Do not net to call cum seperately.
-        {
-            double addCum = 0;
-            double multiCum = 1;
-            double requestCum = 0;
-            foreach (TResource i in Adders)
-            {
-                addCum += i.Sum;
-                addCum += i.Sum;
-                requestCum += i.Request.Sum;
-            }
-            foreach (TResource i in Muxxers)
-            {
-                multiCum += i.Sum;
-            }
-            return new double[] { addCum * multiCum, requestCum * multiCum };
-        }
-    }
+    //     public RRequestLinear(Industry _industry, Resource.RStatic _request) : base(_request)
+    //     {
+    //         multiplier = new Resource.RStatic(Type, 0);
+    //         // ((Resource.RGroup<IResource>)_industry.Production[Type]).Multiply(multiplier);
+    //         _industry.AddSituation(new Situations.OutputModifier(this, multiplier, _industry));
+    //     }
+    //     public override void Respond()
+    //     {
+    //         base.Respond();
+    //         multiplier.Set(1f);
+    //     }
+    //     public override void Respond(double value)
+    //     {
+    //         base.Respond(value);
+    //         multiplier.Set((value - Request.Sum) / Request.Sum);
+    //     }
+    // }
+    // public partial class RGroupRequests<TResource> : RGroup<TResource> where TResource : IRequestable
+    // {
+    //     public RGroupRequests(int _type, IEnumerable<TResource> _add, string _name = "Sum", string _details = "Sum") : base(_type, _add, _name, _details) { }
+    //     public double SumRequest { get { return _SumRequests()[1]; } }
+    //     double[] _SumRequests()
+    //     // Do not net to call cum seperately.
+    //     {
+    //         double addCum = 0;
+    //         double multiCum = 1;
+    //         double requestCum = 0;
+    //         foreach (TResource i in Adders)
+    //         {
+    //             addCum += i.Sum;
+    //             requestCum += i.Request;
+    //         }
+    //         foreach (TResource i in Muxxers)
+    //         {
+    //             multiCum += i.Sum;
+    //         }
+    //         return new double[] { addCum * multiCum, requestCum * multiCum };
+    //     }
+    // }
     // // Small class to handle 'request, vs receive'
     // public class Requester
     // {
@@ -620,7 +641,6 @@ public partial class Resource
         {
             get { return -request.Sum; }
         }
-        public int Count { get; set; }
         public ResourceRequest(Ledger _ledger, IResource _request)
         {
             ledger = _ledger;
@@ -638,6 +658,24 @@ public partial class Resource
         /// <summary>
         /// Ledger is the complete list of all the resources at a specific location. 
         /// </summary>
+
+        /// Dummy method to make sure resource exists.
+
+
+        public Dictionary<int, RStatic> Storage
+        {
+            get
+            {
+                Dictionary<int, RStatic> d = new Dictionary<int, RStatic>();
+                foreach (KeyValuePair<int, Entry> kvp in this.Where(x => x.Key < 500))
+                {
+                    d[kvp.Key] = ((EntryAccrul)kvp.Value).Stored;
+                }
+                return d;
+            }
+        }
+
+
         public class Entry
         {
             /// <summary>
@@ -645,47 +683,74 @@ public partial class Resource
             /// </summary>
 
 
-            public Resource.RGroup<Resource.IResource> Production; // How much is produced here. 
-            public Resource.RGroup<Resource.IResource> ConsumptionRequest; // How much requested to be consumed here.
+            // Net is combo of Resource and Request.
 
-            public Resource.RStatic ExportSurplus; // Surplus to parent
-            public Resource.RStatic ImportDemand; // How much I request of parent.
+            public Resource.RGroup<Resource.IResource> ResourceLocal; // How much is produced here. 
+            public Resource.RGroupRequests<Resource.IRequestable> RequestLocal;
+            public Resource.RStatic ResourceParent; // Surplus to parent
+            public Resource.IRequestable RequestParent; // How much I request of parent.
 
             // public Resource.RGroup<Resource.IResource> ExportSurplus;  // + paying requests to children;
+            // ExportSurplus + Export to children.
+            public Resource.RGroup<Resource.IResource> ResourceChildren; // Surplus from children
+            public Resource.RGroupRequests<Resource.IRequestable> RequestChildren;  // How much my children request of me.
+                                                                                    // Export demand contains a reference to an Import Demand in child.
+                                                                                    // Export demand contains a reference to an Import Demand in child.
 
-            public Resource.RGroup<Resource.IResource> Export; // ExportSurplus + Export to children.
-            public Resource.RGroup<Resource.IResource> Import; // Surplus from children + receiving request from parents.
+            public Resource.RGroup<Resource.IResource> NetRemote
+            {
+                get
+                {
+                    RGroup<IResource> net = new(Type, ResourceChildren.Concat(RequestChildren), "Trade Net", "Trade Net");
+                    net.Add(RequestParent);
+                    net.Add(ResourceParent);
+                    return net;
+                }
+            }
 
-            // These should be linked to trade routes
-            public Resource.RGroup<ResourceRequest> ExportDemand;  // How much my children request of me.
-            // Export demand contains a reference to an Import Demand in child.
+            public Resource.RGroup<Resource.IResource> NetLocal
+            {
+                get
+                {
+                    return new RGroup<IResource>(Type, RequestLocal.Concat(ResourceLocal), "Local Net", "Local Net");
+                }
+            }
+            public Resource.RGroup<Resource.IResource> Net
+            {
+                get
+                {
+                    return new RGroup<IResource>(Type, NetRemote.Concat(NetLocal), "Total Net", "Total Net");
+                }
+            }
+
 
             public int Type { get; set; }
             public Entry(int _type)
-            {   
+            {
                 //Local = 
-                Production = new Resource.RGroup<Resource.IResource>(_type, "Total", "Sum Produced");
-                ConsumptionRequest = new Resource.RGroup<Resource.IResource>(_type, "Total", "Sum Requests");
+                ResourceLocal = new Resource.RGroup<Resource.IResource>(_type, "Total", "Sum Produced");
+                RequestLocal = new Resource.RGroupRequests<Resource.IRequestable>(_type, "Total", "Sum Requested");
+                //ConsumptionRequest = new Resource.RGroupRequests<Resource.IRequestable>(_type, "Total", "Sum Requests");
 
-                ExportSurplus = new Resource.RStatic(_type, 0, "Total", "Surplus Being Exported to parent");
-                ImportDemand = new Resource.RStatic(_type, 0, "Total", "Demanding this from parent");
+                ResourceParent = new Resource.RStatic(_type, 0, "Total", "Surplus Being Exported to parent");
+                RequestParent = new Resource.RRequest(_type, 0, "Total", "Demanding this from parent");
 
-                Import = new Resource.RGroup<Resource.IResource>(_type, "Total", "Imports");
-                ExportDemand = new(_type);
+                ResourceChildren = new Resource.RGroup<Resource.IResource>(_type, "Total", "Imports");
+                RequestChildren = new RGroupRequests<IRequestable>(_type);
 
-                Export = new Resource.RGroup<Resource.IResource>(_type, "Total", "Exports");
                 //Surplus = new Resource.RGroup<Resource.IResource>(_type, "Exports", "Total Exports");
                 Type = _type;
             }
 
             public void Clear()
             {
-                Production.Clear();
-                ConsumptionRequest.Clear();
-                ExportSurplus.Set(0);   
-                ImportDemand.Set(0);
-
-                Export.Clear();
+                ResourceLocal.Clear();
+                RequestLocal.Clear();
+                ResourceParent.Set(0);
+                RequestParent.Request = 0;
+                RequestChildren.Clear();
+                ResourceChildren.Clear();
+                NetLocal.Clear();
             }
             /// <summary>
             /// Return flat requested and actual, for buffer.
@@ -698,17 +763,44 @@ public partial class Resource
 
             public override string ToString()
             {
-                return $"{Resource.Name(Type)}: {Production.Sum} {ConsumptionRequest.Sum} {Export.Sum} {ImportDemand.Sum}";
+                return $"{Resource.Name(Type)}: {ResourceLocal.Sum} {RequestLocal.Sum} {NetLocal.Sum} {RequestParent.Sum}";
             }
         }
-        Dictionary<int, Entry> _dictionary = new();
+
+
+        public class EntryAccrul : Entry
+        {
+            public Resource.RStatic Stored;
+            public Resource.RStatic Capacity;
+
+            public EntryAccrul(int _type) : base(_type)
+            {
+                Stored = new Resource.RStatic(_type, 0, "Stored", "Stored");
+                Capacity = new Resource.RStatic(_type, 1000, "Capacity", "Capacity");
+
+            }
+        }
+
+
+        Dictionary<int, Entry> _all = new();
+        /// <summary>
+        ///  Dict containting only acrulable;
+        /// </summary>
+        Dictionary<int, Entry> _acrul = new();
+
+        //Dictionary<int, EntryAccrul> _accrul = new();
+
 
         public void Clear()
         {
-            foreach (KeyValuePair<int, Ledger.Entry> kvp in _dictionary)
+            foreach (KeyValuePair<int, Ledger.Entry> kvp in _all)
             {
                 kvp.Value.Clear();
             }
+            // foreach (KeyValuePair<int, Ledger.EntryAccrul> kvp in _accrul)
+            // {
+            //     kvp.Value.Clear();
+            // }
         }
 
         public Entry this[int type]
@@ -716,14 +808,23 @@ public partial class Resource
         {
             get
             {
-                if (_dictionary.ContainsKey(type))
+                if (_all.ContainsKey(type))
                 {
-                    return _dictionary[type];
+                    return _all[type];
                 }
                 else
                 {
-                    Entry nre = new Entry(type);
-                    _dictionary[type] = nre;
+                    Entry nre;
+                    // If type less than 500, it is accrul.
+                    if (type < 500)
+                    {
+                        nre = new EntryAccrul(type);
+                    }
+                    else
+                    {
+                        nre = new Entry(type);
+                    }
+                    _all[type] = nre;
                     return nre;
                 }
             }
@@ -731,7 +832,7 @@ public partial class Resource
 
         public IEnumerator<KeyValuePair<int, Entry>> GetEnumerator()
         {
-            foreach (KeyValuePair<int, Entry> element in _dictionary)
+            foreach (KeyValuePair<int, Entry> element in _all)
             {
                 yield return element;
             }
@@ -743,14 +844,14 @@ public partial class Resource
 
         public IEnumerable<Entry> Values()
         {
-            foreach (KeyValuePair<int, Ledger.Entry> kvp in _dictionary)
+            foreach (KeyValuePair<int, Ledger.Entry> kvp in _all)
             {
                 yield return kvp.Value;
             }
         }
         public override string ToString()
         {
-            return string.Join("\n", _dictionary.Select(x => x.Value.ToString()).ToArray());
+            return string.Join("\n", _all.Select(x => x.Value.ToString()).ToArray());
         }
         // public void AddRequest(Resource.IRequestable r)
         // {

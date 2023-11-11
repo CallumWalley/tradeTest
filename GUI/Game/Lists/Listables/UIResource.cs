@@ -1,7 +1,7 @@
 using Godot;
 using System;
 // [Tool]
-public partial class UIResource : Control, Lists.IListable<Resource.IResource>
+public partial class UIResource : UIDrawEFrame, Lists.IListable<Resource.IResource>
 {
     public Resource.IResource resource;
     public Resource.IResource GameElement { get { return resource; } }
@@ -52,6 +52,8 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
         }
         else
         {
+            // hide if null.
+            //Visible = !(resource.Count < 1 && Mathf.Abs(resource.Sum) < 0.1);
             details.Visible = ShowDetails;
             name.Visible = ShowName;
             value.Text = (resource.Sum).ToString();
@@ -66,11 +68,10 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
             return null;
         }
         VBoxContainer vbc1 = new();
-        ExpandDetails(resource, vbc1);
+        ExpandDetails((Resource.IResourceGroup<Resource.IResource>)resource, vbc1);
         return vbc1;
     }
-
-    private void ExpandDetails(Resource.IResource r1, VBoxContainer vbc1)
+    private void ExpandDetails(Resource.IResourceGroup<Resource.IResource> r1, VBoxContainer vbc1)
     {
         // Don't know why, but this is called before ready.
         // Create element representing this.
@@ -86,11 +87,19 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
             VBoxContainer vbc2 = new();
             hbc.AddChild(new VSeparator());
             hbc.AddChild(vbc2);
-            foreach (Resource.IResource r2 in ((Resource.RGroup<Resource.IResource>)r1).Adders)
+            foreach (Resource.IResource r2 in r1)
             {
                 ExpandDetails(r2, vbc2);
             }
             vbc1.AddChild(hbc);
         }
+    }
+    private void ExpandDetails(Resource.IResource r1, VBoxContainer vbc1)
+    {
+        UIResource uir = p_resourceIcon.Instantiate<UIResource>();
+        uir.Init(r1);
+        uir.ShowName = true;
+        vbc1.AddChild(uir);
+
     }
 }

@@ -23,6 +23,7 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
     public TradeRoute GameElement { get { return tradeRoute; } }
 
 
+
     public void Init(TradeRoute _tradeRoute)
     {
         tradeRoute = _tradeRoute;
@@ -79,15 +80,17 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
         labelName = GetNode<LineEdit>("VBoxContainer/Panel/LineEdit");
         labelName.Text = tradeRoute.Name;
 
+
+
         installationHead = GetNode<UIInstallationTiny>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Head/InstallationSummary");
         installationTail = GetNode<UIInstallationTiny>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Tail/InstallationSummary");
         installationHead.Init(tradeRoute.Head);
         installationTail.Init(tradeRoute.Tail);
 
-        // Lists.UIListRequestable demand = new();
-        // Lists.UIListResources surplus = new();
+        //Lists.UIListResources headExportRequest = new();
+        Lists.UIListResources headImport = new();
 
-        // demand.Init(tradeRoute.Demand);
+        headImport.Init(tradeRoute.HeadImport);
         // surplus.Init(tradeRoute.Surplus);
 
         // demand.Vertical = false;
@@ -95,7 +98,7 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
         // demand.ShowBreakdown = true;
         // surplus.ShowBreakdown = true;
 
-        // GetNode<HBoxContainer>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/HeadResources").AddChild(demand);
+        GetNode<HBoxContainer>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/HeadResources").AddChild(headImport);
         // GetNode<HBoxContainer>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/TailResources").AddChild(surplus);
 
         friegherRequirement = GetNode<UIResource>("VBoxContainer/HBoxContainer/HSplitContainer/UIResource");

@@ -2,23 +2,24 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class UIResourceStorage : Control, Lists.IListable<KeyValuePair<int, Installation.StorageElement>>
+public partial class UIResourceStorage : Control
 {
-    public KeyValuePair<int, Installation.StorageElement> storage;
+    public Resource.RStatic resource;
+    public Resource.Ledger.EntryAccrul entry;
     public bool Destroy { get; set; } = false;
 
     Color colorBad = new(1, 0, 0);
     protected Control details;
     protected Label value;
     protected Label name;
-    public KeyValuePair<int, Installation.StorageElement> GameElement { get { return storage; } }
+    public Resource.RStatic GameElement { get { return resource; } }
     static readonly PackedScene p_resourceIcon = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/UIResource.tscn");
 
-    public void Init(KeyValuePair<int, Installation.StorageElement> _storage)
+    public void Init(Resource.Ledger.EntryAccrul _entry)
     {
-        storage = _storage;
-        ((TextureRect)GetNode("Icon")).Texture = Resource.Icon(storage.Key);
-
+        entry = _entry;
+        ((TextureRect)GetNode("Icon")).Texture = Resource.Icon(entry.Type);
+        TooltipText = Resource.Name(entry.Type);
     }
 
     public override void _Ready()
@@ -27,15 +28,14 @@ public partial class UIResourceStorage : Control, Lists.IListable<KeyValuePair<i
         value = GetNode<Label>("Value");
         name = GetNode<Label>("Name");
         details = GetNode<Label>("Details");
-        TooltipText = Resource.Name(storage.Key);
     }
 
     public void Update()
     {
-        value.Text = string.Format("{0:P0}", storage.Value.Level / storage.Value.Capacity);
+        value.Text = string.Format("{0:P0}", entry.Stored.Sum / entry.Capacity.Sum);
         name.Text = $": Storage";
         // Storage is in deficit.
-        if (0 <= storage.Value.Level)
+        if (0 <= entry.Stored.Sum)
         {
             value.AddThemeColorOverride("font_color", new Color(1, 0, 0));
             // detailLabel.Text = string.Format("{0} reserves empty!", storage.Name().ToUpper());
@@ -90,25 +90,25 @@ public partial class UIResourceStorage : Control, Lists.IListable<KeyValuePair<i
         }
     }
 
-    // public override Control _MakeCustomTooltip(string forText)
-    // {
-    //     HBoxContainer hbc1 = new();
+    public override Control _MakeCustomTooltip(string forText)
+    {
+        HBoxContainer hbc1 = new();
 
-    //     TextureRect icon = new();
-    //     Label text = new();
+        TextureRect icon = new();
+        Label text = new();
 
-    //     icon.Texture = Resource.Icon(storage.Key);
-    //     text.Text = $"{storage.Value.Level}/{storage.Value.Capacity}";
+        icon.Texture = Resource.Icon(entry.Type);
+        text.Text = $"{entry.Stored.Sum}/{entry.Capacity.Sum}";
 
-    //     hbc1.AddChild(icon);
-    //     hbc1.AddChild(text);
+        hbc1.AddChild(icon);
+        hbc1.AddChild(text);
 
-    //     // hbc1.AddChild(uir1);
-    //     // hbc1.AddChild(new VSeparator());
-    //     // hbc1.AddChild(uir2);
+        // hbc1.AddChild(uir1);
+        // hbc1.AddChild(new VSeparator());
+        // hbc1.AddChild(uir2);
 
-    //     return hbc1;
-    // }
+        return hbc1;
+    }
     //value.Text = string.Format("{0:F0}/{1:F0}", storage.Value.Capacity, storage.Value.Level);
 
     //value.AddThemeColorOverride("font_color", colorBad);
