@@ -190,7 +190,6 @@ public partial class Installation : Node
             foreach (Resource.IRequestable input in rp.Consumption)
             {
                 Ledger[input.Type].RequestLocal.Add(input);
-                Ledger[input.Type].ResourceLocal.Add(input);
             }
         }
 

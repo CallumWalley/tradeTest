@@ -162,17 +162,18 @@ public partial class Logistics
 
         public static void CalculateResources(Installation installation)
         {
-            foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in installation.Ledger)
+            foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in installation.Ledger.Where(x=>x.Key < 500))
             {
                 // If non accruable, skip.
-                if (kvp.Key > 500) { continue; }
                 if (kvp.Value.RequestLocal.Request == 0)
                 {
                     // TODO: investigate why this zero.
                     continue;
                 }
-                double netResource = kvp.Value.ResourceLocal.Sum + installation.Trade.DownlineTraderoutes.Sum((x => x.HeadImport[kvp.Key].Sum));
-                double supplyFaction = netResource / -kvp.Value.RequestLocal.Request;
+
+                double requestTotal = kvp.Value.RequestLocal.Request;
+                double resourceTotal = installation.Trade.DownlineTraderoutes.Sum((x => x.HeadImport[kvp.Key].Sum)) + kvp.Value.ResourceLocal.Sum;
+                double supplyFaction = resourceTotal / -requestTotal ;
 
                 // Supply local.
                 foreach (Resource.RRequest r in kvp.Value.RequestLocal)
@@ -186,9 +187,13 @@ public partial class Logistics
                     {
                         r.Respond();
                     }
-
-                    kvp.Value.ResourceLocal.Add(r);
                 }
+                // If not enough resources to supply local, not enough to export.
+                if (supplyFaction < 1){
+                    continue;
+                }
+
+                // Any leftovers go to exports.
 
                 // foreach (Resource.RRequest r in kvp.Value. .Adders)
                 // {

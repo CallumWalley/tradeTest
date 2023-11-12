@@ -10,7 +10,7 @@ public partial class UIPanelLedgerEntry : VBoxContainer, Lists.IListable<Resourc
 	public void Init(Resource.Ledger.Entry _ledgerEntry)
 	{
 		ledgerEntry = _ledgerEntry;
-		UIResource production = GetNode<UIResource>("Production");
+		UIResource netLocal = GetNode<UIResource>("NetLocal");
 		UIResourceRequest consumption = GetNode<UIResourceRequest>("ConsumptionRequest");
 		UIResource import = GetNode<UIResource>("Import");
 		UIResource export = GetNode<UIResource>("Export");
@@ -20,7 +20,7 @@ public partial class UIPanelLedgerEntry : VBoxContainer, Lists.IListable<Resourc
 
 
 		//UIResourceStorage storage = GetNode<UIResourceStorage>("Storage");
-		production.Init(ledgerEntry.ResourceLocal);
+		netLocal.Init(ledgerEntry.NetLocal);
 		consumption.Init(ledgerEntry.RequestLocal);
 		import.Init(ledgerEntry.ResourceChildren);
 		export.Init(ledgerEntry.NetLocal);
@@ -37,7 +37,7 @@ public partial class UIPanelLedgerEntry : VBoxContainer, Lists.IListable<Resourc
 		}
 
 
-		production.ShowBreakdown = true;
+		netLocal.ShowBreakdown = true;
 		consumption.ShowBreakdown = true;
 		import.ShowBreakdown = true;
 		export.ShowBreakdown = true;

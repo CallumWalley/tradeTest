@@ -712,7 +712,7 @@ public partial class Resource
             {
                 get
                 {
-                    return new RGroup<IResource>(Type, RequestLocal.Concat(ResourceLocal), "Local Net", "Local Net");
+                    return new RGroup<IResource>(Type, RequestLocal.Concat(ResourceLocal).ToList(), "Local Net", "Local Net");
                 }
             }
             public Resource.RGroup<Resource.IResource> Net
