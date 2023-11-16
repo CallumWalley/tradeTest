@@ -25,7 +25,7 @@ public partial class Resource
     {
 
         /// <summary> Represents current state of request </summary>
-        public int State { get; protected set; }
+        public int State { get; set; }
         /// 0 fulfilled.
         //  1 partially fulfilled.
         //  2 unfulfilled.
@@ -629,8 +629,10 @@ public partial class Resource
             return new RStatic(index, 0);
         }
     }
-
-    public class ResourceRequest : IResource
+    /// <summary>
+    /// Represents the other party in a traded resource.
+    /// </summary>
+    public class RTradedResource : IResource
     {
         public Ledger ledger;
         public IResource request;
@@ -641,9 +643,37 @@ public partial class Resource
         {
             get { return -request.Sum; }
         }
-        public ResourceRequest(Ledger _ledger, IResource _request)
+        public RTradedResource(IResource _request)
         {
-            ledger = _ledger;
+            request = _request;
+        }
+
+    }
+    public class RTradedRequest : IRequestable
+    {
+        public Ledger ledger;
+        public IRequestable request;
+        public int Type { get { return request.Type; } }
+        public int State
+        {
+            get { return request.State; }
+            set { request.State = value; }
+        }
+
+        public double Request
+        {
+            get { return -request.Request; }
+            set { request.Request = -value; }
+        }
+
+        public string Name { get; set; }
+        public string Details { get; set; }
+        public double Sum
+        {
+            get { return -request.Sum; }
+        }
+        public RTradedRequest(IRequestable _request)
+        {
             request = _request;
         }
 

@@ -12,10 +12,9 @@ public partial class TradeRoute : Node
 	public Installation Head { get; set; }
 
 
-	public Resource.TradeRouteResourceList HeadExportRequest; // What tail is requesting from parent.
-	public Resource.TradeRouteResourceList HeadImport;  // What head is importing from child;
-
-	//public Resource.TradeRouteResourceList HeadRequest; // 
+	public Resource.RList<Resource.RStatic> ResourceParent; // What tail is requesting from parent.
+	public Resource.RList<Resource.RRequest> RequestParent;  // What head is importing from child;
+															 //public Resource.TradeRouteResourceList HeadRequest; // 
 
 	public int Order
 	{
@@ -70,8 +69,12 @@ public partial class TradeRoute : Node
 		distance = Tail.GetParent<Body>().Position.DistanceTo(Head.GetParent<Body>().Position);
 		Name = $"Trade route from {Head.Name} to {Tail.Name}";
 
-		HeadExportRequest = new Resource.TradeRouteResourceList(string.Format("{{0}} request", Head.Name), string.Format("{{0}} requested from {0}", Head.Name));
-		HeadImport = new Resource.TradeRouteResourceList(string.Format("{{0}} import", Tail.Name), string.Format("{{0}} imported from {0}", Tail.Name));
+		//string.Format("{{0}} request", Head.Name), string.Format("{{0}} requested from {0}", Head.Name)
+		//string.Format("{{0}} import", Tail.Name), string.Format("{{0}} imported from {0}", Tail.Name)
+		ResourceParent = new Resource.RList<Resource.RStatic>();
+		RequestParent = new Resource.RList<Resource.RRequest>();
+		ResourceParent.CreateMissing = true;
+		RequestParent.CreateMissing = true;
 
 		TradeWeight.Name = Name;
 	}

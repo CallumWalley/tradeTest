@@ -118,51 +118,58 @@ public partial class Logistics
                     // if surplus, do surplus stuff.
                     if (kvp.Value.ResourceParent.Sum > 0)
                     {
-                        downline.HeadImport[kvp.Key].Set(-kvp.Value.ResourceParent.Sum); // Set trade route to export surplus of child.
-                        installation.Ledger[kvp.Key].ResourceChildren.Add(downline.HeadImport[kvp.Key]); // Add this to general import list.
+                        downline.ResourceParent[kvp.Key].Set(-kvp.Value.ResourceParent.Sum);                                    // Set trade route to export surplus of child.
+                        installation.Ledger[kvp.Key].ResourceChildren.Add(new Resource.RTradedResource(kvp.Value.ResourceParent));    // Add this to general import list.
                     }
                     // Else do deficit stuff.
                     else
                     {
-                        downline.HeadExportRequest[kvp.Key].Set(-kvp.Value.RequestParent.Sum); // Set trade route to request shortfall 
-                        installation.Ledger[kvp.Key].RequestChildren.Add(new Resource.RRequest(kvp.Key, downline.HeadImport[kvp.Key].Sum)); // Add this to general import list.
+                        downline.RequestParent[kvp.Key].Set(-kvp.Value.RequestParent.Sum); // Set trade route to request shortfall 
+                        installation.Ledger[kvp.Key].RequestChildren.Add(new Resource.RTradedRequest(kvp.Value.RequestParent)); // Add this to general import list.
                     }
                 }
             }
+
             // For each element in ledger calculate net resource and set ImportDemand / Export appropriately.
             foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in installation.Ledger)
             {
 
-                foreach (TradeRoute tr in installation.Trade.DownlineTraderoutes)
-                {
-                    kvp.Value.ResourceChildren.Add(tr.HeadImport[kvp.Key]);
-                }
+                // foreach (TradeRoute tr in installation.Trade.DownlineTraderoutes)
+                // {
+                //     kvp.Value.ResourceChildren.Add(tr.HeadImport[kvp.Key]);
+                // }
 
                 // if (kvp.Key > 500) { }
 
-                double request = installation.Trade.DownlineTraderoutes.Sum((x => x.HeadExportRequest[kvp.Key].Sum)) + kvp.Value.RequestLocal.Request;
-                double resource = installation.Trade.DownlineTraderoutes.Sum((x => x.HeadImport[kvp.Key].Sum)) + kvp.Value.ResourceLocal.Sum;
+                double request = installation.Trade.DownlineTraderoutes.Sum((x => x.RequestParent[kvp.Key].Request)) + kvp.Value.RequestLocal.Request;
+                double resource = installation.Trade.DownlineTraderoutes.Sum((x => x.ResourceParent[kvp.Key].Sum)) + kvp.Value.ResourceLocal.Sum;
                 double net = resource + request;
 
                 // If balance is negative. Request the difference from parent.
-                if (net < 0)
+                if (installation.Trade.UplineTraderoute != null)
                 {
-                    kvp.Value.ResourceParent.Set(0);
-                    kvp.Value.RequestParent.Request = -net;
-
-                }
-                // Otherwise, set export surplus to difference.
-                else
-                {
-                    kvp.Value.ResourceParent.Set(-net);
-                    kvp.Value.RequestParent.Request = 0;
+                    if (net < 0)
+                    {
+                        kvp.Value.ResourceParent.Set(0);
+                        kvp.Value.RequestParent.Request = -net;
+                    }
+                    // Otherwise, set export surplus to difference.
+                    else
+                    {
+                        kvp.Value.ResourceParent.Set(-net);
+                        kvp.Value.RequestParent.Request = 0;
+                    }
                 }
             }
         }
 
+        /// <summary>
+        ///  Once all elements have 'CalculateRequests' this is run.
+        /// </summary>
+        /// <param name="installation"></param>
         public static void CalculateResources(Installation installation)
         {
-            foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in installation.Ledger.Where(x=>x.Key < 500))
+            foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in installation.Ledger) //.Where(x => x.Key < 500)
             {
                 // If non accruable, skip.
                 if (kvp.Value.RequestLocal.Request == 0)
@@ -172,8 +179,8 @@ public partial class Logistics
                 }
 
                 double requestTotal = kvp.Value.RequestLocal.Request;
-                double resourceTotal = installation.Trade.DownlineTraderoutes.Sum((x => x.HeadImport[kvp.Key].Sum)) + kvp.Value.ResourceLocal.Sum;
-                double supplyFaction = resourceTotal / -requestTotal ;
+                double resourceTotal = installation.Trade.DownlineTraderoutes.Sum((x => x.ResourceParent[kvp.Key].Sum)) + kvp.Value.ResourceLocal.Sum;
+                double supplyFaction = resourceTotal / -requestTotal;
 
                 // Supply local.
                 foreach (Resource.RRequest r in kvp.Value.RequestLocal)
@@ -189,7 +196,8 @@ public partial class Logistics
                     }
                 }
                 // If not enough resources to supply local, not enough to export.
-                if (supplyFaction < 1){
+                if (supplyFaction < 1)
+                {
                     continue;
                 }
 
