@@ -131,6 +131,7 @@ public partial class Installation : Node
 
         Name = $"{Body.Name} station";
 
+        Ledger.installation = this;
         // Initial storage count.
         // GetStorage();
         foreach (KeyValuePair<int, double> kvp in StartingResources)

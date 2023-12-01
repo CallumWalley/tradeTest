@@ -89,8 +89,7 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
 
         //Lists.UIListResources headExportRequest = new();
         Lists.UIListResources headImport = new();
-
-        headImport.Init(tradeRoute.ResourceParent);
+        headImport.Init(tradeRoute.Tail.Ledger.NetRemote);
         // surplus.Init(tradeRoute.Surplus);
 
         // demand.Vertical = false;

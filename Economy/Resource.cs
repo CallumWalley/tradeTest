@@ -61,13 +61,14 @@ public partial class Resource
         public string Details { get; set; }
         public string Name { get; set; }
 
-        public RStatic(int _type, double _sum = 0, string _name = "Unknown", string _details = "Base value")
+        public RStatic(int _type = 0, double _sum = 0, string _name = "Unknown", string _details = "Base value")
         {
             Type = _type;
             Sum = _sum;
             Details = _details;
             Name = _name;
         }
+
         // Cast static to group.
         // public static implicit operator RGroup(RStatic rs)
         // {
@@ -193,7 +194,18 @@ public partial class Resource
         }
 
         // Request is actual amount given
-        public int State { get; set; } = -1;
+        public int State
+        {
+            get { return _members.Sum(x => x.State); }
+            set
+            {
+                { throw new InvalidOperationException("Set method is not valid for groups"); }
+            }
+        }
+        public override string ToString()
+        {
+            return $"{Sum}/{Request}";
+        }
     }
     public interface IResourceTransformers
     {
@@ -244,49 +256,6 @@ public partial class Resource
     //         return $"{Name}:{Stock()}/{Sum}";
     //     }
 
-    // }
-    // Type of resource.
-
-    // public partial class RExchange : IRequestable
-    // {
-    //     /// <summary>
-    //     /// Represents a request from one ledger to another.
-    //     /// </summary>
-    //     /// <param name="_from"></param>
-    //     /// 
-
-    //     // Parameters unique to responder.
-    //     public string Details { get; set; }
-    //     public string Name { get; set; }
-
-    //     // Requester is 'real' request
-    //     public RRequest Requester;
-
-
-    //     // Look through to requester.
-
-    //     public int Type { get { return Requester.Type; } }
-    //     public double Sum { get { return -Requester.Sum; } }
-    //     public int Count { get { return 1; } } //unused
-    //     public int State { get { return Requester.State; } set { Requester.State = value; } }
-    //     public Resource.RStatic Request { get; set; }
-    //     public double RequestSum { get; }
-    //     // No inputs if request fulfilled.
-    //     public void Respond()
-    //     {
-
-    //     }
-    //     // No fulfilled value returned if not fulfilled.
-    //     public void Respond(double value) { }
-
-    //     public RExchange(RRequest _from, string _name = "unset", string _details = "unset")
-    //     {
-    //         Requester = _from;
-    //         Name = _name;
-    //         Details = _details;
-    //     }
-    // }
-
     public partial class RRequest : RStatic, IRequestable
     {
         // This is a dummy request. Does nothing.
@@ -294,12 +263,13 @@ public partial class Resource
         public double Request { get; set; }
 
         // Request is actual amount given
-        public int State { get; set; } = -1;
+        public int State { get; set; } = 0;
 
         public RRequest(int _type, double _request, string _name = "Unknown", string _details = "Base value") : base(_type, 0, _name, _details: _details)
         {
             Request = _request;
         }
+
         // No inputs if request fulfilled.
         public virtual void Respond()
         {
@@ -485,7 +455,7 @@ public partial class Resource
         {
             if (!members.ContainsKey(index))
             {
-                return default(TResource);
+                members[index] = default(TResource);
             }
             return members[index];
         }
@@ -687,8 +657,9 @@ public partial class Resource
     {
         /// <summary>
         /// Ledger is the complete list of all the resources at a specific location. 
+        /// Is a loose implimentation of a sparse 2d matrix I guess.
         /// </summary>
-
+        public Installation installation;
         /// Dummy method to make sure resource exists.
 
 
@@ -706,38 +677,105 @@ public partial class Resource
         }
 
 
+        public IEnumerable<RGroup<IRequestable>> NetRemote
+        {
+            get
+            {
+                foreach (KeyValuePair<int, Entry> kvp in _all)
+                {
+                    yield return kvp.Value.NetRemote;
+                }
+            }
+        }
+        public IEnumerable<KeyValuePair<int, Resource.IRequestable>> RequestExportToParent
+        {
+            get
+            {
+                foreach (Entry item in _all.Values)
+                {
+                    yield return new KeyValuePair<int, Resource.IRequestable>(item.Type, item.RequestImportFromParent);
+                }
+            }
+        }
+        public IEnumerable<KeyValuePair<int, Resource.IRequestable>> RequestImportFromParent
+        {
+            get
+            {
+                foreach (Entry item in _all.Values)
+                {
+                    yield return new KeyValuePair<int, Resource.IRequestable>(item.Type, item.RequestImportFromParent);
+                }
+            }
+        }
+        public IEnumerable<KeyValuePair<int, Resource.IRequestable>> RequestImportFromChildren
+        {
+            get
+            {
+                foreach (Entry item in _all.Values)
+                {
+                    yield return new KeyValuePair<int, Resource.IRequestable>(item.Type, item.RequestImportFromChildren);
+                }
+            }
+        }
         public class Entry
         {
             /// <summary>
             /// Represents a resource, and a place. Can be either request or resource.
             /// </summary>
 
-
             // Net is combo of Resource and Request.
 
             public Resource.RGroup<Resource.IResource> ResourceLocal; // How much is produced here. 
             public Resource.RGroupRequests<Resource.IRequestable> RequestLocal;
-            public Resource.RStatic ResourceParent; // Surplus to parent
-            public Resource.IRequestable RequestParent; // How much I request of parent.
 
-            // public Resource.RGroup<Resource.IResource> ExportSurplus;  // + paying requests to children;
-            // ExportSurplus + Export to children.
-            public Resource.RGroup<Resource.IResource> ResourceChildren; // Surplus from children
-            public Resource.RGroupRequests<Resource.IRequestable> RequestChildren;  // How much my children request of me.
-                                                                                    // Export demand contains a reference to an Import Demand in child.
-                                                                                    // Export demand contains a reference to an Import Demand in child.
-
-            public Resource.RGroup<Resource.IResource> NetRemote
+            // Export demand contains a reference to an Import Demand in child.
+            public RGroupRequests<IRequestable> NetImport
             {
                 get
                 {
-                    RGroup<IResource> net = new(Type, ResourceChildren.Concat(RequestChildren), "Trade Net", "Trade Net");
-                    net.Add(RequestParent);
-                    net.Add(ResourceParent);
+                    RGroupRequests<IRequestable> net = new(Type, "Trade Net", "Trade Net");
+                    foreach (IRequestable item in RequestImportFromChildren)
+                    {
+                        net.Add(item);
+                    }
+                    net.Add(RequestImportFromParent);
+                    return net;
+                }
+            }
+            public RGroupRequests<IRequestable> NetExport
+            {
+                get
+                {
+                    RGroupRequests<IRequestable> net = new(Type, "Trade Net", "Trade Net");
+                    foreach (IRequestable item in RequestImportFromChildren)
+                    {
+                        net.Add(item);
+                    }
+                    net.Add(RequestExportToParent);
                     return net;
                 }
             }
 
+            RGroupRequests<IRequestable> netRemote;
+            public RGroupRequests<IRequestable> NetRemote
+            {
+                get
+                {
+                    netRemote.Clear();
+                    foreach (IRequestable item in RequestImportFromChildren)
+                    {
+                        netRemote.Add(item);
+                    }
+                    foreach (IRequestable item in RequestExportToChildren)
+                    {
+                        netRemote.Add(item);
+                    }
+                    netRemote.Add(RequestExportToParent);
+                    netRemote.Add(RequestImportFromParent);
+
+                    return netRemote;
+                }
+            }
             public Resource.RGroup<Resource.IResource> NetLocal
             {
                 get
@@ -749,7 +787,7 @@ public partial class Resource
             {
                 get
                 {
-                    return new RGroup<IResource>(Type, NetRemote.Concat(NetLocal), "Total Net", "Total Net");
+                    return new RGroup<IResource>(Type, NetRemote.Concat(NetLocal).ToList(), "Total Net", "Total Net");
                 }
             }
 
@@ -757,17 +795,20 @@ public partial class Resource
             public int Type { get; set; }
             public Entry(int _type)
             {
+
+                //Installation installation;
                 //Local = 
-                ResourceLocal = new Resource.RGroup<Resource.IResource>(_type, "Total", "Sum Produced");
-                RequestLocal = new Resource.RGroupRequests<Resource.IRequestable>(_type, "Total", "Sum Requested");
+                ResourceLocal = new RGroup<IResource>(_type, "Local Production", "Sum Produced");
+                RequestLocal = new RGroupRequests<IRequestable>(_type, "Local Consumption", "Sum Requested");
                 //ConsumptionRequest = new Resource.RGroupRequests<Resource.IRequestable>(_type, "Total", "Sum Requests");
 
-                ResourceParent = new Resource.RStatic(_type, 0, "Total", "Surplus Being Exported to parent");
-                RequestParent = new Resource.RRequest(_type, 0, "Total", "Demanding this from parent");
+                RequestExportToParent = new RRequest(_type, 0, "Upline Export", "Surplus Being Exported to parent");
+                RequestImportFromParent = new RRequest(_type, 0, "Upline Import", "Demanding this from parent");
 
-                ResourceChildren = new Resource.RGroup<Resource.IResource>(_type, "Total", "Imports");
-                RequestChildren = new RGroupRequests<IRequestable>(_type);
+                RequestImportFromChildren = new RGroupRequests<IRequestable>(_type, "Downline Imports", "Imports");
+                RequestExportToChildren = new RGroupRequests<IRequestable>(_type, "Downline Exports", "Imports");
 
+                netRemote = new RGroupRequests<IRequestable>(_type, "All Trade", "All Trade");
                 //Surplus = new Resource.RGroup<Resource.IResource>(_type, "Exports", "Total Exports");
                 Type = _type;
             }
@@ -776,10 +817,10 @@ public partial class Resource
             {
                 ResourceLocal.Clear();
                 RequestLocal.Clear();
-                ResourceParent.Set(0);
-                RequestParent.Request = 0;
-                RequestChildren.Clear();
-                ResourceChildren.Clear();
+                // ResourceParent.Set(0);
+                // RequestParent.Request = 0;
+                // RequestChildren.Clear();
+                // ResourceChildren.Clear();
                 NetLocal.Clear();
             }
             /// <summary>
@@ -793,7 +834,7 @@ public partial class Resource
 
             public override string ToString()
             {
-                return $"{Resource.Name(Type)}: {ResourceLocal.Sum} {RequestLocal.Sum} {NetLocal.Sum} {RequestParent.Sum}";
+                return $"{Resource.Name(Type)}: {ResourceLocal.Sum} {RequestLocal.Sum} {NetLocal.Sum} {RequestImportFromParent.Sum}";
             }
         }
 
@@ -882,6 +923,12 @@ public partial class Resource
         public override string ToString()
         {
             return string.Join("\n", _all.Select(x => x.Value.ToString()).ToArray());
+        }
+
+
+        public bool ContainsKey(int key)
+        {
+            return _all.ContainsKey(key);
         }
         // public void AddRequest(Resource.IRequestable r)
         // {

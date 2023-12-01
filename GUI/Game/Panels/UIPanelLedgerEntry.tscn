@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://bb4d471bnpul"]
 
-[ext_resource type="PackedScene" path="res://GUI/Game/Lists/Listables/UIResource.tscn" id="1_rh2jm"]
+[ext_resource type="PackedScene" uid="uid://dui8s5f2ql5qm" path="res://GUI/Game/Lists/Listables/UIResource.tscn" id="1_rh2jm"]
 [ext_resource type="Script" path="res://GUI/Game/Panels/UIPanelLedgerEntry.cs" id="1_rr1wj"]
 [ext_resource type="PackedScene" uid="uid://dcasdyjneoik4" path="res://GUI/Game/Lists/Listables/UIResourceRequest.tscn" id="3_nyyw7"]
 [ext_resource type="PackedScene" uid="uid://0m22s117jkqe" path="res://GUI/Game/Panels/UIResourceStorage.tscn" id="4_b7yvj"]
@@ -23,10 +23,10 @@ layout_mode = 2
 [node name="ConsumptionRequest" parent="." instance=ExtResource("3_nyyw7")]
 layout_mode = 2
 
-[node name="Import" parent="." instance=ExtResource("1_rh2jm")]
+[node name="Import" parent="." instance=ExtResource("3_nyyw7")]
 layout_mode = 2
 
-[node name="Export" parent="." instance=ExtResource("1_rh2jm")]
+[node name="Export" parent="." instance=ExtResource("3_nyyw7")]
 layout_mode = 2
 
 [node name="Storage" parent="." instance=ExtResource("4_b7yvj")]

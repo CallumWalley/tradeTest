@@ -12,8 +12,8 @@ public partial class UIPanelLedgerEntry : VBoxContainer, Lists.IListable<Resourc
 		ledgerEntry = _ledgerEntry;
 		UIResource netLocal = GetNode<UIResource>("NetLocal");
 		UIResourceRequest consumption = GetNode<UIResourceRequest>("ConsumptionRequest");
-		UIResource import = GetNode<UIResource>("Import");
-		UIResource export = GetNode<UIResource>("Export");
+		UIResourceRequest import = GetNode<UIResourceRequest>("Import");
+		UIResourceRequest export = GetNode<UIResourceRequest>("Export");
 		UIResourceStorage storage = GetNode<UIResourceStorage>("Storage");
 		// UIResource importDemand = GetNode<UIResource>("ImportDemand");
 		// UIResource exportDemand = GetNode<UIResource>("ExportDemand");
@@ -22,8 +22,8 @@ public partial class UIPanelLedgerEntry : VBoxContainer, Lists.IListable<Resourc
 		//UIResourceStorage storage = GetNode<UIResourceStorage>("Storage");
 		netLocal.Init(ledgerEntry.NetLocal);
 		consumption.Init(ledgerEntry.RequestLocal);
-		import.Init(ledgerEntry.ResourceChildren);
-		export.Init(ledgerEntry.NetLocal);
+		import.Init(ledgerEntry.NetImport);
+		export.Init(ledgerEntry.NetExport);
 
 		// IF accruable also make storage.
 		if (ledgerEntry.Type < 500)

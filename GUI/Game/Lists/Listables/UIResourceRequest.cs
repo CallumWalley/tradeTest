@@ -19,7 +19,7 @@ public partial class UIResourceRequest : UIDrawEFrame, Lists.IListable<Resource.
     protected static readonly PackedScene p_resourceIcon = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/UIResourceRequest.tscn");
 
     Color colorBad = new(1, 0, 0);
-
+    Color colorGood = new(0, 0, 0);
     public void Init(Resource.IRequestable _request)
     {
         request = _request;
@@ -44,20 +44,22 @@ public partial class UIResourceRequest : UIDrawEFrame, Lists.IListable<Resource.
             name.Visible = ShowName;
             name.Text = $"{request.Name} : ";
 
-            if (request.State != 0)
-            {
-                value.Text = $"{request.Sum}/{request.Request}";
-                name.Text = $"{request.Name}";
-                value.AddThemeColorOverride("font_color", colorBad);
-                name.AddThemeColorOverride("font_color", colorBad);
-            }
-            else
+            if (request.State == 0)
             {
                 value.Text = (request.Sum).ToString();
                 name.Text = $"{request.Name} : ";
                 value.RemoveThemeColorOverride("font_color");
                 name.RemoveThemeColorOverride("font_color");
             }
+            else
+            {
+                value.Text = $"{request.Sum}/{request.Request}";
+                name.Text = $"{request.Name}";
+                value.AddThemeColorOverride("font_color", colorBad);
+                name.AddThemeColorOverride("font_color", colorBad);
+            }
+
+
         }
     }
 

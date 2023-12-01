@@ -45,7 +45,7 @@ public partial class UIResource : UIDrawEFrame, Lists.IListable<Resource.IResour
         ((TextureRect)GetNode("Icon")).Texture = Resource.Icon(resourceCode: resource.Type);
         TooltipText = resource.Name;
     }
-    
+
 
     public override void _Draw()
     {
