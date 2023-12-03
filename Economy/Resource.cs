@@ -39,6 +39,9 @@ public partial class Resource
         public void Respond() { }
         // No fulfilled value returned if not fulfilled.
         public void Respond(double value) { }
+
+        public double Fraction();
+
     }
 
     /// <summary>
@@ -58,8 +61,8 @@ public partial class Resource
     {
         public virtual double Sum { get; protected set; }
         public int Type { get; }
-        public string Details { get; set; }
-        public string Name { get; set; }
+        public virtual string Details { get; set; }
+        public virtual string Name { get; set; }
 
         public RStatic(int _type = 0, double _sum = 0, string _name = "Unknown", string _details = "Base value")
         {
@@ -202,6 +205,11 @@ public partial class Resource
                 { throw new InvalidOperationException("Set method is not valid for groups"); }
             }
         }
+
+        public double Fraction()
+        {
+            return Sum / Request;
+        }
         public override string ToString()
         {
             return $"{Sum}/{Request}";
@@ -260,10 +268,10 @@ public partial class Resource
     {
         // This is a dummy request. Does nothing.
         // Request is the amount of resource this consumer needs and points at another resource.
-        public double Request { get; set; }
+        public virtual double Request { get; set; }
 
         // Request is actual amount given
-        public int State { get; set; } = 0;
+        public virtual int State { get; set; } = 0;
 
         public RRequest(int _type, double _request, string _name = "Unknown", string _details = "Base value") : base(_type, 0, _name, _details: _details)
         {
@@ -281,6 +289,10 @@ public partial class Resource
         {
             base.Set(value);
             State = 1;
+        }
+        public virtual double Fraction()
+        {
+            return (base.Sum / Request);
         }
         public override string ToString()
         {
@@ -437,7 +449,7 @@ public partial class Resource
             set { _Set(index, value); }
         }
 
-        protected virtual void _Set(int index, TResource value)
+        public virtual void _Set(int index, TResource value)
         {
             members.Add(index, value);
         }
@@ -602,52 +614,52 @@ public partial class Resource
     /// <summary>
     /// Represents the other party in a traded resource.
     /// </summary>
-    public class RTradedResource : IResource
-    {
-        public Ledger ledger;
-        public IResource request;
-        public int Type { get { return request.Type; } }
-        public string Name { get; set; }
-        public string Details { get; set; }
-        public double Sum
-        {
-            get { return -request.Sum; }
-        }
-        public RTradedResource(IResource _request)
-        {
-            request = _request;
-        }
+    // public class RTradedResource : IResource
+    // {
+    //     public Ledger ledger;
+    //     public IResource request;
+    //     public int Type { get { return request.Type; } }
+    //     public string Name { get; set; }
+    //     public string Details { get; set; }
+    //     public double Sum
+    //     {
+    //         get { return -request.Sum; }
+    //     }
+    //     public RTradedResource(IResource _request)
+    //     {
+    //         request = _request;
+    //     }
 
-    }
-    public class RTradedRequest : IRequestable
-    {
-        public Ledger ledger;
-        public IRequestable request;
-        public int Type { get { return request.Type; } }
-        public int State
-        {
-            get { return request.State; }
-            set { request.State = value; }
-        }
+    // }
+    // public class RTradedRequest : IRequestable
+    // {
+    //     public Ledger ledger;
+    //     public IRequestable request;
+    //     public int Type { get { return request.Type; } }
+    //     public int State
+    //     {
+    //         get { return request.State; }
+    //         set { request.State = value; }
+    //     }
 
-        public double Request
-        {
-            get { return -request.Request; }
-            set { request.Request = -value; }
-        }
+    //     public double Request
+    //     {
+    //         get { return -request.Request; }
+    //         set { request.Request = -value; }
+    //     }
 
-        public string Name { get; set; }
-        public string Details { get; set; }
-        public double Sum
-        {
-            get { return -request.Sum; }
-        }
-        public RTradedRequest(IRequestable _request)
-        {
-            request = _request;
-        }
+    //     public string Name { get; set; }
+    //     public string Details { get; set; }
+    //     public double Sum
+    //     {
+    //         get { return -request.Sum; }
+    //     }
+    //     public RTradedRequest(IRequestable _request)
+    //     {
+    //         request = _request;
+    //     }
 
-    }
+    // }
 
     // public class ResourceRequestGroup : IResource
     // {
@@ -657,7 +669,7 @@ public partial class Resource
     {
         /// <summary>
         /// Ledger is the complete list of all the resources at a specific location. 
-        /// Is a loose implimentation of a sparse 2d matrix I guess.
+        /// It is sparce on the resource axis, but dense on the type axis.
         /// </summary>
         public Installation installation;
         /// Dummy method to make sure resource exists.
@@ -677,84 +689,106 @@ public partial class Resource
         }
 
 
-        public IEnumerable<RGroup<IRequestable>> NetRemote
-        {
-            get
-            {
-                foreach (KeyValuePair<int, Entry> kvp in _all)
-                {
-                    yield return kvp.Value.NetRemote;
-                }
-            }
-        }
-        public IEnumerable<KeyValuePair<int, Resource.IRequestable>> RequestExportToParent
-        {
-            get
-            {
-                foreach (Entry item in _all.Values)
-                {
-                    yield return new KeyValuePair<int, Resource.IRequestable>(item.Type, item.RequestImportFromParent);
-                }
-            }
-        }
-        public IEnumerable<KeyValuePair<int, Resource.IRequestable>> RequestImportFromParent
-        {
-            get
-            {
-                foreach (Entry item in _all.Values)
-                {
-                    yield return new KeyValuePair<int, Resource.IRequestable>(item.Type, item.RequestImportFromParent);
-                }
-            }
-        }
-        public IEnumerable<KeyValuePair<int, Resource.IRequestable>> RequestImportFromChildren
-        {
-            get
-            {
-                foreach (Entry item in _all.Values)
-                {
-                    yield return new KeyValuePair<int, Resource.IRequestable>(item.Type, item.RequestImportFromChildren);
-                }
-            }
-        }
+        // public IEnumerable<RGroup<IRequestable>> NetRemote
+        // {
+        //     get
+        //     {
+        //         foreach (KeyValuePair<int, Entry> kvp in _all)
+        //         {
+        //             yield return kvp.Value.NetRemote;
+        //         }
+        //     }
+        // }
+        // public IEnumerable<KeyValuePair<int, Resource.IRequestable>> RequestExportToParent
+        // {
+        //     get
+        //     {
+        //         foreach (Entry item in _all.Values)
+        //         {
+        //             yield return new KeyValuePair<int, Resource.IRequestable>(item.Type, item.RequestImportFromParent);
+        //         }
+        //     }
+        // }
+        // public IEnumerable<KeyValuePair<int, Resource.IRequestable>> RequestImportFromParent
+        // {
+        //     get
+        //     {
+        //         foreach (Entry item in _all.Values)
+        //         {
+        //             yield return new KeyValuePair<int, Resource.IRequestable>(item.Type, item.RequestImportFromParent);
+        //         }
+        //     }
+        // }
+        // public IEnumerable<KeyValuePair<int, Resource.IRequestable>> RequestImportFromChildren
+        // {
+        //     get
+        //     {
+        //         foreach (Entry item in _all.Values)
+        //         {
+        //             yield return new KeyValuePair<int, Resource.IRequestable>(item.Type, item.RequestImportFromChildren);
+        //         }
+        //     }
+        // }
         public class Entry
         {
             /// <summary>
             /// Represents a resource, and a place. Can be either request or resource.
             /// </summary>
 
+            public Installation installation;
             // Net is combo of Resource and Request.
 
-            public Resource.RGroup<Resource.IResource> ResourceLocal; // How much is produced here. 
-            public Resource.RGroupRequests<Resource.IRequestable> RequestLocal;
+            public RGroup<IResource> ResourceLocal; // How much is produced here. 
+            public RGroupRequests<IRequestable> RequestLocal;
 
+            public IRequestable RequestToParent
+            {
+                get { return (installation.Trade.UplineTraderoute == null) ? null : installation.Trade.UplineTraderoute.ListRequestTail[Type]; }
+            }
+            public IEnumerable<IRequestable> RequestFromChildren
+            {
+                get
+                {
+                    foreach (TradeRoute tradeRoute in installation.Trade.DownlineTraderoutes)
+                    {
+                        if (tradeRoute.ListRequestHead.ContainsKey(Type))
+                        {
+                            yield return tradeRoute.ListRequestHead[Type];
+                        }
+                    }
+                }
+            }
             // Export demand contains a reference to an Import Demand in child.
-            public RGroupRequests<IRequestable> NetImport
-            {
-                get
-                {
-                    RGroupRequests<IRequestable> net = new(Type, "Trade Net", "Trade Net");
-                    foreach (IRequestable item in RequestImportFromChildren)
-                    {
-                        net.Add(item);
-                    }
-                    net.Add(RequestImportFromParent);
-                    return net;
-                }
-            }
-            public RGroupRequests<IRequestable> NetExport
-            {
-                get
-                {
-                    RGroupRequests<IRequestable> net = new(Type, "Trade Net", "Trade Net");
-                    foreach (IRequestable item in RequestImportFromChildren)
-                    {
-                        net.Add(item);
-                    }
-                    net.Add(RequestExportToParent);
-                    return net;
-                }
-            }
+            // RGroupRequests<IRequestable> netImport;
+            // public RGroupRequests<IRequestable> NetImport
+            // {
+            //     get
+            //     {
+            //         netImport.Clear();
+
+            //         foreach (TradeRoute tradeRoute in installation.Trade.DownlineTraderoutes)
+            //         {
+            //             if (tradeRoute.ListRequest)
+            //                 netImport.Add(item);
+            //         }
+            //         net.Add(RequestImportFromParent);
+            //         return netImport;
+            //     }
+            // }
+
+            // public RGroupRequests<IRequestable> NetExport
+            // {
+            //     get
+            //     {
+            //         RGroupRequests<IRequestable> net = new(Type, "Trade Net", "Trade Net");
+            //         foreach (IRequestable item in RequestImportFromChildren)
+            //         {
+            //             net.Add(item);
+            //         }
+            //         net.Add(RequestExportToParent);
+            //         return net;
+            //     }
+            // }
 
             RGroupRequests<IRequestable> netRemote;
             public RGroupRequests<IRequestable> NetRemote
@@ -762,17 +796,15 @@ public partial class Resource
                 get
                 {
                     netRemote.Clear();
-                    foreach (IRequestable item in RequestImportFromChildren)
+                    foreach (IRequestable item in RequestFromChildren)
                     {
                         netRemote.Add(item);
                     }
-                    foreach (IRequestable item in RequestExportToChildren)
+                    if (RequestToParent != null)
                     {
-                        netRemote.Add(item);
-                    }
-                    netRemote.Add(RequestExportToParent);
-                    netRemote.Add(RequestImportFromParent);
+                        netRemote.Add(RequestToParent);
 
+                    }
                     return netRemote;
                 }
             }
@@ -796,17 +828,12 @@ public partial class Resource
             public Entry(int _type)
             {
 
-                //Installation installation;
                 //Local = 
                 ResourceLocal = new RGroup<IResource>(_type, "Local Production", "Sum Produced");
                 RequestLocal = new RGroupRequests<IRequestable>(_type, "Local Consumption", "Sum Requested");
                 //ConsumptionRequest = new Resource.RGroupRequests<Resource.IRequestable>(_type, "Total", "Sum Requests");
 
-                RequestExportToParent = new RRequest(_type, 0, "Upline Export", "Surplus Being Exported to parent");
-                RequestImportFromParent = new RRequest(_type, 0, "Upline Import", "Demanding this from parent");
-
-                RequestImportFromChildren = new RGroupRequests<IRequestable>(_type, "Downline Imports", "Imports");
-                RequestExportToChildren = new RGroupRequests<IRequestable>(_type, "Downline Exports", "Imports");
+                netRemote = new RGroupRequests<IRequestable>(Type, "All Import", "Trade Net");
 
                 netRemote = new RGroupRequests<IRequestable>(_type, "All Trade", "All Trade");
                 //Surplus = new Resource.RGroup<Resource.IResource>(_type, "Exports", "Total Exports");
@@ -834,7 +861,7 @@ public partial class Resource
 
             public override string ToString()
             {
-                return $"{Resource.Name(Type)}: {ResourceLocal.Sum} {RequestLocal.Sum} {NetLocal.Sum} {RequestImportFromParent.Sum}";
+                return $"{Resource.Name(Type)}: {NetLocal.Sum} {NetRemote.Sum} {Net.Sum}";
             }
         }
 
@@ -890,10 +917,13 @@ public partial class Resource
                     if (type < 500)
                     {
                         nre = new EntryAccrul(type);
+                        nre.installation = installation;
+
                     }
                     else
                     {
                         nre = new Entry(type);
+                        nre.installation = installation;
                     }
                     _all[type] = nre;
                     return nre;
@@ -960,6 +990,110 @@ public partial class Resource
         //             entry.Value.Consumption.Sum, entry.Value.Surplus.Sum, entry.Value.Demand.Sum });
         //     }
         // }
+    }
+
+
+
+    /// TRADE ROUTE UNIQUE CLASSES
+    /// 
+
+    // Same as regular list except makes sure to add corresponding element.
+    // When adding to tail, create corresponding in head. 
+    public class RListRequestTail<T> : Resource.RList<RRequestTail>
+    {
+        TradeRoute tradeRoute;
+        public RListRequestTail(TradeRoute _tradeRoute) : base()
+        {
+            tradeRoute = _tradeRoute;
+        }
+        // protected override RRequestTail _Get(int index)
+        // {
+        // 	if (!members.ContainsKey(index))
+        // 	{
+        // 		members[index] = new RRequestTail(index, 0);
+        // 		tradeRoute.rListRequestHead[index] = new RRequestHead(index, 0);
+        // 	}
+        // 	return members[index];
+        // 	return base._Get(index);
+        // }
+    }
+    /// <summary>
+    /// Same as regular request except details linked to trade.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    // class RListRequestHead<T> : Resource.RList<RRequestHead>
+    // {
+    // 	TradeRoute tradeRoute;
+    // 	public RListRequestHead(int _type, TradeRoute _tradeRoute) : base(_type, 0)
+    // 	{
+    // 		tradeRoute = _tradeRoute;
+    // 	}
+
+    // }
+    public class RRequestHead : RRequest
+    {
+        public TradeRoute tradeRoute;
+        RRequestTail twin;
+
+        public RRequestHead(int _type, TradeRoute _tradeRoute, RRequestTail _twin) : base(_type, 0)
+        {
+            tradeRoute = _tradeRoute;
+            twin = _twin;
+        }
+        /// <summary>
+        /// Drives state of twin.
+        /// </summary>
+        public override int State
+        {
+            get { return base.State; }
+            set
+            {
+                base.State = value;
+                twin.State = value;
+            }
+        }
+        /// <summary>
+        /// Drives state of twin.
+        /// </summary>
+        /// <param name="value"></param>
+        public override void Set(double value)
+        {
+            base.Set(value);
+            twin.Set(-value);
+        }
+        public override string Details { get { return string.Format("Trade with {0}", tradeRoute.Tail.Name); } }
+        public override string Name { get { return string.Format("Trade with {0}", tradeRoute.Tail.Name); } }
+
+    }
+    /// <summary>
+    /// Drives RequestHead
+    /// </summary>
+    public class RRequestTail : RRequest
+    {
+        TradeRoute tradeRoute;
+        RRequestHead twin;
+
+        public RRequestTail(int _type, TradeRoute _tradeRoute) : base(_type, 0)
+        {
+            tradeRoute = _tradeRoute;
+            twin = new RRequestHead(_type, _tradeRoute, this);
+            tradeRoute.ListRequestHead[_type] = twin;
+        }
+
+        /// <summary>
+        /// Tail controls requeust of twin.
+        /// </summary>
+        public override double Request
+        {
+            get { return base.Request; }
+            set
+            {
+                twin.Request = -value;
+                base.Request = value;
+            }
+        }
+        public override string Details { get { return string.Format("Trade with {0}", tradeRoute.Head.Name); } }
+        public override string Name { get { return string.Format("Trade with {0}", tradeRoute.Head.Name); } }
     }
 }
 

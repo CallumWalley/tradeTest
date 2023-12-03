@@ -23,10 +23,10 @@ layout_mode = 2
 [node name="ConsumptionRequest" parent="." instance=ExtResource("3_nyyw7")]
 layout_mode = 2
 
-[node name="Import" parent="." instance=ExtResource("3_nyyw7")]
+[node name="ImportExport" parent="." instance=ExtResource("3_nyyw7")]
 layout_mode = 2
 
-[node name="Export" parent="." instance=ExtResource("3_nyyw7")]
+[node name="Net" parent="." instance=ExtResource("1_rh2jm")]
 layout_mode = 2
 
 [node name="Storage" parent="." instance=ExtResource("4_b7yvj")]

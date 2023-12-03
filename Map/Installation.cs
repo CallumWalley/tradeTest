@@ -283,6 +283,18 @@ public partial class Installation : Node
     public class _Trade
     {
         Installation installation;
+        public Resource.RRequest outboundShipDemand = new Resource.RRequest(901, 0, "Trade vessels for export");
+        public Resource.RRequest inboundShipDemand = new Resource.RRequest(901, 0, "Trade vessels for import.");
+        public Resource.RRequest shipDemand = new Resource.RRequest(901, 0, "Trade vessels in use.");
+        public Resource.RRequest ShipDemand
+        {
+            get
+            {
+                shipDemand.Set(Math.Max(outboundShipDemand.Sum, inboundShipDemand.Sum));
+                return shipDemand;
+            }
+        }
+
         public _Trade(Installation _installation) { installation = _installation; }
         public TradeRoute UplineTraderoute = null;
         public List<TradeRoute> DownlineTraderoutes = new List<TradeRoute>();

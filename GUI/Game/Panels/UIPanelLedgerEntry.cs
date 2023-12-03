@@ -12,8 +12,8 @@ public partial class UIPanelLedgerEntry : VBoxContainer, Lists.IListable<Resourc
 		ledgerEntry = _ledgerEntry;
 		UIResource netLocal = GetNode<UIResource>("NetLocal");
 		UIResourceRequest consumption = GetNode<UIResourceRequest>("ConsumptionRequest");
-		UIResourceRequest import = GetNode<UIResourceRequest>("Import");
-		UIResourceRequest export = GetNode<UIResourceRequest>("Export");
+		UIResourceRequest importExport = GetNode<UIResourceRequest>("ImportExport");
+		UIResource net = GetNode<UIResource>("Net");
 		UIResourceStorage storage = GetNode<UIResourceStorage>("Storage");
 		// UIResource importDemand = GetNode<UIResource>("ImportDemand");
 		// UIResource exportDemand = GetNode<UIResource>("ExportDemand");
@@ -22,8 +22,8 @@ public partial class UIPanelLedgerEntry : VBoxContainer, Lists.IListable<Resourc
 		//UIResourceStorage storage = GetNode<UIResourceStorage>("Storage");
 		netLocal.Init(ledgerEntry.NetLocal);
 		consumption.Init(ledgerEntry.RequestLocal);
-		import.Init(ledgerEntry.NetImport);
-		export.Init(ledgerEntry.NetExport);
+		importExport.Init(ledgerEntry.NetRemote);
+		net.Init(ledgerEntry.Net);
 
 		// IF accruable also make storage.
 		if (ledgerEntry.Type < 500)
@@ -39,8 +39,8 @@ public partial class UIPanelLedgerEntry : VBoxContainer, Lists.IListable<Resourc
 
 		netLocal.ShowBreakdown = true;
 		consumption.ShowBreakdown = true;
-		import.ShowBreakdown = true;
-		export.ShowBreakdown = true;
+		importExport.ShowBreakdown = true;
+		net.ShowBreakdown = true;
 
 		// importDemand.Init(ledgerEntry.ImportDemand);
 	}

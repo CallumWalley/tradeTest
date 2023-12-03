@@ -106,11 +106,15 @@ public partial class Logistics
         /// <param name="installation"></param>
         public static void CalculateRequests(Installation installation)
         {
+            installation.Trade.outboundShipDemand.Set(0);
+            installation.Trade.inboundShipDemand.Set(0);
+
             // For each child trade route
             foreach (TradeRoute downline in installation.Trade.DownlineTraderoutes)
             {
                 // call this funtion on child.
                 CalculateRequests(downline.Tail);
+
                 // // Iterate over ledger. add their ExportSurplus to my Import and their ImportDemand to my ExportDemand. 
                 // foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in downline.Tail.Ledger)
                 // {
@@ -152,6 +156,11 @@ public partial class Logistics
             // For each element in ledger calculate net resource and set ImportDemand / Export appropriately.
             foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in installation.Ledger)
             {
+                // Special rules for trade.
+                // if (kvp.Value == 901)
+                // {
+
+                // }
 
                 // foreach (TradeRoute tr in installation.Trade.DownlineTraderoutes)
                 // {
@@ -159,26 +168,20 @@ public partial class Logistics
                 // }
 
                 // if (kvp.Key > 500) { }
-
-                double importRequest = installation.Trade.DownlineTraderoutes.Sum((x => x.Tail.Ledger[kvp.Key].RequestImportFromParent.Request)) + kvp.Value.RequestLocal.Request;
-                double exportRequest = installation.Trade.DownlineTraderoutes.Sum((x => x.Tail.Ledger[kvp.Key].RequestExportToParent.Sum)) + kvp.Value.ResourceLocal.Sum;
-                double net = exportRequest + importRequest;
+                double net = installation.Trade.DownlineTraderoutes.Where(x => x.ListRequestHead.ContainsKey(kvp.Key)).Sum((x => x.ListRequestHead[kvp.Key].Request)) + kvp.Value.RequestLocal.Request + kvp.Value.ResourceLocal.Sum;
+                //double exportRequest = installation.Trade.DownlineTraderoutes.Sum((x => x.Tail.Ledger[kvp.Key].RequestExportToParent.Sum)) + kvp.Value.ResourceLocal.Sum;
+                //double net = exportRequest + importRequest;
+                if (net > 0)
+                {
+                    installation.Trade.inboundShipDemand.Set(installation.Trade.inboundShipDemand.Sum + net);
+                }
+                else
+                {
+                    installation.Trade.outboundShipDemand.Set(installation.Trade.outboundShipDemand.Sum - net);
+                }
 
                 // If balance is negative. Request the difference from parent.
-                {
-                    if (net < 0)
-                    {
-                        kvp.Value.RequestExportToParent.Request = 0;
-                        kvp.Value.RequestImportFromParent.Request = net;
-                        //installation.Trade.UplineTraderoute.SetRequest(kvp.Key, -net);
-                    }
-                    // Otherwise, set export surplus to difference.
-                    else
-                    {
-                        kvp.Value.RequestExportToParent.Request = net;
-                        kvp.Value.RequestImportFromParent.Request = 0;
-                    }
-                }
+                kvp.Value.RequestToParent.Request = net;
             }
         }
         /// <summary>
@@ -187,22 +190,50 @@ public partial class Logistics
         /// <param name="installation"></param>
         static void CalculateResources(Installation installation)
         {
+            /// how much of this request can be fulfilled.
+            double supplyFaction = 0;
+            installation.Trade.ShipDemand.Request = 0;
+            double shipsAvailable = installation.Ledger[901].Net.Sum;
+
+            // Determine if enough ships for trade.
+            foreach (TradeRoute tradeRoute in installation.Trade.DownlineTraderoutes)
+            {
+                installation.Trade.ShipDemand.Request += tradeRoute.Tail.Trade.ShipDemand.Sum;
+            }
+
+            installation.Trade.ShipDemand.Respond(Math.Min(shipsAvailable, installation.Trade.ShipDemand.Request));
+            supplyFaction = installation.Trade.ShipDemand.Sum / installation.Trade.ShipDemand.Request;
+
+            // Tell each trade route how many ships it gets.
+            foreach (TradeRoute tradeRoute in installation.Trade.DownlineTraderoutes)
+            {
+                tradeRoute.Tail.Trade.outboundShipDemand.Respond(Math.Min(tradeRoute.Tail.Trade.ShipDemand.Request * supplyFaction, tradeRoute.Tail.Trade.outboundShipDemand.Request));
+                tradeRoute.Tail.Trade.inboundShipDemand.Respond(Math.Min(tradeRoute.Tail.Trade.ShipDemand.Request * supplyFaction, tradeRoute.Tail.Trade.inboundShipDemand.Request));
+            }
+
+            /// Actualise imports.
+            foreach (TradeRoute tradeRoute in installation.Trade.DownlineTraderoutes)
+            {
+                foreach (Resource.RRequestHead request in tradeRoute.ListRequestHead)
+                {
+                    if (request.Request < 0) { continue; } // No exports yet.
+                    request.Respond(tradeRoute.Tail.Trade.outboundShipDemand.Fraction() * request.Request);
+                }
+            }
+
             foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in installation.Ledger) //.Where(x => x.Key < 500)
             {
 
-                double total = kvp.Value.ResourceLocal.Sum + installation.Trade.DownlineTraderoutes.Where(x => x.Tail.Ledger.ContainsKey(kvp.Key)).Sum(y => y.Tail.Ledger[kvp.Key].RequestExportToParent.Sum);
-                // Have to do it this ugly way cause of nulls.
+                double total = kvp.Value.ResourceLocal.Sum + kvp.Value.RequestFromChildren.Sum(x => x.Sum);
 
-
+                // Divide total resources amoung local.
                 double resourceLeftovers = ShareResources(total, kvp.Value.RequestLocal);
 
                 //If not enough resources to supply local, not enough to export.
                 if (resourceLeftovers == 0) { continue; }
 
-                // Allocate resources remotely.
-                // Allocate resources locally.
-                IEnumerable<Resource.IRequestable> requestables = installation.Trade.DownlineTraderoutes.Where(x => x.Tail.Ledger.ContainsKey(kvp.Key)).Select(x => x.Tail.Ledger[kvp.Key].RequestExportToParent);
-                resourceLeftovers = ShareResources(resourceLeftovers, requestables);
+                // Remaining resources to fulfill exports.
+                resourceLeftovers = ShareResources(resourceLeftovers, installation.Trade.DownlineTraderoutes.Where(x => x.ListRequestHead.ContainsKey(kvp.Key)).Select(x => x.ListRequestHead[kvp.Key]));
 
                 // Then store remainder
 
@@ -224,19 +255,15 @@ public partial class Logistics
             // Supply fraction is the fraction of resources that can be allocated.
             double requestTotal = requesters.Sum(x => x.Request);
             double newResourceTotal = resourceTotal;
-            double supplyFaction = resourceTotal / -requestTotal;
-            foreach (Resource.IRequestable r in requesters)
-            {
 
+            // Supply fraction used is lowest of available and ship constraints.
+            double resourceSupplyFraction = resourceTotal / -requestTotal;
+            foreach (Resource.RRequestHead r in requesters)
+            {
                 // Respond with fraction.
-                if (supplyFaction < 1)
+                if (resourceSupplyFraction < 1)
                 {
-                    r.Respond(supplyFaction * r.Request);
-                }
-                else
-                {
-                    newResourceTotal -= r.Request;
-                    r.Respond();
+                    r.Respond(Math.Min(Math.Min(resourceSupplyFraction, r.tradeRoute.InboundShipDemand.Fraction() * r.Request), r.Request));
                 }
             }
             return newResourceTotal;

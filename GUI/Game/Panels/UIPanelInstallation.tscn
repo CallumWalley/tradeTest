@@ -34,13 +34,13 @@ text = "Local"
 layout_mode = 2
 text = "Consumption"
 
-[node name="Import" type="Label" parent="VBoxContainer/TabContainer/Supply/VBoxContainer"]
+[node name="Trade" type="Label" parent="VBoxContainer/TabContainer/Supply/VBoxContainer"]
 layout_mode = 2
-text = "Import"
+text = "Trade"
 
-[node name="Export" type="Label" parent="VBoxContainer/TabContainer/Supply/VBoxContainer"]
+[node name="Net" type="Label" parent="VBoxContainer/TabContainer/Supply/VBoxContainer"]
 layout_mode = 2
-text = "Export"
+text = "Net"
 
 [node name="Storage" type="Label" parent="VBoxContainer/TabContainer/Supply/VBoxContainer"]
 layout_mode = 2

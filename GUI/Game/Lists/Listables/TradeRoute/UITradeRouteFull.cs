@@ -89,7 +89,7 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
 
         //Lists.UIListResources headExportRequest = new();
         Lists.UIListResources headImport = new();
-        headImport.Init(tradeRoute.Tail.Ledger.NetRemote);
+        headImport.Init(tradeRoute.ListRequestTail);
         // surplus.Init(tradeRoute.Surplus);
 
         // demand.Vertical = false;
@@ -101,7 +101,7 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
         // GetNode<HBoxContainer>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/TailResources").AddChild(surplus);
 
         friegherRequirement = GetNode<UIResource>("VBoxContainer/HBoxContainer/HSplitContainer/UIResource");
-        friegherRequirement.Init(tradeRoute.TradeWeight);
+        friegherRequirement.Init(tradeRoute.Tail.Trade.ShipDemand);
         friegherRequirement.ShowBreakdown = true;
         details = GetNode<ScrollContainer>("VBoxContainer/HBoxContainer/HSplitContainer/Details");
         cancelButton = GetNode<TextureButton>("VBoxContainer/HBoxContainer/AlignRight/Cancel");

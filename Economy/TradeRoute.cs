@@ -11,32 +11,19 @@ public partial class TradeRoute : Node
 	[Export]
 	public Installation Head { get; set; }
 
-	// public void SetResource(int type, double value)
-	// {
-	// 	ResourceParent[type].Set(value);
-	// 	if (!ResourceChild.ContainsKey(type))
-	// 	{
-	// 		ResourceChild.Add(new Resource.RTradedResource(ResourceParent[type]));
-	// 	}
-	// }
-	// public void SetRequest(int type, double value)
-	// {
-	// 	RequestParent[type].Set(value);
-	// 	if (!ResourceChild.ContainsKey(type))
-	// 	{
-	// 		RequestChild.Add(new Resource.RTradedRequest(RequestParent[type]));
-	// 	}
-	// }
+	public Resource.RListRequestTail<Resource.RRequestTail> ListRequestTail;
+	public Resource.RList<Resource.RRequestHead> ListRequestHead;
 
-	/// DO EVERYTHIN IN TRADE ROUTE NOW
-	public Resource.RList<Resource.RRequest> RequestExportToParent;  // What tail is exporting to parent.
-	public Resource.RList<Resource.RRequest> RequestImportFromParent;  // What tail is requesting from parent.
-	public Resource.RList<Resource.RRequest> RequestExportToChildren;  // What tail is exporting to parent.
-	public Resource.RList<Resource.RRequest> RequestImportFromChildren;  // What tail is requesting from parent.
+	public Resource.IRequestable OutboundShipDemand
+	{
+		get { return Tail.Trade.outboundShipDemand; }
+	}
+	public Resource.IRequestable InboundShipDemand
+	{
+		get { return Tail.Trade.inboundShipDemand; }
+	}
 
 
-
-	//public Resource.TradeRouteResourceList HeadRequest; // 
 	public int Order
 	{
 		get
@@ -90,8 +77,9 @@ public partial class TradeRoute : Node
 		distance = Tail.GetParent<Body>().Position.DistanceTo(Head.GetParent<Body>().Position);
 		Name = $"Trade route from {Head.Name} to {Tail.Name}";
 
+		ListRequestHead = new Resource.RList<Resource.RRequestHead>();
+		ListRequestTail = new Resource.RListRequestTail<Resource.RRequestTail>(this);
 
-.
 		// RequestExportToParent = (Resource.RList<Resource.RRequest>)Tail.Ledger.RequestExportToParent;
 		// RequestImportFromParent = (Resource.RList<Resource.RRequest>)Tail.Ledger.RequestImportFromParent;
 
