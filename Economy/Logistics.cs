@@ -157,10 +157,10 @@ public partial class Logistics
             foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in installation.Ledger)
             {
                 // Special rules for trade.
-                // if (kvp.Value == 901)
-                // {
-
-                // }
+                if (kvp.Key == 901)
+                {
+                    continue;
+                }
 
                 // foreach (TradeRoute tr in installation.Trade.DownlineTraderoutes)
                 // {
@@ -258,13 +258,17 @@ public partial class Logistics
 
             // Supply fraction used is lowest of available and ship constraints.
             double resourceSupplyFraction = resourceTotal / -requestTotal;
-            foreach (Resource.RRequestHead r in requesters)
+            foreach (Resource.IRequestable r in requesters)
             {
                 // Respond with fraction.
-                if (resourceSupplyFraction < 1)
+                double resourceShippingFraction = 1;
+                if (r is Resource.RRequestHead)
                 {
-                    r.Respond(Math.Min(Math.Min(resourceSupplyFraction, r.tradeRoute.InboundShipDemand.Fraction() * r.Request), r.Request));
+                    resourceShippingFraction = ((Resource.RRequestHead)r).tradeRoute.InboundShipDemand.Fraction();
                 }
+                double allocated = Math.Min(Math.Min(resourceSupplyFraction, resourceShippingFraction), 1) * r.Request;
+                r.Respond(allocated);
+                newResourceTotal -= allocated;
             }
             return newResourceTotal;
         }

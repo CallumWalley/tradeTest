@@ -20,12 +20,12 @@ public partial class UIPanelInstallation : Control
     // static readonly PackedScene p_uiIndustry = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/Entities/UI_Industry_Full.tscn");
     // static readonly PackedScene p_uiTradeRoute = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/Entities/UITradeRouteFull.tscn");
     static readonly PackedScene p_uistorage = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Panels/UIResourceStorage.tscn");
-    static readonly PackedScene p_uirequest = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/UIResourceRequest.tscn");
+    static readonly PackedScene p_uirequest = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/UIResource.tscn");
     static readonly PackedScene p_uiDropDown = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/UIDropDown.tscn");
     // static readonly PackedScene p_uiTradeDestination = GD.Load<PackedScene>("res://GUI/Components/UIDropDown.tscn");
     static readonly PackedScene prefab_TradeRoute = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/TradeRoute/UITradeRouteFull.tscn");
     static readonly PackedScene prefab_UplineSelector = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Dropdowns/UIDropDownSetHead.tscn");
-
+    UIPanelLedger panelLedger;
     public void Init(Installation _installation)
     {
         tabContainer = GetNode<VBoxContainer>("VBoxContainer").GetNode<TabContainer>("TabContainer");
@@ -39,7 +39,7 @@ public partial class UIPanelInstallation : Control
         tradePanel = tabContainer.GetNode<BoxContainer>("Trade");
         tradePanelNetwork = tradePanel.GetNode<Label>("Network/Label");
 
-        UIPanelLedger panelLedger = new();
+        panelLedger = new();
         panelLedger.Ledger = installation.Ledger;
         supplyPanel.AddChild(panelLedger);
 
@@ -74,7 +74,6 @@ public partial class UIPanelInstallation : Control
         tradePanel.AddChild(tradeRouteList);
 
         tabContainer.QueueRedraw();
-
     }
 
 
@@ -82,6 +81,7 @@ public partial class UIPanelInstallation : Control
     public override void _Draw()
     {
         base._Draw();
+        panelLedger.Update();
         if (installation.Order > 0)
         {
             tradePanelNetwork.Text = string.Format("{0} order member of {1}", installation.Order, installation.Network);

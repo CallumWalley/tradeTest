@@ -6,20 +6,22 @@ public partial class UIPanelLedgerEntry : VBoxContainer, Lists.IListable<Resourc
 	public Resource.Ledger.Entry ledgerEntry;
 	public Resource.Ledger.Entry GameElement { get { return ledgerEntry; } }
 	public bool Destroy { get; set; } = false;
-
+	UIResource netLocal;
+	UIResource consumption;
+	UIResource importExport;
+	UIResource net;
+	UIResourceStorage storage;
 	public void Init(Resource.Ledger.Entry _ledgerEntry)
 	{
 		ledgerEntry = _ledgerEntry;
-		UIResource netLocal = GetNode<UIResource>("NetLocal");
-		UIResourceRequest consumption = GetNode<UIResourceRequest>("ConsumptionRequest");
-		UIResourceRequest importExport = GetNode<UIResourceRequest>("ImportExport");
-		UIResource net = GetNode<UIResource>("Net");
-		UIResourceStorage storage = GetNode<UIResourceStorage>("Storage");
+		netLocal = GetNode<UIResource>("NetLocal");
+		consumption = GetNode<UIResource>("ConsumptionRequest");
+		importExport = GetNode<UIResource>("ImportExport");
+		net = GetNode<UIResource>("Net");
 		// UIResource importDemand = GetNode<UIResource>("ImportDemand");
 		// UIResource exportDemand = GetNode<UIResource>("ExportDemand");
 
 
-		//UIResourceStorage storage = GetNode<UIResourceStorage>("Storage");
 		netLocal.Init(ledgerEntry.NetLocal);
 		consumption.Init(ledgerEntry.RequestLocal);
 		importExport.Init(ledgerEntry.NetRemote);
@@ -28,12 +30,10 @@ public partial class UIPanelLedgerEntry : VBoxContainer, Lists.IListable<Resourc
 		// IF accruable also make storage.
 		if (ledgerEntry.Type < 500)
 		{
+			storage = (UIResourceStorage)GD.Load<PackedScene>("res://GUI/Game/Panels/UIResourceStorage.tscn").Instantiate();
+			AddChild(storage);
 			storage.Init(((Resource.Ledger.EntryAccrul)ledgerEntry));
 			storage.Visible = true;
-		}
-		else
-		{
-			storage.QueueFree();
 		}
 
 
@@ -46,8 +46,22 @@ public partial class UIPanelLedgerEntry : VBoxContainer, Lists.IListable<Resourc
 	}
 	public override void _Ready()
 	{
+		Update();
 	}
 
+
+	public void Update()
+	{
+		netLocal.Update();
+		consumption.Update();
+		importExport.Update();
+		net.Update();
+		if (ledgerEntry.Type < 500)
+		{
+			storage.Update();
+		}
+
+	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Draw()
 	{

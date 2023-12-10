@@ -281,14 +281,13 @@ public partial class Resource
         // No inputs if request fulfilled.
         public virtual void Respond()
         {
-            base.Set(Request);
-            State = 0;
+            Respond(Request);
         }
         // No fulfilled value returned if not fulfilled.
         public virtual void Respond(double value)
         {
             base.Set(value);
-            State = 1;
+            State = (value == Request) ? 0 : 1;
         }
         public virtual double Fraction()
         {
@@ -523,22 +522,22 @@ public partial class Resource
     }
     // A list but the top level elements must be groups.
 
-    /// <summary>
-    /// Child class of resource list with that constructs resources with correct descriptions.
-    /// </summary>
-    public class TradeRouteResourceList : RStaticList
-    {
-        string name;
-        string description;
-        public TradeRouteResourceList(string _name, string _description)
-        {
-            name = _name; description = _description;
-        }
-        protected override RStatic CreateNewMember(int index)
-        {
-            return new RStatic(index, 0, string.Format(name, Name(index)), string.Format(description, Name(index)));
-        }
-    }
+    // /// <summary>
+    // /// Child class of resource list with that constructs resources with correct descriptions.
+    // /// </summary>
+    // public class TradeRouteResourceList : RStaticList
+    // {
+    //     string name;
+    //     string description;
+    //     public TradeRouteResourceList(string _name, string _description)
+    //     {
+    //         name = _name; description = _description;
+    //     }
+    //     protected override RStatic CreateNewMember(int index)
+    //     {
+    //         return new RStatic(index, 0, string.Format(name, Name(index)), string.Format(description, Name(index)));
+    //     }
+    // }
     public partial class RGroupList<TResource> : RList<RGroup<TResource>> where TResource : IResource
     {
         // Same as RList, except all elements are groups.
@@ -999,23 +998,27 @@ public partial class Resource
 
     // Same as regular list except makes sure to add corresponding element.
     // When adding to tail, create corresponding in head. 
-    public class RListRequestTail<T> : Resource.RList<RRequestTail>
+    public class RListRequestTail<T> : RList<RRequestTail>
     {
         TradeRoute tradeRoute;
         public RListRequestTail(TradeRoute _tradeRoute) : base()
         {
             tradeRoute = _tradeRoute;
+            // CreateMissing = true;
         }
-        // protected override RRequestTail _Get(int index)
-        // {
-        // 	if (!members.ContainsKey(index))
-        // 	{
-        // 		members[index] = new RRequestTail(index, 0);
-        // 		tradeRoute.rListRequestHead[index] = new RRequestHead(index, 0);
-        // 	}
-        // 	return members[index];
-        // 	return base._Get(index);
-        // }
+        protected override RRequestTail _Get(int index)
+        {
+            if (!members.ContainsKey(index))
+            {
+                RRequestTail tail = new RRequestTail(index, tradeRoute);
+                RRequestHead head = new RRequestHead(index, tradeRoute);
+                tail.twin = head;
+                head.twin = tail;
+                members.Add(index, tail);
+                tradeRoute.ListRequestHead.Add(head);
+            }
+            return members[index];
+        }
     }
     /// <summary>
     /// Same as regular request except details linked to trade.
@@ -1033,12 +1036,11 @@ public partial class Resource
     public class RRequestHead : RRequest
     {
         public TradeRoute tradeRoute;
-        RRequestTail twin;
+        public RRequestTail twin;
 
-        public RRequestHead(int _type, TradeRoute _tradeRoute, RRequestTail _twin) : base(_type, 0)
+        public RRequestHead(int _type, TradeRoute _tradeRoute) : base(_type, 0)
         {
             tradeRoute = _tradeRoute;
-            twin = _twin;
         }
         /// <summary>
         /// Drives state of twin.
@@ -1071,13 +1073,12 @@ public partial class Resource
     public class RRequestTail : RRequest
     {
         TradeRoute tradeRoute;
-        RRequestHead twin;
+        public RRequestHead twin;
 
         public RRequestTail(int _type, TradeRoute _tradeRoute) : base(_type, 0)
         {
             tradeRoute = _tradeRoute;
-            twin = new RRequestHead(_type, _tradeRoute, this);
-            tradeRoute.ListRequestHead[_type] = twin;
+            //tradeRoute.ListRequestHead[_type] = twin;
         }
 
         /// <summary>
@@ -1088,12 +1089,13 @@ public partial class Resource
             get { return base.Request; }
             set
             {
+                if (twin == null) { return; }// to avoid error when being set. Maybe better way.
                 twin.Request = -value;
                 base.Request = value;
             }
         }
-        public override string Details { get { return string.Format("Trade with {0}", tradeRoute.Head.Name); } }
-        public override string Name { get { return string.Format("Trade with {0}", tradeRoute.Head.Name); } }
+        // public override string Details { get { return string.Format("Trade with {0}", tradeRoute.Head.Name); } }
+        // public override string Name { get { return string.Format("Trade with {0}", tradeRoute.Head.Name); } }
     }
 }
 

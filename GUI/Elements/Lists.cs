@@ -9,11 +9,15 @@ using System.Linq;
 /// </summary>
 public partial class Lists
 {
-
+    /// <summary>
+    /// A listable element is one that may or may not exist in a parent list.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public interface IListable<T>
     {
         public T GameElement { get; }
         public void Init(T @object);
+        public void Update();
         public void _Draw();
 
         public bool Destroy { set; }// If flag true, must destroy self.
@@ -46,33 +50,42 @@ public partial class Lists
             label.Text = "Empty";
             return label;
         }
-        public override void _Draw()
+
+        /// <summary>
+        ///  Call to recalculate all child elements.
+        /// </summary>
+        public void Update()
         {
-
-            if (list == null)
-            {
-                GD.Print($"UI list tring to draw null");
-                return;
-            }
-
+            /// Queue all children for deletion
             foreach (IListable<T> uichild in GetChildren())
             {
                 uichild.Destroy = true;
             }
 
+            /// For each in list, check if element exists. 
             foreach (T r in list)
             {
-                Update(r);
+                UpdateElement(r);
             }
         }
 
-        protected void Update(T r)
+        public override void _Draw()
+        {
+            if (list == null)
+            {
+                GD.Print($"UI list tring to draw null");
+                return;
+            }
+        }
+
+        protected void UpdateElement(T r)
         {
             foreach (IListable<T> uir in GetChildren())
             {
                 if (ReferenceEquals(uir.GameElement, r))
                 {
                     uir.Destroy = false;
+                    //uir.Update();
                     return;
                 }
             }
@@ -112,25 +125,25 @@ public partial class Lists
         }
     }
 
-    public partial class UIListRequestable : UIList<Resource.IRequestable>
-    {
-        public bool ShowName { get; set; } = false;
-        public bool ShowDetails { get; set; } = false;
-        public bool ShowBreakdown { get; set; } = false;
-        public void Init(IEnumerable<Resource.IRequestable> _object)
-        {
-            Name = "Supply";
-            base.Init(_object, GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/UIResourceRequest.tscn"));
-        }
+    // public partial class UIListRequestable : UIList<Resource.IRequestable>
+    // {
+    //     public bool ShowName { get; set; } = false;
+    //     public bool ShowDetails { get; set; } = false;
+    //     public bool ShowBreakdown { get; set; } = false;
+    //     public void Init(IEnumerable<Resource.IRequestable> _object)
+    //     {
+    //         Name = "Supply";
+    //         base.Init(_object, GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/UIResource.tscn"));
+    //     }
 
-        protected override UIResourceRequest CreateNewElement(Resource.IRequestable r)
-        {
-            UIResourceRequest rui = (UIResourceRequest)prefab.Instantiate();
-            rui.Init(r);
-            rui.ShowName = ShowName;
-            rui.ShowDetails = ShowDetails;
-            rui.ShowBreakdown = ShowBreakdown;
-            return rui;
-        }
-    }
+    //     protected override UIResource CreateNewElement(Resource.IRequestable r)
+    //     {
+    //         UIResource rui = (UIResource)prefab.Instantiate();
+    //         rui.Init(r);
+    //         rui.ShowName = ShowName;
+    //         rui.ShowDetails = ShowDetails;
+    //         rui.ShowBreakdown = ShowBreakdown;
+    //         return rui;
+    //     }
+    // }
 }

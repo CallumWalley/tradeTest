@@ -12,11 +12,10 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
     LineEdit labelName;
     UIInstallationTiny installationHead;
     UIInstallationTiny installationTail;
-    UIListResources resourcesHead;
-    UIListResources resourcesTail;
     UIResource friegherRequirement;
     public TextureButton cancelButton;
     ScrollContainer details;
+    Lists.UIListResources headImport;
 
     public static Player player;
     public Control Control { get { return this; } }
@@ -28,9 +27,14 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
     {
         tradeRoute = _tradeRoute;
 
+        friegherRequirement = GetNode<UIResource>("VBoxContainer/HBoxContainer/HSplitContainer/UIResource");
+        friegherRequirement.Init(tradeRoute.Tail.Trade.ShipDemand);
+        friegherRequirement.ShowBreakdown = true;
         //callback = _callback;
 
-
+        headImport = new();
+        headImport.Init(tradeRoute.ListRequestTail);
+        GetNode<HBoxContainer>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/HeadResources").AddChild(headImport);
         // Set button text.
         // GetNode<Label>("Summary/SummaryContent/Source").Text = $"→ system - {tradeRoute.destination.Name}";
 
@@ -80,34 +84,26 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
         labelName = GetNode<LineEdit>("VBoxContainer/Panel/LineEdit");
         labelName.Text = tradeRoute.Name;
 
-
-
         installationHead = GetNode<UIInstallationTiny>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Head/InstallationSummary");
         installationTail = GetNode<UIInstallationTiny>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Tail/InstallationSummary");
         installationHead.Init(tradeRoute.Head);
         installationTail.Init(tradeRoute.Tail);
 
-        //Lists.UIListResources headExportRequest = new();
-        Lists.UIListResources headImport = new();
-        headImport.Init(tradeRoute.ListRequestTail);
-        // surplus.Init(tradeRoute.Surplus);
 
         // demand.Vertical = false;
         // surplus.Vertical = false;
         // demand.ShowBreakdown = true;
         // surplus.ShowBreakdown = true;
 
-        GetNode<HBoxContainer>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/HeadResources").AddChild(headImport);
         // GetNode<HBoxContainer>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/TailResources").AddChild(surplus);
 
-        friegherRequirement = GetNode<UIResource>("VBoxContainer/HBoxContainer/HSplitContainer/UIResource");
-        friegherRequirement.Init(tradeRoute.Tail.Trade.ShipDemand);
-        friegherRequirement.ShowBreakdown = true;
         details = GetNode<ScrollContainer>("VBoxContainer/HBoxContainer/HSplitContainer/Details");
         cancelButton = GetNode<TextureButton>("VBoxContainer/HBoxContainer/AlignRight/Cancel");
         // Link components
         labelName.Connect("text_submitted", new Callable(this, "ChangeName"));
         cancelButton.Connect("pressed", new Callable(this, "Remove"));
+
+        Update();
     }
 
     public void ChangeName(string newName)
@@ -124,9 +120,12 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
         details.GetNode<Label>("VBoxContainer/Distance").Text = String.Format("Distance {0:N2}", tradeRoute.distance);
         details.GetNode<Label>("VBoxContainer/Time").Text = String.Format("Distance {0:N2}", tradeRoute.distance);
         labelName.Text = tradeRoute.Name;
-        //int index = tradeRoute.destination.GetIndustryTrade().tradeRoutes.IndexOf(tradeRoute);
     }
 
+    public void Update()
+    {
+        headImport.Update();
+    }
     public void Remove()
     {
         player.trade.DeregisterTradeRoute(tradeRoute);

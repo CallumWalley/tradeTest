@@ -8,7 +8,7 @@ public partial class UIAccordianIndustry : UIAccordian, Lists.IListable<Industry
     public Industry Industry;
     static readonly PackedScene p_situation = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/Entities/UI_Industry_Full.tscn");
     static readonly PackedScene p_UIstorage = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/Display/UIResourceStorage.tscn");
-    static readonly PackedScene p_uirequest = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/Display/UIResourceRequest.tscn");
+    static readonly PackedScene p_uirequest = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/Display/UIResource.tscn");
 
     TextureButton moveUpButton;
     TextureButton moveDownButton;
@@ -47,7 +47,7 @@ public partial class UIAccordianIndustry : UIAccordian, Lists.IListable<Industry
 
         // Init resource pool display. // new UIResourceList();
         Lists.UIListResources uiProduction = new(); //leftSide.GetNode<UIResourceList>("/Production");
-        Lists.UIListRequestable uiConsumption = new();//details.GetNode<UIResourceList>("VBoxContainer/HSplitContainer/Left/Consumption");
+        Lists.UIListResources uiConsumption = new();//details.GetNode<UIResourceList>("VBoxContainer/HSplitContainer/Left/Consumption");
         Lists.UIListResources uiStorage = new(); //details.GetNode<UIResourceList>("VBoxContainer/HSplitContainer/Left/Storage");
 
         // leftSide.AddChild(uiProduction);
@@ -74,7 +74,10 @@ public partial class UIAccordianIndustry : UIAccordian, Lists.IListable<Industry
     // {
     //     container.Visible = toggled;
     // }
+    public void Update()
+    {
 
+    }
     void UpdateSituations(Situations.Base s, int index)
     {
         // foreach (UISituation uis in situations.GetNode<VBoxContainer>("VBoxContainer").GetChildren())

@@ -19,6 +19,10 @@ public partial class UIInstallationSmall : Control, Lists.IListable<Installation
     {
         installation = _installation;
     }
+    public void Update()
+    {
+
+    }
     public override void _Draw()
     {
         if (installation == null) { return; }
