@@ -23,20 +23,32 @@ public partial class Global : Node
 
     public delegate void EFrameSetupEventHandler();
 
+    [Signal]
+
+    public delegate void SFrameEventHandler();
     public bool paused = false;
 
     public double timePerEframe = 1;
+    public double timePerSframe = 2;
 
-    double timeLeft;
+
+
+    double deltaEFrame;
+    double deltaSFrame;
+
 
     public int eframeCount = 0;
+    public int sframeCount = 0;
 
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        timeLeft = timePerEframe;
+        deltaEFrame = timePerEframe;
+        deltaSFrame = timePerSframe;
+
         EmitSignal(SignalName.EFrameSetup);
+        SFrame();
         Eframe();
     }
 
@@ -46,11 +58,11 @@ public partial class Global : Node
     {
         if (!paused)
         {
-            timeLeft -= delta;
-            if (timeLeft <= 0)
+            deltaEFrame -= delta;
+            if (deltaEFrame <= 0)
             {
                 Eframe();
-                timeLeft += timePerEframe;
+                deltaEFrame += timePerEframe;
             }
         }
         //PrintStrayNodes();
@@ -67,13 +79,22 @@ public partial class Global : Node
         EmitSignal(SignalName.EFrameUI);
 
         eframeCount += 1;
+    }
+    public void SFrame()
+    {
+        EmitSignal(SignalName.SFrame);
 
+
+        sframeCount += 1;
     }
     public void TimeRateChanged(int value)
     {
         double[] timescale = { 30, 20, 15, 10, 8, 6, 4, 2, 1, 0.5f, 0.1f };
         double newTimePerEframe = timescale[(int)value];
-        timeLeft = (timeLeft / timePerEframe) * newTimePerEframe;
+        double newTimePerSframe = timescale[(int)value];
+        deltaSFrame = (deltaSFrame / timePerSframe) * newTimePerSframe;
+        deltaEFrame = (deltaEFrame / timePerEframe) * newTimePerEframe;
+        timePerSframe = newTimePerSframe;
         timePerEframe = newTimePerEframe;
     }
 }
