@@ -16,6 +16,7 @@ public partial class Logistics
     public interface ISystem
     {
         public void EFrameEarly(Installation installation);
+        public void EFrameLate(Installation installation);
     }
 
     public static class ExportToParent //: ISystem
@@ -157,10 +158,10 @@ public partial class Logistics
             foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in installation.Ledger)
             {
                 // Special rules for trade.
-                if (kvp.Key == 901)
-                {
-                    continue;
-                }
+                // if (kvp.Key == 901)
+                // {
+                //     continue;
+                // }
 
                 // foreach (TradeRoute tr in installation.Trade.DownlineTraderoutes)
                 // {

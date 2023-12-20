@@ -95,7 +95,10 @@ public partial class Resource
     }
     public partial class RGroup<T> : IEnumerable<T>, IResourceGroup<T> where T : IResource
     {
-        public int Type { get; }
+        public int Type
+        {
+            get { return _members.First<T>().Type; }
+        }
         public string Details { get; set; }
         public string Name { get; set; }
         protected List<T> _members { get; set; }
@@ -122,18 +125,17 @@ public partial class Resource
         {
             get { return _members.Sum(x => x.Sum); }
         }
-        public RGroup(int _type, string _name = "Sum", string _details = "Sum")
+        public RGroup(string _name = "Sum", string _details = "Sum")
         {
-            Type = _type;
             Name = _name;
             Details = _details;
             _members = new();
         }
-        public RGroup(int _type, IEnumerable<T> _add, string _name = "Sum", string _details = "Sum") : this(_type, _name, _details)
+        public RGroup(IEnumerable<T> _add, string _name = "Sum", string _details = "Sum") : this(_name, _details)
         {
             _members = (List<T>)_add;
         }
-        public RGroup(int _type, T _add, string _name = "Sum", string _details = "Sum") : this(_type, _name, _details)
+        public RGroup(T _add, string _name = "Sum", string _details = "Sum") : this(_name, _details)
         {
             _members = new();
             _members.Add(_add);
@@ -174,9 +176,9 @@ public partial class Resource
     public partial class RGroupRequests<T> : RGroup<IRequestable>, IRequestable
     {
         // Same as in group but also sum requests.
-        public RGroupRequests(int _type, IEnumerable<IRequestable> _add, string _name = "Sum", string _details = "Sum") : base(_type, _add, _name, _details) { }
-        public RGroupRequests(int _type, IRequestable _add, string _name = "Sum", string _details = "Sum") : base(_type, _add, _name, _details) { }
-        public RGroupRequests(int _type, string _name = "Sum", string _details = "Sum") : base(_type, _name, _details) { }
+        public RGroupRequests(IEnumerable<IRequestable> _add, string _name = "Sum", string _details = "Sum") : base(_add, _name, _details) { }
+        public RGroupRequests(IRequestable _add, string _name = "Sum", string _details = "Sum") : base(_add, _name, _details) { }
+        public RGroupRequests(string _name = "Sum", string _details = "Sum") : base(_name, _details) { }
 
         // Request is a second
         public double Request
@@ -545,12 +547,12 @@ public partial class Resource
         public RGroupList(RGroup<TResource> rGroup) : base(rGroup) { }
 
         // Currently if is inited with only groups, they will become the members.
-        public RGroupList(TResource resource) : base((new RGroup<TResource>(resource.Type, resource))) { }
+        public RGroupList(TResource resource) : base((new RGroup<TResource>(resource))) { }
         public RGroupList(IEnumerable<TResource> _members) : base()
         {
             foreach (TResource m in _members)
             {
-                members.Add(m.Type, new RGroup<TResource>(m.Type, m));
+                members.Add(m.Type, new RGroup<TResource>(m));
             }
         }
 
@@ -567,7 +569,7 @@ public partial class Resource
         {
             if (!members.ContainsKey(r.Type))
             {
-                members[r.Type] = new RGroup<TResource>(r.Type, "Sum", "Sum");
+                members[r.Type] = new RGroup<TResource>("Sum", "Sum");
             }
             else
             {
@@ -736,11 +738,16 @@ public partial class Resource
 
             public Installation installation;
             // Net is combo of Resource and Request.
-
-            public RGroup<IResource> ResourceLocal; // How much is produced here. 
+            public RGroup<IResource> ResourceLocal; // How much is produced here.
             public RGroupRequests<IRequestable> RequestLocal;
 
+            // These are only collections of 'real' elements.
+            RGroup<IResource> netLocal;
+            RGroupRequests<IRequestable> netRemote;
+            RGroup<IResource> net;
+
             public IRequestable RequestToParent
+
             {
                 get { return (installation.Trade.UplineTraderoute == null) ? null : installation.Trade.UplineTraderoute.ListRequestTail[Type]; }
             }
@@ -757,39 +764,7 @@ public partial class Resource
                     }
                 }
             }
-            // Export demand contains a reference to an Import Demand in child.
-            // RGroupRequests<IRequestable> netImport;
-            // public RGroupRequests<IRequestable> NetImport
-            // {
-            //     get
-            //     {
-            //         netImport.Clear();
 
-            //         foreach (TradeRoute tradeRoute in installation.Trade.DownlineTraderoutes)
-            //         {
-            //             if (tradeRoute.ListRequest)
-            //                 netImport.Add(item);
-            //         }
-            //         net.Add(RequestImportFromParent);
-            //         return netImport;
-            //     }
-            // }
-
-            // public RGroupRequests<IRequestable> NetExport
-            // {
-            //     get
-            //     {
-            //         RGroupRequests<IRequestable> net = new(Type, "Trade Net", "Trade Net");
-            //         foreach (IRequestable item in RequestImportFromChildren)
-            //         {
-            //             net.Add(item);
-            //         }
-            //         net.Add(RequestExportToParent);
-            //         return net;
-            //     }
-            // }
-
-            RGroupRequests<IRequestable> netRemote;
             public RGroupRequests<IRequestable> NetRemote
             {
                 get
@@ -807,18 +782,36 @@ public partial class Resource
                     return netRemote;
                 }
             }
-            public Resource.RGroup<Resource.IResource> NetLocal
+            public RGroupRequests<IRequestable> NetLocal
             {
                 get
                 {
-                    return new RGroup<IResource>(Type, RequestLocal.Concat(ResourceLocal).ToList(), "Local Net", "Local Net");
+                    netRemote.Clear();
+                    foreach (IRequestable item in RequestLocal)
+                    {
+                        netLocal.Add(item);
+                    }
+                    foreach (IRequestable item in ResourceLocal)
+                    {
+                        netLocal.Add(item);
+                    }
+                    return netRemote;
                 }
             }
-            public Resource.RGroup<Resource.IResource> Net
+            public RGroup<Resource.IResource> Net
             {
                 get
                 {
-                    return new RGroup<IResource>(Type, NetRemote.Concat(NetLocal).ToList(), "Total Net", "Total Net");
+                    net.Clear();
+                    foreach (IResource item in NetLocal)
+                    {
+                        net.Add(item);
+                    }
+                    foreach (IResource item in NetRemote)
+                    {
+                        net.Add(item);
+                    }
+                    return net;
                 }
             }
 
@@ -826,15 +819,14 @@ public partial class Resource
             public int Type { get; set; }
             public Entry(int _type)
             {
+                netLocal = new("Net Local", "All production and consumption occuring at this installation.");
+                net = new("Total", "All resources produced or traded");
+                netRemote = new("Net Remote", "All Exports and Imports to this Installation");
 
                 //Local = 
-                ResourceLocal = new RGroup<IResource>(_type, "Local Production", "Sum Produced");
-                RequestLocal = new RGroupRequests<IRequestable>(_type, "Local Consumption", "Sum Requested");
+                ResourceLocal = new RGroup<IResource>("Local Production", "Sum Produced");
+                RequestLocal = new RGroupRequests<IRequestable>("Local Consumption", "Sum Requested");
                 //ConsumptionRequest = new Resource.RGroupRequests<Resource.IRequestable>(_type, "Total", "Sum Requests");
-
-                netRemote = new RGroupRequests<IRequestable>(Type, "All Import", "Trade Net");
-
-                netRemote = new RGroupRequests<IRequestable>(_type, "All Trade", "All Trade");
                 //Surplus = new Resource.RGroup<Resource.IResource>(_type, "Exports", "Total Exports");
                 Type = _type;
             }

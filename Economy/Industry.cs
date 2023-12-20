@@ -84,7 +84,7 @@ public partial class Industry : Node, Resource.IResourceTransformers
         if (template == null) { yield break; }
         foreach (KeyValuePair<int, double> kvp in template)
         {
-            yield return new Resource.RGroup<Resource.IResource>(kvp.Key, new Resource.RStatic(kvp.Key, kvp.Value, "Base Yield"), Name, Description);
+            yield return new Resource.RGroup<Resource.IResource>(new Resource.RStatic(kvp.Key, kvp.Value, "Base Yield"), Name, Description);
         }
     }
 

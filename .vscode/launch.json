@@ -15,7 +15,7 @@
             "program": "/usr/local/bin/godot",
             "args": [],
             "cwd": "${workspaceFolder}",
-            "stopAtEntry": false,
+            "stopAtEntry": true,
         }
     ]
 }
