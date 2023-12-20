@@ -16,23 +16,27 @@ public partial class SocialClass : Node
 	public List<Meme> Memes;
 	public List<Conflict> Conflicts;
 
-	public partial class Demographic{
+	public partial class Demographic
+	{
 	}
-	public partial class Meme{
+	public partial class Meme
+	{
 	}
-	public partial class Conflict{
+	public partial class Conflict
+	{
 	}
-    public override void _Ready()
-    {
-        base._Ready();
+	public override void _Ready()
+	{
+		base._Ready();
 
-        global = GetNode<Global>("/root/Global");
+		global = GetNode<Global>("/root/Global");
 		global.Connect("SFrame", new Callable(this, "SFrame"));
 	}
 
-	public void SFrame(){
+	public void SFrame()
+	{
 		Population += GrowthRate;
-		
+
 	}
 
 }

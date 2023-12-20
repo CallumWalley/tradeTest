@@ -101,7 +101,10 @@ public partial class TradeRoute : Node
 	}
 	public void DrawLine()
 	{
-		GetNode<Line2D>("Line2D").Points = new Vector2[] { Tail.Position, Head.Position };
+		if (Tail != null && Head != null)
+		{
+			GetNode<Line2D>("Line2D").Points = new Vector2[] { Tail.Position, Head.Position };
+		}
 	}
 	public void ChangeName(string newName)
 	{

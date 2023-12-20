@@ -4,27 +4,25 @@ using System;
 public partial class UIPanelLedgerEntry : VBoxContainer, Lists.IListable<Resource.Ledger.Entry>
 {
 	public Resource.Ledger.Entry ledgerEntry;
+	public UIPanelLedger parent;
 	public Resource.Ledger.Entry GameElement { get { return ledgerEntry; } }
 	public bool Destroy { get; set; } = false;
 	UIResource netLocal;
-	UIResource consumption;
-	UIResource importExport;
+	UIResource netRemote;
 	UIResource net;
 	UIResourceStorage storage;
 	public void Init(Resource.Ledger.Entry _ledgerEntry)
 	{
 		ledgerEntry = _ledgerEntry;
 		netLocal = GetNode<UIResource>("NetLocal");
-		consumption = GetNode<UIResource>("ConsumptionRequest");
-		importExport = GetNode<UIResource>("ImportExport");
+		netRemote = GetNode<UIResource>("NetRemote");
 		net = GetNode<UIResource>("Net");
 		// UIResource importDemand = GetNode<UIResource>("ImportDemand");
 		// UIResource exportDemand = GetNode<UIResource>("ExportDemand");
 
 
 		netLocal.Init(ledgerEntry.NetLocal);
-		consumption.Init(ledgerEntry.RequestLocal);
-		importExport.Init(ledgerEntry.NetRemote);
+		netRemote.Init(ledgerEntry.NetRemote);
 		net.Init(ledgerEntry.Net);
 
 		// IF accruable also make storage.
@@ -38,8 +36,7 @@ public partial class UIPanelLedgerEntry : VBoxContainer, Lists.IListable<Resourc
 
 
 		netLocal.ShowBreakdown = true;
-		consumption.ShowBreakdown = true;
-		importExport.ShowBreakdown = true;
+		netRemote.ShowBreakdown = true;
 		net.ShowBreakdown = true;
 
 		// importDemand.Init(ledgerEntry.ImportDemand);
@@ -52,9 +49,12 @@ public partial class UIPanelLedgerEntry : VBoxContainer, Lists.IListable<Resourc
 
 	public void Update()
 	{
+		netRemote.Visible = parent.ShowTrade;
+		if (netRemote.Visible)
+		{
+			netRemote.Update();
+		}
 		netLocal.Update();
-		consumption.Update();
-		importExport.Update();
 		net.Update();
 		if (ledgerEntry.Type < 500)
 		{
@@ -66,6 +66,5 @@ public partial class UIPanelLedgerEntry : VBoxContainer, Lists.IListable<Resourc
 	public override void _Draw()
 	{
 		base._Draw();
-		// GD.Print(ledgerEntry);
 	}
 }

@@ -41,7 +41,7 @@ public partial class UIResource : UIDrawEFrame, Lists.IListable<Resource.IResour
         value = GetNode<Label>("Value");
         name = GetNode<Label>("Name");
         details = GetNode<Label>("Details");
-        ((TextureRect)GetNode("Icon")).Texture = Resource.Icon(resourceCode: resource.Type);
+        ((TextureRect)GetNode("Icon")).Texture = Resource.Icon((resource != null) ? resource.Type : 0);
         TooltipText = resource.Name;
     }
 

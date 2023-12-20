@@ -97,7 +97,7 @@ public partial class Resource
     {
         public int Type
         {
-            get { return _members.First<T>().Type; }
+            get { return (_members.Count > 0) ? _members.First<T>().Type : 0; }
         }
         public string Details { get; set; }
         public string Name { get; set; }
@@ -123,7 +123,7 @@ public partial class Resource
         }
         public double Sum
         {
-            get { return _members.Sum(x => x.Sum); }
+            get { return (_members.Count > 0) ? _members.Sum(x => x.Sum) : 0; }
         }
         public RGroup(string _name = "Sum", string _details = "Sum")
         {
@@ -735,8 +735,8 @@ public partial class Resource
             /// <summary>
             /// Represents a resource, and a place. Can be either request or resource.
             /// </summary>
+            public Ledger ledger;
 
-            public Installation installation;
             // Net is combo of Resource and Request.
             public RGroup<IResource> ResourceLocal; // How much is produced here.
             public RGroupRequests<IRequestable> RequestLocal;
@@ -747,15 +747,14 @@ public partial class Resource
             RGroup<IResource> net;
 
             public IRequestable RequestToParent
-
             {
-                get { return (installation.Trade.UplineTraderoute == null) ? null : installation.Trade.UplineTraderoute.ListRequestTail[Type]; }
+                get { return (ledger.installation.Trade.UplineTraderoute == null) ? null : ledger.installation.Trade.UplineTraderoute.ListRequestTail[Type]; }
             }
             public IEnumerable<IRequestable> RequestFromChildren
             {
                 get
                 {
-                    foreach (TradeRoute tradeRoute in installation.Trade.DownlineTraderoutes)
+                    foreach (TradeRoute tradeRoute in ledger.installation.Trade.DownlineTraderoutes)
                     {
                         if (tradeRoute.ListRequestHead.ContainsKey(Type))
                         {
@@ -764,7 +763,6 @@ public partial class Resource
                     }
                 }
             }
-
             public RGroupRequests<IRequestable> NetRemote
             {
                 get
@@ -782,23 +780,23 @@ public partial class Resource
                     return netRemote;
                 }
             }
-            public RGroupRequests<IRequestable> NetLocal
+            public RGroup<IResource> NetLocal
             {
                 get
                 {
-                    netRemote.Clear();
-                    foreach (IRequestable item in RequestLocal)
+                    netLocal.Clear();
+                    foreach (IResource item in RequestLocal)
                     {
                         netLocal.Add(item);
                     }
-                    foreach (IRequestable item in ResourceLocal)
+                    foreach (IResource item in ResourceLocal)
                     {
                         netLocal.Add(item);
                     }
-                    return netRemote;
+                    return netLocal;
                 }
             }
-            public RGroup<Resource.IResource> Net
+            public RGroup<IResource> Net
             {
                 get
                 {
@@ -908,13 +906,13 @@ public partial class Resource
                     if (type < 500)
                     {
                         nre = new EntryAccrul(type);
-                        nre.installation = installation;
+                        nre.ledger = this;
 
                     }
                     else
                     {
                         nre = new Entry(type);
-                        nre.installation = installation;
+                        nre.ledger = this;
                     }
                     _all[type] = nre;
                     return nre;

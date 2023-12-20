@@ -290,6 +290,7 @@ public partial class Installation : Node
         {
             get
             {
+                shipDemand.Request = (Math.Max(outboundShipDemand.Request, val2: inboundShipDemand.Request));
                 shipDemand.Set(Math.Max(outboundShipDemand.Sum, inboundShipDemand.Sum));
                 return shipDemand;
             }

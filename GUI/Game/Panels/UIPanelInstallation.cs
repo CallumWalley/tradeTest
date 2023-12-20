@@ -81,7 +81,6 @@ public partial class UIPanelInstallation : Control
     public override void _Draw()
     {
         base._Draw();
-        panelLedger.Update();
         if (installation.Order > 0)
         {
             tradePanelNetwork.Text = string.Format("{0} order member of {1}", installation.Order, installation.Network);
@@ -91,5 +90,9 @@ public partial class UIPanelInstallation : Control
         {
             //tradePanelNetwork.Visible = false;
         }
+        bool showTrade = (installation.Trade.UplineTraderoute != null || installation.Trade.DownlineTraderoutes.Count > 0);
+        GetNode<Label>("VBoxContainer/TabContainer/Supply/VBoxContainer/Trade").Visible = showTrade;
+        panelLedger.ShowTrade = showTrade;
+        panelLedger.Update();
     }
 }

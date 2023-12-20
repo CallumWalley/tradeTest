@@ -19,7 +19,9 @@ script = ExtResource("8")
 
 [node name="Player" parent="." instance=ExtResource("4_7bqim")]
 
-[node name="Player@PlayerTradeRoutes@TradeRoute" parent="Player/PlayerTrade" index="0" instance=ExtResource("5_6dsy0")]
+[node name="Player@PlayerTradeRoutes@TradeRoute" parent="Player/PlayerTrade" index="0" node_paths=PackedStringArray("Tail", "Head") instance=ExtResource("5_6dsy0")]
+Tail = NodePath("../../../Systems/System1/Mars/Installation")
+Head = NodePath("../../../Systems/System1/Jupyter/Installation")
 
 [node name="Screen" parent="." instance=ExtResource("6_eohnr")]
 

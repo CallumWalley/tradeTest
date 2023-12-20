@@ -107,9 +107,12 @@ public partial class Logistics
         /// <param name="installation"></param>
         public static void CalculateRequests(Installation installation)
         {
-            installation.Trade.outboundShipDemand.Set(0);
-            installation.Trade.inboundShipDemand.Set(0);
-
+            // If has dependent trade route,
+            if (installation.Trade.DownlineTraderoutes.Count() > 0)
+            {
+                installation.Trade.outboundShipDemand.Set(0);
+                installation.Trade.inboundShipDemand.Set(0);
+            }
             // For each child trade route
             foreach (TradeRoute downline in installation.Trade.DownlineTraderoutes)
             {
@@ -193,8 +196,16 @@ public partial class Logistics
         {
             /// how much of this request can be fulfilled.
             double supplyFaction = 0;
-            installation.Trade.ShipDemand.Request = 0;
-            double shipsAvailable = installation.Ledger[901].Net.Sum;
+            double shipsAvailable = 0;
+
+            if (installation.Trade.UplineTraderoute != null)
+            {
+                installation.Trade.ShipDemand.Request = 0;
+            }
+            if (installation.Trade.DownlineTraderoutes.Count() > 0)
+            {
+                shipsAvailable = installation.Ledger[901].Net.Sum;
+            }
 
             // Determine if enough ships for trade.
             foreach (TradeRoute tradeRoute in installation.Trade.DownlineTraderoutes)
@@ -202,9 +213,14 @@ public partial class Logistics
                 installation.Trade.ShipDemand.Request += tradeRoute.Tail.Trade.ShipDemand.Sum;
             }
 
-            installation.Trade.ShipDemand.Respond(Math.Min(shipsAvailable, installation.Trade.ShipDemand.Request));
-            supplyFaction = installation.Trade.ShipDemand.Sum / installation.Trade.ShipDemand.Request;
-
+            if (installation.Trade.UplineTraderoute != null)
+            {
+                installation.Trade.ShipDemand.Respond(Math.Min(shipsAvailable, installation.Trade.ShipDemand.Request));
+            }
+            if (installation.Trade.DownlineTraderoutes.Count() > 0)
+            {
+                supplyFaction = installation.Trade.ShipDemand.Sum / installation.Trade.ShipDemand.Request;
+            }
             // Tell each trade route how many ships it gets.
             foreach (TradeRoute tradeRoute in installation.Trade.DownlineTraderoutes)
             {

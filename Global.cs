@@ -3,12 +3,12 @@ using System;
 
 public partial class Global : Node
 {
-
+    [Signal]
+    public delegate void SFrameEventHandler();
     [Signal]
     public delegate void EFrameEarlyEventHandler();
 
     [Signal]
-
     public delegate void EFrameLateEventHandler();
 
     // Called at start of game once.
@@ -23,13 +23,10 @@ public partial class Global : Node
 
     public delegate void EFrameSetupEventHandler();
 
-    [Signal]
-
-    public delegate void SFrameEventHandler();
     public bool paused = false;
 
     public double timePerEframe = 1;
-    public double timePerSframe = 2;
+    public double timePerSFrame = 2;
 
 
 
@@ -38,17 +35,17 @@ public partial class Global : Node
 
 
     public int eframeCount = 0;
-    public int sframeCount = 0;
+    public int SFrameCount = 0;
 
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
         deltaEFrame = timePerEframe;
-        deltaSFrame = timePerSframe;
+        deltaSFrame = timePerSFrame;
 
         EmitSignal(SignalName.EFrameSetup);
-        SFrame();
+        Sframe();
         Eframe();
     }
 
@@ -80,21 +77,21 @@ public partial class Global : Node
 
         eframeCount += 1;
     }
-    public void SFrame()
+    public void Sframe()
     {
         EmitSignal(SignalName.SFrame);
 
 
-        sframeCount += 1;
+        SFrameCount += 1;
     }
     public void TimeRateChanged(int value)
     {
         double[] timescale = { 30, 20, 15, 10, 8, 6, 4, 2, 1, 0.5f, 0.1f };
         double newTimePerEframe = timescale[(int)value];
-        double newTimePerSframe = timescale[(int)value];
-        deltaSFrame = (deltaSFrame / timePerSframe) * newTimePerSframe;
+        double newTimePerSFrame = timescale[(int)value];
+        deltaSFrame = (deltaSFrame / timePerSFrame) * newTimePerSFrame;
         deltaEFrame = (deltaEFrame / timePerEframe) * newTimePerEframe;
-        timePerSframe = newTimePerSframe;
+        timePerSFrame = newTimePerSFrame;
         timePerEframe = newTimePerEframe;
     }
 }
