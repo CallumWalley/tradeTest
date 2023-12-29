@@ -15,3 +15,5 @@ script = ExtResource("4_3oxjp")
 [node name="PlayerTrade" type="Node" parent="."]
 process_priority = -99
 script = ExtResource("3_3mavi")
+
+[node name="PlayerSocial" type="Node" parent="."]

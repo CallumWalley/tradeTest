@@ -1,5 +1,8 @@
 using Godot;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Resources;
 // [Tool]
 public partial class UIResource : UIDrawEFrame, Lists.IListable<Resource.IResource>
 {
@@ -122,8 +125,7 @@ public partial class UIResource : UIDrawEFrame, Lists.IListable<Resource.IResour
         uir.Init(r1);
         uir.ShowName = true;
         vbc1.AddChild(uir);
-
-        if ((r1 is Resource.IResourceGroup<Resource.IResource>) && (((Resource.IResourceGroup<Resource.IResource>)r1).Count > 0))
+        if ( r1 is Resource.IResourceGroup<Resource.IResource> && ((Resource.IResourceGroup<Resource.IResource>)r1).Count > 0)
         {
             HBoxContainer hbc = new();
             VBoxContainer vbc2 = new();

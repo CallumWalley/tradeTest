@@ -85,7 +85,7 @@ public partial class Lists
                 if (ReferenceEquals(uir.GameElement, r))
                 {
                     uir.Destroy = false;
-                    //uir.Update();
+                    uir.Update();
                     return;
                 }
             }

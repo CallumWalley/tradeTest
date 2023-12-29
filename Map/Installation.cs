@@ -171,6 +171,7 @@ public partial class Installation : Node
     //     }
     // }
 
+
     // A resource is not tracked until it is used.
     public void GetProducers()
     {
@@ -283,16 +284,13 @@ public partial class Installation : Node
     public class _Trade
     {
         Installation installation;
-        public Resource.RRequest outboundShipDemand = new Resource.RRequest(901, 0, "Trade vessels for export");
-        public Resource.RRequest inboundShipDemand = new Resource.RRequest(901, 0, "Trade vessels for import.");
-        public Resource.RRequest shipDemand = new Resource.RRequest(901, 0, "Trade vessels in use.");
-        public Resource.RRequest ShipDemand
+        public Resource.RGroupRequests<Resource.IRequestable> shipDemand = new Resource.RGroupRequests<Resource.IRequestable>("Trade vessels in use.");
+        // needs custom ui element
+        public Resource.RGroupRequests<Resource.IRequestable> ShipDemand
         {
             get
             {
-                shipDemand.Request = (Math.Max(outboundShipDemand.Request, val2: inboundShipDemand.Request));
-                shipDemand.Set(Math.Max(outboundShipDemand.Sum, inboundShipDemand.Sum));
-                return shipDemand;
+                return installation.Ledger[901].RequestLocal;
             }
         }
 
@@ -302,11 +300,15 @@ public partial class Installation : Node
         public void RegisterUpline(TradeRoute i)
         {
             UplineTraderoute = i;
+            ShipDemand.Add(i.ShipDemand);
+
             // Order is set in setter of parent order.
         }
         public void DeregisterUpline(TradeRoute i, bool upline = false)
         {
             UplineTraderoute = null;
+            ShipDemand.Remove(i.ShipDemand);
+
             // 0 is not in network. 
             installation.Order = Math.Min(DownlineTraderoutes.Count, 1);
 
@@ -316,6 +318,7 @@ public partial class Installation : Node
         {
             // If made head of trade network, set order to 1;
             DownlineTraderoutes.Add(i);
+            ShipDemand.Add(i.ShipDemand);
             installation.Order = 1;
             if (installation.Order < 2)
             {
@@ -328,6 +331,8 @@ public partial class Installation : Node
         public void DeregisterDownline(TradeRoute i)
         {
             DownlineTraderoutes.Remove(i);
+            ShipDemand.Remove(i.ShipDemand);
+
             // If no longer part of a trade network, set order to 0;
             if (installation.Order == 1 && DownlineTraderoutes.Count < 1)
             {

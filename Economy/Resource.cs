@@ -48,9 +48,9 @@ public partial class Resource
     ///  A collection of multiple resources of the same type. Enumerable.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IResourceGroup<T> : IResource where T : IResource
+    public interface IResourceGroup<out T> :  IEnumerable<T>, IResource where T : IResource
     {
-        public IEnumerator<T> GetEnumerator();
+        // public IEnumerator<T> GetEnumerator();
         public int Count { get; }
     }
 
@@ -63,7 +63,6 @@ public partial class Resource
         public int Type { get; }
         public virtual string Details { get; set; }
         public virtual string Name { get; set; }
-
         public RStatic(int _type = 0, double _sum = 0, string _name = "Unknown", string _details = "Base value")
         {
             Type = _type;
@@ -93,7 +92,7 @@ public partial class Resource
         }
 
     }
-    public partial class RGroup<T> : IEnumerable<T>, IResourceGroup<T> where T : IResource
+    public partial class RGroup<T> : IResourceGroup<T> where T : IResource
     {
         public int Type
         {
@@ -146,6 +145,11 @@ public partial class Resource
             //throw new
             _members.Add(ra);
         }
+        public void Remove(T ra)
+        {
+            //throw new
+            _members.Remove(ra);
+        }
         public IResource First()
         {
             return _members[0];
@@ -173,7 +177,7 @@ public partial class Resource
         //     return returnString;
         // }
     }
-    public partial class RGroupRequests<T> : RGroup<IRequestable>, IRequestable
+    public partial class RGroupRequests<T> : RGroup<IRequestable>, IResourceGroup<IRequestable>, IRequestable
     {
         // Same as in group but also sum requests.
         public RGroupRequests(IEnumerable<IRequestable> _add, string _name = "Sum", string _details = "Sum") : base(_add, _name, _details) { }
@@ -211,6 +215,12 @@ public partial class Resource
         public double Fraction()
         {
             return Sum / Request;
+        }
+        public double Weight
+        {
+            get{
+                return _members.Sum( x => x.Request );
+            }
         }
         public override string ToString()
         {
@@ -833,11 +843,12 @@ public partial class Resource
             {
                 ResourceLocal.Clear();
                 RequestLocal.Clear();
+                // RequestLocal.Clear();
                 // ResourceParent.Set(0);
                 // RequestParent.Request = 0;
                 // RequestChildren.Clear();
                 // ResourceChildren.Clear();
-                NetLocal.Clear();
+                // NetLocal.Clear();
             }
             /// <summary>
             /// Return flat requested and actual, for buffer.
@@ -994,7 +1005,6 @@ public partial class Resource
         public RListRequestTail(TradeRoute _tradeRoute) : base()
         {
             tradeRoute = _tradeRoute;
-            // CreateMissing = true;
         }
         protected override RRequestTail _Get(int index)
         {
@@ -1008,6 +1018,12 @@ public partial class Resource
                 tradeRoute.ListRequestHead.Add(head);
             }
             return members[index];
+        }
+        public double Weight
+        {
+            get{
+                return members.Sum( x => x.Value.Request );
+            }
         }
     }
     /// <summary>
@@ -1028,7 +1044,7 @@ public partial class Resource
         public TradeRoute tradeRoute;
         public RRequestTail twin;
 
-        public RRequestHead(int _type, TradeRoute _tradeRoute) : base(_type, 0)
+        public RRequestHead(int _type, TradeRoute _tradeRoute) : base( _type, 0 )
         {
             tradeRoute = _tradeRoute;
         }
@@ -1049,12 +1065,13 @@ public partial class Resource
         /// </summary>
         /// <param name="value"></param>
         public override void Set(double value)
-        {
+        {   
             base.Set(value);
+            
             twin.Set(-value);
         }
-        public override string Details { get { return string.Format("Trade with {0}", tradeRoute.Tail.Name); } }
-        public override string Name { get { return string.Format("Trade with {0}", tradeRoute.Tail.Name); } }
+        public override string Name { get { return string.Format("{0}", (Request > 0) ? "Import" : "Export"); } }
+        public override string Details { get { return string.Format("{0} {1} {2}",  Name(Type), (Request > 0) ? "Import from" : "Export to", tradeRoute.Tail.Name); } }
 
     }
     /// <summary>
@@ -1068,7 +1085,6 @@ public partial class Resource
         public RRequestTail(int _type, TradeRoute _tradeRoute) : base(_type, 0)
         {
             tradeRoute = _tradeRoute;
-            //tradeRoute.ListRequestHead[_type] = twin;
         }
 
         /// <summary>
@@ -1084,8 +1100,9 @@ public partial class Resource
                 base.Request = value;
             }
         }
-        // public override string Details { get { return string.Format("Trade with {0}", tradeRoute.Head.Name); } }
-        // public override string Name { get { return string.Format("Trade with {0}", tradeRoute.Head.Name); } }
+        public override string Name { get { return string.Format("{0}", (Request > 0) ? "Import" : "Export"); } }
+        public override string Details { get { return string.Format("{0} {1} {2}",  Name(Type), (Request > 0) ? "Import from" : "Export to", tradeRoute.Head.Name); } }
+
     }
 }
 

@@ -14,15 +14,31 @@ public partial class TradeRoute : Node
 	public Resource.RListRequestTail<Resource.RRequestTail> ListRequestTail;
 	public Resource.RList<Resource.RRequestHead> ListRequestHead;
 
-	public Resource.IRequestable OutboundShipDemand
+	Resource.RRequest shipDemand = new Resource.RRequest(901, 0);
+	double InboundShipDemand
 	{
-		get { return Tail.Trade.outboundShipDemand; }
+		get
+		{
+			// Do null check as this is called before init for some reason
+			return  (ListRequestTail == null) ? 0 : ListRequestTail.Where(x => x.Request < 0).Select(x => x.Request).DefaultIfEmpty(0).Sum();
+		}
 	}
-	public Resource.IRequestable InboundShipDemand
+	double OutboundShipDemand
 	{
-		get { return Tail.Trade.inboundShipDemand; }
+		get
+		{	
+			return (ListRequestTail == null) ? 0 : -ListRequestTail.Where(x => x.Request > 0).Select(x => x.Request).DefaultIfEmpty(0).Sum();
+		}
 	}
-
+	public Resource.IRequestable ShipDemand
+	{
+		get
+		{
+			shipDemand.Request = Math.Max(InboundShipDemand, OutboundShipDemand);
+			shipDemand.Details = string.Format("{0:N1} required for indbound cargo, {1:N1} for outbound.", InboundShipDemand, OutboundShipDemand);
+			return shipDemand;
+		}
+	}
 
 	public int Order
 	{
@@ -46,12 +62,11 @@ public partial class TradeRoute : Node
 	// Tradeweight in KTonnes
 	//public Resource.IResource importTradeWeight;
 	//public Resource.IResource exportTradeWeight;
-	public Resource.RStatic TradeWeight { get; set; } = new Resource.RStatic(901, 0);
 	public double distance;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		UpdateFreighterWeight();
+		// UpdateFreighterWeight();
 		DrawLine();
 		// GetNode<Global>("/root/Global").Connect("EFrameEarly", callable: new Callable(this, "EFrameEarly"));
 	}
@@ -92,7 +107,7 @@ public partial class TradeRoute : Node
 		// ResourceParent.CreateMissing = true;
 		// RequestParent.CreateMissing = true;
 
-		TradeWeight.Name = Name;
+		shipDemand.Name = Name;
 	}
 	public void Init(Installation _head, Installation _tail)
 	{
@@ -156,10 +171,10 @@ public partial class TradeRoute : Node
 	//     //Balance.RemoveZeros();
 	// }
 
-	void UpdateFreighterWeight()
-	{
-		TradeWeight.Set(newValue: TradeRoutes.GetFrieghterWeight());
-	}
+	// void UpdateFreighterWeight()
+	// {
+	// 	TradeWeight.Set(newValue: TradeRoutes.GetFrieghterWeight());
+	// }
 
 	// public class TransformerTradeRoute : Resource.IResourceTransformers
 	// {
