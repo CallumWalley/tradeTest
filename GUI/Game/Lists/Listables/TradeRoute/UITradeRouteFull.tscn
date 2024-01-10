@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://b6r5n5gf38mqj"]
 
 [ext_resource type="Script" path="res://GUI/Game/Lists/Listables/TradeRoute/UITradeRouteFull.cs" id="1_acrdv"]
-[ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="3_1gv37"]
+[ext_resource type="PackedScene" uid="uid://dfi8ps0nktvf8" path="res://GUI/Game/Lists/UIListResources.tscn" id="3_7vo1k"]
 [ext_resource type="PackedScene" uid="uid://fiabywy3cj4i" path="res://GUI/Game/Lists/Listables/Installation/UIInstallationTiny.tscn" id="3_cmyw0"]
 [ext_resource type="PackedScene" uid="uid://chy6hnvyi7yb7" path="res://GUI/Game/Buttons/UIButtonPause.tscn" id="4_dfy41"]
 [ext_resource type="PackedScene" uid="uid://dui8s5f2ql5qm" path="res://GUI/Game/Lists/Listables/UIResource.tscn" id="4_htsp3"]
@@ -51,24 +51,17 @@ layout_mode = 2
 layout_mode = 2
 text = "<-"
 
-[node name="Container" type="MarginContainer" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer"]
-visible = false
+[node name="toHead" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer" instance=ExtResource("3_7vo1k")]
 layout_mode = 2
 
-[node name="HeadResources" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer"]
-visible = false
+[node name="Container" type="MarginContainer" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer"]
 layout_mode = 2
 
 [node name="Container2" type="MarginContainer" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer"]
-visible = false
 layout_mode = 2
 
-[node name="TailResources" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer"]
-visible = false
+[node name="toTail" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer" instance=ExtResource("3_7vo1k")]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme = ExtResource("3_1gv37")
 
 [node name="Tail" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer"]
 layout_mode = 2

@@ -68,7 +68,7 @@ public partial class Logistics
                 return;
             }
             CalculateRequests(installation);
-            CalculateResources(installation);
+            ResolveRequests(installation);
 
         }
         public static void EFrameLate(Installation installation)
@@ -112,37 +112,9 @@ public partial class Logistics
             {
                 // call this funtion on child.
                 CalculateRequests(downline.Tail);
-                // // Iterate over ledger. add their ExportSurplus to my Import and their ImportDemand to my ExportDemand. 
-                // foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in downline.Tail.Ledger)
-                // {
-                //     // if surplus, do surplus stuff.
-                //     if (kvp.Value.ResourceParent.Sum > 0)
-                //     {
-                //         downline.Tail.Ledger[kvp.Key].ResourceParent.Set(-kvp.Value.ResourceParent.Sum);                            // Set trade route to export surplus of child.
-                //         installation.Ledger[kvp.Key].ResourceChildren.Add(new Resource.RTradedResource(downline.Tail.Ledger[kvp.Key].ResourceParent));    // Add this to general import list.
-                //     }
-                //     // Else do deficit stuff.
-                //     else
-                //     {
-                //         downline.Tail.Ledger[kvp.Key].RequestParent.Request = -kvp.Value.ResourceParent.Sum;                                    // Set trade route to export surplus of child.
-                //         installation.Ledger[kvp.Key].RequestChildren.Add(new Resource.RTradedRequest(downline.Tail.Ledger[kvp.Key].RequestParent));
-                //     }
-                // }
-
-                // // This is bad and should be done in a way that doesn't redestroy items.
-                // foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in installation.Ledger)
-                // {
-                //     kvp.Value.RequestExportToChildren.Clear();
-                //     kvp.Value.RequestImportFromChildren.Clear();
-                // }
-
-                // foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in downline.Tail.Ledger)
-                // {
-
-
-                // }
+                // Add ship demand to head.
+                installation.Ledger[901].RequestLocal.Add(downline.ShipDemand);
             }
-
 
             // If no upline, end here.
             if (installation.Trade.UplineTraderoute == null)
@@ -165,112 +137,73 @@ public partial class Logistics
                 kvp.Value.RequestLocal.Request + kvp.Value.ResourceLocal.Sum;
 
                 // Request the difference from parent.
-                kvp.Value.RequestToParent.Request = net;
+                kvp.Value.RequestToParent.Request = -net;
             }
         }
         /// <summary>
         ///  Once all elements have 'CalculateRequests' this is run.
         /// </summary>
         /// <param name="installation"></param>
-        static void CalculateResources(Installation installation)
+        static void ResolveRequests(Installation installation)
         {
-            /// how much of this request can be fulfilled.
-            double supplyFaction = 0;
-            double shipsAvailable = 0;
+            // First resolve ship balance.
+            // if importing ships that always resolved.
+            if ( installation.Ledger[901].RequestToParent != null){
+                installation.Ledger[901].RequestToParent.Respond();
+            }   
 
-            // First resolve 
+            double freightFraction = Math.Min(installation.Ledger[901].RequestLocal.Fraction(), 1);
+
             // enumerate through elements in ledger 
             // in reverse order so ships are resolved first.
-            //
-            foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in installation.Ledger.Reverse()){
-                double max = kvp.Value.Net.Sum; //+ stored.
-                // First allocate resources locally. 
-                // TODO: if supply from stockpile 
-                if (max > 0){
-                    double remainder = ShareResources(max, kvp.Value.RequestLocal);
-                    if (installation.Trade.DownlineTraderoutes.Count > 0 && remainder > 0){
-                        double requestedShips = installation.Ledger[901].RequestFromChildren.Sum(x => x.Request);
-                        double resourceShippingFraction = requestedShips == 0 ? 1 : installation.Ledger[901].Net.Sum / requestedShips;
-                        // If resources remain, allocate to requesters. 
-                        remainder = ShareResources(remainder, kvp.Value.RequestFromChildren, resourceShippingFraction);
-                        if (remainder > 0 && kvp.Key < 500 ){
-                            //do storage
-                        }
-                    }
+            foreach (KeyValuePair<int, Resource.Ledger.EntryAccrul> kvp in installation.Ledger.Acrul()){
+
+                // Step one. Approve imports from children.
+                foreach (var r in kvp.Value.RequestFromChildren.Where(x=> x.Request > 0)){
+                    r.Respond(r.Request * freightFraction);
                 }
+
+                // Step two. Allocate resources locally.
+                double shortfall =  (kvp.Value.NetLocal.Request * freightFraction) - kvp.Value.Net.Sum;
+                double resourceSupplyFraction = Math.Min(kvp.Value.RequestLocal.Sum / kvp.Value.Net.Sum, freightFraction);
+
+                // Set storage element to cover difference.
+
+                // Case 1, no storage needed.
+                foreach (Resource.IRequestable r in kvp.Value.RequestLocal.Where(x=> x.Request <= 0))
+                {
+                    r.Respond(r.Request * resourceSupplyFraction);
+                }                
+
+                // Step three trade
+
+
+                // // Case 2, storage needed but fully covers
+                // else if (shortfall < kvp.Value.Stored.Sum){
+                // }
+                // TODO: if supply from stockpile 
+                // if (max > 0){
+                //     // First allocate resources locally. 
+                //     double remainder = ShareEqual(max, kvp.Value.RequestLocal);
+                //     // If there is remainder.
+                //     if (remainder > 0){
+                //         double resourceShippingFraction = installation.Ledger[901].RequestLocal.Fraction();
+                //         // If resources remain, allocate to requesters. 
+                //         remainder = ShareEqual(remainder * resourceShippingFraction, kvp.Value.RequestFromChildren);
+                //         if (remainder > 0 && kvp.Key < 500 ){
+                //             //do storage
+                //         }
+                //     }
+                // }
             }
             
-            
-             //.Where(x => x.Key < 500)
-  
-
-
-
-            // if (installation.Trade.UplineTraderoute != null)
-            // {
-            //     installation.Trade.ShipDemand.Request = 0;
-            // }
-            // if (installation.Trade.DownlineTraderoutes.Count() > 0)
-            // {
-            //     shipsAvailable = installation.Ledger[901].Net.Sum;
-            // }
-
-            // // Determine if enough ships for trade.
-            // foreach (TradeRoute tradeRoute in installation.Trade.DownlineTraderoutes)
-            // {
-            //     installation.Trade.ShipDemand.Request += tradeRoute.ShipDemand.Sum;
-            // }
-
-            // if (installation.Trade.UplineTraderoute != null)
-            // {
-            //     foreach (Resource.RRequest r in installation.Trade.ShipDemand)
-            //     {
-            //         r.Respond(Math.Min(shipsAvailable, installation.Trade.ShipDemand.Request));
-            //     }
-            // }
-            // if (installation.Trade.DownlineTraderoutes.Count() > 0)
-            // {
-            //     supplyFaction = installation.Trade.ShipDemand.Sum / installation.Trade.ShipDemand.Request;
-            // }
-            // Tell each trade route how many ships it gets.
-            // foreach (TradeRoute tradeRoute in installation.Trade.DownlineTraderoutes)
-            // {
-            //     tradeRoute.Tail.Trade.outboundShipDemand.Respond(Math.Min(tradeRoute.Tail.Trade.ShipDemand.Request * supplyFaction, tradeRoute.Tail.Trade.outboundShipDemand.Request));
-            //     tradeRoute.Tail.Trade.inboundShipDemand.Respond(Math.Min(tradeRoute.Tail.Trade.ShipDemand.Request * supplyFaction, tradeRoute.Tail.Trade.inboundShipDemand.Request));
-            // }
-
-            /// Actualise imports.
-            // foreach (TradeRoute tradeRoute in installation.Trade.DownlineTraderoutes)
-            // {
-            //     foreach (Resource.RRequestHead request in tradeRoute.ListRequestHead)
-            //     {
-            //         if (request.Request < 0) { continue; } // No exports yet.
-            //         request.Respond(tradeRoute.Tail.Trade.outboundShipDemand.Fraction() * request.Request);
-            //     }
-            // }
-
-            // foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in installation.Ledger) //.Where(x => x.Key < 500)
-            // {
-
-            //     double total = kvp.Value.ResourceLocal.Sum + kvp.Value.RequestFromChildren.Sum(x => x.Sum);
-
-            //     // Divide total resources amoung local.
-            //     double resourceLeftovers = ShareResources(total, kvp.Value.RequestLocal);
-
-            //     //If not enough resources to supply local, not enough to export.
-            //     if (resourceLeftovers == 0) { continue; }
-
-            //     // Remaining resources to fulfill exports.
-            //     resourceLeftovers = ShareResources(resourceLeftovers, installation.Trade.DownlineTraderoutes.Where(x => x.ListRequestHead.ContainsKey(kvp.Key)).Select(x => x.ListRequestHead[kvp.Key]));
-
-            //     // Then store remainder
-
-            // }
             foreach (TradeRoute child in installation.Trade.DownlineTraderoutes)
             {
-                CalculateResources(child.Tail);
+                ResolveRequests(child.Tail);
             }
         }
+
+
 
         /// <summary>
         /// Given a number resources, allocates evenly among requesters.
@@ -281,7 +214,7 @@ public partial class Logistics
         /// <returns>
         ///  leftover
         /// </returns>
-        static double ShareResources(double resourceTotal, IEnumerable<Resource.IRequestable> requesters, double resourceShippingFraction=1)
+        static double ShareEqual(double resourceTotal, IEnumerable<Resource.IRequestable> requesters)
         {
             // Supply fraction is the fraction of resources that can be allocated.
             double requestTotal = requesters.Sum(x => x.Request);
@@ -292,13 +225,7 @@ public partial class Logistics
 
             foreach (Resource.IRequestable r in requesters)
             {
-                // Respond with fraction.
-                // double resourceShippingFraction = 1;
-                // if (r is Resource.RRequestHead)
-                // {
-                //     resourceShippingFraction = ((Resource.RRequestHead)r).tradeRoute.Fraction();
-                // }
-                double allocated = Math.Min(Math.Min(resourceSupplyFraction, resourceShippingFraction), 1) * r.Request;
+                double allocated = Math.Min(resourceSupplyFraction, 1) * r.Request;
                 newResourceTotal -= allocated;
                 r.Respond(allocated);
                 // newResourceTotal -= allocated;

@@ -49,16 +49,34 @@ public partial class UIPanelLedgerEntry : VBoxContainer, Lists.IListable<Resourc
 
 	public void Update()
 	{
+		bool isZero = true;
 		netRemote.Visible = parent.ShowTrade;
 		if (netRemote.Visible)
 		{
+			if (netRemote.value.Text != "-"){
+				isZero = false;
+			}
 			netRemote.Update();
 		}
 		netLocal.Update();
+		if (netLocal.value.Text != "-"){
+			isZero = false;
+		}
 		net.Update();
+		if (net.value.Text != "-"){
+			isZero = false;
+		}
 		if (ledgerEntry.Type < 500)
 		{
 			storage.Update();
+			if (storage.value.Text != "0%"){
+				isZero = false;
+			}
+		}
+		if (parent.HideZeroCol && isZero){
+			Visible = false;
+		}else{
+			Visible = true;
 		}
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

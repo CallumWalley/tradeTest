@@ -11,8 +11,8 @@ public partial class TradeRoute : Node
 	[Export]
 	public Installation Head { get; set; }
 
-	public Resource.RListRequestTail<Resource.RRequestTail> ListRequestTail;
-	public Resource.RList<Resource.RRequestHead> ListRequestHead;
+	public RListRequestTail<RRequestTail> ListRequestTail;
+	public Resource.RList<RRequestHead> ListRequestHead;
 
 	Resource.RRequest shipDemand = new Resource.RRequest(901, 0);
 	double InboundShipDemand
@@ -34,7 +34,8 @@ public partial class TradeRoute : Node
 	{
 		get
 		{
-			shipDemand.Request = Math.Max(InboundShipDemand, OutboundShipDemand);
+			shipDemand.Request = Math.Max(InboundShipDemand, OutboundShipDemand) * distance * 0.01;
+			shipDemand.Name = string.Format("Ships required.");
 			shipDemand.Details = string.Format("{0:N1} required for indbound cargo, {1:N1} for outbound.", InboundShipDemand, OutboundShipDemand);
 			return shipDemand;
 		}
@@ -92,8 +93,8 @@ public partial class TradeRoute : Node
 		distance = Tail.GetParent<Body>().Position.DistanceTo(Head.GetParent<Body>().Position);
 		Name = $"Trade route from {Head.Name} to {Tail.Name}";
 
-		ListRequestHead = new Resource.RList<Resource.RRequestHead>();
-		ListRequestTail = new Resource.RListRequestTail<Resource.RRequestTail>(this);
+		ListRequestHead = new Resource.RList<RRequestHead>();
+		ListRequestTail = new RListRequestTail<RRequestTail>(this);
 
 		// RequestExportToParent = (Resource.RList<Resource.RRequest>)Tail.Ledger.RequestExportToParent;
 		// RequestImportFromParent = (Resource.RList<Resource.RRequest>)Tail.Ledger.RequestImportFromParent;
@@ -125,146 +126,126 @@ public partial class TradeRoute : Node
 	{
 		Name = newName;
 	}
-	public void Set()
-	{
-		// foreach (Resource.IResource r in Balance)
-		// {
-		//     if (r.Sum > 0)
-		//     {
-		//         consumptionSource.Add(new TradeInputType(IndustrySource, new Resource.RStatic(r.Type, r.Sum, $"Trade to {destination.Name}")));
-		//     }
-		//     else
-		//     {
-		//         consumptionDestination.Add(new TradeInputType(IndustrySource, new Resource.RStatic(r.Type, r.Sum, $"Trade to {destination.Name}")));
-		//     }
-		// }
-	}
 
-	// IEnumerable<Resource> InvertBalance()
-	// {
-	//     foreach (Resource r in balance)
-	//     {
-	//         if (r .Type == 901) { continue; }//Ignore trade ship cost.
-	//         yield return new Resource.IResource.RStatic(r .Type, -r.Sum);
-	//     }
-	// }
+    /// TRADE ROUTE UNIQUE CLASSES
+    /// 
 
-	// void Sync(Resource.RList lead, Resource.RList follow)
-	// {
-	//     foreach (Resource r in balance)
-	//     {
-	//         if (r .Type == 901) { continue; }//Ignore trade ship cost.
-	//         yield return new Resource.IResource.RStatic(r .Type, -r.Sum);
-	//     }
-	// }
+    // Same as regular list except makes sure to add corresponding element.
+    // When adding to tail, create corresponding in head. 
+    public class RListRequestTail<T> : Resource.RList<RRequestTail>
+    {
+        TradeRoute tradeRoute;
+        public RListRequestTail(TradeRoute _tradeRoute) : base()
+        {
+            tradeRoute = _tradeRoute;
+        }
+        protected override RRequestTail _Get(int index)
+        {
+            if (!members.ContainsKey(index))
+            {
+                RRequestTail tail = new RRequestTail(index, tradeRoute);
+                RRequestHead head = new RRequestHead(index, tradeRoute);
+                tail.twin = head;
+                head.twin = tail;
+                members.Add(index, tail);
+                tradeRoute.ListRequestHead.Add(head);
+            }
+            return members[index];
+        }
+        public double Weight
+        {
+            get{
+                return members.Sum( x => x.Value.Request );
+            }
+        }
+    }
+    /// <summary>
+    /// Same as regular request except details linked to trade.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    // class RListRequestHead<T> : Resource.RList<RRequestHead>
+    // {
+    // 	TradeRoute tradeRoute;
+    // 	public RListRequestHead(int _type, TradeRoute _tradeRoute) : base(_type, 0)
+    // 	{
+    // 		tradeRoute = _tradeRoute;
+    // 	}
 
-	// Sets trade route equal to destination deficit/production
-	// public void MatchDemand()
-	// {
-	//     Balance.Clear();
+    // }
+    public class RRequestHead : Resource.RRequest
+    {
+        public TradeRoute tradeRoute;
+        public RRequestTail twin;
 
-	//     foreach (Resource.IResource r in Tail.RDelta)
-	//     {
-	//         Balance[r.Type].Set(r.Sum);
-	//         //Balance[r.Type].Name = $"Trade to {tradeRoute.destination}"
-	//     }
-	//     //Balance.RemoveZeros();
-	// }
+        public RRequestHead(int _type, TradeRoute _tradeRoute) : base( _type, 0 )
+        {
+            tradeRoute = _tradeRoute;
+        }
+        /// <summary>
+        /// Drives state of twin.
+        /// </summary>
+        public override int State
+        {
+            get { return base.State; }
+            set
+            {
+                base.State = value;
+                twin.State = value;
+            }
+        }
 
-	// void UpdateFreighterWeight()
-	// {
-	// 	TradeWeight.Set(newValue: TradeRoutes.GetFrieghterWeight());
-	// }
+        public override void Respond()
+        {
+            base.Respond();
+        }
+		public override void Respond(double value)
+        {
+            base.Respond(value);
+        }
+        /// <summary>
+        /// Drives state of twin.
+        /// </summary>
+        /// <param name="value"></param>
+        public override void Set(double value)
+        {   
+            base.Set(Math.Round(value,2));
+            
+            twin.Set(Math.Round(-value,2));
+        }
+        public override string Name { get { return string.Format("{0} {1}", (Request > 0) ? "Import from" : "Export to", tradeRoute.Tail.Name); } }
+        public override string Details { get { return string.Format("{0} {1} {2}", Resource.Name(Type), (Request > 0) ? "Import from" : "Export to", tradeRoute.Tail.Name); } }
 
-	// public class TransformerTradeRoute : Resource.IResourceTransformers
-	// {
-	//     public TradeRoute tr;
-	//     public TransformerTradeRoute()
-	//     {
-	//         tr = tradeRoute;
-	//     }
-	//     public IEnumerable<Resource.IRequestable> _Consumption(TransformerTradeRoute tr)
-	//     {
-	//         foreach (Resource.RGroup<Resource.IResource> r in tradeRoute.Tail.produced)
-	//         {
-	//             if (r.Sum > 0) { continue; }
-	//             yield return new Resource.RRequestBase(new Resource.RStatic(r.Type, -r.Sum, tradeRoute.Name, tradeRoute.Name));
-	//         }
-	//     }
-	//     public IEnumerable<Resource.IRequestable> _Production(TransformerTradeRoute tr)
-	//     {
-	//         foreach (Resource.RGroup<Resource.IResource> r in tradeRoute.Tail.consumed)
-	//         {
-	//             if (r.Sum > 0) { continue; }
-	//             yield return new Resource.RRequestBase(new Resource.RStatic(r.Type, -r.Sum, tradeRoute.Name, tradeRoute.Name));
-	//         }
-	//     }
+    }
+    /// <summary>
+    /// Drives RequestHead
+    /// </summary>
+    public class RRequestTail : Resource.RRequest
+    {
+        TradeRoute tradeRoute;
+        public RRequestHead twin;
 
-	//     public virtual Resource.RList<Resource.IResource> Production { get; set; }
-	//     public virtual Resource.RList<Resource.IRequestable> Consumption { get; set; }
-	//     public System.Object Driver { get { return tradeRoute; } }
-	// }
-	// public class TransformerTradeRouteHead : TransformerTradeRoute
-	// {
-	//     TransformerTradeRoute twin;
+        public RRequestTail(int _type, TradeRoute _tradeRoute) : base(_type, 0)
+        {
+            tradeRoute = _tradeRoute;
+			// Touch leder if non existant.
+			tradeRoute.Head.Ledger.InitType(_type);
+        }
 
-	//     public TransformerTradeRouteHead(TransformerTradeRoute _twin) : base()
-	//     {
-	//         twin = _twin;
-	//     }
-	//     public override Resource.RList<Resource.IRequestable> Consumption
-	//     {
-	//         get
-	//         {
-	//             return new Resource.RList<Resource.IRequestable>(_Consumption(twin));
-	//         }
-	//     }
-	//     public override Resource.RList<Resource.IResource> Production
-	//     {
-	//         get
-	//         {
-	//             return new Resource.RList<Resource.IResource>(_Production(twin));
-	//         }
-	//     }
-	// }
-	// public class TransformerTradeRouteTail : TransformerTradeRoute
-	// {
-	//     public override Resource.RList<Resource.IRequestable> Consumption { get { return new Resource.RList<Resource.IRequestable>(_Consumption(this)); } }
-	//     public override Resource.RList<Resource.IResource> Production { get { return new Resource.RList<Resource.IResource>(_Production(this)); } }
+        /// <summary>
+        /// Tail controls requeust of twin.
+        /// </summary>
+        public override double Request
+        {
+            get { return base.Request; }
+            set
+            {
+                if (twin == null) { return; }// to avoid error when being set. Maybe better way.
+                twin.Request = -value;
+                base.Request = value;
+            }
+        }
+        public override string Name { get { return string.Format("{0} {1}", (Request > 0) ? "Import from" : "Export to", tradeRoute.Tail.Name); } }
+        public override string Details { get { return string.Format("{0} {1} {2}", Resource.Name(Type), (Request > 0) ? "Import from" : "Export to", tradeRoute.Head.Name); } }
 
-	// }
-
-	// void BalanceUpdated()
-	// {
-	//     consumed.Clear();
-	//     produced.Clear();
-
-	//     if (isUpline)
-	//     {
-	//         foreach (Resource.RStatic r in tradeRoute.Balance)
-	//         {
-	//             if (r.Sum < 0 && isUpline)
-	//             {
-	//                 consumed[r.Type] = new TradeInputType(twin, r);
-	//             }
-	//             else if (r.Sum > 0 && !isUpline)
-	//             {
-	//                 produced[r.Type] = new Resource.RStatic(r.Type, r.Sum, $"Trade from {tradeRoute.Head.Name}");
-	//             }
-	//         }
-	//     }
-	//     else
-	//     {
-	//         foreach (Resource.RStatic r in tradeRoute.Balance)
-	//         {
-	//             if (r.Sum < 0 && isUpline)
-	//             {
-	//                 consumed[r.Type] = new TradeInputType(twin, new Resource.RStatic(r.Type, r.Sum, $"Trade to {tradeRoute.Head.Name}"));
-	//             }
-	//             else if (r.Sum > 0 && !isUpline)
-	//             {
-	//                 produced[r.Type] = new Resource.RStatic(r.Type, r.Sum, $"Trade from {tradeRoute.Tail.Name}");
-	//             }
-	//         }
-	//     }
+    }
 }

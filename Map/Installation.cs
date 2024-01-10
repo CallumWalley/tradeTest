@@ -177,7 +177,7 @@ public partial class Installation : Node
     {
         foreach (Industry rp in Industries.GetChildren())
         {
-            foreach (Resource.IResource output in rp.Production)
+            foreach (Resource.IRequestable output in rp.Production)
             {
                 Ledger[output.Type].ResourceLocal.Add(output);
             }
@@ -300,14 +300,11 @@ public partial class Installation : Node
         public void RegisterUpline(TradeRoute i)
         {
             UplineTraderoute = i;
-            ShipDemand.Add(i.ShipDemand);
-
             // Order is set in setter of parent order.
         }
         public void DeregisterUpline(TradeRoute i, bool upline = false)
         {
             UplineTraderoute = null;
-            ShipDemand.Remove(i.ShipDemand);
 
             // 0 is not in network. 
             installation.Order = Math.Min(DownlineTraderoutes.Count, 1);
@@ -318,7 +315,6 @@ public partial class Installation : Node
         {
             // If made head of trade network, set order to 1;
             DownlineTraderoutes.Add(i);
-            ShipDemand.Add(i.ShipDemand);
             installation.Order = 1;
             if (installation.Order < 2)
             {
@@ -331,7 +327,6 @@ public partial class Installation : Node
         public void DeregisterDownline(TradeRoute i)
         {
             DownlineTraderoutes.Remove(i);
-            ShipDemand.Remove(i.ShipDemand);
 
             // If no longer part of a trade network, set order to 0;
             if (installation.Order == 1 && DownlineTraderoutes.Count < 1)

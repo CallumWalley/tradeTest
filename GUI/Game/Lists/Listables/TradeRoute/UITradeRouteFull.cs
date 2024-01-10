@@ -15,7 +15,9 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
     UIResource friegherRequirement;
     public TextureButton cancelButton;
     ScrollContainer details;
-    Lists.UIListResources headImport;
+    UIListResources toHead;
+    UIListResources toTail;
+
 
     public static Player player;
     public Control Control { get { return this; } }
@@ -32,9 +34,7 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
         friegherRequirement.ShowBreakdown = true;
         //callback = _callback;
 
-        headImport = new();
-        headImport.Init(tradeRoute.ListRequestTail);
-        GetNode<HBoxContainer>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/HeadResources").AddChild(headImport);
+
         // Set button text.
         // GetNode<Label>("Summary/SummaryContent/Source").Text = $"→ system - {tradeRoute.destination.Name}";
 
@@ -90,6 +90,14 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
         installationTail.Init(tradeRoute.Tail);
 
 
+        toHead = GetNode<UIListResources>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/toHead");
+        toTail = GetNode<UIListResources>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/toTail");
+        toHead.Init(tradeRoute.ListRequestHead);
+        toTail.Init(tradeRoute.ListRequestTail);
+
+        // toHead.ShowDetails = true;
+        // toTail.ShowDetails = true;
+
         // demand.Vertical = false;
         // surplus.Vertical = false;
         // demand.ShowBreakdown = true;
@@ -124,7 +132,8 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
 
     public void Update()
     {
-        headImport.Update();
+        toHead.Update();
+        toTail.Update();
     }
     public void Remove()
     {

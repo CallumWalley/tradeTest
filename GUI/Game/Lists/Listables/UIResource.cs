@@ -24,17 +24,10 @@ public partial class UIResource : UIDrawEFrame, Lists.IListable<Resource.IResour
     public Label name;
     private Label details;
 
-    bool requestable = false;
-
     protected static readonly PackedScene p_resourceIcon = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/UIResource.tscn");
 
     public void Init(Resource.IResource _resource)
     {
-        resource = _resource;
-    }
-    public void Init(Resource.IRequestable _resource)
-    {
-        requestable = true;
         resource = _resource;
     }
 
@@ -69,18 +62,24 @@ public partial class UIResource : UIDrawEFrame, Lists.IListable<Resource.IResour
 
     public void Update()
     {
-        if (requestable && ((Resource.IRequestable)resource).State > 0)
+        // 
+        if (resource is Resource.IRequestable && ((Resource.IRequestable)resource).State > 0)
         {
-            value.Text = $"{resource.Sum}/{((Resource.IRequestable)resource).Request}";
+            value.Text = string.Format("{0:G}/{1:G}", resource.Sum, ((Resource.IRequestable)resource).Request);
             name.Text = $"{resource.Name}";
             value.AddThemeColorOverride("font_color", colorBad);
             name.AddThemeColorOverride("font_color", colorBad);
         }
-        else
+        else if(resource.Sum == 0){
+            value.RemoveThemeColorOverride("font_color");
+            name.RemoveThemeColorOverride("font_color");
+            value.Text = "-";
+            name.Text = $"{resource.Name} : ";
+        }else
         {
             value.RemoveThemeColorOverride("font_color");
             name.RemoveThemeColorOverride("font_color");
-            value.Text = (resource.Sum).ToString();
+            value.Text = string.Format("{0:G}", resource.Sum);
             name.Text = $"{resource.Name} : ";
         }
     }

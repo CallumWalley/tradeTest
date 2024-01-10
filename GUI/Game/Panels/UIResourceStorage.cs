@@ -10,8 +10,8 @@ public partial class UIResourceStorage : Control
 
     Color colorBad = new(1, 0, 0);
     protected Control details;
-    protected Label value;
-    protected Label name;
+    public Label value;
+    public Label name;
     public Resource.RStatic GameElement { get { return resource; } }
     static readonly PackedScene p_resourceIcon = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/UIResource.tscn");
 

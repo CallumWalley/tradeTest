@@ -6,7 +6,7 @@ public partial class Industry : Node, Resource.IResourceTransformers
 {
     [Export]
     public string slug;
-    public Resource.RList<Resource.IResource> Production { get; set; }
+    public Resource.RList<Resource.IRequestable> Production { get; set; }
     public Resource.RList<Resource.IRequestable> Consumption { get; set; }
     public Resource.RList<Resource.RStatic> StorageAdded { get; protected set; }
     public List<Situations.Base> Situations { get; protected set; }
@@ -79,12 +79,12 @@ public partial class Industry : Node, Resource.IResourceTransformers
     //         yield return new Requester(new Resource.IResource.RStatic(kvp.Key, kvp.Value, Name));
     //     }
     // }
-    IEnumerable<Resource.IResource> GetGroupFromTemplate(Dictionary<int, double> template)
+    IEnumerable<Resource.IRequestable> GetGroupFromTemplate(Dictionary<int, double> template)
     {
         if (template == null) { yield break; }
         foreach (KeyValuePair<int, double> kvp in template)
-        {
-            yield return new Resource.RGroup<Resource.IResource>(new Resource.RStatic(kvp.Key, kvp.Value, "Base Yield"), Name, Description);
+        {   
+            yield return new Resource.RGroupRequests<Resource.IRequestable>(new Resource.RRequest(kvp.Key, kvp.Value, "Base Yield", "Base Yield", true), Name, Description);
         }
     }
 

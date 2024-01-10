@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://dfi8ps0nktvf8"]
+[gd_scene load_steps=2 format=3 uid="uid://c6l1f58cf2j1w"]
 
-[ext_resource type="PackedScene" uid="uid://crl4wbobaanin" path="res://GUI/Elements/UIList.tscn" id="1_0gwh2"]
-[ext_resource type="Script" path="res://GUI/Game/Lists/UIListResources.cs" id="2_kp83g"]
+[ext_resource type="Script" path="res://GUI/Game/Lists/UIListResources.cs" id="1_qpy5d"]
 
-[node name="ListResources" instance=ExtResource("1_0gwh2")]
-script = ExtResource("2_kp83g")
+[node name="UiListResources" type="BoxContainer"]
+script = ExtResource("1_qpy5d")

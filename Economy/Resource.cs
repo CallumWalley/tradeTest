@@ -78,7 +78,7 @@ public partial class Resource
         // }
         public virtual void Set(double newValue)
         {
-            Sum = newValue;
+            Sum = Math.Round(newValue,2);
         }
         public static void Clear() { return; }
         public Texture2D Icon { get { return Index(Type).icon; } }
@@ -230,7 +230,7 @@ public partial class Resource
     public interface IResourceTransformers
     {
         public RList<IRequestable> Consumption { get; protected set; }
-        public RList<IResource> Production { get; protected set; }
+        public RList<IRequestable> Production { get; protected set; }
         public System.Object Driver { get; }
     }
 
@@ -285,9 +285,17 @@ public partial class Resource
         // Request is actual amount given
         public virtual int State { get; set; } = 0;
 
-        public RRequest(int _type, double _request, string _name = "Unknown", string _details = "Base value") : base(_type, 0, _name, _details: _details)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="_type"></param>
+        /// <param name="_request"></param>
+        /// <param name="_fulfilled">If true, base static will be set to request.</param>
+        /// <param name="_name"></param>
+        /// <param name="_details"></param>
+        public RRequest(int _type, double _request, string _name = "Unknown", string _details = "Base value",  bool _fulfilled=false) : base(_type, _fulfilled ? _request : 0, _name, _details: _details)
         {
-            Request = _request;
+            Request = Math.Round(_request,2);
         }
 
         // No inputs if request fulfilled.
@@ -298,7 +306,7 @@ public partial class Resource
         // No fulfilled value returned if not fulfilled.
         public virtual void Respond(double value)
         {
-            base.Set(value);
+            Set(value);
             State = (value == Request) ? 0 : 1;
         }
         public virtual double Fraction()
@@ -748,13 +756,13 @@ public partial class Resource
             public Ledger ledger;
 
             // Net is combo of Resource and Request.
-            public RGroup<IResource> ResourceLocal; // How much is produced here.
+            public RGroupRequests<IRequestable> ResourceLocal; // How much is produced here.
             public RGroupRequests<IRequestable> RequestLocal;
 
             // These are only collections of 'real' elements.
-            RGroup<IResource> netLocal;
+            RGroupRequests<IRequestable> netLocal;
             RGroupRequests<IRequestable> netRemote;
-            RGroup<IResource> net;
+            RGroupRequests<IRequestable> net;
 
             public IRequestable RequestToParent
             {
@@ -785,40 +793,42 @@ public partial class Resource
                     if (RequestToParent != null)
                     {
                         netRemote.Add(RequestToParent);
-
                     }
                     return netRemote;
                 }
             }
-            public RGroup<IResource> NetLocal
+            public RGroupRequests<IRequestable> NetLocal
             {
                 get
                 {
                     netLocal.Clear();
-                    foreach (IResource item in RequestLocal)
+                    foreach (IRequestable item in RequestLocal)
                     {
                         netLocal.Add(item);
                     }
-                    foreach (IResource item in ResourceLocal)
+                    foreach (IRequestable item in ResourceLocal)
                     {
                         netLocal.Add(item);
                     }
                     return netLocal;
                 }
             }
-            public RGroup<IResource> Net
+            public RGroupRequests<IRequestable> Net
             {
                 get
                 {
                     net.Clear();
-                    foreach (IResource item in NetLocal)
-                    {
-                        net.Add(item);
-                    }
-                    foreach (IResource item in NetRemote)
-                    {
-                        net.Add(item);
-                    }
+                    net.Add(netLocal);
+                    net.Add(netRemote);
+
+                    // foreach (IRequestable item in NetLocal)
+                    // {
+                    //     net.Add(item);
+                    // }
+                    // foreach (IRequestable item in NetRemote)
+                    // {
+                    //     net.Add(item);
+                    // }
                     return net;
                 }
             }
@@ -827,12 +837,12 @@ public partial class Resource
             public int Type { get; set; }
             public Entry(int _type)
             {
-                netLocal = new("Net Local", "All production and consumption occuring at this installation.");
+                netLocal = new("Local", "All production and consumption occuring at this installation.");
                 net = new("Total", "All resources produced or traded");
-                netRemote = new("Net Remote", "All Exports and Imports to this Installation");
+                netRemote = new("Trade", "All Exports and Imports to this Installation");
 
                 //Local = 
-                ResourceLocal = new RGroup<IResource>("Local Production", "Sum Produced");
+                ResourceLocal = new RGroupRequests<IRequestable>("Local Production", "Sum Produced");
                 RequestLocal = new RGroupRequests<IRequestable>("Local Consumption", "Sum Requested");
                 //ConsumptionRequest = new Resource.RGroupRequests<Resource.IRequestable>(_type, "Total", "Sum Requests");
                 //Surplus = new Resource.RGroup<Resource.IResource>(_type, "Exports", "Total Exports");
@@ -875,16 +885,21 @@ public partial class Resource
             {
                 Stored = new Resource.RStatic(_type, 0, "Stored", "Stored");
                 Capacity = new Resource.RStatic(_type, 1000, "Capacity", "Capacity");
-
             }
         }
+        
 
+        public IEnumerable<KeyValuePair<int, EntryAccrul>> Acrul(){
+            foreach (KeyValuePair<int, EntryAccrul> e in _acrul){
+                yield return e;
+            }
+        }
 
         Dictionary<int, Entry> _all = new();
         /// <summary>
         ///  Dict containting only acrulable;
         /// </summary>
-        Dictionary<int, Entry> _acrul = new();
+        Dictionary<int, EntryAccrul> _acrul = new();
 
         //Dictionary<int, EntryAccrul> _accrul = new();
 
@@ -912,23 +927,27 @@ public partial class Resource
                 }
                 else
                 {
-                    Entry nre;
-                    // If type less than 500, it is accrul.
-                    if (type < 500)
-                    {
-                        nre = new EntryAccrul(type);
-                        nre.ledger = this;
-
-                    }
-                    else
-                    {
-                        nre = new Entry(type);
-                        nre.ledger = this;
-                    }
-                    _all[type] = nre;
-                    return nre;
+                    return InitType(type);
                 }
             }
+        }
+
+        // create new resource type in ledger.
+        public Entry InitType(int type){
+            Entry nre;
+            // If type less than 500, it is accrul.
+            if (type < 500)
+            {
+                nre = new EntryAccrul(type);
+                nre.ledger = this;
+            }
+            else
+            {
+                nre = new Entry(type);
+                nre.ledger = this;
+            }
+            _all[type] = nre;
+            return nre;
         }
 
         public IEnumerator<KeyValuePair<int, Entry>> GetEnumerator()
@@ -994,116 +1013,7 @@ public partial class Resource
 
 
 
-    /// TRADE ROUTE UNIQUE CLASSES
-    /// 
 
-    // Same as regular list except makes sure to add corresponding element.
-    // When adding to tail, create corresponding in head. 
-    public class RListRequestTail<T> : RList<RRequestTail>
-    {
-        TradeRoute tradeRoute;
-        public RListRequestTail(TradeRoute _tradeRoute) : base()
-        {
-            tradeRoute = _tradeRoute;
-        }
-        protected override RRequestTail _Get(int index)
-        {
-            if (!members.ContainsKey(index))
-            {
-                RRequestTail tail = new RRequestTail(index, tradeRoute);
-                RRequestHead head = new RRequestHead(index, tradeRoute);
-                tail.twin = head;
-                head.twin = tail;
-                members.Add(index, tail);
-                tradeRoute.ListRequestHead.Add(head);
-            }
-            return members[index];
-        }
-        public double Weight
-        {
-            get{
-                return members.Sum( x => x.Value.Request );
-            }
-        }
-    }
-    /// <summary>
-    /// Same as regular request except details linked to trade.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    // class RListRequestHead<T> : Resource.RList<RRequestHead>
-    // {
-    // 	TradeRoute tradeRoute;
-    // 	public RListRequestHead(int _type, TradeRoute _tradeRoute) : base(_type, 0)
-    // 	{
-    // 		tradeRoute = _tradeRoute;
-    // 	}
-
-    // }
-    public class RRequestHead : RRequest
-    {
-        public TradeRoute tradeRoute;
-        public RRequestTail twin;
-
-        public RRequestHead(int _type, TradeRoute _tradeRoute) : base( _type, 0 )
-        {
-            tradeRoute = _tradeRoute;
-        }
-        /// <summary>
-        /// Drives state of twin.
-        /// </summary>
-        public override int State
-        {
-            get { return base.State; }
-            set
-            {
-                base.State = value;
-                twin.State = value;
-            }
-        }
-        /// <summary>
-        /// Drives state of twin.
-        /// </summary>
-        /// <param name="value"></param>
-        public override void Set(double value)
-        {   
-            base.Set(value);
-            
-            twin.Set(-value);
-        }
-        public override string Name { get { return string.Format("{0}", (Request > 0) ? "Import" : "Export"); } }
-        public override string Details { get { return string.Format("{0} {1} {2}",  Name(Type), (Request > 0) ? "Import from" : "Export to", tradeRoute.Tail.Name); } }
-
-    }
-    /// <summary>
-    /// Drives RequestHead
-    /// </summary>
-    public class RRequestTail : RRequest
-    {
-        TradeRoute tradeRoute;
-        public RRequestHead twin;
-
-        public RRequestTail(int _type, TradeRoute _tradeRoute) : base(_type, 0)
-        {
-            tradeRoute = _tradeRoute;
-        }
-
-        /// <summary>
-        /// Tail controls requeust of twin.
-        /// </summary>
-        public override double Request
-        {
-            get { return base.Request; }
-            set
-            {
-                if (twin == null) { return; }// to avoid error when being set. Maybe better way.
-                twin.Request = -value;
-                base.Request = value;
-            }
-        }
-        public override string Name { get { return string.Format("{0}", (Request > 0) ? "Import" : "Export"); } }
-        public override string Details { get { return string.Format("{0} {1} {2}",  Name(Type), (Request > 0) ? "Import from" : "Export to", tradeRoute.Head.Name); } }
-
-    }
 }
 
 // TResource GetType(int code, bool createMissing = false)
