@@ -12,7 +12,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "godot-mono",
+            "program": "godot",
             "args": [],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": true,

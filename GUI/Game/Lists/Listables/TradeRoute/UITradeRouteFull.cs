@@ -30,7 +30,7 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
         tradeRoute = _tradeRoute;
 
         friegherRequirement = GetNode<UIResource>("VBoxContainer/HBoxContainer/HSplitContainer/UIResource");
-        friegherRequirement.Init(tradeRoute.Tail.Trade.ShipDemand);
+        friegherRequirement.Init(tradeRoute.ShipDemand);
         friegherRequirement.ShowBreakdown = true;
         //callback = _callback;
 
@@ -92,8 +92,8 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
 
         toHead = GetNode<UIListResources>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/toHead");
         toTail = GetNode<UIListResources>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/toTail");
-        toHead.Init(tradeRoute.ListRequestHead);
-        toTail.Init(tradeRoute.ListRequestTail);
+        toHead.Init(tradeRoute.ListHeadGain);
+        toTail.Init(tradeRoute.ListTailGain);
 
         // toHead.ShowDetails = true;
         // toTail.ShowDetails = true;
@@ -120,20 +120,26 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
     }
     public override void _Draw()
     {
-        if (tradeRoute == null) { return; }
-        if (Destroy)
+        if (Destroy || tradeRoute == null)
         {
+            Visible = false;
+            GD.Print($"{this} QueueFree");
             QueueFree();
+            return;
         }
-        details.GetNode<Label>("VBoxContainer/Distance").Text = String.Format("Distance {0:N2}", tradeRoute.distance);
-        details.GetNode<Label>("VBoxContainer/Time").Text = String.Format("Distance {0:N2}", tradeRoute.distance);
+        // details.GetNode<Label>("VBoxContainer/Distance").Text = String.Format("Distance {0:N2}", tradeRoute.distance);
+        // details.GetNode<Label>("VBoxContainer/Time").Text = String.Format("Distance {0:N2}", tradeRoute.distance);
         labelName.Text = tradeRoute.Name;
     }
 
     public void Update()
     {
-        toHead.Update();
-        toTail.Update();
+        if (!Destroy || tradeRoute != null)
+        {
+            toHead.Update();
+            toTail.Update();
+            _Draw();
+        }
     }
     public void Remove()
     {

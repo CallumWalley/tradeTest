@@ -26,6 +26,7 @@ public partial class UIPanelInstallation : Control
     static readonly PackedScene prefab_TradeRoute = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/TradeRoute/UITradeRouteFull.tscn");
     static readonly PackedScene prefab_UplineSelector = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Dropdowns/UIDropDownSetHead.tscn");
     UIPanelLedger panelLedger;
+    UIList<TradeRoute> tradeRouteList;
     public void Init(Installation _installation)
     {
         tabContainer = GetNode<VBoxContainer>("VBoxContainer").GetNode<TabContainer>("TabContainer");
@@ -66,7 +67,7 @@ public partial class UIPanelInstallation : Control
         // supplyPanel.GetNode<VBoxContainer>("Delta").AddChild(uiResourceDelta);
         // supplyPanel.GetNode<VBoxContainer>("Storage").AddChild(uiStorage);
 
-        UIList<TradeRoute> tradeRouteList = new();
+        tradeRouteList = new();
         UIDropDownSetHead setUpline = tradePanel.GetNode<UIDropDownSetHead>("DropDown");
         setUpline.Init(installation);
         tradeRouteList.Init(installation.Trade.DownlineTraderoutes, prefab_TradeRoute);
@@ -88,11 +89,13 @@ public partial class UIPanelInstallation : Control
         }
         else
         {
+            tradePanelNetwork.Text = string.Format("No trade network connected.", installation.Order, installation.Network);
             //tradePanelNetwork.Visible = false;
         }
         bool showTrade = (installation.Trade.UplineTraderoute != null || installation.Trade.DownlineTraderoutes.Count > 0);
         GetNode<Label>("VBoxContainer/TabContainer/Supply/VBoxContainer/Trade").Visible = showTrade;
         panelLedger.ShowTrade = showTrade;
         panelLedger.Update();
+        tradeRouteList.Update();
     }
 }

@@ -14,11 +14,13 @@ public partial class UIList<T> : BoxContainer
     {
         list = _list;
         prefab = _prefab;
+        Update();
     }
-    public virtual void Init(IEnumerable<T> _list, Type type)
-    {
-        list = _list;
-    }
+    // public virtual void Init(IEnumerable<T> _list, Type type)
+    // {
+    //     list = _list;
+    //     Update();
+    // }
     public virtual Control DrawUnset()
     {
         Label label = new Label();
@@ -36,7 +38,7 @@ public partial class UIList<T> : BoxContainer
         {
             uichild.Destroy = true;
         }
-
+        if (list == null) { GD.Print("List instantiated will null list."); QueueFree(); return; }
         /// For each in list, check if element exists. 
         foreach (T r in list)
         {

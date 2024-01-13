@@ -27,7 +27,7 @@ public partial class UIPanelLedger : HBoxContainer
 		uIList = new();
 		uIList.parent = this;
 		uIList.Init(Ledger.Values(), prefab_LedgerEntry);
-		
+
 		AddChild(uIList);
 	}
 

@@ -48,7 +48,7 @@ public partial class Resource
     ///  A collection of multiple resources of the same type. Enumerable.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IResourceGroup<out T> :  IEnumerable<T>, IResource where T : IResource
+    public interface IResourceGroup<out T> : IEnumerable<T>, IResource where T : IResource
     {
         // public IEnumerator<T> GetEnumerator();
         public int Count { get; }
@@ -78,7 +78,7 @@ public partial class Resource
         // }
         public virtual void Set(double newValue)
         {
-            Sum = Math.Round(newValue,2);
+            Sum = Math.Round(newValue, 2);
         }
         public static void Clear() { return; }
         public Texture2D Icon { get { return Index(Type).icon; } }
@@ -218,8 +218,9 @@ public partial class Resource
         }
         public double Weight
         {
-            get{
-                return _members.Sum( x => x.Request );
+            get
+            {
+                return _members.Sum(x => x.Request);
             }
         }
         public override string ToString()
@@ -293,9 +294,9 @@ public partial class Resource
         /// <param name="_fulfilled">If true, base static will be set to request.</param>
         /// <param name="_name"></param>
         /// <param name="_details"></param>
-        public RRequest(int _type, double _request, string _name = "Unknown", string _details = "Base value",  bool _fulfilled=false) : base(_type, _fulfilled ? _request : 0, _name, _details: _details)
+        public RRequest(int _type, double _request, string _name = "Unknown", string _details = "Base value", bool _fulfilled = false) : base(_type, _fulfilled ? _request : 0, _name, _details: _details)
         {
-            Request = Math.Round(_request,2);
+            Request = Math.Round(_request, 2);
         }
 
         // No inputs if request fulfilled.
@@ -630,69 +631,17 @@ public partial class Resource
             return new RStatic(index, 0);
         }
     }
-    /// <summary>
-    /// Represents the other party in a traded resource.
-    /// </summary>
-    // public class RTradedResource : IResource
-    // {
-    //     public Ledger ledger;
-    //     public IResource request;
-    //     public int Type { get { return request.Type; } }
-    //     public string Name { get; set; }
-    //     public string Details { get; set; }
-    //     public double Sum
-    //     {
-    //         get { return -request.Sum; }
-    //     }
-    //     public RTradedResource(IResource _request)
-    //     {
-    //         request = _request;
-    //     }
-
-    // }
-    // public class RTradedRequest : IRequestable
-    // {
-    //     public Ledger ledger;
-    //     public IRequestable request;
-    //     public int Type { get { return request.Type; } }
-    //     public int State
-    //     {
-    //         get { return request.State; }
-    //         set { request.State = value; }
-    //     }
-
-    //     public double Request
-    //     {
-    //         get { return -request.Request; }
-    //         set { request.Request = -value; }
-    //     }
-
-    //     public string Name { get; set; }
-    //     public string Details { get; set; }
-    //     public double Sum
-    //     {
-    //         get { return -request.Sum; }
-    //     }
-    //     public RTradedRequest(IRequestable _request)
-    //     {
-    //         request = _request;
-    //     }
-
-    // }
-
-    // public class ResourceRequestGroup : IResource
-    // {
-    //     List<ResourceRequest> _resourceRequests;
-    // }
     public class Ledger : IEnumerable<KeyValuePair<int, Ledger.Entry>>
     {
+
+        // Consider moving to installation.
+
         /// <summary>
         /// Ledger is the complete list of all the resources at a specific location. 
         /// It is sparce on the resource axis, but dense on the type axis.
         /// </summary>
         public Installation installation;
         /// Dummy method to make sure resource exists.
-
 
         public Dictionary<int, RStatic> Storage
         {
@@ -707,47 +656,6 @@ public partial class Resource
             }
         }
 
-
-        // public IEnumerable<RGroup<IRequestable>> NetRemote
-        // {
-        //     get
-        //     {
-        //         foreach (KeyValuePair<int, Entry> kvp in _all)
-        //         {
-        //             yield return kvp.Value.NetRemote;
-        //         }
-        //     }
-        // }
-        // public IEnumerable<KeyValuePair<int, Resource.IRequestable>> RequestExportToParent
-        // {
-        //     get
-        //     {
-        //         foreach (Entry item in _all.Values)
-        //         {
-        //             yield return new KeyValuePair<int, Resource.IRequestable>(item.Type, item.RequestImportFromParent);
-        //         }
-        //     }
-        // }
-        // public IEnumerable<KeyValuePair<int, Resource.IRequestable>> RequestImportFromParent
-        // {
-        //     get
-        //     {
-        //         foreach (Entry item in _all.Values)
-        //         {
-        //             yield return new KeyValuePair<int, Resource.IRequestable>(item.Type, item.RequestImportFromParent);
-        //         }
-        //     }
-        // }
-        // public IEnumerable<KeyValuePair<int, Resource.IRequestable>> RequestImportFromChildren
-        // {
-        //     get
-        //     {
-        //         foreach (Entry item in _all.Values)
-        //         {
-        //             yield return new KeyValuePair<int, Resource.IRequestable>(item.Type, item.RequestImportFromChildren);
-        //         }
-        //     }
-        // }
         public class Entry
         {
             /// <summary>
@@ -756,61 +664,86 @@ public partial class Resource
             public Ledger ledger;
 
             // Net is combo of Resource and Request.
-            public RGroupRequests<IRequestable> ResourceLocal; // How much is produced here.
-            public RGroupRequests<IRequestable> RequestLocal;
+            public RGroupRequests<IRequestable> LocalGain; // How much is produced here.
+            public RGroupRequests<IRequestable> LocalLoss;
 
             // These are only collections of 'real' elements.
-            RGroupRequests<IRequestable> netLocal;
-            RGroupRequests<IRequestable> netRemote;
+            RGroupRequests<IRequestable> localNet;
+            RGroupRequests<IRequestable> tradeNet;
             RGroupRequests<IRequestable> net;
 
-            public IRequestable RequestToParent
+            public IRequestable UplineLoss
             {
-                get { return (ledger.installation.Trade.UplineTraderoute == null) ? null : ledger.installation.Trade.UplineTraderoute.ListRequestTail[Type]; }
+                get { return ledger.installation.Trade.UplineTraderoute == null ? null : ledger.installation.Trade.UplineTraderoute.ListTailLoss.ContainsKey(Type) ? ledger.installation.Trade.UplineTraderoute.ListTailLoss[Type] : null; }
             }
-            public IEnumerable<IRequestable> RequestFromChildren
+            public IRequestable UplineGain
+            {
+                get { return ledger.installation.Trade.UplineTraderoute == null ? null : ledger.installation.Trade.UplineTraderoute.ListTailGain.ContainsKey(Type) ? ledger.installation.Trade.UplineTraderoute.ListTailGain[Type] : null; }
+            }
+            public IEnumerable<IRequestable> DownlineGain
             {
                 get
                 {
                     foreach (TradeRoute tradeRoute in ledger.installation.Trade.DownlineTraderoutes)
                     {
-                        if (tradeRoute.ListRequestHead.ContainsKey(Type))
+                        if (tradeRoute.ListHeadGain.ContainsKey(Type))
                         {
-                            yield return tradeRoute.ListRequestHead[Type];
+                            yield return tradeRoute.ListHeadGain[Type];
                         }
                     }
                 }
             }
-            public RGroupRequests<IRequestable> NetRemote
+            public IEnumerable<IRequestable> DownlineLoss
             {
                 get
                 {
-                    netRemote.Clear();
-                    foreach (IRequestable item in RequestFromChildren)
+                    foreach (TradeRoute tradeRoute in ledger.installation.Trade.DownlineTraderoutes)
                     {
-                        netRemote.Add(item);
+                        if (tradeRoute.ListHeadLoss.ContainsKey(Type))
+                        {
+                            yield return tradeRoute.ListHeadLoss[Type];
+                        }
                     }
-                    if (RequestToParent != null)
-                    {
-                        netRemote.Add(RequestToParent);
-                    }
-                    return netRemote;
                 }
             }
-            public RGroupRequests<IRequestable> NetLocal
+            public RGroupRequests<IRequestable> TradeNet
             {
                 get
                 {
-                    netLocal.Clear();
-                    foreach (IRequestable item in RequestLocal)
+                    tradeNet.Clear();
+                    foreach (IRequestable item in DownlineGain)
                     {
-                        netLocal.Add(item);
+                        tradeNet.Add(item);
                     }
-                    foreach (IRequestable item in ResourceLocal)
+                    if (UplineLoss != null)
                     {
-                        netLocal.Add(item);
+                        tradeNet.Add(UplineLoss);
                     }
-                    return netLocal;
+                    foreach (IRequestable item in DownlineLoss)
+                    {
+                        tradeNet.Add(item);
+                    }
+                    if (UplineGain != null)
+                    {
+                        tradeNet.Add(UplineGain);
+                    }
+                    return tradeNet;
+                }
+            }
+            public RGroupRequests<IRequestable> LocalNet
+            {
+                get
+                {
+                    localNet.Clear();
+                    foreach (IRequestable item in LocalLoss)
+                    {
+                        localNet.Add(item);
+                    }
+                    foreach (IRequestable item in LocalGain)
+                    {
+                        localNet.Add(item);
+                    }
+                    return localNet;
                 }
             }
             public RGroupRequests<IRequestable> Net
@@ -818,17 +751,8 @@ public partial class Resource
                 get
                 {
                     net.Clear();
-                    net.Add(netLocal);
-                    net.Add(netRemote);
-
-                    // foreach (IRequestable item in NetLocal)
-                    // {
-                    //     net.Add(item);
-                    // }
-                    // foreach (IRequestable item in NetRemote)
-                    // {
-                    //     net.Add(item);
-                    // }
+                    net.Add(localNet);
+                    net.Add(tradeNet);
                     return net;
                 }
             }
@@ -837,22 +761,21 @@ public partial class Resource
             public int Type { get; set; }
             public Entry(int _type)
             {
-                netLocal = new("Local", "All production and consumption occuring at this installation.");
+                localNet = new("Local", "All production and consumption occuring at this installation.");
                 net = new("Total", "All resources produced or traded");
-                netRemote = new("Trade", "All Exports and Imports to this Installation");
+                tradeNet = new("Trade", "All Exports and Imports to this Installation");
 
                 //Local = 
-                ResourceLocal = new RGroupRequests<IRequestable>("Local Production", "Sum Produced");
-                RequestLocal = new RGroupRequests<IRequestable>("Local Consumption", "Sum Requested");
-                //ConsumptionRequest = new Resource.RGroupRequests<Resource.IRequestable>(_type, "Total", "Sum Requests");
-                //Surplus = new Resource.RGroup<Resource.IResource>(_type, "Exports", "Total Exports");
+                LocalGain = new RGroupRequests<IRequestable>("Local Production", "Sum Produced");
+                LocalLoss = new RGroupRequests<IRequestable>("Local Consumption", "Sum Requested");
+
                 Type = _type;
             }
 
             public void Clear()
             {
-                ResourceLocal.Clear();
-                RequestLocal.Clear();
+                LocalGain.Clear();
+                LocalLoss.Clear();
                 // RequestLocal.Clear();
                 // ResourceParent.Set(0);
                 // RequestParent.Request = 0;
@@ -871,10 +794,9 @@ public partial class Resource
 
             public override string ToString()
             {
-                return $"{Resource.Name(Type)}: {NetLocal.Sum} {NetRemote.Sum} {Net.Sum}";
+                return $"{Resource.Name(Type)}: {LocalNet.Sum} {TradeNet.Sum} {Net.Sum}";
             }
         }
-
 
         public class EntryAccrul : Entry
         {
@@ -887,21 +809,21 @@ public partial class Resource
                 Capacity = new Resource.RStatic(_type, 1000, "Capacity", "Capacity");
             }
         }
-        
 
-        public IEnumerable<KeyValuePair<int, EntryAccrul>> Acrul(){
-            foreach (KeyValuePair<int, EntryAccrul> e in _acrul){
-                yield return e;
-            }
-        }
+
+        // public IEnumerable<KeyValuePair<int, EntryAccrul>> Acrul()
+        // {
+        //     foreach (KeyValuePair<int, EntryAccrul> e in _acrul)
+        //     {
+        //         yield return e;
+        //     }
+        // }
 
         Dictionary<int, Entry> _all = new();
         /// <summary>
         ///  Dict containting only acrulable;
         /// </summary>
-        Dictionary<int, EntryAccrul> _acrul = new();
-
-        //Dictionary<int, EntryAccrul> _accrul = new();
+        // Dictionary<int, EntryAccrul> _acrul = new();
 
 
         public void Clear()
@@ -933,7 +855,8 @@ public partial class Resource
         }
 
         // create new resource type in ledger.
-        public Entry InitType(int type){
+        public Entry InitType(int type)
+        {
             Entry nre;
             // If type less than 500, it is accrul.
             if (type < 500)
@@ -979,170 +902,5 @@ public partial class Resource
         {
             return _all.ContainsKey(key);
         }
-        // public void AddRequest(Resource.IRequestable r)
-        // {
-        //     this[r.Type].Consumption.Add(r);
-        // }
-        // public void AddResource(Resource.IResource r)
-        // {
-        //     this[r.Type].Production.Add(r);
-        // }
-        // public void AddSurplus(Resource.IResource r)
-        // {
-        //     this[r.Type].Surplus.Add(r);
-        // }
-        // public void AddDemand(Resource.IRequestable r)
-        // {
-        //     this[r.Type].Demand.Add(r);
-        // }
-
-        /// <summary>
-        /// Return flat 'sum' of resource difference for use in next step.
-        /// </summary>
-        /// <returns></returns>
-        // public IEnumerable<KeyValuePair<int, double[]>> GetBuffer()
-        // {
-        //     foreach (KeyValuePair<int, Entry> entry in _dictionary)
-        //     {
-        //         yield return new KeyValuePair<int, double[]>(
-        //             entry.Key, new double[] { entry.Value.Production.Sum + entry.Value.Consumption.Sum + entry.Value.Surplus.Sum + entry.Value.Demand.Sum,
-        //             entry.Value.Consumption.Sum, entry.Value.Surplus.Sum, entry.Value.Demand.Sum });
-        //     }
-        // }
     }
-
-
-
-
 }
-
-// TResource GetType(int code, bool createMissing = false)
-// {
-//     // if list is 
-//     foreach (TResource r in members)
-//     {
-//         if (r.Type == code)
-//         {
-//             return r;
-//         }
-//     }
-//     if (createMissing)
-//     {
-//         Resource.IResource nr;
-//         if (Shallow)
-//         {
-//             nr = new Resource.RStatic(code, 0);
-//         }
-//         else
-//         {
-//             nr = new Resource.RGroup(code);
-//         }
-//         members.Add((TResource)nr);
-//         return (TResource)nr;
-//     }
-//     else
-//     {
-//         return default(TResource);
-//     }
-
-// }
-
-// Will add resource as a new (adder) element.
-// public void Add (Resource.IResource _resource)
-// {
-//     Resource.IResource rot = GetType(_resource.Type);
-//     // If no existing element, this is it.
-//     if (rot == null)
-//     {
-//         GD.Print((this.members.GetType()));
-//         GD.Print((_resource.GetType()));
-
-//         members.Add((TResource)_resource);
-//         return;
-//     }
-//     // If existing element is static. Create parent and add both.
-//     else if (rot is Resource.RStatic)
-//     {
-//         // Not allowed
-//         //members.Remove((TResource)rot);
-//         //Add((TResource)(new Resource.RGroup(rot.Type, new List<IResource> { rot, _resource })));
-//     }
-//     // Otherwise just add to agg
-//     else
-//     {
-//         // if (rot == null)
-//         // {
-//         //     rot = new Resource.RGroup(_resource.Type);
-//         //     members.Add((TResource)rot);
-//         // }
-//         ((Resource.RGroup)rot).Add(_resource);
-//     }
-
-
-//     // // If no elements of this type, add as static.
-//     // if (existing.Count < 1){
-//     // 	members.Add(_resource);
-//     // 	members.Remove(existing);
-//     // }else if(existing is TResource.RGroup){
-//     // // If no resourceGroup of this type exists, add to that.
-//     // 	((Resource.RGroup)existing).Add(_resource);
-//     // }else{
-//     // // If exists but is static, replace with TResource.RGroup containing both.
-//     // 	members.Add(new TResource.RGroup(existing .Type, new List<Resource>{existing, _resource}));
-//     // 	members.Remove(existing);
-//     // }
-// }
-
-// public void Multiply(TResource _resource)
-// {
-//     (()GetType<Resource.RGroup>(_resource.Type)).Multiply(_resource);
-
-//     // // If no elements of this type, add as static.
-//     // if (existing.Count < 1){
-//     // 	members.Add(_resource);
-//     // 	members.Remove(existing);
-//     // }else if(existing is TResource.RGroup){
-//     // // If no resourceGroup of this type exists, add to that.
-//     // 	((Resource.RGroup)existing).Add(_resource);
-//     // }else{
-//     // // If exists but is static, replace with TResource.RGroup containing both.
-//     // 	members.Add(new TResource.RGroup(existing .Type, new List<Resource>{existing, _resource}));
-//     // 	members.Remove(existing);
-//     // }
-// }
-
-
-
-// Get resources with code between range.
-// public IEnumerable<TResource> GetRange(int min, int max)
-// {
-//     int i = min;
-//     while (i <= max)
-//     {
-//         if (min <= r.Type && r.Type <= max)
-//         {
-//             yield return r;
-//         }
-//     }
-// }
-
-// void Coalesce(Resource.RStatic member, TResource nonmember)
-// {
-//     members.Remove(member);
-//     Add
-// }
-
-
-// public void Clear()
-// {
-//     foreach  (Resource.IResource m in members)
-//     {
-//         ((Resource.RStatic)m).Set(0);
-//     }
-// }
-// public void RemoveZeros()
-// {
-//     members.RemoveAll(m => m.Sum == 0);
-// }
-
-

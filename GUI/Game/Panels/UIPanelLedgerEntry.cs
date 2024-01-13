@@ -21,8 +21,8 @@ public partial class UIPanelLedgerEntry : VBoxContainer, Lists.IListable<Resourc
 		// UIResource exportDemand = GetNode<UIResource>("ExportDemand");
 
 
-		netLocal.Init(ledgerEntry.NetLocal);
-		netRemote.Init(ledgerEntry.NetRemote);
+		netLocal.Init(ledgerEntry.LocalNet);
+		netRemote.Init(ledgerEntry.TradeNet);
 		net.Init(ledgerEntry.Net);
 
 		// IF accruable also make storage.
@@ -53,29 +53,36 @@ public partial class UIPanelLedgerEntry : VBoxContainer, Lists.IListable<Resourc
 		netRemote.Visible = parent.ShowTrade;
 		if (netRemote.Visible)
 		{
-			if (netRemote.value.Text != "-"){
+			if (netRemote.value.Text != "-")
+			{
 				isZero = false;
 			}
 			netRemote.Update();
 		}
 		netLocal.Update();
-		if (netLocal.value.Text != "-"){
+		if (netLocal.value.Text != "-")
+		{
 			isZero = false;
 		}
 		net.Update();
-		if (net.value.Text != "-"){
+		if (net.value.Text != "-")
+		{
 			isZero = false;
 		}
 		if (ledgerEntry.Type < 500)
 		{
 			storage.Update();
-			if (storage.value.Text != "0%"){
+			if (storage.value.Text != "0%")
+			{
 				isZero = false;
 			}
 		}
-		if (parent.HideZeroCol && isZero){
+		if (parent.HideZeroCol && isZero)
+		{
 			Visible = false;
-		}else{
+		}
+		else
+		{
 			Visible = true;
 		}
 	}

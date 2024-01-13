@@ -35,10 +35,10 @@ public partial class PlayerTrade : Node
 			t.Init();
 		}
 	}
-	public void RegisterTradeRoute(Installation destination, Installation source)
+	public void RegisterTradeRoute(Installation head, Installation tail)
 	{
 		TradeRoute newTradeRoute = ps_TradeRoute.Instantiate<TradeRoute>();
-		newTradeRoute.Init(destination, source);
+		newTradeRoute.Init(head, tail);
 		AddChild(newTradeRoute);
 		GD.Print("Registered trade route.");
 	}
@@ -66,7 +66,6 @@ public partial class PlayerTrade : Node
 			distance = Tail.GetParent<Body>().Position.DistanceTo(Head.GetParent<Body>().Position);
 		}
 		public float distance;
-		float duration;
 		public void Create()
 		{
 			player.RegisterTradeRoute(Head, Tail);

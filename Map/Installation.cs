@@ -172,35 +172,6 @@ public partial class Installation : Node
     // }
 
 
-    // A resource is not tracked until it is used.
-    public void GetProducers()
-    {
-        foreach (Industry rp in Industries.GetChildren())
-        {
-            foreach (Resource.IRequestable output in rp.Production)
-            {
-                Ledger[output.Type].ResourceLocal.Add(output);
-            }
-        }
-    }
-
-    public void GetConsumers()
-    {
-
-        foreach (Industry rp in Industries.GetChildren())
-        {
-            foreach (Resource.IRequestable input in rp.Consumption)
-            {
-                Ledger[input.Type].RequestLocal.Add(input);
-            }
-        }
-
-        // foreach (Resource.RGroup<Resource.IResource> i in RPool.delta.total.Standard)
-        // {
-        //     consumptionBuffer[i.Type] = i.Sum;
-        //     // double deficit = productionBuffer[i] - consumptionBuffer[i];
-        // }
-    }
     // foreach (KeyValuePair<int, double> kvp in resourceBuffer)
     // {
     //     resourceStorage[kvp.Key].Deposit(kvp.Value);
@@ -290,7 +261,7 @@ public partial class Installation : Node
         {
             get
             {
-                return installation.Ledger[901].RequestLocal;
+                return installation.Ledger[901].LocalLoss;
             }
         }
 

@@ -20,6 +20,7 @@ public partial class Lists
         public void Update();
         public void _Draw();
 
+        public bool Visible { get; set; }
         public bool Destroy { set; }// If flag true, must destroy self.
 
     }

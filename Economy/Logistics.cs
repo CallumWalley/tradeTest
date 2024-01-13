@@ -54,58 +54,22 @@ public partial class Logistics
             // 
             // Add 
 
-            // resourceBuffer2 = (Dictionary<int, double[]>)Ledger.GetBuffer();
+            UpdateLedger(installation);
 
-            // delta.Clear();
-            // consumed.Clear();
-            // produced.Clear();
-            // import.Clear();
-            // export.Clear();
+            if (installation.Order > 1) { return; }
 
-            if (installation.Order > 1)
-            {
-                // Not market head.
-                return;
-            }
             CalculateRequests(installation);
-            ResolveRequests(installation);
-
         }
         public static void EFrameLate(Installation installation)
         {
-            // // Add result of last step to storage.
-            // foreach (Resource.IResource r in resourceBuffer)
-            // {
-            //     Storage.Add(r.Type, r.Sum);
-            // }
-            // foreach (KeyValuePair<int, double[]> r in resourceBuffer2)
-            // {
-            //     Storage.Add(r.Key, r.Value[1]);
-            // }
-            // resourceBuffer.Clear();
-
-            // foreach (Resource.IResource r in produced)
-            // {
-            //     productionBuffer[r.Type] = r.Sum;
-            // }
-            installation.Ledger.Clear();
-
-            installation.GetProducers();
-            installation.GetConsumers();
-
-            // foreach (Resource.IResource r in delta)
-            // {
-            //     if (r.Type < 500)
-            //     {
-            //         resourceBuffer.Add(r);
-            //     }
-            // }
+            if (installation.Order > 1) { return; }
+            ResolveRequests(installation);
         }
         /// <summary>
         /// This will go down the tree and work out unfulfilled demand for each child.
         /// </summary>
         /// <param name="installation"></param>
-        public static void CalculateRequests(Installation installation)
+        static void CalculateRequests(Installation installation)
         {
             // For each child trade route
             foreach (TradeRoute downline in installation.Trade.DownlineTraderoutes)
@@ -113,7 +77,7 @@ public partial class Logistics
                 // call this funtion on child.
                 CalculateRequests(downline.Tail);
                 // Add ship demand to head.
-                installation.Ledger[901].RequestLocal.Add(downline.ShipDemand);
+                installation.Ledger[901].LocalLoss.Add(downline.ShipDemand);
             }
 
             // If no upline, end here.
@@ -125,19 +89,27 @@ public partial class Logistics
             // For each element in ledger calculate net resource and set ImportDemand / Export appropriately.
             foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in installation.Ledger)
             {
+                double tally = kvp.Value.LocalGain.Sum;
+
+                if (kvp.Value.UplineGain != null)
+                {
+                    tally += kvp.Value.UplineGain.Sum;
+                }
+
                 // Special rules for trade.
                 // if (kvp.Key == 901)
                 // {
                 //     continue;
                 // }
 
-                // if (kvp.Key > 500) { }
-                // Net is equal to all requests from downline, plus local.
-                double net = installation.Trade.DownlineTraderoutes.Where(x => x.ListRequestHead.ContainsKey(kvp.Key)).Sum((x => x.ListRequestHead[kvp.Key].Request)) +
-                kvp.Value.RequestLocal.Request + kvp.Value.ResourceLocal.Sum;
+                // This could be made more efficient. Duplicating count.
+
+                double def = installation.Trade.DownlineTraderoutes.Where(x => x.ListHeadGain.ContainsKey(kvp.Key)).Sum(x => x.ListHeadGain[kvp.Key].Sum) +
+                installation.Trade.DownlineTraderoutes.Where(x => x.ListHeadGain.ContainsKey(kvp.Key)).Sum(x => x.ListHeadGain[kvp.Key].Request) +
+                kvp.Value.LocalLoss.Request + kvp.Value.LocalGain.Sum;
 
                 // Request the difference from parent.
-                kvp.Value.RequestToParent.Request = -net;
+                installation.Trade.UplineTraderoute.SetValue(kvp.Key, def);
             }
         }
         /// <summary>
@@ -146,92 +118,115 @@ public partial class Logistics
         /// <param name="installation"></param>
         static void ResolveRequests(Installation installation)
         {
+            /// <summary>
+            /// Fraction inbound trade can be fulfilled.
+            /// </summary>
+            double freightFraction = 1;
+
+            // If has upline requesting ships, I Should always resolve as I set the request.
+            if (installation.Ledger.ContainsKey(901) && installation.Ledger[901].UplineLoss != null)
+            {
+                installation.Ledger[901].UplineLoss.Respond();
+            }
+
+            // If has downline.
+            // if (installation.Trade.DownlineTraderoutes.Count > 0)
+            // {
+            //     freightFraction = Math.Min(installation.Ledger[901].RequestLocal.Fraction(), 1);
+            // }
             // First resolve ship balance.
             // if importing ships that always resolved.
-            if ( installation.Ledger[901].RequestToParent != null){
-                installation.Ledger[901].RequestToParent.Respond();
-            }   
-
-            double freightFraction = Math.Min(installation.Ledger[901].RequestLocal.Fraction(), 1);
 
             // enumerate through elements in ledger 
-            // in reverse order so ships are resolved first.
-            foreach (KeyValuePair<int, Resource.Ledger.EntryAccrul> kvp in installation.Ledger.Acrul()){
+            foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in installation.Ledger)
+            {
+                // Start tally with parent exports as they always get thru.
+                double tally = kvp.Value.LocalGain.Sum;
 
-                // Step one. Approve imports from children.
-                foreach (var r in kvp.Value.RequestFromChildren.Where(x=> x.Request > 0)){
-                    r.Respond(r.Request * freightFraction);
+                if (kvp.Value.UplineGain != null)
+                {
+                    tally += kvp.Value.UplineGain.Sum;
+                }
+                // Step One. Approve imports from children.
+                foreach (var r in kvp.Value.DownlineGain)
+                {
+                    double alloc = r.Request * freightFraction;
+                    tally += alloc;
+                    r.Respond(alloc);
                 }
 
-                // Step two. Allocate resources locally.
-                double shortfall =  (kvp.Value.NetLocal.Request * freightFraction) - kvp.Value.Net.Sum;
-                double resourceSupplyFraction = Math.Min(kvp.Value.RequestLocal.Sum / kvp.Value.Net.Sum, freightFraction);
+                // Step Two. Calculate storage withdrawl for local use.
 
-                // Set storage element to cover difference.
+                // Shortfall is how much extra resource required to fulfill.
+                // double shortfall = kvp.Value.Net.Sum - kvp.Value.RequestLocal.Request;
+                // Set storage element to cover difference. (if allowed)
+                // TODO
+                // if shortfall > 0
+                //  ...
+                // recalculate shortfall.
 
-                // Case 1, no storage needed.
-                foreach (Resource.IRequestable r in kvp.Value.RequestLocal.Where(x=> x.Request <= 0))
+                // Step Three. Allocate resources locally.
+
+                // How much of this request can be filled.
+                double resourceSupplyFraction = Math.Max(Math.Min(tally / -kvp.Value.LocalLoss.Request, 1), 0);
+
+                foreach (Resource.IRequestable r in kvp.Value.LocalLoss)
                 {
-                    r.Respond(r.Request * resourceSupplyFraction);
-                }                
+                    double alloc = r.Request * resourceSupplyFraction;
+                    r.Respond(alloc);
+                    tally += alloc;
+                }
 
+
+                // Step Four. Calculate storage withdrawl.
+                // Recaclculate resourceSupplyFractionfor trade.
                 // Step three trade
 
 
-                // // Case 2, storage needed but fully covers
-                // else if (shortfall < kvp.Value.Stored.Sum){
-                // }
-                // TODO: if supply from stockpile 
-                // if (max > 0){
-                //     // First allocate resources locally. 
-                //     double remainder = ShareEqual(max, kvp.Value.RequestLocal);
-                //     // If there is remainder.
-                //     if (remainder > 0){
-                //         double resourceShippingFraction = installation.Ledger[901].RequestLocal.Fraction();
-                //         // If resources remain, allocate to requesters. 
-                //         remainder = ShareEqual(remainder * resourceShippingFraction, kvp.Value.RequestFromChildren);
-                //         if (remainder > 0 && kvp.Key < 500 ){
-                //             //do storage
-                //         }
-                //     }
-                // }
+                resourceSupplyFraction = Math.Min(Math.Min(tally, freightFraction), 1);
+
+                // Set storage element to cover difference. (if allowed)
+                // TODO
+                // if shortfall > 0
+                //  ...
+                // recalculate shortfall.
+
+                foreach (Resource.IRequestable r in kvp.Value.DownlineLoss)
+                {
+                    double alloc = r.Request * resourceSupplyFraction;
+                    r.Respond(r.Request * resourceSupplyFraction);
+                    tally += alloc;
+
+                }
             }
-            
+
             foreach (TradeRoute child in installation.Trade.DownlineTraderoutes)
             {
                 ResolveRequests(child.Tail);
             }
         }
-
-
-
-        /// <summary>
-        /// Given a number resources, allocates evenly among requesters.
-        /// </summary>
-        /// <param name="resourceTotal"></param>
-        /// <param name="requesters"></param>
-        /// <param name="resourceShippingFraction"></param>
-        /// <returns>
-        ///  leftover
-        /// </returns>
-        static double ShareEqual(double resourceTotal, IEnumerable<Resource.IRequestable> requesters)
-        {
-            // Supply fraction is the fraction of resources that can be allocated.
-            double requestTotal = requesters.Sum(x => x.Request);
-            double newResourceTotal = resourceTotal;
-
-            // Supply fraction used is lowest of available and ship constraints.
-            double resourceSupplyFraction = resourceTotal / -requestTotal;
-
-            foreach (Resource.IRequestable r in requesters)
-            {
-                double allocated = Math.Min(resourceSupplyFraction, 1) * r.Request;
-                newResourceTotal -= allocated;
-                r.Respond(allocated);
-                // newResourceTotal -= allocated;
-            }
-            return newResourceTotal;
-        }
     }
 
+
+    public static void UpdateLedger(Installation installation)
+    {
+        // Zero Ledger
+        installation.Ledger.Clear();
+
+        foreach (Industry rp in installation.Industries.GetChildren())
+        {
+            foreach (Resource.IRequestable output in rp.Production)
+            {
+                installation.Ledger[output.Type].LocalGain.Add(output);
+            }
+        }
+
+        foreach (Industry rp in installation.Industries.GetChildren())
+        {
+            foreach (Resource.IRequestable input in rp.Consumption)
+            {
+                installation.Ledger[input.Type].LocalLoss.Add(input);
+            }
+        }
+    }
 }
