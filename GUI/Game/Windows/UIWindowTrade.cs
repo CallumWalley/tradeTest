@@ -19,7 +19,7 @@ public partial class UIWindowTrade : UIWindow
 	public override void _Ready()
 	{
 		base._Ready();
-		GetNode<Global>("/root/Global").Connect("EFrameUI", new Callable(this, "EFrame"));
+		GetNode<Global>("/root/Global").Connect("EFrameUI", new Callable(this, "EFrameUI"));
 
 		player = GetNode<Player>("/root/Global/Player");
 
@@ -42,12 +42,13 @@ public partial class UIWindowTrade : UIWindow
 	protected override void OnCloseRequested()
 	{
 		base.OnCloseRequested();
-		toggleButton.ButtonPressed = false;
+		// toggleButton.ButtonPressed = false;
 	}
 
-	public void EFrame()
+	public void EFrameUI()
 	{
-
+		installationList.Update();
+		tradeRouteList.Update();
 	}
 
 }
