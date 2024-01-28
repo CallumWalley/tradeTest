@@ -12,9 +12,12 @@ public partial class UITopLeft : Panel
 
 	public override void _Ready()
 	{
+		screen = GetNode<CanvasLayer>("/root/Global/Screen");
+
+		// Button open trade window.
 		buttonTrade = GetNode<Button>("HBoxContainer/ButtonTrade");
 		buttonTrade.Connect("pressed", new Callable(this, "OpenTrade"));
-		screen = GetNode<CanvasLayer>("/root/Global/Screen");
+
 		windowTrade = GetNode<UIWindowTrade>("../UITradeWindow");
 		windowTrade.toggleButton = buttonTrade;
 		windowTrade.Position = (Vector2I)Position + new Vector2I(100, 100);
