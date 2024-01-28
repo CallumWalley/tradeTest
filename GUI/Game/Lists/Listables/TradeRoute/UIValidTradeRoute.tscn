@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://GUI/Game/Lists/Listables/TradeRoute/UIValidTradeRoute.cs" id="1_a35q7"]
 [ext_resource type="PackedScene" uid="uid://fiabywy3cj4i" path="res://GUI/Game/Lists/Listables/Installation/UIInstallationTiny.tscn" id="2_txdf8"]
-[ext_resource type="PackedScene" path="res://GUI/Game/Lists/Listables/UIResource.tscn" id="3_fkh11"]
+[ext_resource type="PackedScene" uid="uid://dui8s5f2ql5qm" path="res://GUI/Game/Lists/Listables/UIResource.tscn" id="3_fkh11"]
 
 [node name="ValidTradeRoute" type="Button"]
 custom_minimum_size = Vector2(50, 30)

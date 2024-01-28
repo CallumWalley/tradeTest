@@ -23,19 +23,19 @@ public partial class UIWindowTrade : UIWindow
 
 		player = GetNode<Player>("/root/Global/Player");
 
-		tabReceivers = GetNode<VBoxContainer>("TabContainer/Shipyards");
+		//tabReceivers = GetNode<VBoxContainer>("TabContainer/Shipyards");
 		tabTradeRoutes = GetNode<VBoxContainer>("TabContainer/Trade Routes");
 
-		installationList = new();
+		//installationList = new();
 		tradeRouteList = new();
 
-		installationList.Vertical = true;
+		//installationList.Vertical = true;
 		tradeRouteList.Vertical = true;
 
-		installationList.Init(player.trade.Heads, prefab_Insallation);
+		//installationList.Init(player.trade.Heads, prefab_Insallation);
 		tradeRouteList.Init(player.trade.Routes, prefab_TradeRoute);
 
-		tabReceivers.AddChild(installationList);
+		//tabReceivers.AddChild(installationList);
 		tabTradeRoutes.AddChild(tradeRouteList);
 	}
 
@@ -47,7 +47,7 @@ public partial class UIWindowTrade : UIWindow
 
 	public void EFrameUI()
 	{
-		installationList.Update();
+		//installationList.Update();
 		tradeRouteList.Update();
 	}
 
