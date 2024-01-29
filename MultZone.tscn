@@ -25,15 +25,14 @@ script = ExtResource("8")
 [node name="Player" parent="." instance=ExtResource("4_7bqim")]
 
 [node name="Player@PlayerTradeRoutes@TradeRoute" parent="Player/PlayerTrade" index="0" node_paths=PackedStringArray("Head", "Tail") instance=ExtResource("5_6dsy0")]
-Head = NodePath("../../../Systems/System1/Jupyter/Installation")
-Tail = NodePath("../../../Systems/System1/Mars/Installation")
+Head = NodePath("../../../Map/SuperSystems/SolSystem/JupiterSystem/Installation")
+Tail = NodePath("../../../Map/SuperSystems/SolSystem/MarsSystem/Installation")
 
 [node name="Screen" parent="." instance=ExtResource("6_eohnr")]
 
 [node name="Map" parent="." instance=ExtResource("6_j5rrk")]
 
 [node name="SolSystem" parent="Map/SuperSystems" index="0" instance=ExtResource("10_jdtlx")]
-visible = false
 
 [node name="MarsSystem" parent="Map/SuperSystems/SolSystem" instance=ExtResource("1")]
 position = Vector2(621, 391)

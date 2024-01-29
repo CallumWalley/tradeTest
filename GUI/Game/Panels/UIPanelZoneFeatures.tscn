@@ -1,0 +1,48 @@
+[gd_scene load_steps=3 format=3 uid="uid://bejhglo4krc63"]
+
+[ext_resource type="Script" path="res://GUI/Game/Panels/UIPanelZoneGeneral.cs" id="1_tk57f"]
+[ext_resource type="PackedScene" uid="uid://d15n01ow26b0a" path="res://GUI/Game/Lists/Listables/Feature/UIFeature.tscn" id="2_fulas"]
+
+[node name="Features" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+script = ExtResource("1_tk57f")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="HSplitContainer" type="HSplitContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer2" type="ScrollContainer" parent="VBoxContainer/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HSplitContainer/ScrollContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Feature" parent="VBoxContainer/HSplitContainer/ScrollContainer2/VBoxContainer" instance=ExtResource("2_fulas")]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HSplitContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+
+[node name="Feature" parent="VBoxContainer/HSplitContainer/ScrollContainer/VBoxContainer" instance=ExtResource("2_fulas")]
+layout_mode = 2
+
+[node name="Feature2" parent="VBoxContainer/HSplitContainer/ScrollContainer/VBoxContainer" instance=ExtResource("2_fulas")]
+layout_mode = 2

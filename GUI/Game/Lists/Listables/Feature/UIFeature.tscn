@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://d15n01ow26b0a"]
+
+[ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="1_ox12g"]
+[ext_resource type="Texture2D" path="res://assets/icons/Buttons/computers/ship_part_computer_default.dds" id="2_f0ygf"]
+
+[node name="Feature" type="PanelContainer"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 58.0
+grow_horizontal = 2
+theme = ExtResource("1_ox12g")
+
+[node name="Summary" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Summary"]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="Summary/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("2_f0ygf")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Summary/HBoxContainer"]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Feature Name"

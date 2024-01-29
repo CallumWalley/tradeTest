@@ -1,6 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://bmc4cm5cy8upq"]
+[gd_scene load_steps=4 format=3]
 
-[ext_resource type="Texture2D" path="res://assets/icons/computers/ship_part_computer_default.dds" id="1"]
+[ext_resource type="Texture2D" path="res://assets/icons/Buttons/computers/ship_part_computer_default.dds" id="1"]
 [ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="1_mcrjj"]
 [ext_resource type="Script" path="res://GUI/Game/Lists/Listables/Installation/UIInstallationSmall.cs" id="2_58kj0"]
 

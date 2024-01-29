@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class UIWindowBody : UIWindow
+public partial class UIWindowZone : UIWindow
 {
     [Export]
     public Body body;

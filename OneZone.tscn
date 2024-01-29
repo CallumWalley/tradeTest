@@ -1,0 +1,75 @@
+[gd_scene load_steps=11 format=3 uid="uid://difwjke1vj0f1"]
+
+[ext_resource type="Script" path="res://Global.cs" id="1_mybo0"]
+[ext_resource type="Script" path="res://IndustryRegister.cs" id="2_o0jkj"]
+[ext_resource type="PackedScene" uid="uid://con3ea5txcdnn" path="res://Player/Player.tscn" id="3_1qyig"]
+[ext_resource type="PackedScene" path="res://GUI/screen.tscn" id="5_g8os5"]
+[ext_resource type="PackedScene" uid="uid://c8uihqqtni6cg" path="res://Map/Map.tscn" id="6_n1hqj"]
+[ext_resource type="PackedScene" uid="uid://dsxkp7s8pb3cu" path="res://Map/SuperSystem.tscn" id="7_yynpv"]
+[ext_resource type="PackedScene" uid="uid://cwj52641j5qo2" path="res://Map/Body.tscn" id="8_yiyre"]
+[ext_resource type="PackedScene" uid="uid://ch66j0x6btq21" path="res://Map/Installation.tscn" id="9_ec2dk"]
+[ext_resource type="PackedScene" uid="uid://d1oe4qnb04s6k" path="res://Map/Industry.tscn" id="10_0wc3d"]
+[ext_resource type="Script" path="res://Camera2D.cs" id="12_d4oix"]
+
+[node name="Global" type="Node"]
+script = ExtResource("1_mybo0")
+
+[node name="IndustryRegister" type="Node" parent="."]
+process_priority = -1000
+script = ExtResource("2_o0jkj")
+
+[node name="Player" parent="." instance=ExtResource("3_1qyig")]
+
+[node name="Screen" parent="." instance=ExtResource("5_g8os5")]
+
+[node name="Map" parent="." instance=ExtResource("6_n1hqj")]
+
+[node name="SolSystem" parent="Map/SuperSystems" index="0" instance=ExtResource("7_yynpv")]
+
+[node name="EarthSystem" parent="Map/SuperSystems/SolSystem" instance=ExtResource("8_yiyre")]
+position = Vector2(453, 347)
+altNames = ["Terra", "Gaia"]
+adjective = "Terrestrial"
+color = Color(0.219608, 0.462745, 0.286275, 1)
+
+[node name="Installation" parent="Map/SuperSystems/SolSystem/EarthSystem" instance=ExtResource("9_ec2dk")]
+_validTradeReceiver = true
+StartingResources = {
+2: 200.0
+}
+
+[node name="Freighter Dockyard" parent="Map/SuperSystems/SolSystem/EarthSystem/Installation/Industries" index="0" instance=ExtResource("10_0wc3d")]
+slug = "f_dockyard"
+
+[node name="Chemical Fuel Plant" parent="Map/SuperSystems/SolSystem/EarthSystem/Installation/Industries" index="1" instance=ExtResource("10_0wc3d")]
+slug = "cfuel_water"
+
+[node name="Ice Mine" parent="Map/SuperSystems/SolSystem/EarthSystem/Installation/Industries" index="2" instance=ExtResource("10_0wc3d")]
+slug = "mine_h20_surf_old"
+
+[node name="Fuel Reserves" parent="Map/SuperSystems/SolSystem/EarthSystem/Installation/Industries" index="3" instance=ExtResource("10_0wc3d")]
+slug = "orbit_storage_fuel"
+
+[node name="Moon" parent="Map/SuperSystems/SolSystem/EarthSystem" instance=ExtResource("8_yiyre")]
+position = Vector2(183, 4)
+adjective = "Lunar"
+equatorialRadius = 1.7
+color = Color(0.521569, 0.513726, 0.505882, 1)
+
+[node name="Installation" parent="Map/SuperSystems/SolSystem/EarthSystem/Moon" instance=ExtResource("9_ec2dk")]
+
+[node name="Camera2D" type="Camera2D" parent="Map/SuperSystems/SolSystem"]
+anchor_mode = 0
+script = ExtResource("12_d4oix")
+
+[node name="Camera2D" type="Camera2D" parent="Map"]
+anchor_mode = 0
+script = ExtResource("12_d4oix")
+
+[editable path="Player"]
+[editable path="Screen"]
+[editable path="Map"]
+[editable path="Map/SuperSystems/SolSystem"]
+[editable path="Map/SuperSystems/SolSystem/EarthSystem"]
+[editable path="Map/SuperSystems/SolSystem/EarthSystem/Installation"]
+[editable path="Map/SuperSystems/SolSystem/EarthSystem/Moon"]
