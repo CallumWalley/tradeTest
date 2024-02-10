@@ -28,8 +28,6 @@ script = ExtResource("2_o0jkj")
 
 [node name="EarthSystem" parent="Map/SuperSystems/SolSystem" instance=ExtResource("8_yiyre")]
 position = Vector2(453, 347)
-altNames = ["Terra", "Gaia"]
-adjective = "Terrestrial"
 color = Color(0.219608, 0.462745, 0.286275, 1)
 
 [node name="Installation" parent="Map/SuperSystems/SolSystem/EarthSystem" instance=ExtResource("9_ec2dk")]
@@ -52,8 +50,6 @@ slug = "orbit_storage_fuel"
 
 [node name="Moon" parent="Map/SuperSystems/SolSystem/EarthSystem" instance=ExtResource("8_yiyre")]
 position = Vector2(183, 4)
-adjective = "Lunar"
-equatorialRadius = 1.7
 color = Color(0.521569, 0.513726, 0.505882, 1)
 
 [node name="Installation" parent="Map/SuperSystems/SolSystem/EarthSystem/Moon" instance=ExtResource("9_ec2dk")]

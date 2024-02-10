@@ -17,3 +17,4 @@ Panel/styles/panel = SubResource("StyleBoxFlat_anr8v")
 TextSecondry/base_type = &"Label"
 TextSecondry/colors/font_color = Color(0.878431, 0.878431, 0.878431, 1)
 TextSecondry/fonts/font = ExtResource("1_vr80t")
+VBoxContainer/constants/separation = 4

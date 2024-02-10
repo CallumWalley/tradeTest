@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://dq8wps73ct8h2"]
 
 [ext_resource type="Script" path="res://GUI/Game/Windows/UIWindowBody.cs" id="1_xu761"]
-[ext_resource type="PackedScene" uid="uid://c56d8qpewex6s" path="res://GUI/Game/Panels/UIPanelAstro.tscn" id="2_mw3rw"]
+[ext_resource type="PackedScene" uid="uid://bym8ubboi3l02" path="res://GUI/Game/Panels/UIPanelZoneGeneral.tscn" id="2_0kwm0"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aoo5e"]
 bg_color = Color(0.94902, 0.619608, 0.321569, 1)
@@ -27,5 +27,5 @@ grow_vertical = 2
 theme = SubResource("Theme_b56gc")
 clip_tabs = false
 
-[node name="General" parent="TabContainer" instance=ExtResource("2_mw3rw")]
+[node name="General" parent="TabContainer" instance=ExtResource("2_0kwm0")]
 layout_mode = 2

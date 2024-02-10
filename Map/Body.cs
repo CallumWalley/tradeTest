@@ -11,7 +11,7 @@ public partial class Body : Node2D
     int spriteRadius;
 
     public IEnumerable<Installation> Installations { get { return GetInstallations(); } }
-    static readonly PackedScene p_uiBody = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Windows/UIWindowBody.tscn");
+    static readonly PackedScene p_uiBody = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Windows/UIWindowZone.tscn");
 
     UIWindowBody uiBody;
     bool focus = false;

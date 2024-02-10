@@ -1,6 +1,20 @@
-[gd_scene load_steps=2 format=3 uid="uid://0d7exv23yn1s"]
+[gd_scene load_steps=2 format=3 uid="uid://bwpmjy31xx7p1"]
 
-[ext_resource type="Script" path="res://GUI/Game/Panels/UIPanelIndustry.cs" id="1_olter"]
+[sub_resource type="CSharpScript" id="CSharpScript_rsv4c"]
+script/source = "using Godot;
+using System;
+
+public partial class UIPanelIndustry : Control
+{
+	Body body;
+
+	public void Init(Body _body)
+	{
+		body = _body;
+	}
+
+}
+"
 
 [node name="Industry" type="PanelContainer"]
 anchors_preset = 15
@@ -10,7 +24,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("1_olter")
+script = SubResource("CSharpScript_rsv4c")
 
 [node name="HSplitContainer" type="HSplitContainer" parent="."]
 layout_mode = 2
