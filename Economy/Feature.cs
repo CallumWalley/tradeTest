@@ -55,7 +55,6 @@ public partial class Feature : Node
 
         Consumption = new(GetInputClassFromTemplate(ttype.Consumption));
         Production = new(GetGroupFromTemplate(ttype.Production));
-        StorageAdded = new Resource.RList<Resource.RStatic>(GetStaticFromTemplate(ttype.Storage));
     }
 
 
@@ -68,7 +67,7 @@ public partial class Feature : Node
     // }
 
     // IEnumerable<Requester> GetFromTemplate(Dictionary<int, double> template)
-    // {
+    // {    
     //     if (template == null) { yield break; }
     //     foreach (KeyValuePair<int, double> kvp in template)
     //     {
@@ -79,7 +78,7 @@ public partial class Feature : Node
     {
         if (template == null) { yield break; }
         foreach (KeyValuePair<int, double> kvp in template)
-        {   
+        {
             yield return new Resource.RGroupRequests<Resource.IRequestable>(new Resource.RRequest(kvp.Key, kvp.Value, "Base Yield", "Base Yield", true), Name, Description);
         }
     }

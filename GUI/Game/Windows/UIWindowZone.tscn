@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://dq8wps73ct8h2"]
 
-[ext_resource type="Script" path="res://GUI/Game/Windows/UIWindowBody.cs" id="1_xu761"]
+[ext_resource type="Script" path="res://GUI/Game/Windows/UIWindowZone.cs" id="1_puxti"]
 [ext_resource type="PackedScene" uid="uid://bym8ubboi3l02" path="res://GUI/Game/Panels/UIPanelZoneGeneral.tscn" id="2_0kwm0"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aoo5e"]
@@ -15,7 +15,7 @@ size = Vector2i(500, 300)
 min_size = Vector2i(400, 300)
 content_scale_aspect = 1
 theme = SubResource("Theme_b56gc")
-script = ExtResource("1_xu761")
+script = ExtResource("1_puxti")
 
 [node name="TabContainer" type="TabContainer" parent="."]
 custom_minimum_size = Vector2(400, 300)

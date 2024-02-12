@@ -13,4 +13,3 @@ public partial class SuperSystem : Node2D
 	{
 	}
 }
-	

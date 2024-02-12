@@ -27,6 +27,7 @@ script = ExtResource("2_o0jkj")
 [node name="SolSystem" parent="Map/SuperSystems" index="0" instance=ExtResource("7_yynpv")]
 
 [node name="EarthSystem" parent="Map/SuperSystems/SolSystem" instance=ExtResource("8_yiyre")]
+visible = false
 position = Vector2(453, 347)
 color = Color(0.219608, 0.462745, 0.286275, 1)
 
