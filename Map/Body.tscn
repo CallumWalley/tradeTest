@@ -2,8 +2,5 @@
 
 [ext_resource type="Script" path="res://Map/Body.cs" id="1"]
 
-[node name="body" type="Node2D"]
-z_index = -1
-position = Vector2(108, 109)
+[node name="body" type="Node"]
 script = ExtResource("1")
-altNames = []

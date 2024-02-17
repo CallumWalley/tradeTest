@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" path="res://Map/SuperSystem.cs" id="1_rkix7"]
 
-[node name="SystemName" type="Node2D"]
+[node name="SystemName" type="Node"]
 script = ExtResource("1_rkix7")
