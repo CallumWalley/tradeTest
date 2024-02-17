@@ -8,7 +8,7 @@ public partial class UIWindowBody : UIWindow
     public Body body;
     static readonly PackedScene p_tradePanel = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Panels/UIPanelInstallation.tscn");
     static readonly PackedScene p_astroPanel = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Panels/UIPanelAstro.tscn");
-    static readonly PackedScene p_industryPanel = (PackedScene)GD.Load<PackedScene>("res://GUI/Panels/UIIndustryPanel.tscn");
+    // static readonly PackedScene p_industryPanel = (PackedScene)GD.Load<PackedScene>("res://GUI/Panels/UIIndustryPanel.tscn");
 
 
 
@@ -30,7 +30,7 @@ public partial class UIWindowBody : UIWindow
             tabContainer.AddChild(tp);
         }
         //Always add astro panel.
-        UIPanelAstro ap = GetNode<UIPanelAstro>("TabContainer/Astronomical");
+        UIPanelAstro ap = tabContainer.GetNode<UIPanelAstro>("Astronomical");
         ap.Init(body);
         tabContainer.MoveChild(ap, -1);
         tabContainer.CurrentTab = 0;

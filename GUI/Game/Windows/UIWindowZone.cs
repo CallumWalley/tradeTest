@@ -5,37 +5,36 @@ using System.Collections.Generic;
 public partial class UIWindowZone : UIWindow
 {
     [Export]
-    public Body body;
+    public Zone zone;
     static readonly PackedScene p_tradePanel = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Panels/UIPanelInstallation.tscn");
     static readonly PackedScene p_astroPanel = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Panels/UIPanelAstro.tscn");
-    static readonly PackedScene p_industryPanel = (PackedScene)GD.Load<PackedScene>("res://GUI/Panels/UIIndustryPanel.tscn");
+    // static readonly PackedScene p_featurePanel = (PackedScene)GD.Load<PackedScene>("res://GUI/Panels/UIIndustryPanel.tscn");
 
 
 
     TabContainer tabContainer;
 
-    public void Init(Body _body)
+    public void Init(Zone _body)
     {
-        body = _body;
+        zone = _body;
 
         tabContainer = GetNode<TabContainer>("TabContainer");
-        Position = (Vector2I)body.Position;
+        Position = (Vector2I)zone.Position;
 
 
 
-        foreach (Installation i in body.Installations)
+        foreach (Feature i in zone.Features)
         {
             UIPanelInstallation tp = p_tradePanel.Instantiate<UIPanelInstallation>();
             tp.Init(i);
             tabContainer.AddChild(tp);
         }
-        //Always add astro panel.
-        UIPanelAstro ap = GetNode<UIPanelAstro>("TabContainer/Astronomical");
-        ap.Init(body);
-        tabContainer.MoveChild(ap, -1);
-        tabContainer.CurrentTab = 0;
-        tabContainer.QueueRedraw();
-
+        // //Always add astro panel.
+        // UIPanelAstro ap = GetNode<UIPanelAstro>("TabContainer/Astronomical");
+        // ap.Init(body);
+        // tabContainer.MoveChild(ap, -1);
+        // tabContainer.CurrentTab = 0;
+        // tabContainer.QueueRedraw();
     }
 
 
@@ -104,15 +103,15 @@ public partial class UIWindowZone : UIWindow
     // 		tp.Init(this);
     // 		ip.Init(this);
 
-    // 		uiBody.AddChild(tp);
-    // 		uiBody.AddChild(ip);
+    // 		uiZone.AddChild(tp);
+    // 		uiZone.AddChild(ip);
 
     // 	}
 
     // 	// Add astronomical info
     // 	UIPanelAstro ap = p_astroPanel.Instantiate<UIPanelAstro>();
     // 	ap.Init(this);
-    // 	uiBody.AddChild(ap);
+    // 	uiZone.AddChild(ap);
 
     // 	// Add interactive 
     // 	GetNode("Area2D").Connect("mouse_entered", this, "Focus");
@@ -124,13 +123,13 @@ public partial class UIWindowZone : UIWindow
     // {
     // 	if (Input.IsActionPressed("ui_select")){
     // 		if (focus){
-    // 			uiBody.Visible = true;
-    // 			uiBody.MoveToForeground();
+    // 			uiZone.Visible = true;
+    // 			uiZone.MoveToForeground();
     // 		}
     // 	}
     // 	//  && focus)
     // 	// {
-    // 	// 	uiBody.Visible = true;
+    // 	// 	uiZone.Visible = true;
     // 	// }
     // }
 
