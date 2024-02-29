@@ -17,7 +17,11 @@ mono_crash*
 .nuget/*
 .dotnet/*
 .godot/*
-assets/icons/Buttons/all/*
 
+# Plugins
+addons/*
+
+# Assets
+assets/icons/Buttons/all/*
 assets/icons/Buttons/computers
 assets/icons/computers
