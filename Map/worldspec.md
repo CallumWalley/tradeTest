@@ -14,12 +14,12 @@ global
   - age
   - terrain
   --> system module (barylist)
-    - mass
-    - eccentricity
-    - a_semiminor
-    - a_periapsis
-    - t_anomaly
-    - events
-    --> planet module (generates planetary properies)
-      - core
-      - atmosphere
+	- mass
+	- eccentricity
+	- a_semiminor
+	- a_periapsis
+	- t_anomaly
+	- events
+	--> planet module (generates planetary properies)
+	  - core
+	  - atmosphere
