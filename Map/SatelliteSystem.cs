@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class SubSystem : Zone
+public partial class SatelliteSystem : ResourcePool
 {
 	[ExportGroup("Orbital")]
 	[Export]
@@ -14,5 +14,4 @@ public partial class SubSystem : Zone
 	double eccentricity;
 	[Export]
 	double period;
-	[Export]
 }

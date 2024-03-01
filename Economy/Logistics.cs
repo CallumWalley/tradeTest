@@ -15,13 +15,13 @@ public partial class Logistics
     /// </summary>
     public interface ISystem
     {
-        public void EFrameEarly(Installation installation);
-        public void EFrameLate(Installation installation);
+        public void EFrameEarly(ResourcePool ResourcePool);
+        public void EFrameLate(ResourcePool ResourcePool);
     }
 
     public static class ExportToParent //: ISystem
     {
-        public static void EFrameEarly(Installation installation)
+        public static void EFrameEarly(ResourcePool ResourcePool)
         {
             // Sum all production and consumption.
             // Go downline, fetch all requests and surplus.
@@ -54,40 +54,40 @@ public partial class Logistics
             // 
             // Add 
 
-            UpdateLedger(installation);
+            UpdateLedger(ResourcePool);
 
-            if (installation.Order > 1) { return; }
+            if (ResourcePool.Order > 1) { return; }
 
-            CalculateRequests(installation);
+            CalculateRequests(ResourcePool);
         }
-        public static void EFrameLate(Installation installation)
+        public static void EFrameLate(ResourcePool ResourcePool)
         {
-            if (installation.Order > 1) { return; }
-            ResolveRequests(installation);
+            if (ResourcePool.Order > 1) { return; }
+            ResolveRequests(ResourcePool);
         }
         /// <summary>
         /// This will go down the tree and work out unfulfilled demand for each child.
         /// </summary>
-        /// <param name="installation"></param>
-        static void CalculateRequests(Installation installation)
+        /// <param name="ResourcePool"></param>
+        static void CalculateRequests(ResourcePool ResourcePool)
         {
             // For each child trade route
-            foreach (TradeRoute downline in installation.Trade.DownlineTraderoutes)
+            foreach (TradeRoute downline in ResourcePool.Trade.DownlineTraderoutes)
             {
                 // call this funtion on child.
                 CalculateRequests(downline.Tail);
                 // Add ship demand to head.
-                installation.Ledger[901].LocalLoss.Add(downline.ShipDemand);
+                ResourcePool.Ledger[901].LocalLoss.Add(downline.ShipDemand);
             }
 
             // If no upline, end here.
-            if (installation.Trade.UplineTraderoute == null)
+            if (ResourcePool.Trade.UplineTraderoute == null)
             {
                 return;
             }
 
             // For each element in ledger calculate net resource and set ImportDemand / Export appropriately.
-            foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in installation.Ledger)
+            foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in ResourcePool.Ledger)
             {
                 double tally = kvp.Value.LocalGain.Sum;
 
@@ -104,19 +104,19 @@ public partial class Logistics
 
                 // This could be made more efficient. Duplicating count.
 
-                double def = installation.Trade.DownlineTraderoutes.Where(x => x.ListHeadGain.ContainsKey(kvp.Key)).Sum(x => x.ListHeadGain[kvp.Key].Sum) +
-                installation.Trade.DownlineTraderoutes.Where(x => x.ListHeadGain.ContainsKey(kvp.Key)).Sum(x => x.ListHeadGain[kvp.Key].Request) +
+                double def = ResourcePool.Trade.DownlineTraderoutes.Where(x => x.ListHeadGain.ContainsKey(kvp.Key)).Sum(x => x.ListHeadGain[kvp.Key].Sum) +
+                ResourcePool.Trade.DownlineTraderoutes.Where(x => x.ListHeadGain.ContainsKey(kvp.Key)).Sum(x => x.ListHeadGain[kvp.Key].Request) +
                 kvp.Value.LocalLoss.Request + kvp.Value.LocalGain.Sum;
 
                 // Request the difference from parent.
-                installation.Trade.UplineTraderoute.SetValue(kvp.Key, def);
+                ResourcePool.Trade.UplineTraderoute.SetValue(kvp.Key, def);
             }
         }
         /// <summary>
         ///  Once all elements have 'CalculateRequests' this is run.
         /// </summary>
-        /// <param name="installation"></param>
-        static void ResolveRequests(Installation installation)
+        /// <param name="ResourcePool"></param>
+        static void ResolveRequests(ResourcePool ResourcePool)
         {
             /// <summary>
             /// Fraction inbound trade can be fulfilled.
@@ -124,21 +124,21 @@ public partial class Logistics
             double freightFraction = 1;
 
             // If has upline requesting ships, I Should always resolve as I set the request.
-            if (installation.Ledger.ContainsKey(901) && installation.Ledger[901].UplineLoss != null)
+            if (ResourcePool.Ledger.ContainsKey(901) && ResourcePool.Ledger[901].UplineLoss != null)
             {
-                installation.Ledger[901].UplineLoss.Respond();
+                ResourcePool.Ledger[901].UplineLoss.Respond();
             }
 
             // If has downline.
-            // if (installation.Trade.DownlineTraderoutes.Count > 0)
+            // if (ResourcePool.Trade.DownlineTraderoutes.Count > 0)
             // {
-            //     freightFraction = Math.Min(installation.Ledger[901].RequestLocal.Fraction(), 1);
+            //     freightFraction = Math.Min(ResourcePool.Ledger[901].RequestLocal.Fraction(), 1);
             // }
             // First resolve ship balance.
             // if importing ships that always resolved.
 
             // enumerate through elements in ledger 
-            foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in installation.Ledger)
+            foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in ResourcePool.Ledger)
             {
                 // Start tally with parent exports as they always get thru.
                 double tally = kvp.Value.LocalGain.Sum;
@@ -200,7 +200,7 @@ public partial class Logistics
                 }
             }
 
-            foreach (TradeRoute child in installation.Trade.DownlineTraderoutes)
+            foreach (TradeRoute child in ResourcePool.Trade.DownlineTraderoutes)
             {
                 ResolveRequests(child.Tail);
             }
@@ -208,24 +208,24 @@ public partial class Logistics
     }
 
 
-    public static void UpdateLedger(Installation installation)
+    public static void UpdateLedger(ResourcePool ResourcePool)
     {
         // Zero Ledger
-        installation.Ledger.Clear();
+        ResourcePool.Ledger.Clear();
 
-        foreach (Industry rp in installation.Industries.GetChildren())
+        foreach (Industry rp in ResourcePool.Industries.GetChildren())
         {
             foreach (Resource.IRequestable output in rp.Production)
             {
-                installation.Ledger[output.Type].LocalGain.Add(output);
+                ResourcePool.Ledger[output.Type].LocalGain.Add(output);
             }
         }
 
-        foreach (Industry rp in installation.Industries.GetChildren())
+        foreach (Industry rp in ResourcePool.Industries.GetChildren())
         {
             foreach (Resource.IRequestable input in rp.Consumption)
             {
-                installation.Ledger[input.Type].LocalLoss.Add(input);
+                ResourcePool.Ledger[input.Type].LocalLoss.Add(input);
             }
         }
     }

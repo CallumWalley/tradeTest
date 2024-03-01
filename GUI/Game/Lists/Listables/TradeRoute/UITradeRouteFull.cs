@@ -10,8 +10,8 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
 
     // Components
     LineEdit labelName;
-    UIInstallationTiny installationHead;
-    UIInstallationTiny installationTail;
+    UIResourcePoolTiny ResourcePoolHead;
+    UIResourcePoolTiny ResourcePoolTail;
     UIResource friegherRequirement;
     public TextureButton cancelButton;
     ScrollContainer details;
@@ -43,15 +43,15 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
         //vbox.AddChild(BalancePanel());
 
         // Init resource pool display.
-        // UIResource uir = GetNode<UIResource>("DetailContent/Installation");
+        // UIResource uir = GetNode<UIResource>("DetailContent/ResourcePool");
         // uir.Init(tradeRoute.Balance);
     }
 
     // HBoxContainer BalancePanel()
     // {
     //     HBoxContainer hbox = new();
-    //     UIInstallationSmall head = prefab_UIPanelInstallationSmall.Instantiate<UIInstallationSmall>();
-    //     UIInstallationSmall tail = prefab_UIPanelInstallationSmall.Instantiate<UIInstallationSmall>();
+    //     UIResourcePoolSmall head = prefab_UIPanelResourcePoolSmall.Instantiate<UIResourcePoolSmall>();
+    //     UIResourcePoolSmall tail = prefab_UIPanelResourcePoolSmall.Instantiate<UIResourcePoolSmall>();
     //     VBoxContainer vbox = new();
 
     //     // just bance for now pending trade rework.
@@ -84,10 +84,10 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
         labelName = GetNode<LineEdit>("VBoxContainer/Panel/LineEdit");
         labelName.Text = tradeRoute.Name;
 
-        installationHead = GetNode<UIInstallationTiny>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Head/InstallationSummary");
-        installationTail = GetNode<UIInstallationTiny>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Tail/InstallationSummary");
-        installationHead.Init(tradeRoute.Head);
-        installationTail.Init(tradeRoute.Tail);
+        ResourcePoolHead = GetNode<UIResourcePoolTiny>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Head/ResourcePoolSummary");
+        ResourcePoolTail = GetNode<UIResourcePoolTiny>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Tail/ResourcePoolSummary");
+        ResourcePoolHead.Init(tradeRoute.Head);
+        ResourcePoolTail.Init(tradeRoute.Tail);
 
 
         toHead = GetNode<UIListResources>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/toHead");

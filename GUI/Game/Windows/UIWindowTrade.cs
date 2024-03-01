@@ -3,10 +3,10 @@ using System;
 
 public partial class UIWindowTrade : UIWindow
 {
-	UIList<Installation> installationList;
+	UIList<ResourcePool> ResourcePoolList;
 	UIList<TradeRoute> tradeRouteList;
 
-	static readonly PackedScene prefab_Insallation = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables//Installation/UIInstallationSmall.tscn");
+	static readonly PackedScene prefab_Insallation = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables//ResourcePool/UIResourcePoolSmall.tscn");
 	static readonly PackedScene prefab_TradeRoute = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/TradeRoute/UITradeRouteFull.tscn");
 
 	Player player;
@@ -26,16 +26,16 @@ public partial class UIWindowTrade : UIWindow
 		//tabReceivers = GetNode<VBoxContainer>("TabContainer/Shipyards");
 		tabTradeRoutes = GetNode<VBoxContainer>("TabContainer/Trade Routes");
 
-		//installationList = new();
+		//ResourcePoolList = new();
 		tradeRouteList = new();
 
-		//installationList.Vertical = true;
+		//ResourcePoolList.Vertical = true;
 		tradeRouteList.Vertical = true;
 
-		//installationList.Init(player.trade.Heads, prefab_Insallation);
+		//ResourcePoolList.Init(player.trade.Heads, prefab_Insallation);
 		tradeRouteList.Init(player.trade.Routes, prefab_TradeRoute);
 
-		//tabReceivers.AddChild(installationList);
+		//tabReceivers.AddChild(ResourcePoolList);
 		tabTradeRoutes.AddChild(tradeRouteList);
 	}
 
@@ -47,7 +47,7 @@ public partial class UIWindowTrade : UIWindow
 
 	public void EFrameUI()
 	{
-		//installationList.Update();
+		//ResourcePoolList.Update();
 		tradeRouteList.Update();
 	}
 

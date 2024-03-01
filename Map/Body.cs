@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 
 [Tool]
-public partial class Body : Zone
+public partial class Body : Map.IFeatureable
 {
 
     UIWindowZone uiBody;

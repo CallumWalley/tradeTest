@@ -5,8 +5,8 @@ using System.Collections.Generic;
 public partial class UIWindowZone : UIWindow
 {
     [Export]
-    public Zone zone;
-    static readonly PackedScene p_tradePanel = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Panels/UIPanelInstallation.tscn");
+    public ResourcePool rp;
+    static readonly PackedScene p_tradePanel = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Panels/UIPanelResourcePool.tscn");
     static readonly PackedScene p_astroPanel = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Panels/UIPanelAstro.tscn");
     // static readonly PackedScene p_featurePanel = (PackedScene)GD.Load<PackedScene>("res://GUI/Panels/UIIndustryPanel.tscn");
 
@@ -14,21 +14,21 @@ public partial class UIWindowZone : UIWindow
 
     TabContainer tabContainer;
 
-    public void Init(Zone _body)
+    public void Init(ResourcePool _body)
     {
-        zone = _body;
+        rp = _body;
 
         tabContainer = GetNode<TabContainer>("TabContainer");
-        Position = (Vector2I)zone.Position;
+        // Position = (Vector2I)rp.Position;
 
 
 
-        foreach (Feature i in zone.Features)
-        {
-            UIPanelInstallation tp = p_tradePanel.Instantiate<UIPanelInstallation>();
-            tp.Init(i);
-            tabContainer.AddChild(tp);
-        }
+        // foreach (Feature i in rp.Features)
+        // {
+        //     UIPanelResourcePool tp = p_tradePanel.Instantiate<UIPanelResourcePool>();
+        //     tp.Init(i);
+        //     tabContainer.AddChild(tp);
+        // }
         // //Always add astro panel.
         // UIPanelAstro ap = GetNode<UIPanelAstro>("TabContainer/Astronomical");
         // ap.Init(body);
@@ -90,14 +90,14 @@ public partial class UIWindowZone : UIWindow
     // }
     // public override void _Ready(){
 
-    // 	/// INSTALLATIONS
+    // 	/// ResourcePoolS
     // 	// Add resource pool if exists
-    // 	installation = GetNodeOrNull<Installation>("Installation");
+    // 	ResourcePool = GetNodeOrNull<ResourcePool>("ResourcePool");
 
     // 	/// UI
     // 	// Add trade panel
-    // 	if (installation!=null){
-    // 		UIPanelInstallation tp = p_tradePanel.Instantiate<UIPanelInstallation>();
+    // 	if (ResourcePool!=null){
+    // 		UIPanelResourcePool tp = p_tradePanel.Instantiate<UIPanelResourcePool>();
     // 		UIIndustryPanel ip = p_industryPanel.Instantiate<UIIndustryPanel>();
 
     // 		tp.Init(this);
@@ -141,23 +141,23 @@ public partial class UIWindowZone : UIWindow
     // 	focus = false;
     // }
 
-    // public Installation AddInstallation(){
-    // 	installation = GetNodeOrNull<Installation>("Installation");
-    // 	if (installation==null){
-    // 		installation = p_installation.Instantiate<Installation>();
-    // 		AddChild(installation);
+    // public ResourcePool AddResourcePool(){
+    // 	ResourcePool = GetNodeOrNull<ResourcePool>("ResourcePool");
+    // 	if (ResourcePool==null){
+    // 		ResourcePool = p_ResourcePool.Instantiate<ResourcePool>();
+    // 		AddChild(ResourcePool);
     // 	}
     // 	if (hasTradeReceiver){
-    // 		installation.isValidTradeReceiver=true;
+    // 		ResourcePool.isValidTradeReceiver=true;
     // 	}
-    // 	return installation;
+    // 	return ResourcePool;
     // }
 
     // public TradeReceiver AddTradeReceiver(){
-    // 	tradeReceiver = GetNodeOrNull<TradeReceiver>("Installation");
+    // 	tradeReceiver = GetNodeOrNull<TradeReceiver>("ResourcePool");
     // 	if (tradeReceiver==null){
     // 		tradeReceiver = p_tradeReceiver.Instantiate<TradeReceiver>();
-    // 		tradeReceiver.Init(installation);
+    // 		tradeReceiver.Init(ResourcePool);
     // 		AddChild(tradeReceiver);
     // 	}
     // 	return tradeReceiver;

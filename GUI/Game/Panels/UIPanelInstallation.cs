@@ -3,14 +3,14 @@ using System;
 using System.Collections.Generic;
 using Godot.Collections;
 
-public partial class UIPanelInstallation : Control
+public partial class UIPanelResourcePool : Control
 {
     // Declare member variables here. Examples:
     // private int a = 2;
     // private string b = "text";
     public Body Body { get { return GetParent<Body>(); } }
 
-    Installation installation;
+    ResourcePool ResourcePool;
     TabContainer tabContainer;
     BoxContainer supplyPanel;
     BoxContainer tradePanel;
@@ -27,10 +27,10 @@ public partial class UIPanelInstallation : Control
     static readonly PackedScene prefab_UplineSelector = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Dropdowns/UIDropDownSetHead.tscn");
     UIPanelLedger panelLedger;
     UIList<TradeRoute> tradeRouteList;
-    public void Init(Installation _installation)
+    public void Init(ResourcePool _ResourcePool)
     {
         tabContainer = GetNode<VBoxContainer>("VBoxContainer").GetNode<TabContainer>("TabContainer");
-        installation = _installation;
+        ResourcePool = _ResourcePool;
 
         // tabContainer.AddChild(SupplyPanel());
         // tabContainer.AddChild(TradePanel());
@@ -41,7 +41,7 @@ public partial class UIPanelInstallation : Control
         tradePanelNetwork = tradePanel.GetNode<Label>("Network/Label");
 
         panelLedger = new();
-        panelLedger.Ledger = installation.Ledger;
+        panelLedger.Ledger = ResourcePool.Ledger;
         supplyPanel.AddChild(panelLedger);
 
         // Lists.UIListResources uiResourceProduced = new();
@@ -49,17 +49,17 @@ public partial class UIPanelInstallation : Control
         // Lists.UIListResources uiResourceDelta = new();
         // Lists.UIListResources uiResourceTraded = new();
 
-        // UIList<KeyValuePair<int, Installation.StorageElement>> uiStorage = new();
+        // UIList<KeyValuePair<int, ResourcePool.StorageElement>> uiStorage = new();
 
-        // uiResourceProduced.Init(installation.produced);
-        // uiResourceConsumed.Init(installation.consumed);
+        // uiResourceProduced.Init(ResourcePool.produced);
+        // uiResourceConsumed.Init(ResourcePool.consumed);
         // uiResourceConsumed.ShowBreakdown = true;
         // uiResourceProduced.ShowBreakdown = true;
 
-        // uiResourceTraded.Init(installation.traded);
+        // uiResourceTraded.Init(ResourcePool.traded);
 
-        // uiResourceDelta.Init(installation.delta);
-        // uiStorage.Init(installation.Storage, p_uistorage);
+        // uiResourceDelta.Init(ResourcePool.delta);
+        // uiStorage.Init(ResourcePool.Storage, p_uistorage);
 
         // supplyPanel.GetNode<VBoxContainer>("Produced").AddChild(uiResourceProduced);
         // supplyPanel.GetNode<VBoxContainer>("Consumed").AddChild(uiResourceConsumed);
@@ -69,8 +69,8 @@ public partial class UIPanelInstallation : Control
 
         tradeRouteList = new();
         UIDropDownSetHead setUpline = tradePanel.GetNode<UIDropDownSetHead>("DropDown");
-        setUpline.Init(installation);
-        tradeRouteList.Init(installation.Trade.DownlineTraderoutes, prefab_TradeRoute);
+        setUpline.Init(ResourcePool);
+        tradeRouteList.Init(ResourcePool.Trade.DownlineTraderoutes, prefab_TradeRoute);
         tradeRouteList.Vertical = true;
         tradePanel.AddChild(tradeRouteList);
 
@@ -82,17 +82,17 @@ public partial class UIPanelInstallation : Control
     public override void _Draw()
     {
         base._Draw();
-        if (installation.Order > 0)
+        if (ResourcePool.Order > 0)
         {
-            tradePanelNetwork.Text = string.Format("{0} order member of {1}", installation.Order, installation.Network);
+            tradePanelNetwork.Text = string.Format("{0} order member of {1}", ResourcePool.Order, ResourcePool.Network);
             //tradePanelNetwork.Visible = true;
         }
         else
         {
-            tradePanelNetwork.Text = string.Format("No trade network connected.", installation.Order, installation.Network);
+            tradePanelNetwork.Text = string.Format("No trade network connected.", ResourcePool.Order, ResourcePool.Network);
             //tradePanelNetwork.Visible = false;
         }
-        bool showTrade = (installation.Trade.UplineTraderoute != null || installation.Trade.DownlineTraderoutes.Count > 0);
+        bool showTrade = (ResourcePool.Trade.UplineTraderoute != null || ResourcePool.Trade.DownlineTraderoutes.Count > 0);
         GetNode<Label>("VBoxContainer/TabContainer/Supply/VBoxContainer/Trade").Visible = showTrade;
         panelLedger.ShowTrade = showTrade;
         panelLedger.Update();

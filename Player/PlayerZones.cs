@@ -9,7 +9,7 @@ public partial class PlayerZones : Node
 
 	// static readonly PackedScene ps_TradeRoute = (PackedScene)GD.Load<PackedScene>("res://Map/TradeRoute.tscn");
 
-	public List<Installation> Zones {get;set;}
+	public List<ResourcePool> Zones { get; set; }
 
 	// Initialise trade routes added in editor.
 
@@ -18,7 +18,7 @@ public partial class PlayerZones : Node
 		GetNode<Global>("/root/Global").Connect("EFrameSetup", callable: new Callable(this, "EFrameSetup"));
 	}
 
-	public void RegisterZone(Installation zone)
+	public void RegisterZone(ResourcePool zone)
 	{
 		Zones.Add(zone);
 	}

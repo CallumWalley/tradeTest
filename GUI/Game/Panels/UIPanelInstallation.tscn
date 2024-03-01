@@ -1,9 +1,9 @@
 [gd_scene load_steps=3 format=3 uid="uid://k5ttslxmya3s"]
 
-[ext_resource type="Script" path="res://GUI/Game/Panels/UIPanelInstallation.cs" id="1_hdv7e"]
+[ext_resource type="Script" path="res://GUI/Game/Panels/UIPanelResourcePool.cs" id="1_hdv7e"]
 [ext_resource type="PackedScene" uid="uid://dvge38wi43hpw" path="res://GUI/Game/Dropdowns/UIDropDownSetHead.tscn" id="6_52qtd"]
 
-[node name="Installation" type="PanelContainer"]
+[node name="ResourcePool" type="PanelContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

@@ -6,12 +6,11 @@ using System.Linq;
 public partial class TradeRoute : Node
 {
 
+    [Export]
+    public ResourcePool Head { get; set; }
 
     [Export]
-    public Installation Head { get; set; }
-
-    [Export]
-    public Installation Tail { get; set; }
+    public ResourcePool Tail { get; set; }
     Resource.RList<RRequestTail> listTailLoss;
     Resource.RList<RRequestTail> listTailGain;
     Resource.RList<RRequestHead> listHeadLoss;
@@ -87,7 +86,7 @@ public partial class TradeRoute : Node
         Head.Trade.RegisterDownline(this);
         Tail.Trade.RegisterUpline(this);
 
-        distance = Tail.GetParent<Body>().Position.DistanceTo(Head.GetParent<Body>().Position);
+        distance = 10; // Tail.GetParent<Body>().Position.DistanceTo(Head.GetParent<Body>().Position);
         Name = $"Trade route from {Head.Name} to {Tail.Name}";
 
         listHeadGain = new Resource.RList<RRequestHead>();
@@ -98,7 +97,7 @@ public partial class TradeRoute : Node
 
         shipDemand.Name = Name;
     }
-    public void Init(Installation _head, Installation _tail)
+    public void Init(ResourcePool _head, ResourcePool _tail)
     {
         (Head, Tail) = (_head, _tail);
         Init();

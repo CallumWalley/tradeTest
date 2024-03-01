@@ -1,14 +1,16 @@
-[gd_scene load_steps=10 format=3 uid="uid://difwjke1vj0f1"]
+[gd_scene load_steps=12 format=3 uid="uid://bt3ogevfhywdf"]
 
 [ext_resource type="Script" path="res://Global.cs" id="1_mybo0"]
 [ext_resource type="Script" path="res://IndustryRegister.cs" id="2_o0jkj"]
 [ext_resource type="PackedScene" uid="uid://con3ea5txcdnn" path="res://Player/Player.tscn" id="3_1qyig"]
 [ext_resource type="PackedScene" path="res://GUI/screen.tscn" id="5_g8os5"]
 [ext_resource type="PackedScene" uid="uid://c8uihqqtni6cg" path="res://Map/Map.tscn" id="6_n1hqj"]
-[ext_resource type="PackedScene" uid="uid://dsxkp7s8pb3cu" path="res://Map/SuperSystem.tscn" id="7_yynpv"]
+[ext_resource type="PackedScene" uid="uid://bs11ngj4r7eb4" path="res://Map/Galaxy.tscn" id="6_plfk5"]
+[ext_resource type="PackedScene" uid="uid://bdustjrq7vtln" path="res://Map/PlanetarySystem.tscn" id="7_skkgc"]
+[ext_resource type="PackedScene" uid="uid://cf5ty6my7thnc" path="res://Map/SatelliteSystem.tscn" id="8_oyawq"]
 [ext_resource type="PackedScene" uid="uid://cwj52641j5qo2" path="res://Map/Body.tscn" id="8_yiyre"]
-[ext_resource type="PackedScene" uid="uid://ch66j0x6btq21" path="res://Map/Installation.tscn" id="9_ec2dk"]
-[ext_resource type="PackedScene" uid="uid://d1oe4qnb04s6k" path="res://Map/Industry.tscn" id="10_0wc3d"]
+[ext_resource type="PackedScene" uid="uid://dxioc41n7atcy" path="res://Map/Planet.tscn" id="9_b1bja"]
+[ext_resource type="PackedScene" uid="uid://ch8jfji8okcyx" path="res://Map/Feature.tscn" id="10_12pk0"]
 
 [node name="Global" type="Node"]
 script = ExtResource("1_mybo0")
@@ -23,36 +25,14 @@ script = ExtResource("2_o0jkj")
 
 [node name="Map" parent="." instance=ExtResource("6_n1hqj")]
 
-[node name="SolSystem" parent="Map/SuperSystems" index="0" instance=ExtResource("7_yynpv")]
+[node name="Galaxy" parent="Map" instance=ExtResource("6_plfk5")]
 
-[node name="EarthSystem" parent="Map/SuperSystems/SolSystem" instance=ExtResource("8_yiyre")]
+[node name="Sol" parent="Map/Galaxy" instance=ExtResource("7_skkgc")]
 
-[node name="Installation" parent="Map/SuperSystems/SolSystem/EarthSystem" instance=ExtResource("9_ec2dk")]
-_validTradeReceiver = true
-StartingResources = {
-2: 200.0
-}
+[node name="SatelliteSystem" parent="Map/Galaxy/Sol" instance=ExtResource("8_oyawq")]
 
-[node name="Freighter Dockyard" parent="Map/SuperSystems/SolSystem/EarthSystem/Installation/Industries" index="0" instance=ExtResource("10_0wc3d")]
-slug = "f_dockyard"
+[node name="Planet" parent="Map/Galaxy/Sol/SatelliteSystem" instance=ExtResource("9_b1bja")]
 
-[node name="Chemical Fuel Plant" parent="Map/SuperSystems/SolSystem/EarthSystem/Installation/Industries" index="1" instance=ExtResource("10_0wc3d")]
-slug = "cfuel_water"
+[node name="Feature" parent="Map/Galaxy/Sol/SatelliteSystem" instance=ExtResource("10_12pk0")]
 
-[node name="Ice Mine" parent="Map/SuperSystems/SolSystem/EarthSystem/Installation/Industries" index="2" instance=ExtResource("10_0wc3d")]
-slug = "mine_h20_surf_old"
-
-[node name="Fuel Reserves" parent="Map/SuperSystems/SolSystem/EarthSystem/Installation/Industries" index="3" instance=ExtResource("10_0wc3d")]
-slug = "orbit_storage_fuel"
-
-[node name="Moon" parent="Map/SuperSystems/SolSystem/EarthSystem" instance=ExtResource("8_yiyre")]
-
-[node name="Installation" parent="Map/SuperSystems/SolSystem/EarthSystem/Moon" instance=ExtResource("9_ec2dk")]
-
-[editable path="Player"]
-[editable path="Screen"]
-[editable path="Map"]
-[editable path="Map/SuperSystems/SolSystem"]
-[editable path="Map/SuperSystems/SolSystem/EarthSystem"]
-[editable path="Map/SuperSystems/SolSystem/EarthSystem/Installation"]
-[editable path="Map/SuperSystems/SolSystem/EarthSystem/Moon"]
+[node name="Body" parent="Map/Galaxy/Sol/SatelliteSystem" instance=ExtResource("8_yiyre")]

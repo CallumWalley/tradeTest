@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://GUI/Game/Panels/UIPanelLedgerEntry.cs" id="1_rr1wj"]
 [ext_resource type="PackedScene" uid="uid://0m22s117jkqe" path="res://GUI/Game/Panels/UIResourceStorage.tscn" id="3_ksktb"]
 
-[node name="Installation" type="VBoxContainer"]
+[node name="ResourcePool" type="VBoxContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

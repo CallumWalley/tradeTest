@@ -90,10 +90,10 @@ layout_mode = 2
 toggle_mode = true
 text = "Trade"
 
-[node name="ButtonInstallations" type="Button" parent="Control/TopLeft/HBoxContainer"]
+[node name="ButtonResourcePools" type="Button" parent="Control/TopLeft/HBoxContainer"]
 layout_mode = 2
 toggle_mode = true
-text = "Installations"
+text = "ResourcePools"
 
 [node name="UITradeWindow" parent="Control" instance=ExtResource("3_14ogv")]
 visible = false

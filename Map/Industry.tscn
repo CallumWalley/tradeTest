@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://d1oe4qnb04s6k"]
-
-[ext_resource type="Script" path="res://Economy/Industry.cs" id="1"]
-
-[node name="Transformer" type="Node"]
-script = ExtResource("1")

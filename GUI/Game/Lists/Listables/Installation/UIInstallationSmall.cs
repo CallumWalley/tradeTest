@@ -3,10 +3,10 @@ using System;
 using System.Linq;
 using System.Collections;
 
-public partial class UIInstallationSmall : Control, Lists.IListable<Installation>
+public partial class UIResourcePoolSmall : Control, Lists.IListable<ResourcePool>
 {
-    Installation installation;
-    public Installation GameElement { get { return installation; } }
+    ResourcePool ResourcePool;
+    public ResourcePool GameElement { get { return ResourcePool; } }
     public bool Destroy { get; set; } = false;
 
     Label labelName;
@@ -15,9 +15,9 @@ public partial class UIInstallationSmall : Control, Lists.IListable<Installation
     {
         labelName = GetNode<Label>("Name");
     }
-    public void Init(Installation _installation)
+    public void Init(ResourcePool _ResourcePool)
     {
-        installation = _installation;
+        ResourcePool = _ResourcePool;
     }
     public void Update()
     {
@@ -25,8 +25,8 @@ public partial class UIInstallationSmall : Control, Lists.IListable<Installation
     }
     public override void _Draw()
     {
-        if (installation == null) { return; }
-        labelName.Text = installation.Name;
+        if (ResourcePool == null) { return; }
+        labelName.Text = ResourcePool.Name;
         if (Destroy)
         {
             QueueFree();

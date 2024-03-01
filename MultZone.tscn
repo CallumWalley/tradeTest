@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bx17oyuqg3ytr"]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="PackedScene" uid="uid://cwj52641j5qo2" path="res://Map/Body.tscn" id="1"]
 [ext_resource type="Script" path="res://Camera2D.cs" id="4"]
@@ -11,7 +11,7 @@
 [ext_resource type="Script" path="res://IndustryRegister.cs" id="8"]
 [ext_resource type="PackedScene" uid="uid://ch66j0x6btq21" path="res://Map/Installation.tscn" id="10"]
 [ext_resource type="PackedScene" uid="uid://dsxkp7s8pb3cu" path="res://Map/SuperSystem.tscn" id="10_jdtlx"]
-[ext_resource type="PackedScene" uid="uid://bs11ngj4r7eb4" path="res://Map/SubSystem.tscn" id="12_8brpt"]
+[ext_resource type="PackedScene" uid="uid://bs11ngj4r7eb4" path="res://Map/Galaxy.tscn" id="12_8brpt"]
 
 [sub_resource type="CircleShape2D" id="1"]
 
@@ -25,8 +25,8 @@ script = ExtResource("8")
 [node name="Player" parent="." instance=ExtResource("4_7bqim")]
 
 [node name="Player@PlayerTradeRoutes@TradeRoute" parent="Player/PlayerTrade" index="0" node_paths=PackedStringArray("Head", "Tail") instance=ExtResource("5_6dsy0")]
-Head = NodePath("../../../Map/SuperSystems/SolSystem/JupiterSystem/Installation")
-Tail = NodePath("../../../Map/SuperSystems/SolSystem/MarsSystem/Installation")
+Head = NodePath("../../../Map/SuperSystems/SolSystem/JupiterSystem/ResourcePool")
+Tail = NodePath("../../../Map/SuperSystems/SolSystem/MarsSystem/ResourcePool")
 
 [node name="Screen" parent="." instance=ExtResource("6_eohnr")]
 
@@ -39,12 +39,12 @@ position = Vector2(621, 391)
 radius = 8.0
 color = Color(0.415686, 0.219608, 0.219608, 1)
 
-[node name="Installation" parent="Map/SuperSystems/SolSystem/MarsSystem" instance=ExtResource("10")]
+[node name="ResourcePool" parent="Map/SuperSystems/SolSystem/MarsSystem" instance=ExtResource("10")]
 
-[node name="Surface Mine" parent="Map/SuperSystems/SolSystem/MarsSystem/Installation/Industries" index="0" instance=ExtResource("6")]
+[node name="Surface Mine" parent="Map/SuperSystems/SolSystem/MarsSystem/ResourcePool/Industries" index="0" instance=ExtResource("6")]
 slug = "mine_surf_old"
 
-[node name="Reclaimation Facility" parent="Map/SuperSystems/SolSystem/MarsSystem/Installation/Industries" index="1" instance=ExtResource("6")]
+[node name="Reclaimation Facility" parent="Map/SuperSystems/SolSystem/MarsSystem/ResourcePool/Industries" index="1" instance=ExtResource("6")]
 slug = "reclaim"
 
 [node name="SaturnSystem" parent="Map/SuperSystems/SolSystem" instance=ExtResource("1")]
@@ -53,29 +53,29 @@ nPoints = 16
 radius = 15.0
 color = Color(0.596078, 0.596078, 0.372549, 1)
 
-[node name="Installation" parent="Map/SuperSystems/SolSystem/SaturnSystem" instance=ExtResource("10")]
+[node name="ResourcePool" parent="Map/SuperSystems/SolSystem/SaturnSystem" instance=ExtResource("10")]
 
 [node name="EarthSystem" parent="Map/SuperSystems/SolSystem" instance=ExtResource("1")]
 position = Vector2(148, 157)
 nPoints = 16
 color = Color(0.278431, 0.364706, 0.913725, 1)
 
-[node name="Installation" parent="Map/SuperSystems/SolSystem/EarthSystem" instance=ExtResource("10")]
+[node name="ResourcePool" parent="Map/SuperSystems/SolSystem/EarthSystem" instance=ExtResource("10")]
 _validTradeReceiver = true
 StartingResources = {
 2: 200.0
 }
 
-[node name="Freighter Dockyard" parent="Map/SuperSystems/SolSystem/EarthSystem/Installation/Industries" index="0" instance=ExtResource("6")]
+[node name="Freighter Dockyard" parent="Map/SuperSystems/SolSystem/EarthSystem/ResourcePool/Industries" index="0" instance=ExtResource("6")]
 slug = "f_dockyard"
 
-[node name="Chemical Fuel Plant" parent="Map/SuperSystems/SolSystem/EarthSystem/Installation/Industries" index="1" instance=ExtResource("6")]
+[node name="Chemical Fuel Plant" parent="Map/SuperSystems/SolSystem/EarthSystem/ResourcePool/Industries" index="1" instance=ExtResource("6")]
 slug = "cfuel_water"
 
-[node name="Ice Mine" parent="Map/SuperSystems/SolSystem/EarthSystem/Installation/Industries" index="2" instance=ExtResource("6")]
+[node name="Ice Mine" parent="Map/SuperSystems/SolSystem/EarthSystem/ResourcePool/Industries" index="2" instance=ExtResource("6")]
 slug = "mine_h20_surf_old"
 
-[node name="Fuel Reserves" parent="Map/SuperSystems/SolSystem/EarthSystem/Installation/Industries" index="3" instance=ExtResource("6")]
+[node name="Fuel Reserves" parent="Map/SuperSystems/SolSystem/EarthSystem/ResourcePool/Industries" index="3" instance=ExtResource("6")]
 slug = "orbit_storage_fuel"
 
 [node name="Moon" parent="Map/SuperSystems/SolSystem/EarthSystem" instance=ExtResource("1")]
@@ -84,7 +84,7 @@ nPoints = 16
 radius = 3.0
 color = Color(0.513726, 0.513726, 0.513726, 1)
 
-[node name="Installation" parent="Map/SuperSystems/SolSystem/EarthSystem/Moon" instance=ExtResource("10")]
+[node name="ResourcePool" parent="Map/SuperSystems/SolSystem/EarthSystem/Moon" instance=ExtResource("10")]
 
 [node name="JupiterSystem" parent="Map/SuperSystems/SolSystem" instance=ExtResource("1")]
 position = Vector2(218, 420)
@@ -92,22 +92,22 @@ nPoints = 16
 radius = 20.0
 color = Color(0.678431, 0.380392, 0.184314, 1)
 
-[node name="Installation" parent="Map/SuperSystems/SolSystem/JupiterSystem" instance=ExtResource("10")]
+[node name="ResourcePool" parent="Map/SuperSystems/SolSystem/JupiterSystem" instance=ExtResource("10")]
 _validTradeReceiver = true
 StartingResources = {
 4: 400.0
 }
 
-[node name="Chemical Fuel Plant" parent="Map/SuperSystems/SolSystem/JupiterSystem/Installation/Industries" index="0" instance=ExtResource("6")]
+[node name="Chemical Fuel Plant" parent="Map/SuperSystems/SolSystem/JupiterSystem/ResourcePool/Industries" index="0" instance=ExtResource("6")]
 slug = "cfuel_water"
 
-[node name="Water Tanks" parent="Map/SuperSystems/SolSystem/JupiterSystem/Installation/Industries" index="1" instance=ExtResource("6")]
+[node name="Water Tanks" parent="Map/SuperSystems/SolSystem/JupiterSystem/ResourcePool/Industries" index="1" instance=ExtResource("6")]
 slug = "orbit_storage_h20"
 
-[node name="Fuel Reserves" parent="Map/SuperSystems/SolSystem/JupiterSystem/Installation/Industries" index="2" instance=ExtResource("6")]
+[node name="Fuel Reserves" parent="Map/SuperSystems/SolSystem/JupiterSystem/ResourcePool/Industries" index="2" instance=ExtResource("6")]
 slug = "orbit_storage_fuel"
 
-[node name="Freighter Dockyard" parent="Map/SuperSystems/SolSystem/JupiterSystem/Installation/Industries" index="3" instance=ExtResource("6")]
+[node name="Freighter Dockyard" parent="Map/SuperSystems/SolSystem/JupiterSystem/ResourcePool/Industries" index="3" instance=ExtResource("6")]
 slug = "f_dockyard"
 
 [node name="SunSystem" parent="Map/SuperSystems/SolSystem" instance=ExtResource("12_8brpt")]
@@ -130,11 +130,11 @@ script = ExtResource("4")
 [editable path="Map"]
 [editable path="Map/SuperSystems/SolSystem"]
 [editable path="Map/SuperSystems/SolSystem/MarsSystem"]
-[editable path="Map/SuperSystems/SolSystem/MarsSystem/Installation"]
+[editable path="Map/SuperSystems/SolSystem/MarsSystem/ResourcePool"]
 [editable path="Map/SuperSystems/SolSystem/SaturnSystem"]
 [editable path="Map/SuperSystems/SolSystem/EarthSystem"]
-[editable path="Map/SuperSystems/SolSystem/EarthSystem/Installation"]
+[editable path="Map/SuperSystems/SolSystem/EarthSystem/ResourcePool"]
 [editable path="Map/SuperSystems/SolSystem/EarthSystem/Moon"]
 [editable path="Map/SuperSystems/SolSystem/JupiterSystem"]
-[editable path="Map/SuperSystems/SolSystem/JupiterSystem/Installation"]
+[editable path="Map/SuperSystems/SolSystem/JupiterSystem/ResourcePool"]
 [editable path="Map/SuperSystems/SolSystem/SunSystem"]

@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class SuperSystem : Node2D
+public partial class PlanetarySystem : Node
 {
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()

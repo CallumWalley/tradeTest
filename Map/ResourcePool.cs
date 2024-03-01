@@ -3,13 +3,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public partial class Installation : Node
+public partial class ResourcePool : Node
 {
+    [Export]
+    public bool Active;
+
+    public Vector2 Position
+    {
+        get { return new Vector2(0, 0); }
+    }
 
     [Export]
 
     bool _validTradeReceiver = false;
     public bool ValidTradeReceiver
+
     {
         get { return _validTradeReceiver; }
         protected set
@@ -84,7 +92,7 @@ public partial class Installation : Node
     // Helper methods
     public Godot.Collections.Array<Node> Children { get { return GetChildren(true); } }
 
-    public Vector2 Position { get { return GetParent<Body>().Position; } }
+    // public Vector2 Position { get { return GetParent<Body>().Position; } }
 
     // BODY IS PARENT
     public Body Body { get { return GetParent<Body>(); } }
@@ -129,9 +137,9 @@ public partial class Installation : Node
 
         ValidTradeReceiver = _validTradeReceiver;
 
-        Name = $"{Body.Name} station";
+        // Name = $"{Body.Name} station";
 
-        Ledger.installation = this;
+        Ledger.ResourcePool = this;
         // Initial storage count.
         // GetStorage();
         foreach (KeyValuePair<int, double> kvp in StartingResources)
@@ -254,18 +262,18 @@ public partial class Installation : Node
     // Class for orgasnisng
     public class _Trade
     {
-        Installation installation;
+        ResourcePool ResourcePool;
         public Resource.RGroupRequests<Resource.IRequestable> shipDemand = new Resource.RGroupRequests<Resource.IRequestable>("Trade vessels in use.");
         // needs custom ui element
         public Resource.RGroupRequests<Resource.IRequestable> ShipDemand
         {
             get
             {
-                return installation.Ledger[901].LocalLoss;
+                return ResourcePool.Ledger[901].LocalLoss;
             }
         }
 
-        public _Trade(Installation _installation) { installation = _installation; }
+        public _Trade(ResourcePool _ResourcePool) { ResourcePool = _ResourcePool; }
         public TradeRoute UplineTraderoute = null;
         public List<TradeRoute> DownlineTraderoutes = new List<TradeRoute>();
         public void RegisterUpline(TradeRoute i)
@@ -278,7 +286,7 @@ public partial class Installation : Node
             UplineTraderoute = null;
 
             // 0 is not in network. 
-            installation.Order = Math.Min(DownlineTraderoutes.Count, 1);
+            ResourcePool.Order = Math.Min(DownlineTraderoutes.Count, 1);
 
             //DeregisterTransformer(i.TransformerHead);
         }
@@ -286,11 +294,11 @@ public partial class Installation : Node
         {
             // If made head of trade network, set order to 1;
             DownlineTraderoutes.Add(i);
-            installation.Order = 1;
-            if (installation.Order < 2)
+            ResourcePool.Order = 1;
+            if (ResourcePool.Order < 2)
             {
 
-                GD.Print(string.Format("{0} is the head of the new '{1}' network.", installation.Name, installation.Network));
+                GD.Print(string.Format("{0} is the head of the new '{1}' network.", ResourcePool.Name, ResourcePool.Network));
             }
 
             GD.Print("Downline registered");
@@ -300,10 +308,10 @@ public partial class Installation : Node
             DownlineTraderoutes.Remove(i);
 
             // If no longer part of a trade network, set order to 0;
-            if (installation.Order == 1 && DownlineTraderoutes.Count < 1)
+            if (ResourcePool.Order == 1 && DownlineTraderoutes.Count < 1)
             {
-                GD.Print(string.Format("{0} is not longer part of a network, so order is set to '0'", installation.Name));
-                installation.Order = 0;
+                GD.Print(string.Format("{0} is not longer part of a network, so order is set to '0'", ResourcePool.Name));
+                ResourcePool.Order = 0;
             }
         }
     }

@@ -1,13 +1,13 @@
 using Godot;
 using System;
 
-public partial class UIInstallationTiny : HBoxContainer
+public partial class UIResourcePoolTiny : HBoxContainer
 {
-    Installation installation;
+    ResourcePool ResourcePool;
 
-    public void Init(Installation _installation)
+    public void Init(ResourcePool _ResourcePool)
     {
-        installation = _installation;
+        ResourcePool = _ResourcePool;
     }
 
     public override void _Draw()
@@ -15,6 +15,6 @@ public partial class UIInstallationTiny : HBoxContainer
         base._Draw();
         // all icons currently the same.
         //GetNode<TextureRect>("Icon").Texture;
-        GetNode<Label>("Name").Text = installation.Name;
+        GetNode<Label>("Name").Text = ResourcePool.Name;
     }
 }
