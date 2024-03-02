@@ -2,18 +2,21 @@
 
 [ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="1_ox12g"]
 [ext_resource type="Script" path="res://GUI/Game/Lists/Listables/Feature/UIFeatureSmall.cs" id="2_7boly"]
-[ext_resource type="Texture2D" path="res://assets/icons/computers/ship_part_computer_pregoc.dds" id="2_f0ygf"]
+[ext_resource type="Texture2D" path="res://assets/icons/58x58/ship_part_computer_pregoc.dds" id="2_f0ygf"]
 
-[node name="Feature" type="PanelContainer"]
+[node name="Feature" type="Button"]
 anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 58.0
 grow_horizontal = 2
 theme = ExtResource("1_ox12g")
+toggle_mode = true
 script = ExtResource("2_7boly")
 
 [node name="Summary" type="VBoxContainer" parent="."]
 layout_mode = 2
+offset_right = 1152.0
+offset_bottom = 58.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Summary"]
 layout_mode = 2

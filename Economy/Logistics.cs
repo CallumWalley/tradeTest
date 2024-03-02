@@ -213,7 +213,7 @@ public partial class Logistics
         // Zero Ledger
         ResourcePool.Ledger.Clear();
 
-        foreach (Industry rp in ResourcePool.Industries.GetChildren())
+        foreach (Feature rp in ResourcePool.GetChildren())
         {
             foreach (Resource.IRequestable output in rp.Production)
             {
@@ -221,7 +221,7 @@ public partial class Logistics
             }
         }
 
-        foreach (Industry rp in ResourcePool.Industries.GetChildren())
+        foreach (Feature rp in ResourcePool.GetChildren())
         {
             foreach (Resource.IRequestable input in rp.Consumption)
             {

@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://ckhub76bxwfd8"]
+
+[ext_resource type="Script" path="res://GUI/Screen/Nav.cs" id="1_sctlv"]
+[ext_resource type="PackedScene" uid="uid://blr2onphs1wpv" path="res://GUI/Elements/UIAccordian.tscn" id="2_hu5pb"]
+
+[node name="Nav" type="VBoxContainer"]
+anchors_preset = -1
+anchor_top = 4.171
+anchor_bottom = 14.21
+offset_top = 1.16
+offset_right = 151.0
+offset_bottom = 4.59998
+grow_vertical = 2
+script = ExtResource("1_sctlv")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+custom_minimum_size = Vector2(10, 25)
+layout_mode = 2
+text = "Nav"
+
+[node name="Accordian" parent="." instance=ExtResource("2_hu5pb")]
+layout_mode = 2

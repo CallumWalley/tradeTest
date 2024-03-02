@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 
-public partial class IndustryRegister : Node
+public partial class FeatureRegister : Node
 {
     // Declare member variables here. Examples:
     // private int a = 2;
     // private string b = "text";
-    List<IndustryType> list;
-
-    public partial class IndustryType
+    Dictionary<string, FeatureType> types = new();
+    FeatureType defaultFeature = new FeatureType();
+    public partial class FeatureType
     {
         public string Name { get; set; }
         public string Slug { get; set; }
@@ -27,6 +27,31 @@ public partial class IndustryRegister : Node
 
     }
 
+
+    public interface IFeatureable
+    {
+
+        //////////////////////////
+        // Internal state
+        /////////////////////////
+
+
+        // Output 
+
+        public FeatureRegister.FeatureType ttype { get; set; }
+        public string TypeName { get { return ttype.Name; } }
+        public string TypeSlug { get { return ttype.Slug; } }
+        public string TypeClass { get { return ttype.Superclass; } }
+        public string TypeSubclass { get { return ttype.Subclass; } }
+        public string TypeImage { get { return ttype.Image; } }
+
+
+        //public string TypeRequirements{get{ttype.Requiremnts}
+        public string[] Tags { get; set; }
+        public string Description { get; set; }
+    }
+
+
     // public class InputTypeLoader
     // {
     //     public int Type;
@@ -38,11 +63,11 @@ public partial class IndustryRegister : Node
     // }
 
     // Special Industry type for trade route;
-    public static IndustryType TradeRoute
+    public static FeatureType TradeRoute
     {
         get
         {
-            IndustryType tradeRoute = new IndustryType();
+            FeatureType tradeRoute = new FeatureType();
             tradeRoute.Name = "Trade Route";
             tradeRoute.Slug = "trade_route";
             tradeRoute.Superclass = "special";
@@ -57,10 +82,16 @@ public partial class IndustryRegister : Node
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        list = new List<IndustryType>(LoadFromFile());
+        defaultFeature.Description = "Unknown";
+        defaultFeature.Name = "Unknown";
+
+        foreach (FeatureType t in LoadFromFile())
+        {
+            types[t.Slug] = t;
+        }
     }
 
-    IEnumerable<IndustryType> LoadFromFile()
+    IEnumerable<FeatureType> LoadFromFile()
     {
         //GD.Print(System.IO.Directory.GetFiles("Industrys", ".json"));
         foreach (string file in System.IO.Directory.GetFiles("Economy/Industries", "*.json"))
@@ -68,7 +99,7 @@ public partial class IndustryRegister : Node
             using (StreamReader fi = System.IO.File.OpenText(file))
             {
                 JsonSerializer serializer = new JsonSerializer();
-                foreach (IndustryType tt in (List<IndustryType>)serializer.Deserialize(fi, typeof(List<IndustryType>)))
+                foreach (FeatureType tt in (List<FeatureType>)serializer.Deserialize(fi, typeof(List<FeatureType>)))
                 {
                     yield return tt;
                 }
@@ -76,9 +107,15 @@ public partial class IndustryRegister : Node
         }
     }
 
-    public IndustryType GetFromSlug(string slug)
+    public FeatureType GetFromSlug(string slug)
     {
-        return list.Find(x => x.Slug == slug);
+        if (slug == null)
+        {
+            return defaultFeature;
+        }
+        FeatureType f = types[slug];
+        GD.PrintErr("Feature type not found");
+        return f ?? defaultFeature;
     }
 
     //  // Called every frame. 'delta' is the elapsed time since the previous frame.
