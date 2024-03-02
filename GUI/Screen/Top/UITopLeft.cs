@@ -3,10 +3,10 @@ using System;
 
 public partial class UITopLeft : Panel
 {
-	static readonly PackedScene prefab_TradeWindow = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Windows/UIWindowTrade.tscn");
+	static readonly PackedScene prefab_TradeWindow = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/TabContainer/UITabContainerTrade.tscn");
 
 	Button buttonTrade;
-	UIWindowTrade windowTrade;
+	UITabContainerTrade windowTrade;
 	CanvasLayer screen;
 
 
@@ -18,7 +18,7 @@ public partial class UITopLeft : Panel
 		buttonTrade = GetNode<Button>("HBoxContainer/ButtonTrade");
 		buttonTrade.Connect("pressed", new Callable(this, "OpenTrade"));
 
-		windowTrade = GetNode<UIWindowTrade>("../UITradeWindow");
+		windowTrade = GetNode<UITabContainerTrade>("../UITradeWindow");
 		windowTrade.toggleButton = buttonTrade;
 		windowTrade.Position = (Vector2I)Position + new Vector2I(100, 100);
 	}

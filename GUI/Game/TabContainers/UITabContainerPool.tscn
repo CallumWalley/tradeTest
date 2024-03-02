@@ -1,0 +1,28 @@
+[gd_scene load_steps=6 format=3 uid="uid://dq8wps73ct8h2"]
+
+[ext_resource type="Script" path="res://GUI/Game/TabContainers/UITabContainerPool.cs" id="1_mkdso"]
+[ext_resource type="PackedScene" uid="uid://b21lbg7v3h1t" path="res://GUI/Game/Panels/UIPanelPoolGeneral.tscn" id="2_y5m1n"]
+[ext_resource type="PackedScene" uid="uid://bejhglo4krc63" path="res://GUI/Game/Panels/UIPanelPoolFeatures.tscn" id="3_ealgp"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aoo5e"]
+bg_color = Color(0.94902, 0.619608, 0.321569, 1)
+
+[sub_resource type="Theme" id="Theme_b56gc"]
+Panel/styles/panel = SubResource("StyleBoxFlat_aoo5e")
+
+[node name="TabContainer" type="TabContainer"]
+custom_minimum_size = Vector2(400, 200)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_b56gc")
+script = ExtResource("1_mkdso")
+
+[node name="General" parent="." instance=ExtResource("2_y5m1n")]
+layout_mode = 2
+
+[node name="Features" parent="." instance=ExtResource("3_ealgp")]
+visible = false
+layout_mode = 2

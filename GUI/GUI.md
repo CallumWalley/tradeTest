@@ -7,6 +7,11 @@ Primitives of commonly used elements to be extended
 
 #### UIWindow
 Moveable closeable, etc.
+Should receive `EFrameUI` Signal
+
+#### UIPanel (currently just panel container)
+
+Should be self contained, but still neets to have `Update()` called upon it to update data.
 
 #### UIAccordian
 Moveable closeable, etc.

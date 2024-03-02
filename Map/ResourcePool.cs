@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public partial class ResourcePool : Node
+public partial class ResourcePool : Node, IEnumerable<Feature>
 {
     [Export]
     public bool Active;
@@ -41,7 +41,6 @@ public partial class ResourcePool : Node
 
     // These are PRIMARY characteristics. To add or remove requires call of function.
     public List<Resource.IResourceTransformers> Transformers { get; } = new();
-    public Node Industries;
 
     private int _order = 0;
     public int Order
@@ -132,7 +131,6 @@ public partial class ResourcePool : Node
         global.Connect("EFrameLate", new Callable(this, "EFrameLate"));
 
         player = GetNode<Player>("/root/Global/Player");
-        Industries = GetNode<Node>("Industries");
 
 
         ValidTradeReceiver = _validTradeReceiver;
@@ -228,6 +226,20 @@ public partial class ResourcePool : Node
         }
     }
 
+    public IEnumerator<Feature> GetEnumerator()
+    {
+        foreach (Feature f in GetChildren())
+        {
+            yield return f;
+        }
+    }
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
+
+
     public class Store : IEnumerable<KeyValuePair<int, StorageElement>>
     {
         Dictionary<int, StorageElement> elements = new();
@@ -256,6 +268,8 @@ public partial class ResourcePool : Node
             }
         }
     }
+
+
 
 
 

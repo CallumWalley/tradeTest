@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://ctmr00mrksumb"]
+
+[ext_resource type="Script" path="res://GUI/Game/TabContainers/UITabContainerBody.cs" id="1_4l2ew"]
+[ext_resource type="PackedScene" uid="uid://c56d8qpewex6s" path="res://GUI/Game/Panels/UIPanelAstro.tscn" id="1_8ogl4"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aoo5e"]
+bg_color = Color(0.94902, 0.619608, 0.321569, 1)
+
+[sub_resource type="Theme" id="Theme_b56gc"]
+Panel/styles/panel = SubResource("StyleBoxFlat_aoo5e")
+
+[node name="TabContainer" type="TabContainer"]
+custom_minimum_size = Vector2(400, 300)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_b56gc")
+clip_tabs = false
+script = ExtResource("1_4l2ew")
+
+[node name="Astronomical" parent="." instance=ExtResource("1_8ogl4")]
+layout_mode = 2

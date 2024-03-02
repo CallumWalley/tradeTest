@@ -7,6 +7,7 @@ public partial class UIWindow : Window
 	public override void _Ready()
 	{
 		Connect("close_requested", new Callable(this, "OnCloseRequested"));
+		GetNode<Global>("/root/Global").Connect("EFrameUI", callable: new Callable(this, "EFrame"));
 	}
 	protected virtual void OnCloseRequested()
 	{
@@ -19,5 +20,10 @@ public partial class UIWindow : Window
 		{
 			OnCloseRequested();
 		}
+	}
+
+	public virtual void EFrame()
+	{
+
 	}
 }

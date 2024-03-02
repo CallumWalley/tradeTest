@@ -10,6 +10,8 @@ public partial class Feature : Node
     public Resource.RList<Resource.IRequestable> Consumption { get; set; }
     public List<Situations.Base> Situations { get; protected set; }
 
+    public Texture2D iconMedium;
+
     // 0-100 
 
     //////////////////////////
@@ -27,7 +29,7 @@ public partial class Feature : Node
 
     // Output 
 
-    public IndustryRegister.IndustryType ttype;
+    public FeatureRegister.FeatureType ttype;
     public string TypeName { get { return ttype.Name; } }
     public string TypeSlug { get { return ttype.Slug; } }
     public string TypeClass { get { return ttype.Superclass; } }
@@ -46,12 +48,26 @@ public partial class Feature : Node
     {
         // If instantiated in editor
 
-        ttype ??= GetNode<IndustryRegister>("/root/Global/IndustryRegister").GetFromSlug(slug);
+        ttype ??= GetNode<FeatureRegister>("/root/Global/FeatureRegister").GetFromSlug(slug);
         Name = ttype.Name;
         Tags = ttype.Tags;
         Description = ttype.Description;
         Prioroty = ttype.defaultPrioroty;
         Situations = new List<Situations.Base>();
+
+        if (iconMedium == null)
+        {
+            if (ResourceLoader.Exists(ttype.Image))
+            {
+                iconMedium = (Texture2D)GD.Load<Texture2D>(ttype.Image);
+            }
+            else
+            {
+                GD.Print($"couldn't load icon {ttype.Image}");
+                iconMedium = (Texture2D)GD.Load<Texture2D>("res://assets/icons/58x58/ship_part_computer_default.dds");
+            }
+        }
+
 
         Consumption = new(GetInputClassFromTemplate(ttype.Consumption));
         Production = new(GetGroupFromTemplate(ttype.Production));
