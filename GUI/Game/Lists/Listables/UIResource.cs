@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Resources;
 // [Tool]
-public partial class UIResource : UIDrawEFrame, Lists.IListable<Resource.IResource>
+public partial class UIResource : Control, Lists.IListable<Resource.IResource>
 {
     public Resource.IResource resource;
     public Resource.IResource GameElement { get { return resource; } }

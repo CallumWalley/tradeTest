@@ -1,8 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://bejhglo4krc63"]
+[gd_scene load_steps=2 format=3 uid="uid://bejhglo4krc63"]
 
 [ext_resource type="Script" path="res://GUI/Game/Panels/UIPanelPoolFeatures.cs" id="1_tk57f"]
-[ext_resource type="Texture2D" path="res://assets/icons/58x58/ship_part_computer_pregoc.dds" id="2_wbrpa"]
-[ext_resource type="Texture2D" path="res://assets/icons/58x58/ship_part_computer_default.dds" id="3_elogu"]
 
 [node name="Features" type="PanelContainer"]
 anchors_preset = 15
@@ -61,17 +59,8 @@ size_flags_horizontal = 3
 [node name="ItemList" type="ItemList" parent="VBoxContainer/HSplitContainer/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 auto_height = true
-item_count = 2
-item_0/text = "Feature 1"
-item_0/icon = ExtResource("2_wbrpa")
-item_1/text = "Featur2"
-item_1/icon = ExtResource("3_elogu")
 
 [node name="Display" type="ScrollContainer" parent="VBoxContainer/HSplitContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 horizontal_scroll_mode = 0
-
-[node name="Feature" type="Label" parent="VBoxContainer/HSplitContainer/Display"]
-layout_mode = 2
-text = "Nothing Selected"

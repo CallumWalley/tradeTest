@@ -21,7 +21,7 @@ project/assembly_name="tradeTest"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/detomon.assorted-controls/plugin.cfg", "res://addons/gdUnit4/plugin.cfg")
+enabled=PackedStringArray("res://addons/GameGUI/plugin.cfg", "res://addons/detomon.assorted-controls/plugin.cfg", "res://addons/gdUnit4/plugin.cfg")
 
 [gdnative]
 

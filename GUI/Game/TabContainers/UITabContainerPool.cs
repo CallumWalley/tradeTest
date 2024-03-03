@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class UITabContainerPool : TabContainer
+public partial class UITabContainerPool : UITabContainer
 {
     [Export]
     public ResourcePool rp;
@@ -23,11 +23,5 @@ public partial class UITabContainerPool : TabContainer
         panelFeatures.resourcePool = rp;
         panelGeneral.resourcePool = rp;
         // Position = (Vector2I)rp.Position;
-    }
-
-    public void Update()
-    {
-        panelGeneral.Update();
-        panelFeatures.Update();
     }
 }

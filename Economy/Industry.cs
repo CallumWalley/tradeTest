@@ -31,7 +31,7 @@ public partial class Industry : Node, Resource.IResourceTransformers
 
 
 
-    public IndustryRegister.IndustryType ttype;
+    public FeatureRegister.FeatureType ttype;
     public string TypeName { get { return ttype.Name; } }
     public string TypeSlug { get { return ttype.Slug; } }
     public string TypeClass { get { return ttype.Superclass; } }
@@ -50,7 +50,7 @@ public partial class Industry : Node, Resource.IResourceTransformers
     {
         // If instantiated in editor
 
-        ttype ??= GetNode<IndustryRegister>("/root/Global/IndustryRegister").GetFromSlug(slug);
+        ttype ??= GetNode<FeatureRegister>("/root/Global/FeatureRegister").GetFromSlug(slug);
         Name = ttype.Name;
         Tags = ttype.Tags;
         Description = ttype.Description;
@@ -83,7 +83,7 @@ public partial class Industry : Node, Resource.IResourceTransformers
     {
         if (template == null) { yield break; }
         foreach (KeyValuePair<int, double> kvp in template)
-        {   
+        {
             yield return new Resource.RGroupRequests<Resource.IRequestable>(new Resource.RRequest(kvp.Key, kvp.Value, "Base Yield", "Base Yield", true), Name, Description);
         }
     }

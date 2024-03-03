@@ -35,12 +35,4 @@ public partial class UITabContainerTrade : TabContainer
 		//tabReceivers.AddChild(ResourcePoolList);
 		tabTradeRoutes.AddChild(tradeRouteList);
 	}
-
-
-	public void EFrameUI()
-	{
-		//ResourcePoolList.Update();
-		tradeRouteList.Update();
-	}
-
 }

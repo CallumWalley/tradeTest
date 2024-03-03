@@ -48,7 +48,7 @@ public partial class UIDropDown : VBoxContainer
 
         // popup.Connect("focus_exited", new Callable(this, "_PopupHide"));
 
-        popup.Connect("about_to_popup", new Callable(target: this, "_AboutToPopup"));
+        popup.Connect("about_to_popup", new Callable(this, "_AboutToPopup"));
 
         buttonSettings.Connect("button_up", new Callable(this, "_ButtonUp"));
         buttonSettings.Connect("toggled", new Callable(this, "_Toggled"));

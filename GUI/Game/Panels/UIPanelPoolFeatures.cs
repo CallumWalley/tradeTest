@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class UIPanelPoolFeatures : UIPanel
+public partial class UIPanelPoolFeatures : UIPanel, UIInterfaces.IEFrameUpdatable
 {
 
     public ResourcePool resourcePool;
@@ -11,36 +11,70 @@ public partial class UIPanelPoolFeatures : UIPanel
     ItemList list;
     ScrollContainer display;
     static readonly PackedScene prefab_UIFeatureSmall = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/Feature/UIFeatureSmall.tscn");
+    static readonly PackedScene prefab_UIPanelFeatureFull = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Panels/UIPanelFeatureFull.tscn");
 
     Feature selected;
     UIList<Feature> vbox;
 
     public override void _Ready()
     {
+
         list = GetNode<ItemList>("VBoxContainer/HSplitContainer/ScrollContainer/VBoxContainer/ItemList");
         display = GetNode<ScrollContainer>("VBoxContainer/HSplitContainer/Display");
+
+        list.Connect("item_selected", new Callable(this, "OnItemListItemSelected"));
+
+        if (resourcePool.GetChildCount() > 0)
+        {
+            selected = resourcePool.GetChild<Feature>(0);
+        }
+        else
+        {
+            selected = null;
+        }
+
         // vbox = new UIList<Feature>();
         // vbox.Vertical = true;
         // vbox.Init(resourcePool, prefab_UIFeatureSmall);
         // GetNode<ScrollContainer>("VBoxContainer/HSplitContainer/ScrollContainer").AddChild(vbox);
     }
 
-    public override void _Draw()
+    public void OnItemListItemSelected(int i)
     {
-
+        selected = resourcePool.GetChild<Feature>(i);
+        DrawDisplay();
     }
 
-    public override void Update()
+
+
+    void DrawDisplay()
     {
+        if (resourcePool.GetChildCount() > 0)
+        {
+            // If selected feature changed, or none.
+            if ((display.GetChildCount() < 1) || display.GetChild<UIPanelFeatureFull>(0).feature != selected)
+            {
+                foreach (Control c in display.GetChildren())
+                {
+                    c.Visible = false;
+                    c.QueueFree();
+                }
+                UIPanelFeatureFull uipff = prefab_UIPanelFeatureFull.Instantiate<UIPanelFeatureFull>();
+                uipff.feature = selected;
+                display.AddChild(uipff);
+            }
+            display.GetChild<UIPanelFeatureFull>(0).OnEFrameUpdate();
+        }
+    }
+    public void OnEFrameUpdate()
+    {
+        if (!IsInsideTree()) { return; }
         list.Clear();
         foreach (Feature f in resourcePool)
         {
             list.AddItem(f.Name, f.iconMedium);
         }
-        display.GetChild(0);
+        DrawDisplay();
 
-
-        base.Update();
     }
-
 }

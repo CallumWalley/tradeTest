@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class UITabContainerBody : TabContainer
+public partial class UITabContainerBody : UITabContainer
 {
     public Body body;
     static readonly PackedScene p_tradePanel = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Panels/UIPanelResourcePool.tscn");
@@ -40,13 +40,6 @@ public partial class UITabContainerBody : TabContainer
         GetNode<Global>("/root/Global").Connect("EFrameUI", callable: new Callable(this, "EFrame"));
     }
 
-    public void EFrame()
-    {
-        foreach (Control panel in GetChildren())
-        {
-            panel.QueueRedraw();
-        }
-    }
 
 
     // bool focus = false;

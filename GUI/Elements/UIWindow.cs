@@ -7,7 +7,7 @@ public partial class UIWindow : Window
 	public override void _Ready()
 	{
 		Connect("close_requested", new Callable(this, "OnCloseRequested"));
-		GetNode<Global>("/root/Global").Connect("EFrameUI", callable: new Callable(this, "EFrame"));
+		GetNode<Global>("/root/Global").Connect("EFrameUI", callable: new Callable(this, "OnEFrameUI"));
 	}
 	protected virtual void OnCloseRequested()
 	{
@@ -22,8 +22,11 @@ public partial class UIWindow : Window
 		}
 	}
 
-	public virtual void EFrame()
+	public virtual void OnEFrameUI()
 	{
-
+		foreach (UIInterfaces.IEFrameUpdatable c in GetChildren())
+		{
+			c.OnEFrameUpdate();
+		}
 	}
 }

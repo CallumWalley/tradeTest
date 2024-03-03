@@ -24,6 +24,12 @@ public partial class Lists
         public bool Destroy { set; }// If flag true, must destroy self.
 
     }
+
+    // Sub-class of listable element used in UIListSelector
+    public interface IListableSelect<T>
+    {
+        T OnValueSelected();
+    }
     public interface IOrderable<T> : IListable<T>
     {
 
