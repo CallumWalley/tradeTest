@@ -2,83 +2,55 @@
     {
         "name": "Freighter Dockyard",
         "slug": "f_dockyard",
-        "consumption": {
-            "2": -1
-        },
-        "production": {
+        "factors": {
+            "2": -1,
             "901": 12
         },
-        "storage": {},
         "description": "All the trade gantries, maintainance facilites and refueling shuttles required to maintain a fleet of starships frieghters."
     },
     {
         "name": "Fuel Reserves",
         "slug": "orbit_storage_fuel",
-        "consumption": {},
-        "production": {},
-        "storage": {
-            "2": 40
-        },
+        "factors": {},
         "description": "Strategic fuel reserves."
     },
     {
         "name": "Water Reserves",
         "slug": "orbit_storage_h20",
-        "consumption": {},
-        "production": {},
-        "storage": {
-            "4": 40
-        },
+        "factors": {},
         "description": "Large quantities of dihydrogen oxide, pressurised in order to maintain a subcritical state."
     },
     {
         "name": "Surface Mine",
         "slug": "mine_surf_old",
-        "consumption": {
-            "2": -1
-        },
-        "production": {
+        "factors": {
+            "2": -1,
             "1": 2
-        },
-        "storage": {
-            "1": 6,
-            "2": 3
         },
         "description": "Surface Mining using hand tools."
     },
     {
         "name": "Ice Mine",
         "slug": "mine_h20_surf_old",
-        "consumption": {
-            "2": -1
-        },
-        "production": {
+        "factors": {
+            "2": -1,
             "4": 1
         },
-        "storage": {},
         "description": "Extraction of DHMO from surface ice deposits."
     },
     {
         "name": "Reclaimation Facility",
         "slug": "reclaim",
-        "consumption": {},
-        "production": {
+        "factors": {
             "1": 0.5
-        },
-        "storage": {}
+        }
     },
     {
         "name": "Chemical Fuel Plant",
         "slug": "cfuel_water",
-        "consumption": {
+        "factors": {
+            "2": 3,
             "4": -1
-        },
-        "production": {
-            "2": 3
-        },
-        "storage": {
-            "2": 4,
-            "4": 3
         },
         "superclass": "fuel",
         "subclass": "orbital",
