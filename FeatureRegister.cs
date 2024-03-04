@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 
+[Tool]
 public partial class FeatureRegister : Node
 {
     // Declare member variables here. Examples:
@@ -21,9 +22,7 @@ public partial class FeatureRegister : Node
         public string Description { get; set; }
         public string Image { get; set; }
         public int defaultPrioroty;
-        public Dictionary<int, double> Consumption { get; set; }
-        public Dictionary<int, double> Production { get; set; }
-        public Dictionary<int, double> Storage { get; set; }
+        public Dictionary<int, double> Factors { get; set; }
 
     }
 
@@ -34,7 +33,6 @@ public partial class FeatureRegister : Node
         //////////////////////////
         // Internal state
         /////////////////////////
-
 
         // Output 
 
@@ -82,19 +80,21 @@ public partial class FeatureRegister : Node
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        defaultFeature.Description = "Unknown";
+        defaultFeature.Description = "Very mysterious";
+        defaultFeature.Slug = "Unknown";
         defaultFeature.Name = "Unknown";
 
         foreach (FeatureType t in LoadFromFile())
         {
             types[t.Slug] = t;
         }
+        types["unset"] = defaultFeature;
     }
 
     IEnumerable<FeatureType> LoadFromFile()
     {
         //GD.Print(System.IO.Directory.GetFiles("Industrys", ".json"));
-        foreach (string file in System.IO.Directory.GetFiles("Economy/Industries", "*.json"))
+        foreach (string file in System.IO.Directory.GetFiles("Economy/Features", "*.json"))
         {
             using (StreamReader fi = System.IO.File.OpenText(file))
             {
@@ -107,15 +107,21 @@ public partial class FeatureRegister : Node
         }
     }
 
+
+
     public FeatureType GetFromSlug(string slug)
     {
         if (slug == null)
         {
+            GD.PrintErr("Feature type unset");
             return defaultFeature;
+        }else{
+            if (! types.ContainsKey(slug)){
+                GD.PrintErr($"Feature type {slug} not found");
+                return defaultFeature;     
+            }
+            return types[slug];
         }
-        FeatureType f = types[slug];
-        GD.PrintErr("Feature type not found");
-        return f ?? defaultFeature;
     }
 
     //  // Called every frame. 'delta' is the elapsed time since the previous frame.

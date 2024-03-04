@@ -215,17 +215,14 @@ public partial class Logistics
 
         foreach (Feature rp in ResourcePool.GetChildren())
         {
-            foreach (Resource.IRequestable output in rp.Production)
+            foreach (Resource.IRequestable f in rp.Factors)
             {
-                ResourcePool.Ledger[output.Type].LocalGain.Add(output);
-            }
-        }
-
-        foreach (Feature rp in ResourcePool.GetChildren())
-        {
-            foreach (Resource.IRequestable input in rp.Consumption)
-            {
-                ResourcePool.Ledger[input.Type].LocalLoss.Add(input);
+                if (f.Sum > 0){
+                    ResourcePool.Ledger[f.Type].LocalGain.Add(f);
+                }else{
+                    ResourcePool.Ledger[f.Type].LocalLoss.Add(f);
+                }
+                
             }
         }
     }
