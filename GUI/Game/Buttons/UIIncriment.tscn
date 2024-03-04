@@ -1,11 +1,11 @@
 [gd_scene load_steps=8 format=3 uid="uid://c555jlpytxxpv"]
 
-[ext_resource type="Texture2D" uid="uid://cddtcs35w5o6y" path="res://assets/Buttons/arrows/icon_up_hover.tga" id="1"]
-[ext_resource type="Texture2D" uid="uid://caa8w3loybrv6" path="res://assets/Buttons/arrows/icon_up_disabled.tga" id="2"]
-[ext_resource type="Texture2D" uid="uid://v7wdjhsmedmx" path="res://assets/Buttons/arrows/icon_down_disabled.tga" id="3"]
-[ext_resource type="Texture2D" uid="uid://pqjhkng2e4yc" path="res://assets/Buttons/arrows/icon_down_default.tga" id="4"]
-[ext_resource type="Texture2D" uid="uid://hbjllt5b25js" path="res://assets/Buttons/arrows/icon_up_default.tga" id="5"]
-[ext_resource type="Texture2D" uid="uid://dyqa37d405qvp" path="res://assets/Buttons/arrows/icon_down_hover.tga" id="6"]
+[ext_resource type="Texture2D" uid="uid://cddtcs35w5o6y" path="res://assets/buttons/arrows/icon_up_hover.tga" id="1"]
+[ext_resource type="Texture2D" uid="uid://caa8w3loybrv6" path="res://assets/buttons/arrows/icon_up_disabled.tga" id="2"]
+[ext_resource type="Texture2D" uid="uid://v7wdjhsmedmx" path="res://assets/buttons/arrows/icon_down_disabled.tga" id="3"]
+[ext_resource type="Texture2D" uid="uid://pqjhkng2e4yc" path="res://assets/buttons/arrows/icon_down_default.tga" id="4"]
+[ext_resource type="Texture2D" uid="uid://hbjllt5b25js" path="res://assets/buttons/arrows/icon_up_default.tga" id="5"]
+[ext_resource type="Texture2D" uid="uid://dyqa37d405qvp" path="res://assets/buttons/arrows/icon_down_hover.tga" id="6"]
 [ext_resource type="Script" path="res://GUI/Elements/Button/UIIncriment.cs" id="7"]
 
 [node name="Incriment" type="VBoxContainer"]
