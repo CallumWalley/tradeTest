@@ -4,10 +4,8 @@ using System.Collections.Generic;
 
 public partial class Feature : Node
 {
-    [Export]
-    public string slug;
-    public Resource.RList<Resource.IRequestable> Production { get; set; }
-    public Resource.RList<Resource.IRequestable> Consumption { get; set; }
+
+    public Resource.RList<Resource.IRequestable> Factors { get; set; }
     public List<Situations.Base> Situations { get; protected set; }
 
     public Texture2D iconMedium;
@@ -31,7 +29,9 @@ public partial class Feature : Node
 
     public FeatureRegister.FeatureType ttype;
     public string TypeName { get { return ttype.Name; } }
-    public string TypeSlug { get { return ttype.Slug; } }
+
+    [Export(PropertyHint.Enum, "unset,f_dockyard,orbit_storage_fuel,orbit_storage_h20,mine_surf_old,mine_h20_surf_old,reclaim,cfuel_water")]
+    public string TypeSlug { get; set; } = "unset";
     public string TypeClass { get { return ttype.Superclass; } }
     public string TypeSubclass { get { return ttype.Subclass; } }
     public string TypeImage { get { return ttype.Image; } }
@@ -48,12 +48,12 @@ public partial class Feature : Node
     {
         // If instantiated in editor
 
-        ttype ??= GetNode<FeatureRegister>("/root/Global/FeatureRegister").GetFromSlug(slug);
-        Name = ttype.Name;
-        Tags = ttype.Tags;
-        Description = ttype.Description;
-        Prioroty = ttype.defaultPrioroty;
-        Situations = new List<Situations.Base>();
+        ttype ??= GetNode<FeatureRegister>("/root/Global/FeatureRegister").GetFromSlug(TypeSlug);
+        Name ??= ttype.Name;
+        Tags ??= ttype.Tags;
+        Description ??= ttype.Description;
+        // Prioroty = ttype.defaultPrioroty;
+        // Situations = new List<Situations.Base>();
 
         if (iconMedium == null)
         {
@@ -67,10 +67,7 @@ public partial class Feature : Node
                 iconMedium = (Texture2D)GD.Load<Texture2D>("res://assets/icons/58x58/ship_part_computer_default.dds");
             }
         }
-
-
-        Consumption = new(GetInputClassFromTemplate(ttype.Consumption));
-        Production = new(GetGroupFromTemplate(ttype.Production));
+        Factors = new(GetGroupFromTemplate(ttype.Factors));
     }
 
 
