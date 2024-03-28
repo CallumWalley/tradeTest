@@ -43,7 +43,8 @@
         "slug": "reclaim",
         "factors": {
             "1": 0.5
-        }
+        },
+        "description": "Sorting facilities to recover useful resources from industrial waste."
     },
     {
         "name": "Chemical Fuel Plant",

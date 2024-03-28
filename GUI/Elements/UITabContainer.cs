@@ -3,7 +3,7 @@ using System;
 
 public partial class UITabContainer : TabContainer, UIInterfaces.IEFrameUpdatable
 {
-	public void OnEFrameUpdate()
+	public virtual void OnEFrameUpdate()
 	{
 		foreach (Control c in GetChildren())
 		{

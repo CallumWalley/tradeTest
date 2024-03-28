@@ -12,6 +12,8 @@ public partial class UITabContainerPool : UITabContainer
 
     UIPanelPoolGeneral panelGeneral;
     UIPanelPoolFeatures panelFeatures;
+    UIPanelPoolSupply panelSupply;
+
 
     public void Init(ResourcePool _body)
     {
@@ -19,9 +21,12 @@ public partial class UITabContainerPool : UITabContainer
 
         panelGeneral = GetNode<UIPanelPoolGeneral>("General");
         panelFeatures = GetNode<UIPanelPoolFeatures>("Features");
+        panelSupply = GetNode<UIPanelPoolSupply>("Supply");
+
 
         panelFeatures.resourcePool = rp;
         panelGeneral.resourcePool = rp;
+        panelSupply.resourcePool = rp;
         // Position = (Vector2I)rp.Position;
     }
 }

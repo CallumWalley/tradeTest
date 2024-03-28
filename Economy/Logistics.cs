@@ -121,7 +121,7 @@ public partial class Logistics
             /// <summary>
             /// Fraction inbound trade can be fulfilled.
             /// </summary>
-            double freightFraction = 1;
+            double freightFraction = 0;
 
             // If has upline requesting ships, I Should always resolve as I set the request.
             if (ResourcePool.Ledger.ContainsKey(901) && ResourcePool.Ledger[901].UplineLoss != null)
@@ -130,10 +130,10 @@ public partial class Logistics
             }
 
             // If has downline.
-            // if (ResourcePool.Trade.DownlineTraderoutes.Count > 0)
-            // {
-            //     freightFraction = Math.Min(ResourcePool.Ledger[901].RequestLocal.Fraction(), 1);
-            // }
+            if (ResourcePool.Trade.DownlineTraderoutes.Count > 0)
+            {
+                freightFraction = Math.Min(ResourcePool.Ledger[901].TradeNet.Fraction(), 1);
+            }
             // First resolve ship balance.
             // if importing ships that always resolved.
 

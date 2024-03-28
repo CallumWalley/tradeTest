@@ -66,9 +66,8 @@ public partial class UIPanelPoolFeatures : UIPanel, UIInterfaces.IEFrameUpdatabl
             display.GetChild<UIPanelFeatureFull>(0).OnEFrameUpdate();
         }
     }
-    public void OnEFrameUpdate()
+    public override void OnEFrameUpdate()
     {
-        if (!IsInsideTree()) { return; }
         list.Clear();
         foreach (Feature f in resourcePool)
         {

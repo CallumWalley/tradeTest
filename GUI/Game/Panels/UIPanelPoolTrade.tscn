@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://dy1f1jbsqh1vn"]
+
+[ext_resource type="PackedScene" uid="uid://dvge38wi43hpw" path="res://GUI/Game/Dropdowns/UIDropDownSetHead.tscn" id="1_t3j0p"]
+
+[node name="Trade" type="VBoxContainer"]
+size_flags_horizontal = 0
+
+[node name="Network" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Network"]
+layout_mode = 2
+text = "No Market"
+
+[node name="DropDown" parent="." instance=ExtResource("1_t3j0p")]
+layout_mode = 2

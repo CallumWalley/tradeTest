@@ -4,7 +4,7 @@
 [ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="1_xowkr"]
 [ext_resource type="Texture2D" uid="uid://dfihyt16212ay" path="res://assets/splash/test.png" id="2_6p7vk"]
 
-[node name="Feature" type="TabContainer"]
+[node name="Feature" type="PanelContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -14,7 +14,6 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("1_xowkr")
-tabs_visible = false
 script = ExtResource("1_sgn1i")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]

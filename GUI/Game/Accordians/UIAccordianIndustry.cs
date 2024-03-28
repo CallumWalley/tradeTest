@@ -1,12 +1,12 @@
 using Godot;
 using System;
-public partial class UIAccordianIndustry : UIAccordian, Lists.IListable<Industry>
+public partial class UIAccordianFeature : UIAccordian, Lists.IListable<Feature>
 {
     // Game object this UI element follows.
-    public Industry GameElement { get { return Industry; } }
+    public Feature GameElement { get { return Feature; } }
     public bool Destroy { get; set; }
-    public Industry Industry;
-    static readonly PackedScene p_situation = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/Entities/UI_Industry_Full.tscn");
+    public Feature Feature;
+    static readonly PackedScene p_situation = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/Entities/UI_Feature_Full.tscn");
     static readonly PackedScene p_UIstorage = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/Display/UIResourceStorage.tscn");
     static readonly PackedScene p_uirequest = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/Display/UIResource.tscn");
 
@@ -19,9 +19,9 @@ public partial class UIAccordianIndustry : UIAccordian, Lists.IListable<Industry
 
     // Element to update on change.
     //Control callback;
-    public virtual void Init(Industry _Industry)
+    public virtual void Init(Feature _Feature)
     {
-        Industry = _Industry;
+        Feature = _Feature;
     }
     public override void _Ready()
     {
@@ -34,7 +34,7 @@ public partial class UIAccordianIndustry : UIAccordian, Lists.IListable<Industry
         // button.Connect("toggled", new Callable(this, "ShowDetails"));
 
         // Set button text
-        button.GetNode<Label>("HBoxContainer/Label").Text = Industry.Name;
+        button.GetNode<Label>("HBoxContainer/Label").Text = Feature.Name;
 
         // // Set reorder buttons
         // moveUpButton = button.GetNode<TextureButton>("AlignRight/Incriment/MoveUp");
@@ -43,7 +43,7 @@ public partial class UIAccordianIndustry : UIAccordian, Lists.IListable<Industry
         // moveDownButton.Connect("pressed", new Callable(this, "ReorderDown"));
 
         //situations = details.GetNode<VBoxContainer>("VBoxContainer/HSplitContainer/TabContainer/Situation");
-        container.GetNode<Label>("Label").Text = Industry.Description;
+        container.GetNode<Label>("Label").Text = Feature.Description;
 
         // Init resource pool display. // new UIResourceList();
         UIListResources uiProduction = new(); //leftSide.GetNode<UIResourceList>("/Production");
@@ -54,16 +54,16 @@ public partial class UIAccordianIndustry : UIAccordian, Lists.IListable<Industry
         // leftSide.AddChild(uiConsumption);
         // leftSide.AddChild(uiStorage);    
 
-        // uiProduction.Init(Industry.Production);
-        // uiConsumption.Init(Industry.Consumption, p_uirequest);
+        // uiProduction.Init(Feature.Production);
+        // uiConsumption.Init(Feature.Consumption, p_uirequest);
 
-        //uiConsumption.Init(Industry.Consumption);
-        //uiDelta.Init(Industry.Production);
-        // uiStorage.Init(Industry.stored);
+        //uiConsumption.Init(Feature.Consumption);
+        //uiDelta.Init(Feature.Production);
+        // uiStorage.Init(Feature.stored);
     }
     public override void _Draw()
     {
-        if (Industry == null) { return; }
+        if (Feature == null) { return; }
         if (Destroy)
         {
             QueueFree();

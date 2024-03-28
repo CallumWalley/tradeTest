@@ -3,8 +3,9 @@
 [ext_resource type="Script" path="res://GUI/Elements/UIWindow.cs" id="1_t8qrw"]
 
 [node name="Window" type="Window"]
+sdf_oversize = 0
 initial_position = 1
-size = Vector2i(400, 200)
+size = Vector2i(800, 400)
 content_scale_mode = 2
 content_scale_aspect = 1
 script = ExtResource("1_t8qrw")

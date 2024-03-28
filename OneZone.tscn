@@ -21,6 +21,7 @@ script = ExtResource("2_qodif")
 [node name="Player" parent="." instance=ExtResource("3_1qyig")]
 
 [node name="Screen" parent="." instance=ExtResource("5_g8os5")]
+follow_viewport_enabled = true
 
 [node name="Map" parent="." instance=ExtResource("6_n1hqj")]
 
@@ -29,17 +30,69 @@ script = ExtResource("2_qodif")
 [node name="Sol" parent="Map/Galaxy" instance=ExtResource("7_skkgc")]
 
 [node name="Sol A" parent="Map/Galaxy/Sol" instance=ExtResource("8_oyawq")]
+aphelion = null
+perihelion = null
+semiMajorAxis = null
+eccentricity = null
+period = null
+Active = null
+_validTradeReceiver = null
+StartingResources = null
 
 [node name="Mercury" parent="Map/Galaxy/Sol" instance=ExtResource("8_oyawq")]
+aphelion = null
+perihelion = null
+semiMajorAxis = null
+eccentricity = null
+period = null
+Active = null
+_validTradeReceiver = null
+StartingResources = null
 
-[node name="Feature" parent="Map/Galaxy/Sol/Mercury" instance=ExtResource("10_12pk0")]
+[node name="Sorting Facility" parent="Map/Galaxy/Sol/Mercury" instance=ExtResource("10_12pk0")]
+TypeSlug = "reclaim"
+Tags = PackedStringArray()
+Description = ""
+Prioroty = 0
+iconMedium = null
 
-[node name="Body" parent="Map/Galaxy/Sol/Mercury" instance=ExtResource("8_yiyre")]
+[node name="Stinky Mine" parent="Map/Galaxy/Sol/Mercury" instance=ExtResource("8_yiyre")]
+TypeSlug = "mine_surf_old"
+Tags = PackedStringArray()
+Description = ""
+Prioroty = 0
+iconMedium = null
+uiBody = null
+focus = false
 
 [node name="Alpha Centuri" parent="Map/Galaxy" instance=ExtResource("7_skkgc")]
 
 [node name="Proxima" parent="Map/Galaxy/Alpha Centuri" instance=ExtResource("8_oyawq")]
+aphelion = null
+perihelion = null
+semiMajorAxis = null
+eccentricity = null
+period = null
+Active = null
+_validTradeReceiver = null
+StartingResources = null
 
 [node name="Rigil Kentaurus" parent="Map/Galaxy/Alpha Centuri" instance=ExtResource("8_oyawq")]
+aphelion = null
+perihelion = null
+semiMajorAxis = null
+eccentricity = null
+period = null
+Active = null
+_validTradeReceiver = null
+StartingResources = null
 
 [node name="Toliman" parent="Map/Galaxy/Alpha Centuri" instance=ExtResource("8_oyawq")]
+aphelion = null
+perihelion = null
+semiMajorAxis = null
+eccentricity = null
+period = null
+Active = null
+_validTradeReceiver = null
+StartingResources = null

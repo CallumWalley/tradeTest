@@ -10,37 +10,37 @@ public partial class Situations
         public virtual string Description { get; set; }
     };
 
-    public partial class BaseIndustry : Base
+    public partial class BaseFeature : Base
     {
         public new string Name { get; set; }
         public new string Description { get; set; }
-        Industry Industry;
-        public BaseIndustry(Industry _Industry, string _name = "Unknown", string _description = "This doesn't concern you.")
+        Feature Feature;
+        public BaseFeature(Feature _Feature, string _name = "Unknown", string _description = "This doesn't concern you.")
         {
-            Industry = _Industry;
+            Feature = _Feature;
             Name = _name;
             Description = _description;
         }
     }
 
-    public partial class OutputModifier : BaseIndustry
+    public partial class OutputModifier : BaseFeature
     {
         public new string Name { get; set; }
         public new string Description { get; set; }
         public readonly Resource.IResource cause;
         public readonly Resource.IResource effect;
-        Industry Industry;
-        public OutputModifier(Resource.IResource _cause, Resource.IResource _effect, Industry _Industry, string _name = "Resource Shortfall", string _description = "Output is being affected by resource shortfall") : base(_Industry, _name, _description)
+        Feature Feature;
+        public OutputModifier(Resource.IResource _cause, Resource.IResource _effect, Feature _Feature, string _name = "Resource Shortfall", string _description = "Output is being affected by resource shortfall") : base(_Feature, _name, _description)
         {
             cause = _cause;
             effect = _effect;
         }
     }
 
-    // public class Resource.IResourceShortage : BaseIndustry{
-    //     Industry.Requester requester;
+    // public class Resource.IResourceShortage : BaseFeature{
+    //     Feature.Requester requester;
     //     Resource.RList outputs;
-    //     public Resource.IResourceShortage(Industry _Industry, Industry.Requester _requester, List<Resource> _outputs) : base(_Industry){
+    //     public Resource.IResourceShortage(Feature _Feature, Feature.Requester _requester, List<Resource> _outputs) : base(_Feature){
     //         outputs = _outputs;
     //         requester = _requester;
     //     }

@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
+[Tool]
 public partial class Feature : Node
 {
 
@@ -15,14 +16,14 @@ public partial class Feature : Node
     //////////////////////////
     // Internal state
     /////////////////////////
-    int maxCapacity = 1; // How many 'buildings' this industry contains.
-    int operationalCapacity = 1; // How many 'buildings' are currently enabled.
-    byte capacityUtilisation = 255; // What percentage of maximum inputs for currently operational [0-255]
-    double efficiency = 1; // Modifies all output value 
+    // int maxCapacity = 1; // How many 'buildings' this industry contains.
+    // int operationalCapacity = 1; // How many 'buildings' are currently enabled.
+    // byte capacityUtilisation = 255; // What percentage of maximum inputs for currently operational [0-255]
+    // double efficiency = 1; // Modifies all output value 
 
     // output = baseProduction * operationalCapacity *  capacityUtilisation * efficiency
 
-    byte breakDown; // Decays without maintainance. [0-255]
+    // byte breakDown; // Decays without maintainance. [0-255]
 
 
     // Output 
@@ -42,16 +43,15 @@ public partial class Feature : Node
     public string Description { get; set; }
     public int Prioroty { get; set; }
 
-    // this could be made less confusing.
-
-    public override void _Ready()
-    {
+    public void InitFirstStep(){
         // If instantiated in editor
 
         ttype ??= GetNode<FeatureRegister>("/root/Global/FeatureRegister").GetFromSlug(TypeSlug);
         Name ??= ttype.Name;
         Tags ??= ttype.Tags;
-        Description ??= ttype.Description;
+        if (string.IsNullOrWhiteSpace(Description)){
+            Description = ttype.Description;
+        }
         // Prioroty = ttype.defaultPrioroty;
         // Situations = new List<Situations.Base>();
 
@@ -67,7 +67,13 @@ public partial class Feature : Node
                 iconMedium = (Texture2D)GD.Load<Texture2D>("res://assets/icons/58x58/ship_part_computer_default.dds");
             }
         }
-        Factors = new(GetGroupFromTemplate(ttype.Factors));
+        Factors = new(GetFactorsFromTemplate(ttype.Factors));
+    }
+
+    // this could be made less confusing.
+    public override void _Ready()
+    {
+        InitFirstStep();
     }
 
 
@@ -87,7 +93,7 @@ public partial class Feature : Node
     //         yield return new Requester(new Resource.IResource.RStatic(kvp.Key, kvp.Value, Name));
     //     }
     // }
-    IEnumerable<Resource.IRequestable> GetGroupFromTemplate(Dictionary<int, double> template)
+    IEnumerable<Resource.IRequestable> GetFactorsFromTemplate(Dictionary<int, double> template)
     {
         if (template == null) { yield break; }
         foreach (KeyValuePair<int, double> kvp in template)
@@ -96,23 +102,10 @@ public partial class Feature : Node
         }
     }
 
-    IEnumerable<Resource.RStatic> GetStaticFromTemplate(Dictionary<int, double> template)
-    {
-        if (template == null) { yield break; }
-        foreach (KeyValuePair<int, double> kvp in template)
-        {
-            yield return new Resource.RStatic(kvp.Key, kvp.Value, Name);
-        }
+    void SetFromTemplateIfUnset(){
+
     }
 
-    IEnumerable<Resource.IRequestable> GetInputClassFromTemplate(Dictionary<int, double> template)
-    {
-        if (template == null) { yield break; }
-        foreach (KeyValuePair<int, double> kvp in template)
-        {
-            yield return new Resource.RRequest(kvp.Key, kvp.Value, $"{TypeName} Upkeep", "Base Yield");
-        }
-    }
     public void AddSituation(Situations.Base s)
     {
         Situations.Add(s);
