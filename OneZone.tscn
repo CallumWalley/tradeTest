@@ -50,20 +50,8 @@ _validTradeReceiver = null
 StartingResources = null
 
 [node name="Sorting Facility" parent="Map/Galaxy/Sol/Mercury" instance=ExtResource("10_12pk0")]
-TypeSlug = "reclaim"
-Tags = PackedStringArray()
-Description = ""
-Prioroty = 0
-iconMedium = null
 
 [node name="Stinky Mine" parent="Map/Galaxy/Sol/Mercury" instance=ExtResource("8_yiyre")]
-TypeSlug = "mine_surf_old"
-Tags = PackedStringArray()
-Description = ""
-Prioroty = 0
-iconMedium = null
-uiBody = null
-focus = false
 
 [node name="Alpha Centuri" parent="Map/Galaxy" instance=ExtResource("7_skkgc")]
 

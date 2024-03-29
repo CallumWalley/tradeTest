@@ -22,5 +22,5 @@ mono_crash*
 addons/*
 
 # Assets
-assets/buttons/*
+assets/Buttons/*
 assets/icons/computers
