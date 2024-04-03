@@ -147,7 +147,7 @@ public partial class Logistics
                 {
                     tally += kvp.Value.UplineGain.Sum;
                 }
-                // Step One. Approve imports from children.
+                // Step One. Approve imports from children. (equal to available ships)
                 foreach (var r in kvp.Value.DownlineGain)
                 {
                     double alloc = r.Request * freightFraction;
@@ -158,10 +158,13 @@ public partial class Logistics
                 // Step Two. Calculate storage withdrawl for local use.
 
                 // Shortfall is how much extra resource required to fulfill.
-                // double shortfall = kvp.Value.Net.Sum - kvp.Value.RequestLocal.Request;
                 // Set storage element to cover difference. (if allowed)
                 // TODO
-                // if shortfall > 0
+                if (kvp.Value is Resource.Ledger.EntryAccrul && kvp.Value.Net.Sum < 0)
+                {
+                    ((Resource.Ledger.EntryAccrul)kvp.Value).Delta.Set(((Resource.Ledger.EntryAccrul)kvp.Value).Delta.Sum + Mathf.Min(-kvp.Value.Net.Sum, ((Resource.Ledger.EntryAccrul)kvp.Value).Stored.Sum));
+                    tally += ((Resource.Ledger.EntryAccrul)kvp.Value).Delta.Sum;
+                }
                 //  ...
                 // recalculate shortfall.
 
@@ -217,12 +220,15 @@ public partial class Logistics
         {
             foreach (Resource.IRequestable f in rp.Factors)
             {
-                if (f.Sum > 0){
+                if (f.Sum > 0)
+                {
                     ResourcePool.Ledger[f.Type].LocalGain.Add(f);
-                }else{
+                }
+                else
+                {
                     ResourcePool.Ledger[f.Type].LocalLoss.Add(f);
                 }
-                
+
             }
         }
     }

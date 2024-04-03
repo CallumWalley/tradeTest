@@ -802,6 +802,7 @@ public partial class Resource
         {
             public Resource.RStatic Stored;
             public Resource.RStatic Capacity;
+            public Resource.RStatic Delta;
 
             public EntryAccrul(int _type) : base(_type)
             {
