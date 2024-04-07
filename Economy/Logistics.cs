@@ -161,9 +161,8 @@ public partial class Logistics
                 // Set storage element to cover difference. (if allowed)
                 // TODO
                 if (kvp.Value is Resource.Ledger.EntryAccrul && kvp.Value.Net.Sum < 0)
-                {
-                    ((Resource.Ledger.EntryAccrul)kvp.Value).Delta.Set(((Resource.Ledger.EntryAccrul)kvp.Value).Delta.Sum + Mathf.Min(-kvp.Value.Net.Sum, ((Resource.Ledger.EntryAccrul)kvp.Value).Stored.Sum));
-                    tally += ((Resource.Ledger.EntryAccrul)kvp.Value).Delta.Sum;
+                {                    
+                    tally += ((Resource.Ledger.EntryAccrul)kvp.Value).Withdraw(kvp.Value.Net.Sum);
                 }
                 //  ...
                 // recalculate shortfall.

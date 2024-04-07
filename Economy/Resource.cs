@@ -80,6 +80,12 @@ public partial class Resource
         {
             Sum = Math.Round(newValue, 2);
         }
+
+        public virtual void Add(double adder)
+        {
+            Sum = Sum+=adder;
+        }
+
         public static void Clear() { return; }
         public Texture2D Icon { get { return Index(Type).icon; } }
 
@@ -808,6 +814,13 @@ public partial class Resource
             {
                 Stored = new Resource.RStatic(_type, 0, "Stored", "Stored");
                 Capacity = new Resource.RStatic(_type, 1000, "Capacity", "Capacity");
+            }
+
+            // Attempt to withdraw amount, return actual.
+            public double Withdraw(double amount){
+                Delta.Set(Mathf.Min(amount, Stored.Sum));
+                Stored.Add(Delta.Sum);
+                return Delta.Sum;
             }
         }
 
