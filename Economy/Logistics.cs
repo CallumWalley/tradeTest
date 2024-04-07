@@ -159,9 +159,11 @@ public partial class Logistics
 
                 // Shortfall is how much extra resource required to fulfill.
                 // Set storage element to cover difference. (if allowed)
-                // TODO
+
+                // whether store resourses are needed.
+
                 if (kvp.Value is Resource.Ledger.EntryAccrul && kvp.Value.Net.Sum < 0)
-                {                    
+                {
                     tally += ((Resource.Ledger.EntryAccrul)kvp.Value).Withdraw(kvp.Value.Net.Sum);
                 }
                 //  ...
@@ -170,7 +172,7 @@ public partial class Logistics
                 // Step Three. Allocate resources locally.
 
                 // How much of this request can be filled.
-                double resourceSupplyFraction = Math.Max(Math.Min(tally / -kvp.Value.LocalLoss.Request, 1), 0);
+                double resourceSupplyFraction = Math.Max(Math.Min(-tally / kvp.Value.LocalLoss.Request, 1), 0);
 
                 foreach (Resource.IRequestable r in kvp.Value.LocalLoss)
                 {
@@ -181,6 +183,9 @@ public partial class Logistics
 
 
                 // Step Four. Calculate storage withdrawl.
+
+
+
                 // Recaclculate resourceSupplyFractionfor trade.
                 // Step three trade
 
@@ -199,6 +204,11 @@ public partial class Logistics
                     r.Respond(r.Request * resourceSupplyFraction);
                     tally += alloc;
 
+                }
+
+                if (kvp.Value is Resource.Ledger.EntryAccrul && kvp.Value.Net.Sum > 0)
+                {
+                    ((Resource.Ledger.EntryAccrul)kvp.Value).Withdraw(tally);
                 }
             }
 

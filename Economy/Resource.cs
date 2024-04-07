@@ -36,9 +36,9 @@ public partial class Resource
         /// <summary>
         /// Sets the resource value.
         /// </summary>
-        public void Respond() { }
+        public abstract void Respond();
         // No fulfilled value returned if not fulfilled.
-        public void Respond(double value) { }
+        public abstract void Respond(double value);
 
         public double Fraction();
 
@@ -71,11 +71,10 @@ public partial class Resource
             Name = _name;
         }
 
-        // Cast static to group.
-        // public static implicit operator RGroup(RStatic rs)
-        // {
-        //     return new RGroup(rs.Type, new List<IResource> { rs });
-        // }
+        public static double operator -(RStatic a, RStatic b)
+        {
+            return a.Sum - b.Sum;
+        }
         public virtual void Set(double newValue)
         {
             Sum = Math.Round(newValue, 2);
@@ -83,7 +82,7 @@ public partial class Resource
 
         public virtual void Add(double adder)
         {
-            Sum = Sum+=adder;
+            Sum = Sum += adder;
         }
 
         public static void Clear() { return; }
@@ -205,6 +204,19 @@ public partial class Resource
             set
             {
                 { throw new InvalidOperationException("Set method is not valid for groups"); }
+            }
+        }
+
+        public void Respond()
+        {
+            Respond(Request);
+        }
+        public void Respond(double value)
+        {
+            double fraction = value / Request;
+            foreach (IRequestable i in _members)
+            {
+                i.Respond(fraction * i.Request);
             }
         }
 
@@ -757,8 +769,8 @@ public partial class Resource
                 get
                 {
                     net.Clear();
-                    net.Add(localNet);
-                    net.Add(tradeNet);
+                    net.Add(LocalNet);
+                    net.Add(TradeNet);
                     return net;
                 }
             }
@@ -812,15 +824,20 @@ public partial class Resource
 
             public EntryAccrul(int _type) : base(_type)
             {
-                Stored = new Resource.RStatic(_type, 0, "Stored", "Stored");
-                Capacity = new Resource.RStatic(_type, 1000, "Capacity", "Capacity");
+                Stored = new Resource.RStatic(_type, 0, "Stored", string.Format("{0} stored here.", Name(_type)));
+                Capacity = new Resource.RStatic(_type, 1000, "Capacity", string.Format("{0} capacity.", Name(_type)));
+                Delta = new Resource.RStatic(_type, 1000, "Change", string.Format("{0} change.", Name(_type)));
             }
 
             // Attempt to withdraw amount, return actual.
-            public double Withdraw(double amount){
-                Delta.Set(Mathf.Min(amount, Stored.Sum));
+            public double Withdraw(double amount)
+            {
+                // Max withdrawl is stored, 
+                // Max deposit is available storage.
+                Delta.Set(Mathf.Min((Mathf.Max(amount, -Stored.Sum)), Capacity - Stored));
                 Stored.Add(Delta.Sum);
-                return Delta.Sum;
+
+                return -Delta.Sum;
             }
         }
 
