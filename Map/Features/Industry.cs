@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 [Tool]
-public partial class Feature : Node
+public partial class Industry : Node
 {
 
     public Resource.RList<Resource.IRequestable> Factors { get; set; }
@@ -24,7 +24,6 @@ public partial class Feature : Node
     // output = baseProduction * operationalCapacity *  capacityUtilisation * efficiency
 
     // byte breakDown; // Decays without maintainance. [0-255]
-
 
     // Output 
 
