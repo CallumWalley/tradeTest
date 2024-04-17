@@ -33,8 +33,7 @@ public partial class UIResourceStorage : Control
     public void Update()
     {
         //value.Text = string.Format("{0:P0}", entry.Stored.Sum / entry.Capacity.Sum);
-        value.Text = string.Format("{0:D2}", entry.Stored.Sum);
-
+        value.Text = string.Format("{0:N2}", entry.Stored.Sum);
         name.Text = $": Storage";
         // Storage is in deficit.
         if (0 <= entry.Stored.Sum)

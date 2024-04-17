@@ -1,10 +1,10 @@
 using Godot;
 using System;
 
-public partial class UIPanelPoolSupply : UIPanel	
+public partial class UIPanelPoolSupply : UIPanel
 {
     UIPanelLedger panelLedger;
-	public ResourcePool resourcePool;
+    public ResourcePool resourcePool;
     public override void _Ready()
     {
         panelLedger = new();
@@ -12,9 +12,8 @@ public partial class UIPanelPoolSupply : UIPanel
         GetNode<HBoxContainer>("HBoxContainer").AddChild(panelLedger);
     }
 
-
-    public override void _Draw()
+    public override void OnEFrameUpdate()
     {
-        base._Draw();
+        panelLedger.Update();
     }
 }

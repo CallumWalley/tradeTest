@@ -81,9 +81,6 @@ public partial class ResourcePool : Node, IEnumerable<Feature>
     // RProducedTrade + RConsumedTrade = RDeltaTrade
     // RDeltaLocal + RDeltaTrade = RDeltaTotal
 
-    // NET amount of resource in storage.
-    public Store Storage { get; protected set; } = new();
-
     public Resource.Ledger Ledger = new();
     // Used to carry through numbers to next step.
     protected Dictionary<int, double> productionBuffer = new();
@@ -102,24 +99,6 @@ public partial class ResourcePool : Node, IEnumerable<Feature>
     Player player;
     Global global;
 
-    // public List<int> resourcePresent = new();
-    // public List<Resource.IResource> resourceBuffer = new();
-    // public Dictionary<int, double[]> resourceBuffer2 = new();
-    // public List<Resource.IResource> produced = new();
-    // public List<Resource.IRequestable> consumed = new();
-    // public List<Resource.IResource> export = new();
-    // public List<Resource.IRequestable> import = new();
-
-    // These are aggrigates
-    // public List<Resource.IResource> delta = new();
-    // public List<Resource.IResource> traded = new();
-
-
-    // public void AddType(int type)
-    // {
-    //     resourcePresent.Add(type);
-    //     delta.AddType(type);
-    // }
     // Convenience function. Makes children at start of scene into members.
     public override void _Ready()
     {
@@ -139,7 +118,6 @@ public partial class ResourcePool : Node, IEnumerable<Feature>
 
         Ledger.ResourcePool = this;
         // Initial storage count.
-        // GetStorage();
         foreach (KeyValuePair<int, double> kvp in StartingResources)
         {
             // Dummy call to make sure resource exists.
@@ -163,69 +141,6 @@ public partial class ResourcePool : Node, IEnumerable<Feature>
 
     public void EFrameSetup() { }
 
-
-
-    // void GetStorage()
-    // {
-    //     foreach (Industry industry in Industries)
-    //     {
-    //         if (industry.stored == null) { continue; }
-    //         foreach (Resource.RStatic output in industry.stored)
-    //         {
-    //             resourceStorage[output.Type].Add(output);
-    //         }
-    //     }
-    // }
-
-
-    // foreach (KeyValuePair<int, double> kvp in resourceBuffer)
-    // {
-    //     resourceStorage[kvp.Key].Deposit(kvp.Value);
-    // }
-
-    // // Amount of extra DELTA required to cover this request.
-    //                 double remainderDelta = requested - resourceBuffer[type]; //+ it.Request.Sum;
-
-    //                 // Amount of extra NET required to cover this request.	
-    //                 // No extra required
-    //                 if (remainderDelta <= 0)
-    //                 {
-    //                     input.Respond();
-    //                     resourceBuffer[type] -= requested;
-    //                 }
-    //                 // Covering shortfall out of storage.
-    //                 else if (storage.Stock() >= remainderDelta)
-    //                 {
-    //                     input.Respond();
-    //                     //storage.Deposit(remainderDelta);
-    //                     resourceBuffer[type] -= requested;
-    //                 }
-    //                 // Partial cover shortfall out of storage.
-    //                 else
-    //                 {
-    //                     // Fullfill partial request.
-    //                     input.Respond(storage.Stock());
-    //                     //storage.Deposit(-storage.Stock());
-    //                     resourceBuffer[type] = 0;
-    //                 }
-
-    //                 RConsumedLocal[input.Type].Add(input);
-    //                 RDelta[input.Type].Add(new Resource.RStaticInvert(input.Response));
-    //                 // Deduct remainder from storage.
-    //                 // Emit some sort of storage message.
-    public class StorageElement
-    {
-        public double Capacity { get; set; }
-        public double Level { get; set; }
-
-        //public int Type { get; protected set; }
-        public StorageElement(double _capacity, double _level)
-        {
-            Level = _level;
-            Capacity = _capacity;
-        }
-    }
-
     public IEnumerator<Feature> GetEnumerator()
     {
         foreach (Feature f in GetChildren())
@@ -237,41 +152,6 @@ public partial class ResourcePool : Node, IEnumerable<Feature>
     {
         return GetEnumerator();
     }
-
-
-
-    public class Store : IEnumerable<KeyValuePair<int, StorageElement>>
-    {
-        Dictionary<int, StorageElement> elements = new();
-
-        public IEnumerator<KeyValuePair<int, StorageElement>> GetEnumerator()
-        {
-            foreach (KeyValuePair<int, StorageElement> element in elements)
-            {
-                yield return element;
-            }
-        }
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        public void Add(int type, double sum)
-        {
-            if (elements.ContainsKey(type))
-            {
-                elements[type].Level += sum;
-            }
-            else
-            {
-                elements.Add(type, new StorageElement(1000, sum));
-            }
-        }
-    }
-
-
-
-
 
     // Class for orgasnisng
     public class _Trade
