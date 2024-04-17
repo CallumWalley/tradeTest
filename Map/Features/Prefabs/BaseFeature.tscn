@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://ch8jfji8okcyx"]
+
+[ext_resource type="Script" path="res://Map/Features/Prefabs/Feature.cs" id="1_d04i1"]
+
+[node name="Feature" type="Node"]
