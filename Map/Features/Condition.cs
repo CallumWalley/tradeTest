@@ -1,21 +1,18 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-public partial class Situations
+public partial class Condition
 {
+    // Condition is some logic affecting a feature, evaluated every EFrame
 
-    public partial class Base
-    {
-        public virtual string Name { get; set; }
-        public virtual string Description { get; set; }
-    };
 
-    public partial class BaseFeature : Base
+    public partial class BaseCondition
     {
+        // Base class for conditions.
         public new string Name { get; set; }
         public new string Description { get; set; }
-        Feature Feature;
-        public BaseFeature(Feature _Feature, string _name = "Unknown", string _description = "This doesn't concern you.")
+        Features.FeatureBase Feature;
+        public BaseCondition(Features.FeatureBase _Feature, string _name = "Unknown", string _description = "This doesn't concern you.")
         {
             Feature = _Feature;
             Name = _name;
@@ -23,14 +20,15 @@ public partial class Situations
         }
     }
 
-    public partial class OutputModifier : BaseFeature
+    public partial class OutputModifier : BaseCondition
     {
+        // For features representing a transformation of resources.
         public new string Name { get; set; }
         public new string Description { get; set; }
         public readonly Resource.IResource cause;
         public readonly Resource.IResource effect;
-        Feature Feature;
-        public OutputModifier(Resource.IResource _cause, Resource.IResource _effect, Feature _Feature, string _name = "Resource Shortfall", string _description = "Output is being affected by resource shortfall") : base(_Feature, _name, _description)
+        Features.FeatureBase Feature;
+        public OutputModifier(Resource.IResource _cause, Resource.IResource _effect, Features.FeatureBase _Feature, string _name = "Resource Shortfall", string _description = "Output is being affected by resource shortfall") : base(_Feature, _name, _description)
         {
             cause = _cause;
             effect = _effect;

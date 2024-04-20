@@ -1,0 +1,36 @@
+[gd_scene load_steps=9 format=3 uid="uid://bqwjnbtt5kf3p"]
+
+[ext_resource type="Script" path="res://Global.cs" id="1_1b3uo"]
+[ext_resource type="PackedScene" uid="uid://con3ea5txcdnn" path="res://Player/Player.tscn" id="1_w03ia"]
+[ext_resource type="PackedScene" uid="uid://c8uihqqtni6cg" path="res://Map/Map.tscn" id="2_b0thp"]
+[ext_resource type="PackedScene" uid="uid://r5ytkwljq7nb" path="res://GUI/Screen.tscn" id="2_ohuhm"]
+[ext_resource type="PackedScene" uid="uid://bs11ngj4r7eb4" path="res://Map/Galaxy.tscn" id="3_x7akn"]
+[ext_resource type="PackedScene" uid="uid://bdustjrq7vtln" path="res://Map/PlanetarySystem.tscn" id="4_hdweb"]
+[ext_resource type="PackedScene" uid="uid://cf5ty6my7thnc" path="res://Map/SatelliteSystem.tscn" id="5_438b2"]
+[ext_resource type="PackedScene" uid="uid://mxxp0rpqyiqh" path="res://Map/Features/Prefabs/FeatureBase.tscn" id="6_cx087"]
+
+[node name="Global" type="Node"]
+script = ExtResource("1_1b3uo")
+
+[node name="Player" parent="." instance=ExtResource("1_w03ia")]
+
+[node name="Map" parent="." instance=ExtResource("2_b0thp")]
+
+[node name="Galaxy" parent="Map" instance=ExtResource("3_x7akn")]
+
+[node name="Sol" parent="Map/Galaxy" instance=ExtResource("4_hdweb")]
+
+[node name="Earth" parent="Map/Galaxy/Sol" instance=ExtResource("5_438b2")]
+aphelion = null
+perihelion = null
+semiMajorAxis = null
+eccentricity = null
+period = null
+Active = null
+_validTradeReceiver = null
+StartingResources = null
+
+[node name="BlankFeature" parent="Map/Galaxy/Sol/Earth" instance=ExtResource("6_cx087")]
+TypeSlug = null
+
+[node name="Screen" parent="." instance=ExtResource("2_ohuhm")]

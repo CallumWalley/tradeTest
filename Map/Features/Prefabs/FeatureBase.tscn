@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://mxxp0rpqyiqh"]
+
+[ext_resource type="Script" path="res://Map/Features/Prefabs/FeatureBase.cs" id="1_as5qs"]
+
+[node name="FeatureBase" type="Node"]
+script = ExtResource("1_as5qs")
+TypeSlug = null

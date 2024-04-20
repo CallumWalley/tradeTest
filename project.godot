@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="tradeTest"
-run/main_scene="res://OneZone.tscn"
+run/main_scene="res://TestScene.tscn"
 config/features=PackedStringArray("4.2", "C#")
 config/icon="res://icon.png"
+
+[autoload]
+
+Features="*res://Map/Features/Features.cs"
 
 [dotnet]
 
@@ -21,8 +25,7 @@ project/assembly_name="tradeTest"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg")
-enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg")
+enabled=PackedStringArray()
 
 [gdnative]
 

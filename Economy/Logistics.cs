@@ -225,9 +225,9 @@ public partial class Logistics
         // Zero Ledger
         ResourcePool.Ledger.Clear();
 
-        foreach (Feature rp in ResourcePool.GetChildren())
+        foreach (Features.FeatureBase rp in ResourcePool.GetChildren())
         {
-            foreach (Resource.IRequestable f in rp.Factors)
+            foreach (Resource.IRequestable f in rp.FactorsGlobal)
             {
                 if (f.Sum > 0)
                 {

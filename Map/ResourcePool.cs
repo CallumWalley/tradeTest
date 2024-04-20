@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public partial class ResourcePool : Node, IEnumerable<Feature>
+public partial class ResourcePool : Node, IEnumerable<Features.FeatureBase>
 {
     [Export]
     public bool Active;
@@ -141,9 +141,9 @@ public partial class ResourcePool : Node, IEnumerable<Feature>
 
     public void EFrameSetup() { }
 
-    public IEnumerator<Feature> GetEnumerator()
+    public IEnumerator<Features.FeatureBase> GetEnumerator()
     {
-        foreach (Feature f in GetChildren())
+        foreach (Features.FeatureBase f in GetChildren())
         {
             yield return f;
         }

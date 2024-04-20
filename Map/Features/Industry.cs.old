@@ -42,13 +42,15 @@ public partial class Industry : Node
     public string Description { get; set; }
     public int Prioroty { get; set; }
 
-    public void InitFirstStep(){
+    public void InitFirstStep()
+    {
         // If instantiated in editor
 
         ttype ??= GetNode<FeatureRegister>("/root/Global/FeatureRegister").GetFromSlug(TypeSlug);
         Name ??= ttype.Name;
         Tags ??= ttype.Tags;
-        if (string.IsNullOrWhiteSpace(Description)){
+        if (string.IsNullOrWhiteSpace(Description))
+        {
             Description = ttype.Description;
         }
         // Prioroty = ttype.defaultPrioroty;
@@ -101,7 +103,8 @@ public partial class Industry : Node
         }
     }
 
-    void SetFromTemplateIfUnset(){
+    void SetFromTemplateIfUnset()
+    {
 
     }
 

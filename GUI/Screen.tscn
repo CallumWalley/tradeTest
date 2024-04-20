@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://GUI/Screen/Nav.cs" id="3_a3qo3"]
 [ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="4_d36to"]
 
-[node name="UI" type="CanvasLayer"]
+[node name="Screen" type="CanvasLayer"]
 
 [node name="TopRight" type="Panel" parent="."]
 anchors_preset = 1
@@ -96,6 +96,7 @@ offset_right = 116.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
 script = ExtResource("3_a3qo3")
+map = null
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Nav"]
 layout_mode = 2

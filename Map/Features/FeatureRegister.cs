@@ -115,10 +115,13 @@ public partial class FeatureRegister : Node
         {
             GD.PrintErr("Feature type unset");
             return defaultFeature;
-        }else{
-            if (! types.ContainsKey(slug)){
+        }
+        else
+        {
+            if (!types.ContainsKey(slug))
+            {
                 GD.PrintErr($"Feature type {slug} not found");
-                return defaultFeature;     
+                return defaultFeature;
             }
             return types[slug];
         }

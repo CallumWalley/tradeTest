@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b2rfi7pec2lbj"]
+
+[ext_resource type="Script" path="res://Map/Features/Features.cs" id="1_du8yj"]
+
+[node name="Features" type="Node"]
+script = ExtResource("1_du8yj")

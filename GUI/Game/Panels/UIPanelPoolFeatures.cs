@@ -13,8 +13,8 @@ public partial class UIPanelPoolFeatures : UIPanel, UIInterfaces.IEFrameUpdatabl
     static readonly PackedScene prefab_UIFeatureSmall = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/Feature/UIFeatureSmall.tscn");
     static readonly PackedScene prefab_UIPanelFeatureFull = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Panels/UIPanelFeatureFull.tscn");
 
-    Feature selected;
-    UIList<Feature> vbox;
+    Features.FeatureBase selected;
+    UIList<Features.FeatureBase> vbox;
 
     public override void _Ready()
     {
@@ -26,7 +26,7 @@ public partial class UIPanelPoolFeatures : UIPanel, UIInterfaces.IEFrameUpdatabl
 
         if (resourcePool.GetChildCount() > 0)
         {
-            selected = resourcePool.GetChild<Feature>(0);
+            selected = resourcePool.GetChild<Features.FeatureBase>(0);
         }
         else
         {
@@ -41,7 +41,7 @@ public partial class UIPanelPoolFeatures : UIPanel, UIInterfaces.IEFrameUpdatabl
 
     public void OnItemListItemSelected(int i)
     {
-        selected = resourcePool.GetChild<Feature>(i);
+        selected = resourcePool.GetChild<Features.FeatureBase>(i);
         DrawDisplay();
     }
 
@@ -69,7 +69,7 @@ public partial class UIPanelPoolFeatures : UIPanel, UIInterfaces.IEFrameUpdatabl
     public override void OnEFrameUpdate()
     {
         list.Clear();
-        foreach (Feature f in resourcePool)
+        foreach (Features.FeatureBase f in resourcePool)
         {
             list.AddItem(f.Name, f.iconMedium);
         }

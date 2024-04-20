@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 
 [Tool]
-public partial class Body : Feature
+public partial class Body : Features.FeatureBase
 {
 
     UITabContainerPool uiBody;

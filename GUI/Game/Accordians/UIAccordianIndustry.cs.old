@@ -78,21 +78,21 @@ public partial class UIAccordianFeature : UIAccordian, Lists.IListable<Feature>
     {
 
     }
-    void UpdateSituations(Situations.Base s, int index)
-    {
-        // foreach (UISituation uis in situations.GetNode<VBoxContainer>("VBoxContainer").GetChildren())
-        // {
-        //     if (uis.situation == s)
-        //     {
-        //         situations.MoveChild(uis, index);
-        //         return;
-        //     }
-        // }
-        // // If doesn't exist, add it and insert at postition.
-        // UISituation ui = (UISituation)p_situation.Instantiate();
-        // ui.Init(s);
-        // situations.AddChild(ui);
-        // situations.MoveChild(ui, index);
-    }
+    // void UpdateSituations(Situations.Base s, int index)
+    // {
+    //     // foreach (UISituation uis in situations.GetNode<VBoxContainer>("VBoxContainer").GetChildren())
+    //     // {
+    //     //     if (uis.situation == s)
+    //     //     {
+    //     //         situations.MoveChild(uis, index);
+    //     //         return;
+    //     //     }
+    //     // }
+    //     // // If doesn't exist, add it and insert at postition.
+    //     // UISituation ui = (UISituation)p_situation.Instantiate();
+    //     // ui.Init(s);
+    //     // situations.AddChild(ui);
+    //     // situations.MoveChild(ui, index);
+    // }
 }
 
