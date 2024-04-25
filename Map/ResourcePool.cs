@@ -105,12 +105,11 @@ public partial class ResourcePool : Node, IEnumerable<Features.FeatureBase>
         base._Ready();
 
         global = GetNode<Global>("/root/Global");
-        global.Connect("EFrameSetup", new Callable(this, "EFrameSetup"));
+        global.Connect("Setup", new Callable(this, "Setup"));
         global.Connect("EFrameEarly", new Callable(this, "EFrameEarly"));
         global.Connect("EFrameLate", new Callable(this, "EFrameLate"));
 
         player = GetNode<Player>("/root/Global/Player");
-
 
         ValidTradeReceiver = _validTradeReceiver;
 
@@ -139,7 +138,7 @@ public partial class ResourcePool : Node, IEnumerable<Features.FeatureBase>
         Logistics.ExportToParent.EFrameLate(this);
     }
 
-    public void EFrameSetup() { }
+    public void Setup() { }
 
     public IEnumerator<Features.FeatureBase> GetEnumerator()
     {

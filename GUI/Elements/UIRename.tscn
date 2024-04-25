@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3 uid="uid://b8m1ub13xosju"]
+
+[ext_resource type="Script" path="res://GUI/Elements/UIRename.cs" id="1_kfhos"]
+
+[node name="UiRename" type="LineEdit"]
+custom_minimum_size = Vector2(0, 40)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -952.0
+offset_bottom = -608.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Placeholder Name"
+middle_mouse_paste_enabled = false
+caret_blink = true
+caret_blink_interval = 0.5
+script = ExtResource("1_kfhos")

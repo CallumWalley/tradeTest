@@ -52,6 +52,6 @@ public partial class UITimeControl : Container
 
     void EFrame()
     {
-        PrintOrphanNodes();
+        //PrintOrphanNodes();
     }
 }

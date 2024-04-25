@@ -3,10 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
-public partial class Features : Node
+public partial class Features : Node, IEnumerable<Features.FeatureBase>
 {
     // All types of features are stored in here.
-    public Dictionary<string, FeatureBase> index = new();
+    // public Dictionary<string, FeatureBase> index = new();
 
     public partial class FeatureBase : Node
     {
@@ -15,11 +15,11 @@ public partial class Features : Node
         public List<Condition.BaseCondition> Conditions { get; protected set; }
         public Texture2D iconMedium;
 
-        public FeatureRegister.FeatureType ttype;
+        // public FeatureBase ttype;
 
         [Export(PropertyHint.Enum, "unset,f_dockyard,orbit_storage_fuel,orbit_storage_h20,mine_surf_old,mine_h20_surf_old,reclaim,cfuel_water")]
         public string TypeSlug { get; set; } = "unset";
-        public string TypeName { get { return ttype.Name; } }
+        // public string TypeName { get { return ttype.Name; } }
         public string[] Tags { get; set; }
         public string Description { get; set; }
 
@@ -37,6 +37,18 @@ public partial class Features : Node
     }
 
 
+    public IEnumerator<Features.FeatureBase> GetEnumerator()
+    {
+        foreach (Features.FeatureBase f in GetChildren())
+        {
+            yield return f;
+        }
+    }
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
     public override void _Ready()
     {
 
@@ -47,23 +59,30 @@ public partial class Features : Node
                 JsonSerializer serializer = new JsonSerializer();
                 foreach (FeatureConstructor tt in (List<FeatureConstructor>)serializer.Deserialize(fi, typeof(List<FeatureConstructor>)))
                 {
-                    index[tt.Slug] = tt.Make();
+                    CallDeferred("add_child", tt.Make());
+                    tt.QueueFree();
                 }
             }
         }
-        index["unset"] = new FeatureBase();
     }
     public partial class FeatureConstructor : Node
-    {
+    {   
+        [Export(PropertyHint.Enum, "unset,f_dockyard,orbit_storage_fuel,orbit_storage_h20,mine_surf_old,mine_h20_surf_old,reclaim,cfuel_water")]
         public string Slug { get; set; }
+        [Export]
         public string[] Tags { get; set; }
+        [Export]
         public string Description { get; set; }
+        [Export]
         public string Image { get; set; }
+        
         public Dictionary<int, double> Factors { get; set; }
 
         public FeatureBase Make()
         {
             FeatureBase featureBase = new FeatureBase();
+
+            featureBase.TypeSlug = Slug;
             featureBase.Name = Name;
             featureBase.Tags = Tags;
             featureBase.Description = Description;
@@ -80,21 +99,21 @@ public partial class Features : Node
         }
     }
 
-    public FeatureBase GetFromSlug(string slug)
-    {
-        if (slug == null)
-        {
-            GD.PrintErr("Feature type unset");
-            return new FeatureBase();
-        }
-        else
-        {
-            if (!index.ContainsKey(slug))
-            {
-                GD.PrintErr($"Feature type {slug} not found");
-                return new FeatureBase();
-            }
-            return index[slug];
-        }
-    }
+    // public FeatureBase GetFromSlug(string slug)
+    // {
+    //     if (slug == null)
+    //     {
+    //         GD.PrintErr("Feature type unset");
+    //         return new FeatureBase();
+    //     }
+    //     else
+    //     {
+    //         if (!index.ContainsKey(slug))
+    //         {
+    //             GD.PrintErr($"Feature type {slug} not found");
+    //             return new FeatureBase();
+    //         }
+    //         return index[slug];
+    //     }
+    // }
 }

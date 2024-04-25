@@ -1,10 +1,12 @@
-[gd_scene load_steps=6 format=3 uid="uid://r5ytkwljq7nb"]
+[gd_scene load_steps=8 format=3 uid="uid://r5ytkwljq7nb"]
 
 [ext_resource type="Script" path="res://GUI/Screen/Top/UITimeControl.cs" id="1_ys7u5"]
-[ext_resource type="Script" path="res://GUI/Screen/Top/UITopLeft.cs" id="2_snmv0"]
+[ext_resource type="PackedScene" uid="uid://rwliij8aoq6r" path="res://GUI/Elements/UIButtonToggleWindow.tscn" id="3_0miou"]
 [ext_resource type="PackedScene" uid="uid://clgo3jgqxgcsa" path="res://GUI/Game/TabContainers/UITabContainerTrade.tscn" id="3_14ogv"]
 [ext_resource type="Script" path="res://GUI/Screen/Nav.cs" id="3_a3qo3"]
 [ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="4_d36to"]
+[ext_resource type="PackedScene" uid="uid://hayfw1l6yk1x" path="res://GUI/Elements/UIWindow.tscn" id="4_ibjw3"]
+[ext_resource type="PackedScene" uid="uid://drd8h7hdq8c86" path="res://GUI/Game/TabContainers/UITabContainerBuild.tscn" id="6_1c18q"]
 
 [node name="Screen" type="CanvasLayer"]
 
@@ -70,22 +72,21 @@ anchor_right = 1.0
 grow_horizontal = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("2_snmv0")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="TopLeft"]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="ButtonTrade" type="Button" parent="TopLeft/HBoxContainer"]
+[node name="UiButtonTrade" parent="TopLeft/HBoxContainer" node_paths=PackedStringArray("window") instance=ExtResource("3_0miou")]
 layout_mode = 2
-toggle_mode = true
 text = "Trade"
+window = NodePath("../../../UITradeWindow")
 
-[node name="ButtonResourcePools" type="Button" parent="TopLeft/HBoxContainer"]
+[node name="UiButtonIndustries" parent="TopLeft/HBoxContainer" node_paths=PackedStringArray("window") instance=ExtResource("3_0miou")]
 layout_mode = 2
-toggle_mode = true
-text = "ResourcePools"
+text = "Industries"
+window = NodePath("../../../UIIndustriesWindow")
 
 [node name="Nav" type="VBoxContainer" parent="."]
 anchors_preset = -1
@@ -96,11 +97,17 @@ offset_right = 116.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
 script = ExtResource("3_a3qo3")
-map = null
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Nav"]
 layout_mode = 2
 
-[node name="UITradeWindow" parent="." instance=ExtResource("3_14ogv")]
+[node name="UITradeWindow" parent="." instance=ExtResource("4_ibjw3")]
 visible = false
+
+[node name="UITradeWindow" parent="UITradeWindow" instance=ExtResource("3_14ogv")]
 theme = ExtResource("4_d36to")
+
+[node name="UIIndustriesWindow" parent="." instance=ExtResource("4_ibjw3")]
+visible = false
+
+[node name="UiTabContainerBuild" parent="UIIndustriesWindow" instance=ExtResource("6_1c18q")]

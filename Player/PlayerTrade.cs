@@ -25,10 +25,10 @@ public partial class PlayerTrade : Node
 
 	public override void _Ready()
 	{
-		GetNode<Global>("/root/Global").Connect("EFrameSetup", callable: new Callable(this, "EFrameSetup"));
+		GetNode<Global>("/root/Global").Connect("Setup", callable: new Callable(this, "Setup"));
 	}
 
-	void EFrameSetup()
+	void Setup()
 	{
 		foreach (TradeRoute t in GetChildren())
 		{

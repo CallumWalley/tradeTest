@@ -18,17 +18,15 @@ public partial class Global : Node
 	public delegate void EFrameUIEventHandler();
 
 	// Called called after late frame, for UI only.
-
 	[Signal]
+	public delegate void SetupEventHandler();
 
-	public delegate void EFrameSetupEventHandler();
-
+	// Bool, set to true after first step.
+	bool initialised = false;
 	public bool paused = false;
 
 	public double timePerEframe = 1;
 	public double timePerSFrame = 2;
-
-
 
 	double deltaEFrame;
 	double deltaSFrame;
@@ -44,7 +42,7 @@ public partial class Global : Node
 		deltaEFrame = timePerEframe;
 		deltaSFrame = timePerSFrame;
 
-		EmitSignal(SignalName.EFrameSetup);
+		EmitSignal(SignalName.Setup);
 		Sframe();
 		Eframe();
 	}

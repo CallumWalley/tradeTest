@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class UITabContainerTrade : TabContainer
+public partial class UITabContainerTrade : TabContainer, UIInterfaces.IEFrameUpdatable
 {
 	UIList<ResourcePool> ResourcePoolList;
 	UIList<TradeRoute> tradeRouteList;
@@ -35,4 +35,6 @@ public partial class UITabContainerTrade : TabContainer
 		//tabReceivers.AddChild(ResourcePoolList);
 		tabTradeRoutes.AddChild(tradeRouteList);
 	}
+
+    public void OnEFrameUpdate(){}
 }
