@@ -1,9 +1,12 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class UIWindow : Window
 {
-	// Called when the node enters the scene tree for the first time.
+	[Export]
+	// Elements in 'Driven' will be updated on every EFrame
+	public Godot.Collections.Array<Control> Driven;
 	public override void _Ready()
 	{
 		Connect("close_requested", new Callable(this, "OnCloseRequested"));
@@ -24,9 +27,10 @@ public partial class UIWindow : Window
 
 	public virtual void OnEFrameUI()
 	{
-		foreach (UIInterfaces.IEFrameUpdatable c in GetChildren())
+		if (Driven == null){return;}
+		foreach (Control c in Driven)
 		{
-			c.OnEFrameUpdate();
+			((UIInterfaces.IEFrameUpdatable)c).OnEFrameUpdate();
 		}
 	}
 }

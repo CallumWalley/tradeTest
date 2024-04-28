@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://drd8h7hdq8c86"]
+
+[ext_resource type="Script" path="res://GUI/Elements/UITabContainer.cs" id="1_gwyf3"]
+[ext_resource type="PackedScene" uid="uid://b5mtlqpxrceqn" path="res://GUI/Game/Panels/UIPanelBuildTemplate.tscn" id="2_84btb"]
+
+[node name="UiTabContainerBuild" type="TabContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gwyf3")
+
+[node name="Industry Templates" parent="." instance=ExtResource("2_84btb")]
+layout_mode = 2
+size_flags_vertical = 3

@@ -2,28 +2,32 @@
     {
         "name": "Freighter Dockyard",
         "slug": "f_dockyard",
-        "factors": {
+        "factorsGlobal": {
             "2": -1,
             "901": 12
         },
+        "tags": ["orbital"],
         "description": "All the trade gantries, maintainance facilites and refueling shuttles required to maintain a fleet of starships frieghters."
     },
     {
         "name": "Fuel Reserves",
         "slug": "orbit_storage_fuel",
-        "factors": {},
+        "tags": ["orbital"],
+        "factorsGlobal": {},
         "description": "Strategic fuel reserves."
     },
     {
         "name": "Water Reserves",
-        "slug": "orbit_storage_h20",
-        "factors": {},
+        "slug": "orbit_storage_h2o",
+        "tags": ["orbital"],
+        "factorsGlobal": {},
         "description": "Large quantities of dihydrogen oxide, pressurised in order to maintain a subcritical state."
     },
     {
         "name": "Surface Mine",
-        "slug": "mine_surf_old",
-        "factors": {
+        "slug": "planet_mine_minerals",
+        "tags": ["planetary"],
+        "factorsGlobal": {
             "2": -1,
             "1": 2
         },
@@ -31,8 +35,9 @@
     },
     {
         "name": "Ice Mine",
-        "slug": "mine_h20_surf_old",
-        "factors": {
+        "slug": "planet_mine_h2o",
+        "tags": ["planetary"],
+        "factorsGlobal": {
             "2": -1,
             "4": 1
         },
@@ -41,7 +46,8 @@
     {
         "name": "Reclaimation Facility",
         "slug": "reclaim",
-        "factors": {
+        "tags": ["planetary"],
+        "factorsGlobal": {
             "1": 0.5
         },
         "description": "Sorting facilities to recover useful resources from industrial waste."
@@ -49,12 +55,11 @@
     {
         "name": "Chemical Fuel Plant",
         "slug": "cfuel_water",
-        "factors": {
+        "tags": ["orbital"],
+        "factorsGlobal": {
             "2": 3,
             "4": -1
         },
-        "superclass": "fuel",
-        "subclass": "orbital",
         "description": "Facilities for converting H2O into chemical fuel."
     }
 ]

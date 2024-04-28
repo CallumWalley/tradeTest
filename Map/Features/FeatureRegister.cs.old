@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 
-[Tool]
 public partial class FeatureRegister : Node
 {
     // Declare member variables here. Examples:

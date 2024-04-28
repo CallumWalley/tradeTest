@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 
 
-[Tool]
 public partial class Body : Features.FeatureBase
 {
 

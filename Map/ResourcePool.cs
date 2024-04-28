@@ -65,7 +65,6 @@ public partial class ResourcePool : Node, IEnumerable<Features.FeatureBase>
                 tradeRoute.Tail.Order = value + 1;
                 tradeRoute.Tail.Network = Network;
                 GD.Print(string.Format("{0} has had its order set to '{1}' by '{2}'", tradeRoute.Tail.Name, Order, Name));
-
             }
         }
     }
@@ -215,4 +214,9 @@ public partial class ResourcePool : Node, IEnumerable<Features.FeatureBase>
     }
 
     public override string ToString() { return Name; }
+
+    public void AddFeature(Features.FeatureBase feature){
+        AddChild(feature);
+    }
+
 }

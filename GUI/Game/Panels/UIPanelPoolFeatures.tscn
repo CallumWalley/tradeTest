@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://bejhglo4krc63"]
+[gd_scene load_steps=5 format=3 uid="uid://bejhglo4krc63"]
 
 [ext_resource type="Script" path="res://GUI/Game/Panels/UIPanelPoolFeatures.cs" id="1_tk57f"]
+[ext_resource type="PackedScene" uid="uid://rwliij8aoq6r" path="res://GUI/Elements/UIButtonToggleWindow.tscn" id="2_3dkul"]
+[ext_resource type="PackedScene" uid="uid://hayfw1l6yk1x" path="res://GUI/Elements/UIWindow.tscn" id="3_hg0bi"]
+[ext_resource type="PackedScene" uid="uid://b5mtlqpxrceqn" path="res://GUI/Game/Panels/UIPanelBuildTemplate.tscn" id="4_e8ljg"]
 
 [node name="Features" type="PanelContainer"]
 anchors_preset = 15
@@ -15,6 +18,7 @@ script = ExtResource("1_tk57f")
 layout_mode = 2
 
 [node name="Filters" type="PanelContainer" parent="VBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 
@@ -56,6 +60,10 @@ horizontal_scroll_mode = 0
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="PlanNewIndustry" parent="VBoxContainer/HSplitContainer/ScrollContainer/VBoxContainer" instance=ExtResource("2_3dkul")]
+layout_mode = 2
+text = "Plan New Industry"
+
 [node name="ItemList" type="ItemList" parent="VBoxContainer/HSplitContainer/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 auto_height = true
@@ -64,3 +72,43 @@ auto_height = true
 layout_mode = 2
 size_flags_horizontal = 3
 horizontal_scroll_mode = 0
+
+[node name="Window" parent="." node_paths=PackedStringArray("Driven") instance=ExtResource("3_hg0bi")]
+visible = false
+Driven = [NodePath("VBoxContainer/Industry Templates")]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Window"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Industry Templates" parent="Window/VBoxContainer" instance=ExtResource("4_e8ljg")]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Window/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_vertical = 0
+alignment = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Window/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+text = "x"
+fit_content = true
+scroll_active = false
+context_menu_enabled = true
+shortcut_keys_enabled = false
+
+[node name="LineEdit" type="LineEdit" parent="Window/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Window/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Build"

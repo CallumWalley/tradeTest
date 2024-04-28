@@ -23,6 +23,7 @@ public partial class UISatelliteSystemNav : Button
 
 		uit.Init(satelliteSystem);
 		uiw.AddChild(uit);
+		uiw.Driven.Add(uit);
 		canvasLayer.AddChild(uiw);
 	}
 }

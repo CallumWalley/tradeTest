@@ -17,18 +17,13 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
 
         // public FeatureBase ttype;
 
-        [Export(PropertyHint.Enum, "unset,f_dockyard,orbit_storage_fuel,orbit_storage_h20,mine_surf_old,mine_h20_surf_old,reclaim,cfuel_water")]
+        [Export(PropertyHint.Enum, "unset,f_dockyard,orbit_storage_fuel,orbit_storage_h2o,planet_mine_minerals,planet_mine_h2o,reclaim,cfuel_water")]
         public string TypeSlug { get; set; } = "unset";
         // public string TypeName { get { return ttype.Name; } }
         public string[] Tags { get; set; }
         public string Description { get; set; }
 
-        public override void _Ready()
-        {
-            FactorsLocal = new();
-            FactorsGlobal = new();
-            Conditions = new();
-        }
+
 
         public void AddCondition(Condition.BaseCondition s)
         {
@@ -52,7 +47,7 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
     public override void _Ready()
     {
 
-        foreach (string file in System.IO.Directory.GetFiles("Economy/Features", "*.json"))
+        foreach (string file in System.IO.Directory.GetFiles("Map/Features/Templates", "*.json"))
         {
             using (StreamReader fi = System.IO.File.OpenText(file))
             {
@@ -67,16 +62,17 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
     }
     public partial class FeatureConstructor : Node
     {   
-        [Export(PropertyHint.Enum, "unset,f_dockyard,orbit_storage_fuel,orbit_storage_h20,mine_surf_old,mine_h20_surf_old,reclaim,cfuel_water")]
+        [Export(PropertyHint.Enum, "unset,f_dockyard,orbit_storage_fuel,orbit_storage_h2o,planet_mine_minerals,planet_mine_h2o,reclaim,cfuel_water")]
         public string Slug { get; set; }
         [Export]
         public string[] Tags { get; set; }
         [Export]
         public string Description { get; set; }
         [Export]
-        public string Image { get; set; }
-        
-        public Dictionary<int, double> Factors { get; set; }
+        public string Splash { get; set; }
+        [Export]
+        public Godot.Collections.Dictionary<int, double> FactorsGlobal { get; set; }
+        public Dictionary<int, double> FactorsLocal { get; set; }
 
         public FeatureBase Make()
         {
@@ -86,10 +82,10 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
             featureBase.Name = Name;
             featureBase.Tags = Tags;
             featureBase.Description = Description;
-            featureBase.FactorsGlobal = new(GetFactorsFromTemplate(Factors));
+            featureBase.FactorsGlobal = new(GetFactorsFromTemplate(FactorsGlobal));
             return featureBase;
         }
-        IEnumerable<Resource.IRequestable> GetFactorsFromTemplate(Dictionary<int, double> template)
+        IEnumerable<Resource.IRequestable> GetFactorsFromTemplate(Godot.Collections.Dictionary<int, double> template)
         {
             if (template == null) { yield break; }
             foreach (KeyValuePair<int, double> kvp in template)

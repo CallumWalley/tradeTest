@@ -3,7 +3,6 @@ using System;
 using System.Numerics;
 
 
-[Tool]
 public partial class Nav : VBoxContainer
 {
 	static readonly PackedScene prefab_UIAccordian = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/UIAccordian.tscn");

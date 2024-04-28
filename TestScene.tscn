@@ -32,7 +32,10 @@ StartingResources = null
 
 [node name="FeatureConstructor" parent="Map/Galaxy/Sol/Earth" instance=ExtResource("6_cx087")]
 Tags = null
-Description = null
-Image = null
+Description = "Test Feature"
+Splash = null
+FactorsGlobal = {
+1: 2.0
+}
 
 [node name="Screen" parent="." instance=ExtResource("2_ohuhm")]

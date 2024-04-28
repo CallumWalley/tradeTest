@@ -3,4 +3,5 @@
 [ext_resource type="Script" path="res://GUI/Game/Lists/UIListResources.cs" id="1_qpy5d"]
 
 [node name="UiListResources" type="BoxContainer"]
+custom_minimum_size = Vector2(0, 20)
 script = ExtResource("1_qpy5d")
