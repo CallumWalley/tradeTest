@@ -7,6 +7,7 @@ public partial class UIPanelPoolSupply : UIPanel
     public ResourcePool resourcePool;
     public override void _Ready()
     {
+        base._Ready();
         panelLedger = new();
         panelLedger.Ledger = resourcePool.Ledger;
         GetNode<HBoxContainer>("HBoxContainer").AddChild(panelLedger);

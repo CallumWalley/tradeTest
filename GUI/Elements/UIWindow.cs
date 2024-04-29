@@ -4,13 +4,10 @@ using System.Collections.Generic;
 
 public partial class UIWindow : Window
 {
-	[Export]
-	// Elements in 'Driven' will be updated on every EFrame
-	public Godot.Collections.Array<Control> Driven;
 	public override void _Ready()
 	{
-		Connect("close_requested", new Callable(this, "OnCloseRequested"));
-		GetNode<Global>("/root/Global").Connect("EFrameUI", callable: new Callable(this, "OnEFrameUI"));
+		base._Ready();
+		// Connect("_close_requested", callable: new Callable(this, "OnCloseRequested"));
 	}
 	protected virtual void OnCloseRequested()
 	{
@@ -25,12 +22,12 @@ public partial class UIWindow : Window
 		}
 	}
 
-	public virtual void OnEFrameUI()
-	{
-		if (Driven == null){return;}
-		foreach (Control c in Driven)
-		{
-			((UIInterfaces.IEFrameUpdatable)c).OnEFrameUpdate();
-		}
-	}
+	// public virtual void OnEFrameUI()
+	// {
+	// 	if (Driven == null){return;}
+	// 	foreach (Control c in Driven)
+	// 	{
+	// 		((UIInterfaces.IEFrameUpdatable)c).OnEFrameUpdate();
+	// 	}
+	// }
 }

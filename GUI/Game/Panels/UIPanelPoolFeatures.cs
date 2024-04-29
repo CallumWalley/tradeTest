@@ -21,6 +21,7 @@ public partial class UIPanelPoolFeatures : UIPanel, UIInterfaces.IEFrameUpdatabl
     public override void _Ready()
     {
 
+        base._Ready();
         list = GetNode<ItemList>("VBoxContainer/HSplitContainer/ScrollContainer/VBoxContainer/ItemList");
         display = GetNode<ScrollContainer>("VBoxContainer/HSplitContainer/Display");
 
@@ -73,6 +74,7 @@ public partial class UIPanelPoolFeatures : UIPanel, UIInterfaces.IEFrameUpdatabl
     }
     public override void OnEFrameUpdate()
     {
+        base._Ready();
         // If visible, and there are features, update the list to reflect reality.
         if (Visible && resourcePool.GetChildCount() > 0){
             list.Clear();

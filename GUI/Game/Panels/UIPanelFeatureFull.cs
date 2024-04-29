@@ -11,6 +11,7 @@ public partial class UIPanelFeatureFull : UIPanel
 	UIListResources factors;
 	public override void _Ready()
 	{
+		base._Ready();
 		name = GetNode<UIRename>("PanelContainer/Details/MarginContainer/HBoxContainer/Name");
 		type = GetNode<Label>("PanelContainer/Details/MarginContainer/HBoxContainer/Type");
 		description = GetNode<RichTextLabel>("PanelContainer/Details/Description");

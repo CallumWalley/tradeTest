@@ -101,15 +101,13 @@ script = ExtResource("3_a3qo3")
 [node name="VBoxContainer" type="VBoxContainer" parent="Nav"]
 layout_mode = 2
 
-[node name="UITradeWindow" parent="." node_paths=PackedStringArray("Driven") instance=ExtResource("4_ibjw3")]
+[node name="UITradeWindow" parent="." instance=ExtResource("4_ibjw3")]
 visible = false
-Driven = [NodePath("UITradeWindow")]
 
 [node name="UITradeWindow" parent="UITradeWindow" instance=ExtResource("3_14ogv")]
 theme = ExtResource("4_d36to")
 
-[node name="UIIndustriesWindow" parent="." node_paths=PackedStringArray("Driven") instance=ExtResource("4_ibjw3")]
+[node name="UIIndustriesWindow" parent="." instance=ExtResource("4_ibjw3")]
 visible = false
-Driven = [NodePath("UiTabContainerBuild")]
 
 [node name="UiTabContainerBuild" parent="UIIndustriesWindow" instance=ExtResource("6_1c18q")]

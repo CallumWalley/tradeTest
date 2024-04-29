@@ -20,6 +20,7 @@ public partial class UIPanelBuildTemplate : UIPanel, UIInterfaces.IEFrameUpdatab
 
     public override void _Ready()
     {
+        base._Ready();
 		featureList = GetNode<Features>("/root/Features");
         list = GetNode<ItemList>("VBoxContainer/HSplitContainer/ScrollContainer/VBoxContainer/ItemList");
         display = GetNode<ScrollContainer>("VBoxContainer/HSplitContainer/Display");
@@ -65,6 +66,7 @@ public partial class UIPanelBuildTemplate : UIPanel, UIInterfaces.IEFrameUpdatab
     public override void OnEFrameUpdate()
     {
         // If visible, and there are features, update the list to reflect reality.
+        base.OnEFrameUpdate();
         if (Visible && featureList.GetChildCount() > 0){
             list.Clear();
             foreach (Node f in featureList.GetChildren())

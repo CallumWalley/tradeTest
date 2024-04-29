@@ -1,12 +1,23 @@
 using Godot;
 using System;
 
-public partial class UIPanel : PanelContainer,  UIInterfaces.IEFrameUpdatable
+public partial class UIPanel : PanelContainer
 {
-	public virtual void OnEFrameUpdate()
+
+	public override void _Ready()
+	{
+		GetNode<Global>("/root/Global").Connect("EFrameUI", callable: new Callable(this, "OnEFrameUI"));
+	}
+	public virtual void OnEFrameUI()
 	{
 		// Impliment any updates here that need be called less frequently than 'Draw';
 		// e.g. game data updates.
-		QueueRedraw();
+		if (Visible){
+			OnEFrameUpdate();
+		}
+	}
+
+	public virtual void OnEFrameUpdate(){
+		
 	}
 }
