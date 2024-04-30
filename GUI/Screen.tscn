@@ -102,6 +102,7 @@ script = ExtResource("3_a3qo3")
 layout_mode = 2
 
 [node name="UITradeWindow" parent="." instance=ExtResource("4_ibjw3")]
+visible = false
 
 [node name="UITradeWindow" type="TabContainer" parent="UITradeWindow"]
 custom_minimum_size = Vector2(400, 200)
@@ -140,5 +141,4 @@ text = "Idustry Template Editor"
 fit_content = true
 
 [node name="Industry Templates" parent="UIIndustriesWindow" instance=ExtResource("7_13nsc")]
-visible = false
 size_flags_vertical = 3

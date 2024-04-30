@@ -2,7 +2,10 @@ using Godot;
 using System;
 using System.Linq;
 
-// List of all buildable structures.
+/// <summary>
+/// List of all buildable structures.
+/// Used in template menu and build menu.
+/// </summary>
 public partial class UIPanelBuildTemplate : UIPanel, UIInterfaces.IEFrameUpdatable
 {
     Label nameLabel;
@@ -14,7 +17,7 @@ public partial class UIPanelBuildTemplate : UIPanel, UIInterfaces.IEFrameUpdatab
     static readonly PackedScene prefab_UIFeatureSmall = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/Feature/UIFeatureSmall.tscn");
     static readonly PackedScene prefab_UIPanelFeatureFull = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Panels/UIPanelFeatureFull.tscn");
 
-    Features.FeatureBase selected;
+    public Features.FeatureBase selected;
     int selectedIndex = 0;
     UIList<Features.FeatureBase> vbox;
 
@@ -26,11 +29,6 @@ public partial class UIPanelBuildTemplate : UIPanel, UIInterfaces.IEFrameUpdatab
         display = GetNode<ScrollContainer>("VBoxContainer/HSplitContainer/Display");
 
         list.Connect("item_selected", new Callable(this, "OnItemListItemSelected"));
-
-        // vbox = new UIList<Feature>();
-        // vbox.Vertical = true;
-        // vbox.Init(resourcePool, prefab_UIFeatureSmall);
-        // GetNode<ScrollContainer>("VBoxContainer/HSplitContainer/ScrollContainer").AddChild(vbox);
     }
 
     public void OnItemListItemSelected(int i)
@@ -39,6 +37,8 @@ public partial class UIPanelBuildTemplate : UIPanel, UIInterfaces.IEFrameUpdatab
         selected = featureList.GetChild<Features.FeatureBase>(selectedIndex);
         DrawDisplay();
     }
+
+
 
     void DrawDisplay()
     {

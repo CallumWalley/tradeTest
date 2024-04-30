@@ -13,6 +13,8 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
         public Resource.RList<Resource.IRequestable> FactorsLocal { get; set; }
         public Resource.RList<Resource.IRequestable> FactorsGlobal { get; set; }
         public List<Condition.BaseCondition> Conditions { get; protected set; }
+
+        public FeatureBase Template {get; set;} = null;
         public Texture2D iconMedium;
 
         // public FeatureBase ttype;
@@ -28,6 +30,18 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
         public void AddCondition(Condition.BaseCondition s)
         {
             Conditions.Add(s);
+        }
+        public FeatureBase NewFeatureFromTemplate(){
+            FeatureBase newFeature = new(); 
+            newFeature.Template = this;
+            newFeature.Name = Name;
+            newFeature.Description = Description;
+            newFeature.FactorsGlobal = new Resource.RList<Resource.IRequestable>();
+            newFeature.FactorsLocal = new();
+            newFeature.Conditions = new();
+            newFeature.Tags = Tags;
+            newFeature.iconMedium = iconMedium;
+            return newFeature;
         }
     }
 

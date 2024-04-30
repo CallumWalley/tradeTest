@@ -1,6 +1,9 @@
 using Godot;
 using System;
 
+/// <summary>
+/// Displays the ist of features in a location.
+/// </summary>
 public partial class UIPanelPoolFeatures : UIPanel, UIInterfaces.IEFrameUpdatable
 {
 
@@ -25,6 +28,8 @@ public partial class UIPanelPoolFeatures : UIPanel, UIInterfaces.IEFrameUpdatabl
         list = GetNode<ItemList>("VBoxContainer/HSplitContainer/ScrollContainer/VBoxContainer/ItemList");
         display = GetNode<ScrollContainer>("VBoxContainer/HSplitContainer/Display");
 
+        GetNode<UIWindowPoolFeaturePlan>("WindowPoolFeaturePlan").resourcePool = resourcePool;
+
         list.Connect("item_selected", new Callable(this, "OnItemListItemSelected"));
 
         if (resourcePool.GetChildCount() > 0)
@@ -35,11 +40,6 @@ public partial class UIPanelPoolFeatures : UIPanel, UIInterfaces.IEFrameUpdatabl
         {
             selected = null;
         }
-
-        // vbox = new UIList<Feature>();
-        // vbox.Vertical = true;
-        // vbox.Init(resourcePool, prefab_UIFeatureSmall);
-        // GetNode<ScrollContainer>("VBoxContainer/HSplitContainer/ScrollContainer").AddChild(vbox);
     }
 
         public void OnItemListItemSelected(int i)
