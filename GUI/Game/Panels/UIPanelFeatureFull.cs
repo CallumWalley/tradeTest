@@ -8,17 +8,31 @@ public partial class UIPanelFeatureFull : UIPanel
 	UIRename name;
 	Label type;
 	RichTextLabel description;
+	HBoxContainer tags;
 	UIListResources factors;
+
+	static readonly PackedScene prefab_pill = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/UIPill.tscn");
+
+	
+
 	public override void _Ready()
 	{
 		base._Ready();
 		name = GetNode<UIRename>("PanelContainer/Details/MarginContainer/HBoxContainer/Name");
 		type = GetNode<Label>("PanelContainer/Details/MarginContainer/HBoxContainer/Type");
 		description = GetNode<RichTextLabel>("PanelContainer/Details/Description");
+		tags = GetNode<HBoxContainer>("PanelContainer/Details/Tags");
 		factors = new UIListResources();
 		factors.Vertical = false;
 
 		name.node = feature;
+
+		foreach (Features.FeatureTag tag in feature.Tags)
+		{
+			UIPill pill = prefab_pill.Instantiate<UIPill>();
+			pill.tag = tag;
+			tags.AddChild(pill);
+		}
 		
 		factors.Init(feature.FactorsGlobal);
 		GetNode<VBoxContainer>("PanelContainer/Details").AddChild(factors);

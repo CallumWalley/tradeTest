@@ -50,6 +50,9 @@ size_flags_horizontal = 8
 text = "Type"
 horizontal_alignment = 2
 
+[node name="Tags" type="HBoxContainer" parent="PanelContainer/Details"]
+layout_mode = 2
+
 [node name="Description" type="RichTextLabel" parent="PanelContainer/Details"]
 layout_mode = 2
 size_flags_vertical = 3

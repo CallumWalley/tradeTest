@@ -1,7 +1,23 @@
-[gd_resource type="Theme" load_steps=4 format=3 uid="uid://dv1dcg5y6swss"]
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://dv1dcg5y6swss"]
 
 [ext_resource type="FontFile" uid="uid://dssr2dxpuiv0e" path="res://assets/fonts/static/OpenSans-Light.ttf" id="1_2e4sy"]
 [ext_resource type="FontFile" uid="uid://hduc4gveq0i4" path="res://assets/fonts/static/OpenSans_Condensed-LightItalic.ttf" id="1_vr80t"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_25l4a"]
+content_margin_left = 2.0
+content_margin_top = 1.0
+content_margin_right = 2.0
+content_margin_bottom = 1.0
+bg_color = Color(1, 1, 1, 0.0392157)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_anr8v"]
 bg_color = Color(0, 0.329412, 0.32549, 0.717647)
@@ -19,10 +35,14 @@ LabelContext/font_sizes/font_size = 12
 LabelContext/font_sizes/italics_font_size = 12
 LabelContext/font_sizes/mono_font_size = 12
 LabelContext/font_sizes/normal_font_size = 12
-MarginContainer/constants/margin_bottom = 2
-MarginContainer/constants/margin_left = 5
-MarginContainer/constants/margin_right = 5
-MarginContainer/constants/margin_top = 2
+LabelPill/base_type = &"Label"
+LabelPill/font_sizes/font_size = 8
+LabelPill/fonts/font = ExtResource("1_2e4sy")
+LabelPill/styles/normal = SubResource("StyleBoxFlat_25l4a")
+MarginContainer/constants/margin_bottom = 10
+MarginContainer/constants/margin_left = 10
+MarginContainer/constants/margin_right = 10
+MarginContainer/constants/margin_top = 10
 Panel/styles/panel = SubResource("StyleBoxFlat_anr8v")
 TextSecondry/base_type = &"Label"
 TextSecondry/colors/font_color = Color(0.878431, 0.878431, 0.878431, 1)

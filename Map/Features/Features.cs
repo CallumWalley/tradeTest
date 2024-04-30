@@ -6,8 +6,6 @@ using Newtonsoft.Json;
 public partial class Features : Node, IEnumerable<Features.FeatureBase>
 {
     // All types of features are stored in here.
-    // public Dictionary<string, FeatureBase> index = new();
-
     public partial class FeatureBase : Node
     {
         public Resource.RList<Resource.IRequestable> FactorsLocal { get; set; }
@@ -17,15 +15,11 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
         public FeatureBase Template {get; set;} = null;
         public Texture2D iconMedium;
 
-        // public FeatureBase ttype;
-
         [Export(PropertyHint.Enum, "unset,f_dockyard,orbit_storage_fuel,orbit_storage_h2o,planet_mine_minerals,planet_mine_h2o,reclaim,cfuel_water")]
         public string TypeSlug { get; set; } = "unset";
         // public string TypeName { get { return ttype.Name; } }
-        public string[] Tags { get; set; }
+        public HashSet<FeatureTag> Tags { get; set; }
         public string Description { get; set; }
-
-
 
         public void AddCondition(Condition.BaseCondition s)
         {
@@ -36,15 +30,14 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
             newFeature.Template = this;
             newFeature.Name = Name;
             newFeature.Description = Description;
-            newFeature.FactorsGlobal = new Resource.RList<Resource.IRequestable>();
-            newFeature.FactorsLocal = new();
+            newFeature.FactorsGlobal = FactorsGlobal.Clone();
+            newFeature.FactorsLocal = FactorsLocal.Clone();
             newFeature.Conditions = new();
-            newFeature.Tags = Tags;
+            newFeature.Tags = new (Tags);
             newFeature.iconMedium = iconMedium;
             return newFeature;
         }
     }
-
 
     public IEnumerator<Features.FeatureBase> GetEnumerator()
     {
@@ -60,7 +53,6 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
 
     public override void _Ready()
     {
-
         foreach (string file in System.IO.Directory.GetFiles("Map/Features/Templates", "*.json"))
         {
             using (StreamReader fi = System.IO.File.OpenText(file))
@@ -79,14 +71,14 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
         [Export(PropertyHint.Enum, "unset,f_dockyard,orbit_storage_fuel,orbit_storage_h2o,planet_mine_minerals,planet_mine_h2o,reclaim,cfuel_water")]
         public string Slug { get; set; }
         [Export]
-        public string[] Tags { get; set; }
+        public Godot.Collections.Array<string> Tags { get; set; }
         [Export]
         public string Description { get; set; }
         [Export]
         public string Splash { get; set; }
         [Export]
         public Godot.Collections.Dictionary<int, double> FactorsGlobal { get; set; }
-        public Dictionary<int, double> FactorsLocal { get; set; }
+        public Godot.Collections.Dictionary<int, double> FactorsLocal { get; set; }
 
         public FeatureBase Make()
         {
@@ -94,9 +86,15 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
 
             featureBase.TypeSlug = Slug;
             featureBase.Name = Name;
-            featureBase.Tags = Tags;
+            featureBase.Tags = new();
+            foreach (string tag in Tags)
+            {
+                featureBase.Tags.Add(featureTags[tag]);
+            }
             featureBase.Description = Description;
             featureBase.FactorsGlobal = new(GetFactorsFromTemplate(FactorsGlobal));
+            featureBase.FactorsLocal = new(GetFactorsFromTemplate(FactorsLocal));
+
             return featureBase;
         }
         IEnumerable<Resource.IRequestable> GetFactorsFromTemplate(Godot.Collections.Dictionary<int, double> template)
@@ -108,6 +106,25 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
             }
         }
     }
+    
+
+    public class FeatureTag{
+        public string Slug;
+        public string Name;
+        public string Description;
+
+        public FeatureTag(string _slug, string _name, string _description)
+        {
+            Slug = _slug;
+            Name = _name;
+            Description = _description;
+        }        
+    }
+
+    public static Dictionary<string, FeatureTag> featureTags = new Dictionary<string, FeatureTag>(){
+        {"orbital", new FeatureTag("orbital", "Orbital", "Must be built in orbit")},
+        {"planetary", new FeatureTag("planetary", "Planetary", "Must be built on the surface of a planet")}
+    };
 
     // public FeatureBase GetFromSlug(string slug)
     // {

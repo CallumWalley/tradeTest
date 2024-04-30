@@ -74,7 +74,7 @@ public partial class UIPanelPoolFeatures : UIPanel, UIInterfaces.IEFrameUpdatabl
     }
     public override void OnEFrameUpdate()
     {
-        base._Ready();
+        base.OnEFrameUpdate();
         // If visible, and there are features, update the list to reflect reality.
         if (Visible && resourcePool.GetChildCount() > 0){
             list.Clear();

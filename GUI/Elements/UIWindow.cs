@@ -21,13 +21,4 @@ public partial class UIWindow : Window
 			OnCloseRequested();
 		}
 	}
-
-	// public virtual void OnEFrameUI()
-	// {
-	// 	if (Driven == null){return;}
-	// 	foreach (Control c in Driven)
-	// 	{
-	// 		((UIInterfaces.IEFrameUpdatable)c).OnEFrameUpdate();
-	// 	}
-	// }
 }

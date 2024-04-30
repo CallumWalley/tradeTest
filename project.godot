@@ -19,6 +19,10 @@ config/icon="res://icon.png"
 
 Features="*res://Map/Features/Features.cs"
 
+[display]
+
+window/size/mode=3
+
 [dotnet]
 
 project/assembly_name="tradeTest"

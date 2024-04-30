@@ -119,7 +119,6 @@ public partial class Resource
             return GetEnumerator();
         }
 
-
         // Does not consider grandchild members.
         public int Count
         {
@@ -172,15 +171,6 @@ public partial class Resource
         {
             return $"{Name}:{Sum}";
         }
-        // public override string ToString()
-        // {
-        //     string returnString = "";
-        //     foreach (IResource r in Adders)
-        //     {
-        //         returnString += r.ToString() + ", ";
-        //     }
-        //     return returnString;
-        // }
     }
     public partial class RGroupRequests<T> : RGroup<IRequestable>, IResourceGroup<IRequestable>, IRequestable
     {
@@ -400,6 +390,7 @@ public partial class Resource
     //     }
     // }
 
+
     public struct ResourceType
     {
         public string name;
@@ -426,28 +417,43 @@ public partial class Resource
             // {803, new ResourceType("Efficiency", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.dds"), false)},
             {901, new ResourceType("Freighter", GD.Load<Texture2D>("res://assets/icons/freighter.png"), false)}
         };
-    public static ResourceType Index(int resourceCode)
+    
+
+    /// <summary>
+    /// Returns resource type for given resourceid
+    /// </summary>
+    /// <param name="resourceid"></param>
+    /// <returns></returns>
+    public static ResourceType Index(int resourceid)
     {
-        return _index[resourceCode];
+        return _index[resourceid];
     }
-    public static Texture2D Icon(int resourceCode)
+    /// <summary>
+    /// Returns icon for given resource id.
+    /// </summary>
+    /// <param name="resourceid"></param>
+    /// <returns></returns>
+    public static Texture2D Icon(int resourceid)
     {
-        return _index[resourceCode].icon;
+        return _index[resourceid].icon;
     }
 
     ///<summary>
-    ///Returns generic name of a resource for a specified code.
+    ///Returns generic name of a resource for a specified resourceid.
     ///</summary>
-    public static string Name(int resourceCode)
+    public static string Name(int resourceid)
     {
-        return _index[resourceCode].name;
+        return _index[resourceid].name;
     }
     // public static double ShipWeight(int resourceCode)
     // {
     //     return _index[resourceCode].shipWeight;
     // }
 
-    // Lists
+    /// <summary>
+    /// Dictionary of resources, keyed by resource id
+    /// </summary>
+    /// <typeparam name="TResource"></typeparam>
     public partial class RList<TResource> : IEnumerable<TResource> where TResource : IResource
     {
         // if true, element will be created rather than returning null
@@ -475,6 +481,10 @@ public partial class Resource
         public RList(TResource resource)
         {
             members = new SortedDictionary<int, TResource>() { { resource.Type, resource } };
+        }
+        public RList(SortedDictionary<int, TResource> _members)
+        {
+            members = _members;
         }
         public RList()
         {
@@ -556,6 +566,16 @@ public partial class Resource
                 returnString += r.ToString() + ", ";
             }
             return returnString;
+        }
+
+        public RList<TResource> Clone(){
+            RList<TResource> newRlist = new();
+
+            foreach (KeyValuePair<int, TResource> kvp in members){
+                newRlist[kvp.Key] = kvp.Value;
+            }
+
+            return newRlist;
         }
 
     }
