@@ -1,7 +1,11 @@
 using Godot;
 using System;
 
-public partial class UITabContainerTrade : TabContainer, UIInterfaces.IEFrameUpdatable
+
+/// <summary>
+/// A list showing all active trade routes.
+/// </summary>
+public partial class UIPanelTradeAll : UIPanel
 {
 	UIList<ResourcePool> ResourcePoolList;
 	UIList<TradeRoute> tradeRouteList;
@@ -18,6 +22,7 @@ public partial class UITabContainerTrade : TabContainer, UIInterfaces.IEFrameUpd
 
 	public override void _Ready()
 	{
+		base._Ready();
 		player = GetNode<Player>("/root/Global/Player");
 
 		//tabReceivers = GetNode<VBoxContainer>("TabContainer/Shipyards");
@@ -35,6 +40,4 @@ public partial class UITabContainerTrade : TabContainer, UIInterfaces.IEFrameUpd
 		//tabReceivers.AddChild(ResourcePoolList);
 		tabTradeRoutes.AddChild(tradeRouteList);
 	}
-
-    public void OnEFrameUpdate(){}
 }

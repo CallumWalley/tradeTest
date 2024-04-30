@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://clgo3jgqxgcsa"]
+[gd_scene load_steps=2 format=3 uid="uid://d36p8e4etbhre"]
 
 [ext_resource type="Script" path="res://GUI/Game/TabContainers/UITabContainerTrade.cs" id="1_55vyg"]
 

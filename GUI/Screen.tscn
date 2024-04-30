@@ -2,11 +2,11 @@
 
 [ext_resource type="Script" path="res://GUI/Screen/Top/UITimeControl.cs" id="1_ys7u5"]
 [ext_resource type="PackedScene" uid="uid://rwliij8aoq6r" path="res://GUI/Elements/UIButtonToggleWindow.tscn" id="3_0miou"]
-[ext_resource type="PackedScene" uid="uid://clgo3jgqxgcsa" path="res://GUI/Game/TabContainers/UITabContainerTrade.tscn" id="3_14ogv"]
 [ext_resource type="Script" path="res://GUI/Screen/Nav.cs" id="3_a3qo3"]
 [ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="4_d36to"]
 [ext_resource type="PackedScene" uid="uid://hayfw1l6yk1x" path="res://GUI/Elements/UIWindow.tscn" id="4_ibjw3"]
-[ext_resource type="PackedScene" uid="uid://drd8h7hdq8c86" path="res://GUI/Game/TabContainers/UITabContainerBuildTemplate.tscn" id="6_1c18q"]
+[ext_resource type="PackedScene" uid="uid://c28stn4qsv6rp" path="res://GUI/Game/Panels/UIPanelTradeAll.tscn" id="6_neq83"]
+[ext_resource type="PackedScene" uid="uid://b5mtlqpxrceqn" path="res://GUI/Game/Panels/UIPanelBuildTemplate.tscn" id="7_13nsc"]
 
 [node name="Screen" type="CanvasLayer"]
 
@@ -102,12 +102,43 @@ script = ExtResource("3_a3qo3")
 layout_mode = 2
 
 [node name="UITradeWindow" parent="." instance=ExtResource("4_ibjw3")]
-visible = false
 
-[node name="UITradeWindow" parent="UITradeWindow" instance=ExtResource("3_14ogv")]
+[node name="UITradeWindow" type="TabContainer" parent="UITradeWindow"]
+custom_minimum_size = Vector2(400, 200)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme = ExtResource("4_d36to")
+
+[node name="Trade Routes" type="VBoxContainer" parent="UITradeWindow/UITradeWindow"]
+layout_mode = 2
+
+[node name="UiPanelTradeAll" parent="UITradeWindow/UITradeWindow/Trade Routes" instance=ExtResource("6_neq83")]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UITradeWindow/UITradeWindow/Trade Routes"]
+visible = false
+layout_mode = 2
+text = "No Trade Routes"
+
+[node name="Shipyards" type="VBoxContainer" parent="UITradeWindow/UITradeWindow"]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UITradeWindow/UITradeWindow/Shipyards"]
+visible = false
+layout_mode = 2
+text = "No Shipyards"
 
 [node name="UIIndustriesWindow" parent="." instance=ExtResource("4_ibjw3")]
 visible = false
 
-[node name="UiTabContainerBuild" parent="UIIndustriesWindow" instance=ExtResource("6_1c18q")]
+[node name="RichTextLabel" type="RichTextLabel" parent="UIIndustriesWindow"]
+text = "Idustry Template Editor"
+fit_content = true
+
+[node name="Industry Templates" parent="UIIndustriesWindow" instance=ExtResource("7_13nsc")]
+visible = false
+size_flags_vertical = 3

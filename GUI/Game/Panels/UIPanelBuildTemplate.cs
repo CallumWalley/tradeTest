@@ -40,8 +40,6 @@ public partial class UIPanelBuildTemplate : UIPanel, UIInterfaces.IEFrameUpdatab
         DrawDisplay();
     }
 
-
-
     void DrawDisplay()
     {
         if (featureList.GetChildCount() > 0)

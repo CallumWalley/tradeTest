@@ -1,6 +1,5 @@
-[gd_scene load_steps=3 format=3 uid="uid://drd8h7hdq8c86"]
+[gd_scene load_steps=2 format=3 uid="uid://lnv6nxuxve78"]
 
-[ext_resource type="Script" path="res://GUI/Elements/UITabContainer.cs" id="1_gwyf3"]
 [ext_resource type="PackedScene" uid="uid://b5mtlqpxrceqn" path="res://GUI/Game/Panels/UIPanelBuildTemplate.tscn" id="2_84btb"]
 
 [node name="UiTabContainerBuild" type="TabContainer"]
@@ -9,8 +8,13 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_gwyf3")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 2
+text = "Idustry Template Editor"
+fit_content = true
 
 [node name="Industry Templates" parent="." instance=ExtResource("2_84btb")]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3

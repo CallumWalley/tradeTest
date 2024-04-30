@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class UITabContainerPool : UITabContainer
+public partial class UITabContainerPool : TabContainer
 {
     [Export]
     public ResourcePool rp;
