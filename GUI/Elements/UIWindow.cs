@@ -7,7 +7,7 @@ public partial class UIWindow : Window
 	public override void _Ready()
 	{
 		base._Ready();
-		// Connect("_close_requested", callable: new Callable(this, "OnCloseRequested"));
+		Connect("close_requested", new Callable(this, "OnCloseRequested"));
 	}
 	protected virtual void OnCloseRequested()
 	{
