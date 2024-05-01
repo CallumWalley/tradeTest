@@ -80,6 +80,10 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
         public Godot.Collections.Dictionary<int, double> FactorsGlobal { get; set; }
         public Godot.Collections.Dictionary<int, double> FactorsLocal { get; set; }
 
+        /// <summary>
+        /// Converts feature constructor to actual feature.
+        /// </summary>
+        /// <returns></returns>
         public FeatureBase Make()
         {
             FeatureBase featureBase = new FeatureBase();
@@ -107,7 +111,9 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
         }
     }
     
-
+    /// <summary>
+    /// Tags to identify feature types.
+    /// </summary>
     public class FeatureTag{
         public string Slug;
         public string Name;
@@ -120,27 +126,13 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
             Description = _description;
         }        
     }
-
+    /// <summary>
+    /// Dictionary of feature types.
+    /// </summary>
     public static Dictionary<string, FeatureTag> featureTags = new Dictionary<string, FeatureTag>(){
         {"orbital", new FeatureTag("orbital", "Orbital", "Must be built in orbit")},
         {"planetary", new FeatureTag("planetary", "Planetary", "Must be built on the surface of a planet")}
     };
+    public Godot.Collections.Array<Node> Children { get { return GetChildren(true); } }
 
-    // public FeatureBase GetFromSlug(string slug)
-    // {
-    //     if (slug == null)
-    //     {
-    //         GD.PrintErr("Feature type unset");
-    //         return new FeatureBase();
-    //     }
-    //     else
-    //     {
-    //         if (!index.ContainsKey(slug))
-    //         {
-    //             GD.PrintErr($"Feature type {slug} not found");
-    //             return new FeatureBase();
-    //         }
-    //         return index[slug];
-    //     }
-    // }
 }

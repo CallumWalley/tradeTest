@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 /// <summary>
@@ -13,7 +14,7 @@ public partial class UIPanelBuildTemplate : UIPanel, UIInterfaces.IEFrameUpdatab
     Label altNameLabel;
     ItemList list;
     ScrollContainer display;
-	Features featureList;
+	List<Node> featureList;
     static readonly PackedScene prefab_UIFeatureSmall = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/Feature/UIFeatureSmall.tscn");
     static readonly PackedScene prefab_UIPanelFeatureFull = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Panels/UIPanelFeatureFull.tscn");
 
@@ -24,7 +25,7 @@ public partial class UIPanelBuildTemplate : UIPanel, UIInterfaces.IEFrameUpdatab
     public override void _Ready()
     {
         base._Ready();
-		featureList = GetNode<Features>("/root/Features");
+		featureList = GetNode<Features>("/root/Features").Children.Where(x => ((Features.FeatureBase)x).Tags.Contains(Features.featureTags["planetary"])).ToList();
         list = GetNode<ItemList>("VBoxContainer/HSplitContainer/ScrollContainer/VBoxContainer/ItemList");
         display = GetNode<ScrollContainer>("VBoxContainer/HSplitContainer/Display");
 
@@ -34,15 +35,14 @@ public partial class UIPanelBuildTemplate : UIPanel, UIInterfaces.IEFrameUpdatab
     public void OnItemListItemSelected(int i)
     {   
         selectedIndex = i;
-        selected = featureList.GetChild<Features.FeatureBase>(selectedIndex);
+        selected = (Features.FeatureBase)featureList[selectedIndex];
         DrawDisplay();
     }
 
 
-
     void DrawDisplay()
     {
-        if (featureList.GetChildCount() > 0)
+        if (featureList.Count > 0)
         {
             // If selected feature changed, or none.
             if ((display.GetChildCount() < 1) || display.GetChild<UIPanelFeatureFull>(0).feature != selected)
@@ -53,7 +53,7 @@ public partial class UIPanelBuildTemplate : UIPanel, UIInterfaces.IEFrameUpdatab
                     c.QueueFree();
                     display.RemoveChild(c);
                 }
-                selected ??= featureList.GetChild<Features.FeatureBase>(0);
+                selected ??= (Features.FeatureBase)featureList[0];
                 UIPanelFeatureFull uipff = prefab_UIPanelFeatureFull.Instantiate<UIPanelFeatureFull>();
                 uipff.feature = selected;
                 display.AddChild(uipff);
@@ -65,9 +65,9 @@ public partial class UIPanelBuildTemplate : UIPanel, UIInterfaces.IEFrameUpdatab
     {
         // If visible, and there are features, update the list to reflect reality.
         base.OnEFrameUpdate();
-        if (Visible && featureList.GetChildCount() > 0){
+        if (Visible && featureList.Count > 0){
             list.Clear();
-            foreach (Node f in featureList.GetChildren())
+            foreach (Node f in featureList)
             {
                 if (f is Features.FeatureBase){
                     list.AddItem(((Features.FeatureBase)f).Name, ((Features.FeatureBase)f).iconMedium);

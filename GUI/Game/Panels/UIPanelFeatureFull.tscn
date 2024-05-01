@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://dpufcfwyovoup"]
+[gd_scene load_steps=6 format=3 uid="uid://dpufcfwyovoup"]
 
 [ext_resource type="Script" path="res://GUI/Game/Panels/UIPanelFeatureFull.cs" id="1_sgn1i"]
 [ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="1_xowkr"]
 [ext_resource type="Texture2D" uid="uid://dfihyt16212ay" path="res://assets/splash/test.png" id="2_6p7vk"]
 [ext_resource type="PackedScene" uid="uid://b8m1ub13xosju" path="res://GUI/Elements/UIRename.tscn" id="4_8k85m"]
+[ext_resource type="Script" path="res://GUI/Elements/UIList.cs" id="5_em8d0"]
 
 [node name="Feature" type="PanelContainer"]
 anchors_preset = 15
@@ -50,7 +51,7 @@ size_flags_horizontal = 8
 text = "Type"
 horizontal_alignment = 2
 
-[node name="Tags" type="HBoxContainer" parent="PanelContainer/Details"]
+[node name="Tags" type="HFlowContainer" parent="PanelContainer/Details"]
 layout_mode = 2
 
 [node name="Description" type="RichTextLabel" parent="PanelContainer/Details"]
@@ -62,3 +63,21 @@ text = "Description Description Description
 Description Description Description Description "
 fit_content = true
 scroll_active = false
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/Details"]
+layout_mode = 2
+
+[node name="Conditions" type="PanelContainer" parent="PanelContainer/Details"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/Details/Conditions"]
+layout_mode = 2
+text = "Conditions"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/Details/Conditions"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="ConditionsList" type="VBoxContainer" parent="PanelContainer/Details/Conditions/ScrollContainer"]
+layout_mode = 2
+script = ExtResource("5_em8d0")

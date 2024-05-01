@@ -5,7 +5,6 @@ public partial class Condition
 {
     // Condition is some logic affecting a feature, evaluated every EFrame
 
-
     public partial class BaseCondition
     {
         // Base class for conditions.
@@ -35,6 +34,10 @@ public partial class Condition
         }
     }
 
+
+    // public static Dictionary<string, BaseCondition> condtion_index = new Dictionary<string, BaseCondition>(){
+    //     {"orbital", new OutputModifier("orbital", "Orbital", "Must be built in orbit")},
+    // };
     // public class Resource.IResourceShortage : BaseFeature{
     //     Feature.Requester requester;
     //     Resource.RList outputs;
