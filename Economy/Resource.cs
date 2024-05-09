@@ -97,19 +97,25 @@ public partial class Resource
         }
 
     }
+    /// <summary>
+    /// Resorce reprisenting a multiplactive value.
+    /// </summary>
+
     public partial class RGroup<T> : IResourceGroup<T> where T : IResource
     {
         public int Type
         {
-            get { return (_members.Count > 0) ? _members.First<T>().Type : 0; }
+            get { return (_adders.Count > 0) ? _adders.First<T>().Type : 0; }
         }
         public string Details { get; set; }
         public string Name { get; set; }
-        protected List<T> _members { get; set; }
+        protected List<T> _adders { get; set; }
+        protected List<T> _muxxers { get; set; }
+
 
         public IEnumerator<T> GetEnumerator()
         {
-            foreach (T element in _members)
+            foreach (T element in _adders)
             {
                 yield return element;
             }
@@ -122,41 +128,51 @@ public partial class Resource
         // Does not consider grandchild members.
         public int Count
         {
-            get { return (_members.Count); }
+            get { return (_adders.Count); }
         }
         public double Sum
         {
-            get { return (_members.Count > 0) ? _members.Sum(x => x.Sum) : 0; }
+            get { return _AdderSubtotal() * _MuxxerSubtotal();  }
         }
         public RGroup(string _name = "Sum", string _details = "Sum")
         {
             Name = _name;
             Details = _details;
-            _members = new();
+            _adders = new();
+            _muxxers = new();
         }
         public RGroup(IEnumerable<T> _add, string _name = "Sum", string _details = "Sum") : this(_name, _details)
         {
-            _members = (List<T>)_add;
+            _adders = (List<T>)_add;
         }
         public RGroup(T _add, string _name = "Sum", string _details = "Sum") : this(_name, _details)
         {
-            _members = new();
-            _members.Add(_add);
+            _adders = new();
+            _adders.Add(_add);
         }
-
+        double _AdderSubtotal(){
+            return (_adders.Count > 0) ? _adders.Sum(x => x.Sum) : 0;
+        }
+        double _MuxxerSubtotal(){
+            double agg = 1;
+            foreach (T muxxer in _muxxers){agg *= agg;}
+            return agg;
+        }
         public void Add(T ra)
         {
-            //throw new
-            _members.Add(ra);
+            _adders.Add(ra);
+        }
+        public void Mux(T ra)
+        {
+            _muxxers.Add(ra);
         }
         public void Remove(T ra)
         {
-            //throw new
-            _members.Remove(ra);
+            _adders.Remove(ra);
         }
         public IResource First()
         {
-            return _members[0];
+            return _adders[0];
         }
         public void Set(double newValue)
         {
@@ -164,7 +180,7 @@ public partial class Resource
         }
         public void Clear()
         {
-            _members.Clear();
+            _adders.Clear();
         }
 
         public override string ToString()
@@ -185,7 +201,7 @@ public partial class Resource
             get
             {
                 double requestCum = 0;
-                foreach (IRequestable i in _members)
+                foreach (IRequestable i in _adders)
                 {
                     requestCum += i.Request;
                 }
@@ -204,7 +220,7 @@ public partial class Resource
         public void Respond(double value)
         {
             double fraction = value / Request;
-            foreach (IRequestable i in _members)
+            foreach (IRequestable i in _adders)
             {
                 i.Respond(fraction * i.Request);
             }
@@ -213,7 +229,7 @@ public partial class Resource
         // Request is actual amount given
         public int State
         {
-            get { return _members.Sum(x => x.State); }
+            get { return _adders.Sum(x => x.State); }
             set
             {
                 { throw new InvalidOperationException("Set method is not valid for groups"); }
@@ -228,7 +244,7 @@ public partial class Resource
         {
             get
             {
-                return _members.Sum(x => x.Request);
+                return _adders.Sum(x => x.Request);
             }
         }
         public override string ToString()
@@ -412,6 +428,8 @@ public partial class Resource
             {2, new ResourceType("Fuel", GD.Load<Texture2D>("res://assets/icons/resources/energy.dds"), true)},
             {3, new ResourceType("Food", GD.Load<Texture2D>("res://assets/icons/resources/food.dds"),  true)},
             {4, new ResourceType("H2O", GD.Load<Texture2D>("res://assets/icons/resources/h2o.png"),  true)},
+            {801, new ResourceType("Fulfillment", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.dds"), false)},
+
             // {801, new ResourceType("Operational Capacity", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.dds"), false)},
             // {802, new ResourceType("Capacity Utilisation", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.dds"), false)},
             // {803, new ResourceType("Efficiency", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.dds"), false)},

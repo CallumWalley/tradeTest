@@ -31,7 +31,6 @@ _validTradeReceiver = null
 StartingResources = null
 
 [node name="FeatureConstructor" parent="Map/Galaxy/Sol/Earth" instance=ExtResource("6_cx087")]
-Tags = null
 Description = "Test Feature"
 Splash = null
 FactorsGlobal = {
