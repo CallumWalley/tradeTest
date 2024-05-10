@@ -26,7 +26,7 @@ public partial class UIPanelTradeAll : UIPanel
 		player = GetNode<Player>("/root/Global/Player");
 
 		//tabReceivers = GetNode<VBoxContainer>("TabContainer/Shipyards");
-		tabTradeRoutes = GetNode<VBoxContainer>("Trade Routes");
+		//tabTradeRoutes = GetNode<VBoxContainer>("Trade Routes");
 
 		//ResourcePoolList = new();
 		tradeRouteList = new();
@@ -38,6 +38,6 @@ public partial class UIPanelTradeAll : UIPanel
 		tradeRouteList.Init(player.trade.Routes, prefab_TradeRoute);
 
 		//tabReceivers.AddChild(ResourcePoolList);
-		tabTradeRoutes.AddChild(tradeRouteList);
+		//tabTradeRoutes.AddChild(tradeRouteList);
 	}
 }

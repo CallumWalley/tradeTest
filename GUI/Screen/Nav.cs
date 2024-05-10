@@ -18,12 +18,6 @@ public partial class Nav : VBoxContainer
 		}
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Draw()
-	{
-
-	}
-
 	public UIAccordian DrawGalaxy(Galaxy g)
 	{
 		UIAccordian ui_g = prefab_UIAccordian.Instantiate<UIAccordian>();

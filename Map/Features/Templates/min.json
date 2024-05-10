@@ -32,7 +32,7 @@
             "planetary"
         ],
         "conditions": {
-            "fulfillment": "input: {2: -1}, output: {1: 2}"
+            "fulfilment": "{input: {'2': -1.0}, output: {'1': 2.0}}"
         },
         "description": "Surface Mining using hand tools."
     },

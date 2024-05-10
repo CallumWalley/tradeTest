@@ -4,7 +4,7 @@ using System.Collections;
 
 public partial class FeatureConstructor : Features.FeatureConstructor
 {
-    
+
     public override void _Ready()
     {
         GetNode<Global>("/root/Global").Connect("Setup", new Callable(this, "Setup"));
@@ -14,7 +14,8 @@ public partial class FeatureConstructor : Features.FeatureConstructor
         // GetParent().CallDeferred("add_child", );
         // QueueFree();
     }
-    void Setup(){
+    void Setup()
+    {
         GetParent().AddChild(Make());
         GetParent().RemoveChild(this);
         QueueFree();

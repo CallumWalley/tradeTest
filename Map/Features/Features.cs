@@ -13,7 +13,7 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
         public Resource.RList<Resource.RGroupRequests<Resource.IRequestable>> FactorsGlobal { get; set; }
         public List<Condition.BaseCondition> Conditions { get; set; }
 
-        public FeatureBase Template {get; set;} = null;
+        public FeatureBase Template { get; set; } = null;
         public Texture2D iconMedium;
 
         [Export(PropertyHint.Enum, "unset,f_dockyard,orbit_storage_fuel,orbit_storage_h2o,planet_mine_minerals,planet_mine_h2o,reclaim,cfuel_water")]
@@ -26,15 +26,16 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
         {
             Conditions.Add(s);
         }
-        public FeatureBase NewFeatureFromTemplate(){
-            FeatureBase newFeature = new(); 
+        public FeatureBase NewFeatureFromTemplate()
+        {
+            FeatureBase newFeature = new();
             newFeature.Template = this;
             newFeature.Name = Name;
             newFeature.Description = Description;
             newFeature.FactorsGlobal = FactorsGlobal.Clone();
             newFeature.FactorsLocal = FactorsLocal.Clone();
             newFeature.Conditions = new();
-            newFeature.Tags = new (Tags);
+            newFeature.Tags = new(Tags);
             newFeature.iconMedium = iconMedium;
             return newFeature;
         }
@@ -68,14 +69,14 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
         }
     }
     public partial class FeatureConstructor : Node
-    {   
+    {
         [Export(PropertyHint.Enum, "unset,f_dockyard,orbit_storage_fuel,orbit_storage_h2o,planet_mine_minerals,planet_mine_h2o,reclaim,cfuel_water")]
         public string Slug { get; set; }
         [Export]
-        public Godot.Collections.Array<string> Tags { get; set; }
+        public Godot.Collections.Array<string> Tags { get; set; } = new();
 
         [Export]
-        public Godot.Collections.Dictionary<string, string> Conditions { get; set; }
+        public Godot.Collections.Dictionary<string, string> Conditions { get; set; } = new();
         [Export]
         public string Description { get; set; }
         [Export]
@@ -94,11 +95,13 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
 
             featureBase.TypeSlug = Slug;
             featureBase.Name = Name;
-            featureBase.Conditions = new (GetConditionsFromTemplate(Conditions));
+            featureBase.Conditions = new(GetConditionsFromTemplate(Conditions));
             featureBase.Tags = new();
-            foreach (string tag in Tags)
+            foreach (string _tag in Tags)
             {
-                featureBase.Tags.Add(featureTags[tag]);
+                FeatureTag tag;
+                featureTags.TryGetValue(_tag, out tag);
+                featureBase.Tags.Add(tag);
             }
             featureBase.Description = Description;
             featureBase.FactorsGlobal = new();
@@ -120,20 +123,23 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
             foreach (KeyValuePair<string, string> kvp in template)
             {
                 // Select type based on key
-                if (kvp.Key == "fullfillment"){
-                   yield return new Condition.Fulfillment(kvp.Value);
-                }else{
+                if (kvp.Key == "fulfilment")
+                {
+                    yield return new Condition.Fulfilment(kvp.Value);
+                }
+                else
+                {
                     GD.Print("Condition class not found");
                 }
-                
             }
         }
     }
-    
+
     /// <summary>
     /// Tags to identify feature types.
     /// </summary>
-    public class FeatureTag{
+    public class FeatureTag
+    {
         public string Slug;
         public string Name;
         public string Description;
@@ -143,7 +149,7 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
             Slug = _slug;
             Name = _name;
             Description = _description;
-        }        
+        }
     }
     /// <summary>
     /// Dictionary of feature types.

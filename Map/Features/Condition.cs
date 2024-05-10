@@ -21,38 +21,55 @@ public partial class Condition
         //     Description = _description;
         // }
 
-        public virtual void Init(){
+        public virtual void Init()
+        {
 
         }
-        public virtual void OnEFrame(){}
+        public virtual void OnEFrame() { }
     }
 
-    public partial class Fulfillment : BaseCondition
+    public partial class Fulfilment : BaseCondition
     {
         // For features representing a transformation of resources.
         public new string Name { get; set; }
         public new string Description { get; set; }
-        public readonly Resource.IResource cause;
-        public readonly Resource.IResource effect;
+        public List<Resource.RStatic> inputs;
+        public List<Resource.RStatic> outputs;
         Features.FeatureBase Feature;
 
-        public Fulfillment(string str){
-            var def = new {input=new{}, output=new{}};
-            var x = JsonConvert.DeserializeAnonymousType(str, def);
+        public Fulfilment(string str)
+        {
+            Dictionary<string, Dictionary<int, double>> x = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<int, double>>>(str);
+            inputs = new List<Resource.RStatic>();
+            foreach (KeyValuePair<int, double> kvp in x["input"])
+            {
+                Resource.RStatic newResource = new Resource.RStatic(kvp.Key, kvp.Value);
+                inputs.Add(newResource);
+            }
+            outputs = new List<Resource.RStatic>();
+            foreach (KeyValuePair<int, double> kvp in x["output"])
+            {
+                Resource.RStatic newResource = new Resource.RStatic(kvp.Key, kvp.Value);
+                outputs.Add(newResource);
+            }
         }
 
-        public void Deserialize(string s){
+        public void Deserialize(string s)
+        {
 
         }
 
-        public override void Init(){
+        public override void Init()
+        {
 
         }
 
-        public override void OnEFrame(){
+        public override void OnEFrame()
+        {
             // Feature.FactorsGlobal[1].Add()
         }
-        public void FromString(){
+        public void FromString()
+        {
 
         }
         // public Fulfillment(Resource.IResource _cause, Resource.IResource _effect)
