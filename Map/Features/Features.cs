@@ -22,6 +22,12 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
         public HashSet<FeatureTag> Tags { get; set; }
         public string Description { get; set; }
 
+        public bool IsBuildable(){
+            if (Template is null){return true;}
+            // Hard code only buildable on planet.
+            return (Tags.Contains(featureTags["planetary"]));
+        }
+
         public void AddCondition(Condition.BaseCondition s)
         {
             Conditions.Add(s);
@@ -62,7 +68,8 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
                 JsonSerializer serializer = new JsonSerializer();
                 foreach (FeatureConstructor tt in (List<FeatureConstructor>)serializer.Deserialize(fi, typeof(List<FeatureConstructor>)))
                 {
-                    CallDeferred("add_child", tt.Make());
+                    //CallDeferred("add_child", tt.Make());
+                    AddChild(tt.Make());
                     tt.QueueFree();
                 }
             }
@@ -99,9 +106,11 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
             featureBase.Tags = new();
             foreach (string _tag in Tags)
             {
-                FeatureTag tag;
-                featureTags.TryGetValue(_tag, out tag);
-                featureBase.Tags.Add(tag);
+                if (! featureTags.ContainsKey(_tag) ){
+                    GD.Print($"Trying to add non existant tag {_tag}");
+                    continue;
+                }
+                featureBase.Tags.Add(featureTags[_tag]);
             }
             featureBase.Description = Description;
             featureBase.FactorsGlobal = new();

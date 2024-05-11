@@ -76,7 +76,7 @@ public partial class UIPanelPoolFeatures : UIPanel, UIInterfaces.IEFrameUpdatabl
     {
         base.OnEFrameUpdate();
         // If visible, and there are features, update the list to reflect reality.
-        if (Visible && resourcePool.GetChildCount() > 0){
+        if (IsVisibleInTree() && resourcePool.GetChildCount() > 0){
             list.Clear();
             foreach (Node f in resourcePool)
             {

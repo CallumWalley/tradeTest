@@ -14,18 +14,17 @@ public partial class UIPanelBuildTemplate : UIPanel, UIInterfaces.IEFrameUpdatab
     Label altNameLabel;
     ItemList list;
     ScrollContainer display;
-	List<Node> featureList;
+	List<Features.FeatureBase> featureList = new();
     static readonly PackedScene prefab_UIFeatureSmall = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/Feature/UIFeatureSmall.tscn");
     static readonly PackedScene prefab_UIPanelFeatureFull = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Panels/UIPanelFeatureFull.tscn");
 
     public Features.FeatureBase selected;
     int selectedIndex = 0;
     UIList<Features.FeatureBase> vbox;
-
+    
     public override void _Ready()
     {
         base._Ready();
-		featureList = GetNode<Features>("/root/Features").Children.Where(x => ((Features.FeatureBase)x).Tags.Contains(Features.featureTags["planetary"])).ToList();
         list = GetNode<ItemList>("VBoxContainer/HSplitContainer/ScrollContainer/VBoxContainer/ItemList");
         display = GetNode<ScrollContainer>("VBoxContainer/HSplitContainer/Display");
 
@@ -38,7 +37,6 @@ public partial class UIPanelBuildTemplate : UIPanel, UIInterfaces.IEFrameUpdatab
         selected = (Features.FeatureBase)featureList[selectedIndex];
         DrawDisplay();
     }
-
 
     void DrawDisplay()
     {
@@ -65,7 +63,8 @@ public partial class UIPanelBuildTemplate : UIPanel, UIInterfaces.IEFrameUpdatab
     {
         // If visible, and there are features, update the list to reflect reality.
         base.OnEFrameUpdate();
-        if (Visible && featureList.Count > 0){
+        featureList = GetNode<Features>("/root/Features").ToList(); //.Where(x => x.IsBuildable()).ToList();
+        if (IsVisibleInTree() && featureList.Count > 0){
             list.Clear();
             foreach (Node f in featureList)
             {

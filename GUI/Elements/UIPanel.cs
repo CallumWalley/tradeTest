@@ -7,6 +7,8 @@ public partial class UIPanel : PanelContainer
 	public override void _Ready()
 	{
 		GetNode<Global>("/root/Global").Connect("EFrameUI", callable: new Callable(this, "OnEFrameUI"));
+		GetNode<Global>("/root/Global").Connect("Setup", callable: new Callable(this, "OnSetup"));
+
 	}
 	public virtual void OnEFrameUI()
 	{
@@ -17,6 +19,10 @@ public partial class UIPanel : PanelContainer
 		}
 	}
 
+	public virtual void OnSetup()
+	{
+		// Called once, before the first EFrame, but after ready
+	}
 	public virtual void OnEFrameUpdate(){
 		
 	}
