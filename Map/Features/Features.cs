@@ -9,9 +9,9 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
     // All types of features are stored in here.
     public partial class FeatureBase : Node
     {
-        public Resource.RList<Resource.RGroupRequests<Resource.IRequestable>> FactorsLocal { get; set; }
-        public Resource.RList<Resource.RGroupRequests<Resource.IRequestable>> FactorsGlobal { get; set; }
-        public List<Condition.BaseCondition> Conditions { get; set; }
+        public Resource.RList<Resource.RGroupRequester<Resource.IRequestable>> FactorsLocal { get; set; } = new();
+        public Resource.RList<Resource.RGroupRequester<Resource.IRequestable>> FactorsGlobal { get; set; } = new();
+        public List<Condition.BaseCondition> Conditions { get; set; } = new();
 
         public FeatureBase Template { get; set; } = null;
         public Texture2D iconMedium;
@@ -38,9 +38,11 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
             newFeature.Template = this;
             newFeature.Name = Name;
             newFeature.Description = Description;
-            newFeature.FactorsGlobal = FactorsGlobal.Clone();
-            newFeature.FactorsLocal = FactorsLocal.Clone();
-            newFeature.Conditions = new();
+            foreach (var c in Conditions)
+            {
+                newFeature.AddCondition(c);
+                
+            }
             newFeature.Tags = new(Tags);
             newFeature.iconMedium = iconMedium;
             return newFeature;

@@ -8,12 +8,13 @@ using System.Security.Cryptography;
 public partial class Condition
 {
     // Condition is some logic affecting a feature, evaluated every EFrame
-    public partial class BaseCondition
+    public partial class BaseConditionFactory
     {
         // Base class for conditions.
         public string Name { get; set; }
         public string Description { get; set; }
         protected JsonSerializer serializer = new JsonSerializer();
+
         // public BaseCondition(Features.FeatureBase _Feature, string _name = "Unknown", string _description = "This doesn't concern you.")
         // {
         //     Feature = _Feature;
@@ -26,18 +27,21 @@ public partial class Condition
 
         }
         public virtual void OnEFrame() { }
+
+        public virtual BaseConditionFactory Clone(){}
     }
 
-    public partial class Fulfilment : BaseCondition
+    public partial class FulfilmentFactory : BaseConditionFactory
     {
         // For features representing a transformation of resources.
         public new string Name { get; set; }
         public new string Description { get; set; }
         public List<Resource.RStatic> inputs;
         public List<Resource.RStatic> outputs;
+        public Resource.RGroupRequester<Resource.IResource> fulfilment;
         Features.FeatureBase Feature;
 
-        public Fulfilment(string str)
+        public FulfilmentFactory(string str)
         {
             Dictionary<string, Dictionary<int, double>> x = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<int, double>>>(str);
             inputs = new List<Resource.RStatic>();
@@ -52,16 +56,19 @@ public partial class Condition
                 Resource.RStatic newResource = new Resource.RStatic(kvp.Key, kvp.Value);
                 outputs.Add(newResource);
             }
+            foreach (KeyValuePair<int, double> kvp in x["output"])
+            {
+                Resource.RStatic newResource = new Resource.RStatic(kvp.Key, kvp.Value);
+                outputs.Add(newResource);
+            }
         }
 
-        public void Deserialize(string s)
+        public void Init()
         {
-
-        }
-
-        public override void Init()
-        {
-
+            foreach (Resource.IResource i in inputs)
+            {
+                Feature.FactorsGlobal[i.Type].Add(i);
+            }
         }
 
         public override void OnEFrame()
@@ -72,14 +79,8 @@ public partial class Condition
         {
 
         }
-        // public Fulfillment(Resource.IResource _cause, Resource.IResource _effect)
-        // {
-        //     string _name = "Resource Shortfall", 
-        //     string _description = "Output is being affected by resource shortfall"
+        public virtual BaseConditionFactory Clone(){}
 
-        //     cause = _cause;
-        //     effect = _effect;
-        // }
     }
 
 

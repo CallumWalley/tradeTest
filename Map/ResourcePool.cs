@@ -40,7 +40,7 @@ public partial class ResourcePool : Node, IEnumerable<Features.FeatureBase>
     // Transformers contains list trade + industry
 
     // These are PRIMARY characteristics. To add or remove requires call of function.
-    public List<Resource.IResourceTransformers> Transformers { get; } = new();
+    // public List<Resource.IResourceTransformers> Transformers { get; } = new();
 
     private int _order = 0;
     public int Order

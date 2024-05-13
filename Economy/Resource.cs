@@ -97,10 +97,10 @@ public partial class Resource
         }
 
     }
+    
     /// <summary>
-    /// Resorce reprisenting a multiplactive value.
+    /// Group of multiple resources added/summed together.
     /// </summary>
-
     public partial class RGroup<T> : IResourceGroup<T> where T : IResource
     {
         public int Type
@@ -111,7 +111,6 @@ public partial class Resource
         public string Name { get; set; }
         protected List<T> _adders { get; set; }
         protected List<T> _muxxers { get; set; }
-
 
         public IEnumerator<T> GetEnumerator()
         {
@@ -188,6 +187,60 @@ public partial class Resource
             return $"{Name}:{Sum}";
         }
     }
+    
+    /// <summary>
+    /// Makes a request from sum of group
+    /// (Cross between RGroup and RGroupRequests)
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public partial class RGroupRequester<T> : RGroup<IResource>,  IResourceGroup<IResource>, IRequestable
+    {
+        public double Request
+        {
+            get
+            {
+                return Sum;
+            }
+            set
+            {
+                { throw new InvalidOperationException("Set method is not valid for groups"); }
+            }
+        }
+
+        public void Respond()
+        {
+            throw new InvalidOperationException("Respind method is not valid RGroupRequester"); 
+        }
+        public void Respond(double value)
+        {
+            throw new InvalidOperationException("Respind method is not valid RGroupRequester"); 
+        }
+
+        // Request is actual amount given
+        public int State
+        {
+            get { return 1; }
+            set
+            {
+                { throw new InvalidOperationException("Set method is not valid for groups"); }
+            }
+        }
+
+        public double Fraction()
+        {
+            return Sum / Request;
+        }
+
+        public override string ToString()
+        {
+            return $"{Sum}/{Request}";
+        }
+    }
+    
+    /// <summary>
+    /// RGroup, but requestable.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public partial class RGroupRequests<T> : RGroup<IRequestable>, IResourceGroup<IRequestable>, IRequestable
     {
         // Same as in group but also sum requests.
@@ -240,24 +293,13 @@ public partial class Resource
         {
             return Sum / Request;
         }
-        public double Weight
-        {
-            get
-            {
-                return _adders.Sum(x => x.Request);
-            }
-        }
+
         public override string ToString()
         {
             return $"{Sum}/{Request}";
         }
     }
-    public interface IResourceTransformers
-    {
-        public RList<IRequestable> Consumption { get; protected set; }
-        public RList<IRequestable> Production { get; protected set; }
-        public System.Object Driver { get; }
-    }
+
 
 
     // public partial class RStorage : RGroup, IResource
