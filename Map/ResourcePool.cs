@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public partial class ResourcePool : Node, IEnumerable<Features.FeatureBase>
+public partial class ResourcePool : Node, IEnumerable<Features.Basic>
 {
     [Export]
     public bool Active;
@@ -139,9 +139,9 @@ public partial class ResourcePool : Node, IEnumerable<Features.FeatureBase>
 
     public void Setup() { }
 
-    public IEnumerator<Features.FeatureBase> GetEnumerator()
+    public IEnumerator<Features.Basic> GetEnumerator()
     {
-        foreach (Features.FeatureBase f in GetChildren())
+        foreach (Features.Basic f in GetChildren())
         {
             yield return f;
         }
@@ -215,7 +215,7 @@ public partial class ResourcePool : Node, IEnumerable<Features.FeatureBase>
 
     public override string ToString() { return Name; }
 
-    public void AddFeature(Features.FeatureBase feature){
+    public void AddFeature(Features.Basic feature){
         AddChild(feature);
     }
 

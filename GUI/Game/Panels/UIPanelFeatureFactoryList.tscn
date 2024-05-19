@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b5mtlqpxrceqn"]
 
-[ext_resource type="Script" path="res://GUI/Game/Panels/UIPanelBuildTemplate.cs" id="1_3wmkf"]
+[ext_resource type="Script" path="res://GUI/Game/Panels/UIPanelFeatureFactoryList.cs" id="1_wlotd"]
 
 [node name="Industry Templates" type="PanelContainer"]
 anchors_preset = 15
@@ -9,7 +9,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
-script = ExtResource("1_3wmkf")
+script = ExtResource("1_wlotd")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2

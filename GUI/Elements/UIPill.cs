@@ -3,11 +3,11 @@ using System;
 
 public partial class UIPill : Label
 {
-	public Features.FeatureTag tag;
+	public string tag;
 	public override void _Ready()
 	{
-		Text = tag.Name;
-		TooltipText = tag.Description;
+		Text = Tags.Name(tag);
+		TooltipText = Tags.Description(tag);
 
 	}
 }

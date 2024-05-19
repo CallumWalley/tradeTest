@@ -4,54 +4,26 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using System.Dynamic;
-public partial class Features : Node, IEnumerable<Features.FeatureBase>
+using System.Linq;
+public partial class Features : Node, IEnumerable<Features.BasicFactory>
 {
-    // All types of features are stored in here.
-    public partial class FeatureBase : Node
+    public override void _Ready()
     {
-        public Resource.RList<Resource.RGroupRequester<Resource.IRequestable>> FactorsLocal { get; set; } = new();
-        public Resource.RList<Resource.RGroupRequester<Resource.IRequestable>> FactorsGlobal { get; set; } = new();
-        public List<Condition.BaseCondition> Conditions { get; set; } = new();
-
-        public FeatureBase Template { get; set; } = null;
-        public Texture2D iconMedium;
-
-        [Export(PropertyHint.Enum, "unset,f_dockyard,orbit_storage_fuel,orbit_storage_h2o,planet_mine_minerals,planet_mine_h2o,reclaim,cfuel_water")]
-        public string TypeSlug { get; set; } = "unset";
-        // public string TypeName { get { return ttype.Name; } }
-        public HashSet<FeatureTag> Tags { get; set; }
-        public string Description { get; set; }
-
-        public bool IsBuildable(){
-            if (Template is null){return true;}
-            // Hard code only buildable on planet.
-            return (Tags.Contains(featureTags["planetary"]));
-        }
-
-        public void AddCondition(Condition.BaseCondition s)
+        foreach (string file in System.IO.Directory.GetFiles("Map/Features/Templates", "*.json"))
         {
-            Conditions.Add(s);
-        }
-        public FeatureBase NewFeatureFromTemplate()
-        {
-            FeatureBase newFeature = new();
-            newFeature.Template = this;
-            newFeature.Name = Name;
-            newFeature.Description = Description;
-            foreach (var c in Conditions)
+            using StreamReader fi = System.IO.File.OpenText(file);
+            JsonSerializer serializer = new();
+            foreach (BasicFactory tt in (List<BasicFactory>)serializer.Deserialize(fi, typeof(List<BasicFactory>)))
             {
-                newFeature.AddCondition(c);
-                
+                //CallDeferred("add_child", tt.Make());
+                AddChild(tt);
+                tt.QueueFree();
             }
-            newFeature.Tags = new(Tags);
-            newFeature.iconMedium = iconMedium;
-            return newFeature;
         }
     }
-
-    public IEnumerator<Features.FeatureBase> GetEnumerator()
+    public IEnumerator<Features.BasicFactory> GetEnumerator()
     {
-        foreach (Features.FeatureBase f in GetChildren())
+        foreach (Features.BasicFactory f in GetChildren().Cast<BasicFactory>())
         {
             yield return f;
         }
@@ -60,24 +32,55 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
     {
         return GetEnumerator();
     }
-
-    public override void _Ready()
+    // All types of features are stored in here.
+    public partial class Basic : Node
     {
-        foreach (string file in System.IO.Directory.GetFiles("Map/Features/Templates", "*.json"))
-        {
-            using (StreamReader fi = System.IO.File.OpenText(file))
-            {
-                JsonSerializer serializer = new JsonSerializer();
-                foreach (FeatureConstructor tt in (List<FeatureConstructor>)serializer.Deserialize(fi, typeof(List<FeatureConstructor>)))
-                {
-                    //CallDeferred("add_child", tt.Make());
-                    AddChild(tt.Make());
-                    tt.QueueFree();
-                }
-            }
+        public Resource.RList<Resource.RGroupRequester<Resource.IRequestable>> FactorsLocal { get; set; } = new();
+        public Resource.RList<Resource.RGroupRequester<Resource.IRequestable>> FactorsGlobal { get; set; } = new();
+        public List<Condition.BaseCondition> Conditions { get; set; } = new();
+
+        public Basic Template { get; set; } = null;
+        public Texture2D iconMedium;
+
+        [Export(PropertyHint.Enum, "unset,f_dockyard,orbit_storage_fuel,orbit_storage_h2o,planet_mine_minerals,planet_mine_h2o,reclaim,cfuel_water")]
+        public string TypeSlug { get; set; } = "unset";
+        // public string TypeName { get { return ttype.Name; } }
+        public List<string> Tags { get; set; }
+        public string Description { get; set; }
+
+        public bool IsBuildable(){
+            if (Template is null){return true;}
+            // Hard code only buildable on planet.
+            return (Tags.Contains("planetary"));
         }
+
+        public void AddCondition(Condition.BaseCondition s)
+        {
+            Conditions.Add(s); 
+        }
+        // public Basic NewFeatureFromTemplate()
+        // {
+        //     Basic newFeature = new();
+        //     newFeature.Template = this;
+        //     newFeature.Name = Name;
+        //     newFeature.Description = Description;
+        //     foreach (var c in Conditions)
+        //     {
+        //         newFeature.AddCondition(c.Instantiate());   
+        //     }
+        //     newFeature.Tags = new(Tags);
+        //     newFeature.iconMedium = iconMedium;
+        //     return newFeature;
+        // }
     }
-    public partial class FeatureConstructor : Node
+
+
+
+
+    /// <summary>
+    /// Factory for basic feature type.
+    /// </summary>
+    public partial class BasicFactory : Node
     {
         [Export(PropertyHint.Enum, "unset,f_dockyard,orbit_storage_fuel,orbit_storage_h2o,planet_mine_minerals,planet_mine_h2o,reclaim,cfuel_water")]
         public string Slug { get; set; }
@@ -94,26 +97,23 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
         public Godot.Collections.Dictionary<int, double> FactorsGlobal { get; set; }
         public Godot.Collections.Dictionary<int, double> FactorsLocal { get; set; }
 
+        [Export]
+        public Texture2D iconMedium;
+
+
         /// <summary>
         /// Converts feature constructor to actual feature.
         /// </summary>
         /// <returns></returns>
-        public FeatureBase Make()
+        public Basic Instantiate()
         {
-            FeatureBase featureBase = new();
+            Basic featureBase = new();
 
             featureBase.TypeSlug = Slug;
             featureBase.Name = Name;
             featureBase.Conditions = new(GetConditionsFromTemplate(Conditions));
-            featureBase.Tags = new();
-            foreach (string _tag in Tags)
-            {
-                if (! featureTags.ContainsKey(_tag) ){
-                    GD.Print($"Trying to add non existant tag {_tag}");
-                    continue;
-                }
-                featureBase.Tags.Add(featureTags[_tag]);
-            }
+            featureBase.Tags = Tags.ToList();
+        
             featureBase.Description = Description;
             featureBase.FactorsGlobal = new();
             featureBase.FactorsLocal = new();
@@ -136,7 +136,7 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
                 // Select type based on key
                 if (kvp.Key == "fulfilment")
                 {
-                    yield return new Condition.Fulfilment(kvp.Value);
+                    yield return new Condition.FulfilmentFactory(kvp.Value).Instantiate();
                 }
                 else
                 {
@@ -146,28 +146,5 @@ public partial class Features : Node, IEnumerable<Features.FeatureBase>
         }
     }
 
-    /// <summary>
-    /// Tags to identify feature types.
-    /// </summary>
-    public class FeatureTag
-    {
-        public string Slug;
-        public string Name;
-        public string Description;
-
-        public FeatureTag(string _slug, string _name, string _description)
-        {
-            Slug = _slug;
-            Name = _name;
-            Description = _description;
-        }
-    }
-    /// <summary>
-    /// Dictionary of feature types.
-    /// </summary>
-    public static Dictionary<string, FeatureTag> featureTags = new Dictionary<string, FeatureTag>(){
-        {"orbital", new FeatureTag("orbital", "Orbital", "Must be built in orbit")},
-        {"planetary", new FeatureTag("planetary", "Planetary", "Must be built on the surface of a planet")}
-    };
     public Godot.Collections.Array<Node> Children { get { return GetChildren(true); } }
 }

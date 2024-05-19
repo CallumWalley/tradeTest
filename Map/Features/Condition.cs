@@ -13,22 +13,9 @@ public partial class Condition
         // Base class for conditions.
         public string Name { get; set; }
         public string Description { get; set; }
-        protected JsonSerializer serializer = new JsonSerializer();
+        protected JsonSerializer serializer = new ();
 
-        // public BaseCondition(Features.FeatureBase _Feature, string _name = "Unknown", string _description = "This doesn't concern you.")
-        // {
-        //     Feature = _Feature;
-        //     Name = _name;
-        //     Description = _description;
-        // }
-
-        public virtual void Init()
-        {
-
-        }
-        public virtual void OnEFrame() { }
-
-        public virtual BaseConditionFactory Clone(){}
+        public virtual BaseCondition Instantiate(){ return new BaseCondition();}
     }
 
     public partial class FulfilmentFactory : BaseConditionFactory
@@ -36,54 +23,54 @@ public partial class Condition
         // For features representing a transformation of resources.
         public new string Name { get; set; }
         public new string Description { get; set; }
-        public List<Resource.RStatic> inputs;
-        public List<Resource.RStatic> outputs;
-        public Resource.RGroupRequester<Resource.IResource> fulfilment;
-        Features.FeatureBase Feature;
-
+        public Resource.RList<Resource.RStatic> inputs;
+        public Resource.RList<Resource.RStatic> outputs;
+        public Resource.RStatic fulfilment;
         public FulfilmentFactory(string str)
         {
             Dictionary<string, Dictionary<int, double>> x = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<int, double>>>(str);
-            inputs = new List<Resource.RStatic>();
+            inputs = new Resource.RList<Resource.RStatic>();
             foreach (KeyValuePair<int, double> kvp in x["input"])
             {
-                Resource.RStatic newResource = new Resource.RStatic(kvp.Key, kvp.Value);
+                Resource.RStatic newResource = new(kvp.Key, kvp.Value);
                 inputs.Add(newResource);
             }
-            outputs = new List<Resource.RStatic>();
+            outputs = new Resource.RList<Resource.RStatic>();
             foreach (KeyValuePair<int, double> kvp in x["output"])
             {
-                Resource.RStatic newResource = new Resource.RStatic(kvp.Key, kvp.Value);
+                Resource.RStatic newResource = new (kvp.Key, kvp.Value);
                 outputs.Add(newResource);
             }
             foreach (KeyValuePair<int, double> kvp in x["output"])
             {
-                Resource.RStatic newResource = new Resource.RStatic(kvp.Key, kvp.Value);
+                Resource.RStatic newResource = new (kvp.Key, kvp.Value);
                 outputs.Add(newResource);
             }
         }
 
-        public void Init()
+        public override BaseCondition Instantiate()
         {
-            foreach (Resource.IResource i in inputs)
-            {
-                Feature.FactorsGlobal[i.Type].Add(i);
-            }
-        }
+            Fulfilment fulfilment = new();
+            fulfilment.Name = Name;
+            fulfilment.Description = Description;
+            fulfilment.inputs = inputs.Clone();
+            fulfilment.outputs = outputs.Clone();
+            fulfilment.fulfilment = new();
 
-        public override void OnEFrame()
-        {
-            // Feature.FactorsGlobal[1].Add()
+            return fulfilment;
         }
-        public void FromString()
-        {
-
-        }
-        public virtual BaseConditionFactory Clone(){}
-
     }
 
 
+    public partial class BaseCondition{
+        public string Name { get; set; }
+        public string Description { get; set; }
+    }
+    public partial class Fulfilment : BaseCondition{
+        public Resource.RList<Resource.RStatic> inputs;
+        public Resource.RList<Resource.RStatic> outputs;
+        public Resource.RStatic fulfilment;
+    }
     // public static Dictionary<string, BaseCondition> condtion_index = new Dictionary<string, BaseCondition>(){
     //     {"orbital", new OutputModifier("orbital", "Orbital", "Must be built in orbit")},
     // };

@@ -6,7 +6,7 @@
 [ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="4_d36to"]
 [ext_resource type="PackedScene" uid="uid://hayfw1l6yk1x" path="res://GUI/Elements/UIWindow.tscn" id="4_ibjw3"]
 [ext_resource type="PackedScene" uid="uid://c28stn4qsv6rp" path="res://GUI/Game/Panels/UIPanelTradeAll.tscn" id="6_neq83"]
-[ext_resource type="PackedScene" uid="uid://b5mtlqpxrceqn" path="res://GUI/Game/Panels/UIPanelBuildTemplate.tscn" id="7_13nsc"]
+[ext_resource type="PackedScene" uid="uid://b5mtlqpxrceqn" path="res://GUI/Game/Panels/UIPanelFeatureFactoryList.tscn" id="7_13nsc"]
 
 [node name="Screen" type="CanvasLayer"]
 

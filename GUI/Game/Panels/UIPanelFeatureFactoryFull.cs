@@ -1,10 +1,11 @@
 using Godot;
 using System;
 
-public partial class UIPanelFeatureFull : UIPanel
+/// summary
+/// UI element for possible build options.
+public partial class UIPanelFeatureFactoryFull : UIPanel
 {
-	// Called when the node enters the scene tree for the first time.
-	public new Features.Basic feature;
+	public Features.BasicFactory feature;
 	UIRename name;
 	Label type;
 	RichTextLabel description;
@@ -29,13 +30,9 @@ public partial class UIPanelFeatureFull : UIPanel
 			pill.tag = tag;
 			tags.AddChild(pill);
 		}
-
-		factors = new UIListResources();
-		factors.Vertical = false;
-
-		factors.Init(feature.FactorsGlobal);
-		GetNode<VBoxContainer>("PanelContainer/Details").AddChild(factors);
-		factors.Update();
+		// factors.Init(feature.FactorsGlobal);
+		//GetNode<VBoxContainer>("PanelContainer/Details").AddChild(factors);
+		//factors.Update();
 	}
 
 	public override void _Draw()
@@ -43,13 +40,5 @@ public partial class UIPanelFeatureFull : UIPanel
 		base._Draw();
 		description.Text = feature.Description;
 		name.node = feature;
-	}
-	
-
-
-	public override void OnEFrameUpdate()
-	{
-		base.OnEFrameUpdate();
-		factors.Update();
 	}
 }

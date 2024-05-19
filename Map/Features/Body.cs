@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 
-public partial class Body : Features.FeatureBase
+public partial class Body : Features.Basic
 {
 
     UITabContainerPool uiBody;

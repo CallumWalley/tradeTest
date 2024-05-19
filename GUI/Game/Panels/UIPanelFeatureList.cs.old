@@ -7,20 +7,20 @@ using System.Linq;
 /// List of all buildable structures.
 /// Used in template menu and build menu.
 /// </summary>
-public partial class UIPanelBuildTemplate : UIPanel, UIInterfaces.IEFrameUpdatable
+public partial class UIPanelFeatureList : UIPanel, UIInterfaces.IEFrameUpdatable
 {
     Label nameLabel;
     Label adjLabel;
     Label altNameLabel;
     ItemList list;
     ScrollContainer display;
-	List<Features.FeatureBase> featureList = new();
+	List<Features.Basic> featureList = new();
     static readonly PackedScene prefab_UIFeatureSmall = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/Feature/UIFeatureSmall.tscn");
     static readonly PackedScene prefab_UIPanelFeatureFull = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Panels/UIPanelFeatureFull.tscn");
 
-    public Features.FeatureBase selected;
+    public Features.Basic selected;
     int selectedIndex = 0;
-    UIList<Features.FeatureBase> vbox;
+    UIList<Features.Basic> vbox;
     
     public override void _Ready()
     {
@@ -34,7 +34,7 @@ public partial class UIPanelBuildTemplate : UIPanel, UIInterfaces.IEFrameUpdatab
     public void OnItemListItemSelected(int i)
     {   
         selectedIndex = i;
-        selected = (Features.FeatureBase)featureList[selectedIndex];
+        selected = (Features.Basic)featureList[selectedIndex];
         DrawDisplay();
     }
 
@@ -51,7 +51,7 @@ public partial class UIPanelBuildTemplate : UIPanel, UIInterfaces.IEFrameUpdatab
                     c.QueueFree();
                     display.RemoveChild(c);
                 }
-                selected ??= (Features.FeatureBase)featureList[0];
+                selected ??= (Features.Basic)featureList[0];
                 UIPanelFeatureFull uipff = prefab_UIPanelFeatureFull.Instantiate<UIPanelFeatureFull>();
                 uipff.feature = selected;
                 display.AddChild(uipff);
@@ -68,8 +68,8 @@ public partial class UIPanelBuildTemplate : UIPanel, UIInterfaces.IEFrameUpdatab
             list.Clear();
             foreach (Node f in featureList)
             {
-                if (f is Features.FeatureBase){
-                    list.AddItem(((Features.FeatureBase)f).Name, ((Features.FeatureBase)f).iconMedium);
+                if (f is Features.Basic){
+                    list.AddItem(((Features.Basic)f).Name, ((Features.Basic)f).iconMedium);
                 }
             }
             list.Select(selectedIndex);

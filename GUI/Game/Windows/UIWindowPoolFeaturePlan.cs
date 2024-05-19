@@ -7,7 +7,7 @@ public partial class UIWindowPoolFeaturePlan : UIWindow
 	public ResourcePool resourcePool;
 
 	[Export]
-	public UIPanelBuildTemplate templateList;
+	public UIPanelFeatureFactoryList templateList;
 
 	[Export]
 	public Button addButton;
@@ -25,7 +25,7 @@ public partial class UIWindowPoolFeaturePlan : UIWindow
 	}
 
 	public void OnButtonPressed(){
-		Features.FeatureBase newFeature = templateList.selected.NewFeatureFromTemplate();
+		Features.Basic newFeature = templateList.selected.Instantiate();
 		resourcePool.AddFeature(newFeature);
 		templateList.OnItemListItemSelected(newFeature.GetIndex());
 		OnCloseRequested();

@@ -225,7 +225,7 @@ public partial class Logistics
         // Zero Ledger
         ResourcePool.Ledger.Clear();
 
-        foreach (Features.FeatureBase rp in ResourcePool.GetChildren())
+        foreach (Features.Basic rp in ResourcePool.GetChildren().Cast<Features.Basic>())
         {
             foreach (Resource.IRequestable f in rp.FactorsGlobal)
             {

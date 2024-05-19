@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections;
 
-public partial class FeatureConstructor : Features.FeatureConstructor
+public partial class FeatureConstructor : Features.BasicFactory
 {
 
     public override void _Ready()
@@ -16,7 +16,7 @@ public partial class FeatureConstructor : Features.FeatureConstructor
     }
     void Setup()
     {
-        GetParent().AddChild(Make());
+        GetParent().AddChild(Instantiate());
         GetParent().RemoveChild(this);
         QueueFree();
     }
