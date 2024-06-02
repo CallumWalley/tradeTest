@@ -46,8 +46,9 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
         public List<string> Tags { get; set; }
         public string Description { get; set; }
 
-        public bool IsBuildable(){
-            if (Template is null){return true;}
+        public bool IsBuildable()
+        {
+            if (Template is null) { return true; }
             // Hard code only buildable on planet.
             return (Tags.Contains("planetary"));
         }
@@ -111,7 +112,7 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
 
             featureBase.FactorsGlobal = new();
             featureBase.FactorsLocal = new();
-            
+
             featureBase.TypeSlug = Slug;
             featureBase.Name = Name;
             featureBase.Conditions = new();
@@ -120,7 +121,7 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
                 featureBase.AddCondition(condition);
             }
             featureBase.Tags = Tags.ToList();
-        
+
             featureBase.Description = Description;
 
 
@@ -143,6 +144,10 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
                 if (kvp.Key == "fulfilment")
                 {
                     yield return new Condition.FulfilmentFactory(kvp.Value).Instantiate();
+                }
+                if (kvp.Key == "constant")
+                {
+                    yield return new Condition.ConstantFactory(kvp.Value).Instantiate();
                 }
                 else
                 {

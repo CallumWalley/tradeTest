@@ -2,24 +2,26 @@ using Godot;
 using System;
 
 public partial class UIRename : LineEdit
-{	
+{
 	public Node node;
-    public override void _Ready()
-    {
-        base._Ready();
+	public override void _Ready()
+	{
+		base._Ready();
 		Connect("text_submitted", new Callable(this, "OnTextSubmitted"));
-    }
+	}
 
 	public override void _Draw()
-	{	
+	{
 		base._Draw();
-		if (!HasFocus()){
+		if (!HasFocus())
+		{
 			Text = node.Name;
 		}
 	}
-	
-	public void OnTextSubmitted(string s){
-		node.Name=s;
+
+	public void OnTextSubmitted(string s)
+	{
+		node.Name = s;
 		ReleaseFocus();
 	}
 
