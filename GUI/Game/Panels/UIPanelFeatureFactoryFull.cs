@@ -33,7 +33,7 @@ public partial class UIPanelFeatureFactoryFull : UIPanel
 		// factors.Init(feature.FactorsGlobal);
 		//GetNode<VBoxContainer>("PanelContainer/Details").AddChild(factors);
 		//factors.Update();
-	}
+	}	
 
 	public override void _Draw()
 	{

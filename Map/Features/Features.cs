@@ -15,9 +15,7 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
             JsonSerializer serializer = new();
             foreach (BasicFactory tt in (List<BasicFactory>)serializer.Deserialize(fi, typeof(List<BasicFactory>)))
             {
-                //CallDeferred("add_child", tt.Make());
                 AddChild(tt);
-                tt.QueueFree();
             }
         }
     }
@@ -35,8 +33,8 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
     // All types of features are stored in here.
     public partial class Basic : Node
     {
-        public Resource.RList<Resource.RGroupRequester<Resource.IRequestable>> FactorsLocal { get; set; } = new();
-        public Resource.RList<Resource.RGroupRequester<Resource.IRequestable>> FactorsGlobal { get; set; } = new();
+        public Resource.RList<Resource.RGroup<Resource.IResource>> FactorsLocal { get; set; } = new();
+        public Resource.RList<Resource.RGroupRequests<Resource.RRequest>> FactorsGlobal { get; set; } = new();
         public List<Condition.BaseCondition> Conditions { get; set; } = new();
 
         public Basic Template { get; set; } = null;
@@ -56,7 +54,9 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
 
         public void AddCondition(Condition.BaseCondition s)
         {
-            Conditions.Add(s); 
+            Conditions.Add(s);
+            s.Feature = this;
+            s.OnAdd();
         }
         // public Basic NewFeatureFromTemplate()
         // {
@@ -109,14 +109,20 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
         {
             Basic featureBase = new();
 
+            featureBase.FactorsGlobal = new();
+            featureBase.FactorsLocal = new();
+            
             featureBase.TypeSlug = Slug;
             featureBase.Name = Name;
-            featureBase.Conditions = new(GetConditionsFromTemplate(Conditions));
+            featureBase.Conditions = new();
+            foreach (Condition.BaseCondition condition in GetConditionsFromTemplate(Conditions))
+            {
+                featureBase.AddCondition(condition);
+            }
             featureBase.Tags = Tags.ToList();
         
             featureBase.Description = Description;
-            featureBase.FactorsGlobal = new();
-            featureBase.FactorsLocal = new();
+
 
             return featureBase;
         }

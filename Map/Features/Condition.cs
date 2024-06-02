@@ -23,29 +23,25 @@ public partial class Condition
         // For features representing a transformation of resources.
         public new string Name { get; set; }
         public new string Description { get; set; }
-        public Resource.RList<Resource.RStatic> inputs;
-        public Resource.RList<Resource.RStatic> outputs;
+        public Resource.RList<Resource.RRequest> inputs;
+        public Resource.RList<Resource.RRequest> outputs;
         public Resource.RStatic fulfilment;
         public FulfilmentFactory(string str)
         {
             Dictionary<string, Dictionary<int, double>> x = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<int, double>>>(str);
-            inputs = new Resource.RList<Resource.RStatic>();
+            inputs = new Resource.RList<Resource.RRequest>();
             foreach (KeyValuePair<int, double> kvp in x["input"])
             {
-                Resource.RStatic newResource = new(kvp.Key, kvp.Value);
+                Resource.RRequest newResource = new(kvp.Key, kvp.Value);
                 inputs.Add(newResource);
             }
-            outputs = new Resource.RList<Resource.RStatic>();
+            outputs = new Resource.RList<Resource.RRequest>();
             foreach (KeyValuePair<int, double> kvp in x["output"])
             {
-                Resource.RStatic newResource = new (kvp.Key, kvp.Value);
+                Resource.RRequest newResource = new (kvp.Key, kvp.Value);
                 outputs.Add(newResource);
             }
-            foreach (KeyValuePair<int, double> kvp in x["output"])
-            {
-                Resource.RStatic newResource = new (kvp.Key, kvp.Value);
-                outputs.Add(newResource);
-            }
+
         }
 
         public override BaseCondition Instantiate()
@@ -61,25 +57,29 @@ public partial class Condition
         }
     }
 
-
     public partial class BaseCondition{
         public string Name { get; set; }
         public string Description { get; set; }
+        public Features.Basic Feature {get; set;} // parent reference.
+
+        public virtual void OnAdd(){} //Called when added to feature.
     }
     public partial class Fulfilment : BaseCondition{
-        public Resource.RList<Resource.RStatic> inputs;
-        public Resource.RList<Resource.RStatic> outputs;
+        public Resource.RList<Resource.RRequest> inputs;
+        public Resource.RList<Resource.RRequest> outputs;
         public Resource.RStatic fulfilment;
+
+        public override void OnAdd(){
+            foreach (Resource.RRequest r in inputs)
+            {
+                Feature.FactorsGlobal[r.Type].Add(r);
+            }
+            foreach (Resource.RRequest r in outputs)
+            {
+                Feature.FactorsGlobal[r.Type].Add(r);
+            }
+            Feature.FactorsLocal[801].Add(fulfilment);
+        }
     }
-    // public static Dictionary<string, BaseCondition> condtion_index = new Dictionary<string, BaseCondition>(){
-    //     {"orbital", new OutputModifier("orbital", "Orbital", "Must be built in orbit")},
-    // };
-    // public class Resource.IResourceShortage : BaseFeature{
-    //     Feature.Requester requester;
-    //     Resource.RList outputs;
-    //     public Resource.IResourceShortage(Feature _Feature, Feature.Requester _requester, List<Resource> _outputs) : base(_Feature){
-    //         outputs = _outputs;
-    //         requester = _requester;
-    //     }
-    // }
+
 }

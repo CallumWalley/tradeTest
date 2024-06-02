@@ -63,6 +63,9 @@ public partial class Resource
         public int Type { get; }
         public virtual string Details { get; set; }
         public virtual string Name { get; set; }
+
+        public RStatic(){}
+
         public RStatic(int _type = 0, double _sum = 0, string _name = "Unknown", string _details = "Base value")
         {
             Type = _type;
@@ -133,13 +136,18 @@ public partial class Resource
         {
             get { return _AdderSubtotal() * _MuxxerSubtotal();  }
         }
-        public RGroup(string _name = "Sum", string _details = "Sum")
-        {
-            Name = _name;
-            Details = _details;
+
+        public RGroup(){
             _adders = new();
             _muxxers = new();
         }
+
+        public RGroup(string _name = "Sum", string _details = "Sum") : this()
+        {
+            Name = _name;
+            Details = _details;
+        }
+
         public RGroup(IEnumerable<T> _add, string _name = "Sum", string _details = "Sum") : this(_name, _details)
         {
             _adders = (List<T>)_add;
@@ -248,6 +256,7 @@ public partial class Resource
         public RGroupRequests(IRequestable _add, string _name = "Sum", string _details = "Sum") : base(_add, _name, _details) { }
         public RGroupRequests(string _name = "Sum", string _details = "Sum") : base(_name, _details) { }
 
+        public RGroupRequests() : base() {}
         // Request is a second
         public double Request
         {
@@ -360,7 +369,8 @@ public partial class Resource
         /// <param name="_fulfilled">If true, base static will be set to request.</param>
         /// <param name="_name"></param>
         /// <param name="_details"></param>
-        public RRequest(int _type, double _request, string _name = "Unknown", string _details = "Base value", bool _fulfilled = false) : base(_type, _fulfilled ? _request : 0, _name, _details: _details)
+        public RRequest():base(){}
+        public RRequest(int _type = 0, double _request = 0, string _name = "Unknown", string _details = "Base value", bool _fulfilled = false) : base(_type, _fulfilled ? _request : 0, _name, _details: _details)
         {
             Request = Math.Round(_request, 2);
         }
@@ -514,7 +524,7 @@ public partial class Resource
     /// Dictionary of resources, keyed by resource id
     /// </summary>
     /// <typeparam name="TResource"></typeparam>
-    public partial class RList<TResource> : IEnumerable<TResource> where TResource : IResource
+    public partial class RList<TResource> : IEnumerable<TResource> where TResource : IResource, new()
     {
         // if true, element will be created rather than returning null
         public bool CreateMissing = false;
@@ -575,7 +585,7 @@ public partial class Resource
         {
             if (!members.ContainsKey(index))
             {
-                members[index] = default(TResource);
+                members[index] = new();
             }
             return members[index];
         }
@@ -657,7 +667,7 @@ public partial class Resource
     //         return new RStatic(index, 0, string.Format(name, Name(index)), string.Format(description, Name(index)));
     //     }
     // }
-    public partial class RGroupList<TResource> : RList<RGroup<TResource>> where TResource : IResource
+    public partial class RGroupList<TResource> : RList<RGroup<TResource>> where TResource : IResource, new()
     {
         // Same as RList, except all elements are groups.
         public RGroupList() : base() { }

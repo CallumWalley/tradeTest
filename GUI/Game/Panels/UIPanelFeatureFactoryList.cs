@@ -15,7 +15,6 @@ public partial class UIPanelFeatureFactoryList : UIPanel, UIInterfaces.IEFrameUp
     ItemList list;
     ScrollContainer display;
 	List<Features.BasicFactory> featureList = new();
-    static readonly PackedScene prefab_UIFeatureSmall = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/Feature/UIFeatureSmall.tscn");
     static readonly PackedScene prefab_UIPanelFeatureFactoryFull = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Panels/UIPanelFeatureFactoryFull.tscn");
 
     public Features.BasicFactory selected;
@@ -56,7 +55,7 @@ public partial class UIPanelFeatureFactoryList : UIPanel, UIInterfaces.IEFrameUp
                 uipff.feature = selected;
                 display.AddChild(uipff);
             }
-            display.GetChild<UIPanelFeatureFull>(0).OnEFrameUpdate();
+            display.GetChild<UIPanelFeatureFactoryFull>(0).OnEFrameUpdate();
         }
     }
     public override void OnEFrameUpdate()
@@ -73,5 +72,5 @@ public partial class UIPanelFeatureFactoryList : UIPanel, UIInterfaces.IEFrameUp
             list.Select(selectedIndex);
             DrawDisplay();
         }
-    }
+    } 
 }

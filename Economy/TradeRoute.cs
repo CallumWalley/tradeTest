@@ -223,7 +223,8 @@ public partial class TradeRoute : Node
         public TradeRoute tradeRoute;
         public RRequestTail twin;
 
-        public RRequestHead(int _type, TradeRoute _tradeRoute) : base(_type, 0)
+        public RRequestHead(){}
+        public RRequestHead(int _type = 0, TradeRoute _tradeRoute = null) : base(_type, 0)
         {
             tradeRoute = _tradeRoute;
         }
@@ -270,7 +271,9 @@ public partial class TradeRoute : Node
         TradeRoute tradeRoute;
         public RRequestHead twin;
 
-        public RRequestTail(int _type, TradeRoute _tradeRoute) : base(_type, 0)
+        public RRequestTail() : base(){}
+
+        public RRequestTail(int _type = 0, TradeRoute _tradeRoute = null) : base(_type, 0)
         {
             tradeRoute = _tradeRoute;
             // Touch leder if non existant.

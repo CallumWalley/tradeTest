@@ -4,15 +4,15 @@ using System;
 public partial class UIPanelFeatureFull : UIPanel
 {
 	// Called when the node enters the scene tree for the first time.
-	public new Features.Basic feature;
+	public Features.Basic feature;
 	UIRename name;
 	Label type;
 	RichTextLabel description;
 	HFlowContainer tags;
-	UIListResources factors;
+	UIListResources globalFactors = new ();
+	UIListResources localFactors = new ();
 
 	static readonly PackedScene prefab_pill = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/UIPill.tscn");
-
 
 	public override void _Ready()
 	{
@@ -30,12 +30,20 @@ public partial class UIPanelFeatureFull : UIPanel
 			tags.AddChild(pill);
 		}
 
-		factors = new UIListResources();
-		factors.Vertical = false;
+		globalFactors.Vertical = false;
+		localFactors.Vertical = false;
 
-		factors.Init(feature.FactorsGlobal);
-		GetNode<VBoxContainer>("PanelContainer/Details").AddChild(factors);
-		factors.Update();
+		globalFactors.Init(feature.FactorsGlobal);
+		localFactors.Init(feature.FactorsLocal);
+
+		globalFactors.ShowBreakdown = true;
+		localFactors.ShowBreakdown = true;
+
+		GetNode<VBoxContainer>("PanelContainer/Details/Factors/VBoxContainer").AddChild(globalFactors);
+		GetNode<VBoxContainer>("PanelContainer/Details/Factors/VBoxContainer").AddChild(localFactors);
+
+		globalFactors.Update();
+		localFactors.Update();
 	}
 
 	public override void _Draw()
@@ -50,6 +58,8 @@ public partial class UIPanelFeatureFull : UIPanel
 	public override void OnEFrameUpdate()
 	{
 		base.OnEFrameUpdate();
-		factors.Update();
+		globalFactors.Update();
+		globalFactors.Update();
+
 	}
 }
