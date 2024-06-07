@@ -53,6 +53,10 @@ public partial class Resource
         // public IEnumerator<T> GetEnumerator();
         public int Count { get; }
     }
+    // public interface IRequestableGroup<out T> : IEnumerable<T>, IResource where T : IRequestable
+    // {
+    //     public int Count { get; }
+    // }
 
     /// <summary>
     ///  A static resource is the most simple resource. It will be a number and stay that way until changed.
@@ -64,7 +68,7 @@ public partial class Resource
         public virtual string Details { get; set; }
         public virtual string Name { get; set; }
 
-        public RStatic(){}
+        public RStatic() { }
 
         public RStatic(int _type = 0, double _sum = 0, string _name = "Unknown", string _details = "Base value")
         {
@@ -100,7 +104,7 @@ public partial class Resource
         }
 
     }
-    
+
     /// <summary>
     /// Group of multiple resources added/summed together.
     /// </summary>
@@ -134,10 +138,11 @@ public partial class Resource
         }
         public double Sum
         {
-            get { return _AdderSubtotal() * _MuxxerSubtotal();  }
+            get { return _AdderSubtotal() * _MuxxerSubtotal(); }
         }
 
-        public RGroup(){
+        public RGroup()
+        {
             _adders = new();
             _muxxers = new();
         }
@@ -157,12 +162,14 @@ public partial class Resource
             _adders = new();
             _adders.Add(_add);
         }
-        double _AdderSubtotal(){
+        double _AdderSubtotal()
+        {
             return (_adders.Count > 0) ? _adders.Sum(x => x.Sum) : 0;
         }
-        double _MuxxerSubtotal(){
+        double _MuxxerSubtotal()
+        {
             double agg = 1;
-            foreach (T muxxer in _muxxers){agg *= agg;}
+            foreach (T muxxer in _muxxers) { agg *= agg; }
             return agg;
         }
         public void Add(T ra)
@@ -195,13 +202,13 @@ public partial class Resource
             return $"{Name}:{Sum}";
         }
     }
-    
+
     /// <summary>
     /// Makes a request from sum of group
     /// (Cross between RGroup and RGroupRequests)
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public partial class RGroupRequester<T> : RGroup<IResource>,  IResourceGroup<IResource>, IRequestable
+    public partial class RGroupRequester<T> : RGroup<IResource>, IResourceGroup<IResource>, IRequestable
     {
         public double Request
         {
@@ -217,11 +224,11 @@ public partial class Resource
 
         public void Respond()
         {
-            throw new InvalidOperationException("Respind method is not valid RGroupRequester"); 
+            throw new InvalidOperationException("Respind method is not valid RGroupRequester");
         }
         public void Respond(double value)
         {
-            throw new InvalidOperationException("Respind method is not valid RGroupRequester"); 
+            throw new InvalidOperationException("Respind method is not valid RGroupRequester");
         }
 
         // Request is actual amount given
@@ -244,7 +251,7 @@ public partial class Resource
             return $"{Sum}/{Request}";
         }
     }
-    
+
     /// <summary>
     /// RGroup, but requestable.
     /// </summary>
@@ -256,7 +263,7 @@ public partial class Resource
         public RGroupRequests(IRequestable _add, string _name = "Sum", string _details = "Sum") : base(_add, _name, _details) { }
         public RGroupRequests(string _name = "Sum", string _details = "Sum") : base(_name, _details) { }
 
-        public RGroupRequests() : base() {}
+        public RGroupRequests() : base() { }
         // Request is a second
         public double Request
         {
@@ -369,7 +376,7 @@ public partial class Resource
         /// <param name="_fulfilled">If true, base static will be set to request.</param>
         /// <param name="_name"></param>
         /// <param name="_details"></param>
-        public RRequest():base(){}
+        public RRequest() : base() { }
         public RRequest(int _type = 0, double _request = 0, string _name = "Unknown", string _details = "Base value", bool _fulfilled = false) : base(_type, _fulfilled ? _request : 0, _name, _details: _details)
         {
             Request = Math.Round(_request, 2);
@@ -487,7 +494,7 @@ public partial class Resource
             // {803, new ResourceType("Efficiency", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.dds"), false)},
             {901, new ResourceType("Freighter", GD.Load<Texture2D>("res://assets/icons/freighter.png"), false)}
         };
-    
+
 
     /// <summary>
     /// Returns resource type for given resourceid
@@ -638,10 +645,12 @@ public partial class Resource
             return returnString;
         }
 
-        public RList<TResource> Clone(){
+        public RList<TResource> Clone()
+        {
             RList<TResource> newRlist = new();
 
-            foreach (KeyValuePair<int, TResource> kvp in members){
+            foreach (KeyValuePair<int, TResource> kvp in members)
+            {
                 newRlist[kvp.Key] = kvp.Value;
             }
 

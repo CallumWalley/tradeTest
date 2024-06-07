@@ -48,23 +48,21 @@ public partial class Condition
         // // For features representing a transformation of resources.
         // public new string Name { get; set; }
         // public new string Description { get; set; }
-        public Resource.RList<Resource.RRequest> inputs;
-        public Resource.RList<Resource.RRequest> outputs;
+        public Resource.RList<Resource.RRequest> inputs = new();
+        public Resource.RGroupList<Resource.RGroupRequests<Resource.RRequest>> outputs = new();
         public Resource.RStatic fulfilment;
         public FulfilmentFactory(string str)
         {
             Dictionary<string, Dictionary<int, double>> x = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<int, double>>>(str);
-            inputs = new Resource.RList<Resource.RRequest>();
             foreach (KeyValuePair<int, double> kvp in x["input"])
             {
                 Resource.RRequest newResource = new(kvp.Key, kvp.Value);
                 inputs.Add(newResource);
             }
-            outputs = new Resource.RList<Resource.RRequest>();
             foreach (KeyValuePair<int, double> kvp in x["output"])
             {
-                Resource.RRequest newResource = new(kvp.Key, kvp.Value);
-                outputs.Add(newResource);
+                Resource.RGroupRequests<Resource.RRequest> newResourceGroup = new(new Resource.RRequest(kvp.Key, kvp.Value));
+                outputs.Add(newResourceGroup);
             }
 
         }
@@ -73,14 +71,14 @@ public partial class Condition
 
         public override BaseCondition Instantiate()
         {
-            Fulfilment fulfilment = new();
-            fulfilment.Name = Name;
-            fulfilment.Description = Description;
-            fulfilment.inputs = inputs.Clone();
-            fulfilment.outputs = outputs.Clone();
-            fulfilment.fulfilment = new();
+            // Fulfilment fulfilment = new();
+            // fulfilment.Name = Name;
+            // fulfilment.Description = Description;
+            // fulfilment.inputs = inputs.Clone();
+            // fulfilment.outputs = outputs.Clone();
+            // fulfilment.fulfilment = new();
 
-            return fulfilment;
+            // return fulfilment;
         }
     }
 
@@ -91,15 +89,20 @@ public partial class Condition
         public Features.Basic Feature { get; set; } // parent reference.
 
         public virtual void OnAdd() { } //Called when added to feature.
+        public virtual void OnEFrame() { } //Called every eframe.
+
     }
     public partial class Fulfilment : BaseCondition
     {
         public Resource.RList<Resource.RRequest> inputs;
+        Dictionary<Resource.RRequest, Resource.RRequest> inputFullfillments;
         public Resource.RList<Resource.RRequest> outputs;
+        Dictionary<Resource.RRequest, Resource.RRequest> outputFullfillments;
         public Resource.RStatic fulfilment;
 
         public override void OnAdd()
         {
+            Feature.FactorsLocal[801].Add(fulfilment);
             foreach (Resource.RRequest r in inputs)
             {
                 Feature.FactorsGlobal[r.Type].Add(r);
@@ -108,7 +111,20 @@ public partial class Condition
             {
                 Feature.FactorsGlobal[r.Type].Add(r);
             }
-            Feature.FactorsLocal[801].Add(fulfilment);
+
+        }
+        public override void OnEFrame()
+        {
+
+            // foreach (Resource.RRequest r in inputs)
+            // {
+            //     Feature.FactorsGlobal[r.Type].Add(r);
+            // }
+            // foreach (Resource.RRequest r in outputs)
+            // {
+            //     Feature.FactorsGlobal[r.Type].Add(r);
+            // }
+            // Feature.FactorsLocal[801].Add(fulfilment);
         }
     }
 
