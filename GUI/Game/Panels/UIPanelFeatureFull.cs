@@ -33,11 +33,11 @@ public partial class UIPanelFeatureFull : UIPanel
 		globalFactors.Vertical = false;
 		localFactors.Vertical = false;
 
-		globalFactors.Init(feature.FactorsGlobal);
-		localFactors.Init(feature.FactorsLocal);
-
 		globalFactors.ShowBreakdown = true;
 		localFactors.ShowBreakdown = true;
+
+		globalFactors.Init(feature.FactorsGlobal);
+		localFactors.Init(feature.FactorsLocal);
 
 		GetNode<VBoxContainer>("PanelContainer/Details/Factors/VBoxContainer").AddChild(globalFactors);
 		GetNode<VBoxContainer>("PanelContainer/Details/Factors/VBoxContainer").AddChild(localFactors);
@@ -59,7 +59,7 @@ public partial class UIPanelFeatureFull : UIPanel
 	{
 		base.OnEFrameUpdate();
 		globalFactors.Update();
-		globalFactors.Update();
+		localFactors.Update();
 
 	}
 }

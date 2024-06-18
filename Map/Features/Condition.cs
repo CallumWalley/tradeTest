@@ -8,50 +8,102 @@ using System.Security.Cryptography;
 public partial class Condition
 {
     // Condition is some logic affecting a feature, evaluated every EFrame
-    public partial class BaseConditionFactory
+    protected JsonSerializer serializer = new();
+    // public partial class BaseConditionFactory
+    // {
+    //     // Base class for conditions.
+    //     public string Name { get; set; }
+    //     public string Description { get; set; }
+    //     protected JsonSerializer serializer = new();
+
+    //     public virtual BaseCondition Instantiate() { return new BaseCondition(); }
+    // }
+    // public partial class ConstantFactory : BaseConditionFactory
+    // {
+    //     public Resource.RList<Resource.RRequest> outputs;
+    //     public ConstantFactory(string str)
+    //     {
+    //         Dictionary<string, Dictionary<int, double>> x = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<int, double>>>(str);
+    //         outputs = new Resource.RList<Resource.RRequest>();
+    //         foreach (KeyValuePair<int, double> kvp in x["output"])
+    //         {
+    //             Resource.RRequest newResource = new(kvp.Key, kvp.Value, _fulfilled: true);
+    //             outputs.Add(newResource);
+    //         }
+
+    //     }
+    //     public override BaseCondition Instantiate()
+    //     {
+    //         Constant condition = new();
+    //         condition.Name = Name;
+    //         condition.Description = Description;
+    //         condition.outputs = outputs.Clone();
+
+    //         return condition;
+    //     }
+    // }
+
+
+    // public partial class FulfilmentFactory : BaseConditionFactory
+    // {
+    //     // // For features representing a transformation of resources.
+    //     // public new string Name { get; set; }
+    //     // public new string Description { get; set; }
+    //     public Resource.RList<Resource.RRequest> inputs = new();
+    //     public Resource.RGroupList<Resource.RGroupRequests<Resource.RRequest>> outputs = new();
+    //     public Resource.RStatic fulfilment;
+    //     public FulfilmentFactory(string str)
+    //     {
+    //         Dictionary<string, Dictionary<int, double>> x = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<int, double>>>(str);
+    //         foreach (KeyValuePair<int, double> kvp in x["input"])
+    //         {
+    //             Resource.RRequest newResource = new(kvp.Key, kvp.Value);
+    //             inputs.Add(newResource);
+    //         }
+    //         foreach (KeyValuePair<int, double> kvp in x["output"])
+    //         {
+    //             Resource.RGroupRequests<Resource.RRequest> newResourceGroup = new(new Resource.RRequest(kvp.Key, kvp.Value));
+    //             outputs.Add(newResourceGroup);
+    //         }
+
+    //     }
+
+
+
+    //     // public override BaseCondition Instantiate()
+    //     // {
+    //     //     // Fulfilment fulfilment = new();
+    //     //     // fulfilment.Name = Name;
+    //     //     // fulfilment.Description = Description;
+    //     //     // fulfilment.inputs = inputs.Clone();
+    //     //     // fulfilment.outputs = outputs.Clone();
+    //     //     // fulfilment.fulfilment = new();
+
+    //     //     // return fulfilment;
+    //     // }
+    // }
+
+    public partial class BaseCondition
     {
-        // Base class for conditions.
         public string Name { get; set; }
         public string Description { get; set; }
-        protected JsonSerializer serializer = new();
+        public Features.Basic Feature { get; set; } // parent reference.
 
-        public virtual BaseCondition Instantiate() { return new BaseCondition(); }
+        public BaseCondition(){}
+
+        public virtual void OnAdd() { } //Called when added to feature.
+        public virtual void OnEFrame() { } //Called every eframe.
+
     }
-    public partial class ConstantFactory : BaseConditionFactory
+    public partial class Fulfilment : BaseCondition
     {
-        public Resource.RList<Resource.RRequest> outputs;
-        public ConstantFactory(string str)
-        {
-            Dictionary<string, Dictionary<int, double>> x = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<int, double>>>(str);
-            outputs = new Resource.RList<Resource.RRequest>();
-            foreach (KeyValuePair<int, double> kvp in x["output"])
-            {
-                Resource.RRequest newResource = new(kvp.Key, kvp.Value, _fulfilled: true);
-                outputs.Add(newResource);
-            }
-
-        }
-        public override BaseCondition Instantiate()
-        {
-            Constant condition = new();
-            condition.Name = Name;
-            condition.Description = Description;
-            condition.outputs = outputs.Clone();
-
-            return condition;
-        }
-    }
-
-
-    public partial class FulfilmentFactory : BaseConditionFactory
-    {
-        // // For features representing a transformation of resources.
-        // public new string Name { get; set; }
-        // public new string Description { get; set; }
-        public Resource.RList<Resource.RRequest> inputs = new();
+        public Resource.RList<Resource.RRequest> inputs;
+        Dictionary<Resource.RRequest, Resource.RRequest> inputFullfillments;
         public Resource.RGroupList<Resource.RGroupRequests<Resource.RRequest>> outputs = new();
+        Dictionary<Resource.RRequest, Resource.RRequest> outputFullfillments;
         public Resource.RStatic fulfilment;
-        public FulfilmentFactory(string str)
+
+        public Fulfilment(string str)
         {
             Dictionary<string, Dictionary<int, double>> x = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<int, double>>>(str);
             foreach (KeyValuePair<int, double> kvp in x["input"])
@@ -66,40 +118,6 @@ public partial class Condition
             }
 
         }
-
-
-
-        public override BaseCondition Instantiate()
-        {
-            // Fulfilment fulfilment = new();
-            // fulfilment.Name = Name;
-            // fulfilment.Description = Description;
-            // fulfilment.inputs = inputs.Clone();
-            // fulfilment.outputs = outputs.Clone();
-            // fulfilment.fulfilment = new();
-
-            // return fulfilment;
-        }
-    }
-
-    public partial class BaseCondition
-    {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public Features.Basic Feature { get; set; } // parent reference.
-
-        public virtual void OnAdd() { } //Called when added to feature.
-        public virtual void OnEFrame() { } //Called every eframe.
-
-    }
-    public partial class Fulfilment : BaseCondition
-    {
-        public Resource.RList<Resource.RRequest> inputs;
-        Dictionary<Resource.RRequest, Resource.RRequest> inputFullfillments;
-        public Resource.RList<Resource.RRequest> outputs;
-        Dictionary<Resource.RRequest, Resource.RRequest> outputFullfillments;
-        public Resource.RStatic fulfilment;
-
         public override void OnAdd()
         {
             Feature.FactorsLocal[801].Add(fulfilment);
@@ -132,6 +150,16 @@ public partial class Condition
     public partial class Constant : BaseCondition
     {
         public Resource.RList<Resource.RRequest> outputs;
+        public Constant(string str)
+        {
+            Dictionary<string, Dictionary<int, double>> x = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<int, double>>>(str);
+            outputs = new Resource.RList<Resource.RRequest>();
+            foreach (KeyValuePair<int, double> kvp in x["output"])
+            {
+                Resource.RRequest newResource = new(kvp.Key, kvp.Value, _fulfilled: true);
+                outputs.Add(newResource);
+            }
+        }
 
         public override void OnAdd()
         {

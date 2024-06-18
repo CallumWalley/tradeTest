@@ -54,8 +54,8 @@
         "tags": [
             "planetary"
         ],
-        "factorsGlobal": {
-            "1": 0.5
+        "conditions": {
+            "constant": "{output: {'1': 1.0}}"
         },
         "description": "Sorting facilities to recover useful resources from industrial waste."
     },
