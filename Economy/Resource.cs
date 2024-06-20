@@ -65,8 +65,8 @@ public partial class Resource
     {
         public virtual double Sum { get; protected set; }
         public int Type { get; }
-        public virtual string Details { get; set; }
-        public virtual string Name { get; set; }
+        public virtual string Details { get; set; } = "Base value";
+        public virtual string Name { get; set; } = "Unknown";
 
         public RStatic() { }
 
@@ -114,14 +114,18 @@ public partial class Resource
         {
             get { return (_adders.Count > 0) ? _adders.First<T>().Type : 0; }
         }
-        public string Details { get; set; }
-        public string Name { get; set; }
+        public string Details { get; set; } = "Sum";
+        public string Name { get; set; } = "Sum";
         protected List<T> _adders { get; set; }
         protected List<T> _muxxers { get; set; }
 
         public IEnumerator<T> GetEnumerator()
         {
             foreach (T element in _adders)
+            {
+                yield return element;
+            }
+            foreach (T element in _muxxers)
             {
                 yield return element;
             }
@@ -134,7 +138,7 @@ public partial class Resource
         // Does not consider grandchild members.
         public int Count
         {
-            get { return (_adders.Count); }
+            get { return (_adders.Count + _muxxers.Count); }
         }
         public double Sum
         {
@@ -169,7 +173,7 @@ public partial class Resource
         double _MuxxerSubtotal()
         {
             double agg = 1;
-            foreach (T muxxer in _muxxers) { agg *= agg; }
+            foreach (T muxxer in _muxxers) { agg *= muxxer.Sum; }
             return agg;
         }
         public void Add(T ra)
@@ -527,6 +531,8 @@ public partial class Resource
     //     return _index[resourceCode].shipWeight;
     // }
 
+
+
     /// <summary>
     /// Dictionary of resources, keyed by resource id
     /// </summary>
@@ -676,43 +682,43 @@ public partial class Resource
     //         return new RStatic(index, 0, string.Format(name, Name(index)), string.Format(description, Name(index)));
     //     }
     // }
-    public partial class RGroupList<TResource> : RList<RGroup<TResource>> where TResource : IResource, new()
-    {
-        // Same as RList, except all elements are groups.
-        public RGroupList() : base() { }
-        public RGroupList(RGroup<TResource> rGroup) : base(rGroup) { }
+    // public partial class RGroupList<TResource> : RList<RGroup<TResource>> where TResource : IResource, new()
+    // {
+    //     // Same as RList, except all elements are groups.
+    //     public RGroupList() : base() { }
+    //     public RGroupList(RGroup<TResource> rGroup) : base(rGroup) { }
 
-        // Currently if is inited with only groups, they will become the members.
-        public RGroupList(TResource resource) : base((new RGroup<TResource>(resource))) { }
-        public RGroupList(IEnumerable<TResource> _members) : base()
-        {
-            foreach (TResource m in _members)
-            {
-                members.Add(m.Type, new RGroup<TResource>(m));
-            }
-        }
+    //     // Currently if is inited with only groups, they will become the members.
+    //     public RGroupList(TResource resource) : base((new RGroup<TResource>(resource))) { }
+    //     public RGroupList(IEnumerable<TResource> _members) : base()
+    //     {
+    //         foreach (TResource m in _members)
+    //         {
+    //             members.Add(m.Type, new RGroup<TResource>(m));
+    //         }
+    //     }
 
-        // override default clear behavior.
-        // keep top level groups.
-        public override void Clear()
-        {
-            foreach (KeyValuePair<int, RGroup<TResource>> member in members)
-            {
-                (member.Value).Clear();
-            }
-        }
-        public void Insert(TResource r)
-        {
-            if (!members.ContainsKey(r.Type))
-            {
-                members[r.Type] = new RGroup<TResource>("Sum", "Sum");
-            }
-            else
-            {
-                this[r.Type].Add(r);
-            }
-        }
-    }
+    //     // override default clear behavior.
+    //     // keep top level groups.
+    //     public override void Clear()
+    //     {
+    //         foreach (KeyValuePair<int, RGroup<TResource>> member in members)
+    //         {
+    //             (member.Value).Clear();
+    //         }
+    //     }
+    //     public void Insert(TResource r)
+    //     {
+    //         if (!members.ContainsKey(r.Type))
+    //         {
+    //             members[r.Type] = new RGroup<TResource>("Sum", "Sum");
+    //         }
+    //         else
+    //         {
+    //             this[r.Type].Add(r);
+    //         }
+    //     }
+    // }
 
 
     // public partial class RStorageList<TResource> : RList<TResource> where TResource : RStorage

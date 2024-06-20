@@ -215,7 +215,8 @@ public partial class ResourcePool : Node, IEnumerable<Features.Basic>
 
     public override string ToString() { return Name; }
 
-    public void AddFeature(Features.Basic feature){
+    public void AddFeature(Features.Basic feature)
+    {
         AddChild(feature);
     }
 

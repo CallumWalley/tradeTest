@@ -40,10 +40,11 @@ public partial class UIPanelPoolFeatures : UIPanel, UIInterfaces.IEFrameUpdatabl
         {
             selected = null;
         }
+        DrawDisplay();
     }
 
-        public void OnItemListItemSelected(int i)
-    {   
+    public void OnItemListItemSelected(int i)
+    {
         selectedIndex = i;
         selected = resourcePool.GetChild<Features.Basic>(selectedIndex);
         DrawDisplay();
@@ -76,11 +77,13 @@ public partial class UIPanelPoolFeatures : UIPanel, UIInterfaces.IEFrameUpdatabl
     {
         base.OnEFrameUpdate();
         // If visible, and there are features, update the list to reflect reality.
-        if (IsVisibleInTree() && resourcePool.GetChildCount() > 0){
+        if (IsVisibleInTree() && resourcePool.GetChildCount() > 0)
+        {
             list.Clear();
             foreach (Node f in resourcePool)
             {
-                if (f is Features.Basic){
+                if (f is Features.Basic)
+                {
                     list.AddItem(((Features.Basic)f).Name, ((Features.Basic)f).iconMedium);
                 }
             }

@@ -9,8 +9,8 @@ public partial class UIPanelFeatureFull : UIPanel
 	Label type;
 	RichTextLabel description;
 	HFlowContainer tags;
-	UIListResources globalFactors = new ();
-	UIListResources localFactors = new ();
+	UIListResources globalFactors = new();
+	UIListResources localFactors = new();
 
 	static readonly PackedScene prefab_pill = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/UIPill.tscn");
 
@@ -52,7 +52,7 @@ public partial class UIPanelFeatureFull : UIPanel
 		description.Text = feature.Description;
 		name.node = feature;
 	}
-	
+
 
 
 	public override void OnEFrameUpdate()

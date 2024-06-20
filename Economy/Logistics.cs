@@ -64,6 +64,10 @@ public partial class Logistics
         {
             if (ResourcePool.Order > 1) { return; }
             ResolveRequests(ResourcePool);
+            foreach (Features.Basic f in ResourcePool)
+            {
+                f.OnEFrame();
+            }
         }
         /// <summary>
         /// This will go down the tree and work out unfulfilled demand for each child.

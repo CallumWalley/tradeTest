@@ -33,7 +33,7 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
     // All types of features are stored in here.
     public partial class Basic : Node
     {
-        public Resource.RList<Resource.RGroup<Resource.IResource>> FactorsLocal { get; set; } = new();
+        public Resource.RList<Resource.RGroupRequests<Resource.IResource>> FactorsLocal { get; set; } = new();
         public Resource.RList<Resource.RGroupRequests<Resource.RRequest>> FactorsGlobal { get; set; } = new();
         public List<Condition.BaseCondition> Conditions { get; set; } = new();
 
@@ -58,6 +58,14 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
             Conditions.Add(s);
             s.Feature = this;
             s.OnAdd();
+        }
+
+        public void OnEFrame()
+        {
+            foreach (Condition.BaseCondition c in Conditions)
+            {
+                c.OnEFrame();
+            }
         }
         // public Basic NewFeatureFromTemplate()
         // {
@@ -94,9 +102,7 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
         public string Description { get; set; }
         [Export]
         public string Splash { get; set; }
-        [Export]
-        public Godot.Collections.Dictionary<int, double> FactorsGlobal { get; set; }
-        public Godot.Collections.Dictionary<int, double> FactorsLocal { get; set; }
+
 
         [Export]
         public Texture2D iconMedium;
@@ -116,14 +122,18 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
             featureBase.TypeSlug = Slug;
             featureBase.Name = Name;
             featureBase.Conditions = new();
-            foreach (Condition.BaseCondition condition in GetConditionsFromTemplate(Conditions))
+            foreach (Condition.BaseCondition condition in GetContitionsFromTemplate(Conditions))
             {
                 featureBase.AddCondition(condition);
             }
             featureBase.Tags = Tags.ToList();
 
             featureBase.Description = Description;
-
+            // Give factors sensible names.
+            foreach (Resource.RGroupRequests<Resource.RRequest> f in featureBase.FactorsGlobal)
+            {
+                f.Name = Name;
+            }
 
             return featureBase;
         }
@@ -135,7 +145,7 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
                 yield return new Resource.RGroupRequests<Resource.IRequestable>(new Resource.RRequest(kvp.Key, kvp.Value, "Base Yield", "Base Yield", true), Name, Description);
             }
         }
-        IEnumerable<Condition.BaseCondition> GetConditionsFromTemplate(Godot.Collections.Dictionary<string, string> template)
+        IEnumerable<Condition.BaseCondition> GetContitionsFromTemplate(Godot.Collections.Dictionary<string, string> template)
         {
             if (template == null) { yield break; }
             foreach (KeyValuePair<string, string> kvp in template)
@@ -143,15 +153,15 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
                 // Select type based on key
                 if (kvp.Key == "fulfilment")
                 {
-                    yield return new Condition.FulfilmentFactory(kvp.Value).Instantiate();
+                    yield return new Condition.Fulfilment(kvp.Value);
                 }
-                if (kvp.Key == "constant")
+                else if (kvp.Key == "constant")
                 {
-                    yield return new Condition.ConstantFactory(kvp.Value).Instantiate();
+                    yield return new Condition.Constant(kvp.Value);
                 }
                 else
                 {
-                    GD.Print("Condition class not found");
+                    GD.Print($"Condition class '{kvp.Key}' not found");
                 }
             }
         }

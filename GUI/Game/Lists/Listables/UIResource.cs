@@ -62,7 +62,6 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
 
     public void Update()
     {
-
         // 
         if (resource is Resource.IRequestable && ((Resource.IRequestable)resource).State > 0)
         {
@@ -71,13 +70,13 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
             value.AddThemeColorOverride("font_color", colorBad);
             name.AddThemeColorOverride("font_color", colorBad);
         }
-        else if (resource.Sum == 0)
-        {
-            value.RemoveThemeColorOverride("font_color");
-            name.RemoveThemeColorOverride("font_color");
-            value.Text = "-";
-            name.Text = $"{resource.Name} : ";
-        }
+        // else if (resource.Sum == 0)
+        // {
+        //     value.RemoveThemeColorOverride("font_color");
+        //     name.RemoveThemeColorOverride("font_color");
+        //     value.Text = "-";
+        //     name.Text = $"{resource.Name} : ";
+        // }
         else
         {
             value.RemoveThemeColorOverride("font_color");
