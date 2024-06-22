@@ -151,13 +151,17 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
             foreach (KeyValuePair<string, string> kvp in template)
             {
                 // Select type based on key
-                if (kvp.Key == "fulfilment")
+                if (kvp.Key == "inputFulfilment")
                 {
-                    yield return new Condition.Fulfilment(kvp.Value);
+                    yield return new Condition.InputFulfilment(kvp.Value);
                 }
-                else if (kvp.Key == "constant")
+                else if (kvp.Key == "outputFulfilment")
                 {
-                    yield return new Condition.Constant(kvp.Value);
+                    yield return new Condition.OutputConstant(kvp.Value);
+                }
+                else if (kvp.Key == "outputConstant")
+                {
+                    yield return new Condition.OutputConstant(kvp.Value);
                 }
                 else
                 {

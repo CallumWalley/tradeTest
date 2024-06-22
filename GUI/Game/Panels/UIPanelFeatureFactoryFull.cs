@@ -14,7 +14,6 @@ public partial class UIPanelFeatureFactoryFull : UIPanel
 
 	static readonly PackedScene prefab_pill = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/UIPill.tscn");
 
-
 	public override void _Ready()
 	{
 		base._Ready();
@@ -33,7 +32,7 @@ public partial class UIPanelFeatureFactoryFull : UIPanel
 		// factors.Init(feature.FactorsGlobal);
 		//GetNode<VBoxContainer>("PanelContainer/Details").AddChild(factors);
 		//factors.Update();
-	}	
+	}
 
 	public override void _Draw()
 	{

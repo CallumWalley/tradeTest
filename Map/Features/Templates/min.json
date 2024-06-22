@@ -13,7 +13,6 @@
         "tags": [
             "orbital"
         ],
-        "factorsGlobal": {},
         "description": "Strategic fuel reserves."
     },
     {
@@ -22,7 +21,6 @@
         "tags": [
             "orbital"
         ],
-        "factorsGlobal": {},
         "description": "Large quantities of dihydrogen oxide, pressurised in order to maintain a subcritical state."
     },
     {
@@ -32,7 +30,8 @@
             "planetary"
         ],
         "conditions": {
-            "fulfilment": "{input: {'2': -1.0}, output: {'1': 2.0}}"
+            "inputFulfilment": "{'2': -1.0}",
+            "outputFulfilment": "{'1': 2.0}"
         },
         "description": "Surface Mining using hand tools."
     },
@@ -42,10 +41,6 @@
         "tags": [
             "planetary"
         ],
-        "factorsGlobal": {
-            "2": -1,
-            "4": 1
-        },
         "description": "Extraction of DHMO from surface ice deposits."
     },
     {
@@ -55,7 +50,7 @@
             "planetary"
         ],
         "conditions": {
-            "constant": "{output: {'1': 1.0}}"
+            "outputConstant": "{'1': 1.0}"
         },
         "description": "Sorting facilities to recover useful resources from industrial waste."
     },
@@ -65,12 +60,8 @@
         "tags": [
             "orbital"
         ],
-        "factorsGlobal": {
-            "2": 3,
-            "4": -1
-        },
         "conditions": {
-            "constant": "{output: {'2': 2.0}}"
+            "outputConstant": "{'2': 2.0}"
         },
         "description": "Facilities for converting H2O into chemical fuel."
     }

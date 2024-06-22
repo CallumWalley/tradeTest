@@ -180,6 +180,7 @@ public partial class Logistics
 
                 foreach (Resource.IRequestable r in kvp.Value.LocalLoss)
                 {
+                    if (r.Request >= 0) { continue; }
                     double alloc = r.Request * resourceSupplyFraction;
                     r.Respond(alloc);
                     tally += alloc;

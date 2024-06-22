@@ -21,22 +21,24 @@ script = ExtResource("1_1b3uo")
 [node name="Sol" parent="Map/Galaxy" instance=ExtResource("4_hdweb")]
 
 [node name="Earth" parent="Map/Galaxy/Sol" instance=ExtResource("5_438b2")]
-aphelion = null
-perihelion = null
-semiMajorAxis = null
-eccentricity = null
-period = null
-Active = null
-_validTradeReceiver = null
-StartingResources = null
 
-[node name="FeatureConstructor" parent="Map/Galaxy/Sol/Earth" instance=ExtResource("6_cx087")]
-Tags = null
-Conditions = null
-Description = "Test Feature"
-Splash = null
-FactorsGlobal = {
-1: 2.0
+[node name="Magic Power Station" parent="Map/Galaxy/Sol/Earth" instance=ExtResource("6_cx087")]
+Slug = "planet_mine_minerals"
+Tags = []
+Conditions = {
+    "outputConstant": "{'2': 2.0}"
 }
+Description = "Test Feature"
+Splash = ""
+
+[node name="Test Mine" parent="Map/Galaxy/Sol/Earth" instance=ExtResource("6_cx087")]
+Slug = "planet_mine_minerals"
+Tags = []
+Conditions = {
+    "inputFulfilment": "{'2': -1.0}",
+    "outputFulfilment": "{'1': 2.0}"
+}
+Description = "Test Feature"
+Splash = ""
 
 [node name="Screen" parent="." instance=ExtResource("2_ohuhm")]
