@@ -20,7 +20,7 @@ public partial class TradeRoute : Node
     public Resource.RList<RRequestTail> ListTailGain { get { return listTailGain; } }
     public Resource.RList<RRequestHead> ListHeadLoss { get { return listHeadLoss; } }
     public Resource.RList<RRequestHead> ListHeadGain { get { return listHeadGain; } }
-    Resource.RRequest shipDemand = new Resource.RRequest(901, 0);
+    Resource.RRequest shipDemand = new Resource.RRequest(811, 0);
     double InboundShipDemand
     {
         get
@@ -223,7 +223,7 @@ public partial class TradeRoute : Node
         public TradeRoute tradeRoute;
         public RRequestTail twin;
 
-        public RRequestHead(){}
+        public RRequestHead() { }
         public RRequestHead(int _type = 0, TradeRoute _tradeRoute = null) : base(_type, 0)
         {
             tradeRoute = _tradeRoute;
@@ -271,7 +271,7 @@ public partial class TradeRoute : Node
         TradeRoute tradeRoute;
         public RRequestHead twin;
 
-        public RRequestTail() : base(){}
+        public RRequestTail() : base() { }
 
         public RRequestTail(int _type = 0, TradeRoute _tradeRoute = null) : base(_type, 0)
         {

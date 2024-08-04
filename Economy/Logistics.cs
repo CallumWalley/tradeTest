@@ -81,7 +81,7 @@ public partial class Logistics
                 // call this funtion on child.
                 CalculateRequests(downline.Tail);
                 // Add ship demand to head.
-                ResourcePool.Ledger[901].LocalLoss.Add(downline.ShipDemand);
+                ResourcePool.Ledger[811].LocalLoss.Add(downline.ShipDemand);
             }
 
             // If no upline, end here.
@@ -101,7 +101,7 @@ public partial class Logistics
                 }
 
                 // Special rules for trade.
-                // if (kvp.Key == 901)
+                // if (kvp.Key == 811)
                 // {
                 //     continue;
                 // }
@@ -128,15 +128,15 @@ public partial class Logistics
             double freightFraction = 0;
 
             // If has upline requesting ships, I Should always resolve as I set the request.
-            if (ResourcePool.Ledger.ContainsKey(901) && ResourcePool.Ledger[901].UplineLoss != null)
+            if (ResourcePool.Ledger.ContainsKey(811) && ResourcePool.Ledger[811].UplineLoss != null)
             {
-                ResourcePool.Ledger[901].UplineLoss.Respond();
+                ResourcePool.Ledger[811].UplineLoss.Respond();
             }
 
             // If has downline.
             if (ResourcePool.Trade.DownlineTraderoutes.Count > 0)
             {
-                freightFraction = Math.Min(ResourcePool.Ledger[901].TradeNet.Fraction(), 1);
+                freightFraction = Math.Min(ResourcePool.Ledger[811].TradeNet.Fraction(), 1);
             }
             // First resolve ship balance.
             // if importing ships that always resolved.

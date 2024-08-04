@@ -11,6 +11,7 @@ public partial class UIPanelFeatureFull : UIPanel
 	HFlowContainer tags;
 	UIListResources globalFactors = new();
 	UIListResources localFactors = new();
+	UIListResources singularFactors = new();
 
 	static readonly PackedScene prefab_pill = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/UIPill.tscn");
 
@@ -29,21 +30,25 @@ public partial class UIPanelFeatureFull : UIPanel
 			pill.tag = tag;
 			tags.AddChild(pill);
 		}
-
-		globalFactors.Vertical = false;
+		singularFactors.Vertical = false;
 		localFactors.Vertical = false;
+		globalFactors.Vertical = false;
 
-		globalFactors.ShowBreakdown = true;
+		singularFactors.ShowBreakdown = false;
 		localFactors.ShowBreakdown = true;
+		globalFactors.ShowBreakdown = true;
 
-		globalFactors.Init(feature.FactorsGlobal);
+		singularFactors.Init(feature.FactorsSingle);
 		localFactors.Init(feature.FactorsLocal);
+		globalFactors.Init(feature.FactorsGlobal);
 
-		GetNode<VBoxContainer>("PanelContainer/Details/Factors/VBoxContainer").AddChild(globalFactors);
+		GetNode<VBoxContainer>("PanelContainer/Details/Factors/VBoxContainer").AddChild(singularFactors);
 		GetNode<VBoxContainer>("PanelContainer/Details/Factors/VBoxContainer").AddChild(localFactors);
+		GetNode<VBoxContainer>("PanelContainer/Details/Factors/VBoxContainer").AddChild(globalFactors);
 
-		globalFactors.Update();
+		singularFactors.Update();
 		localFactors.Update();
+		globalFactors.Update();
 	}
 
 	public override void _Draw()

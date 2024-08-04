@@ -161,7 +161,7 @@ public partial class ResourcePool : Node, IEnumerable<Features.Basic>
         {
             get
             {
-                return ResourcePool.Ledger[901].LocalLoss;
+                return ResourcePool.Ledger[811].LocalLoss;
             }
         }
 

@@ -33,8 +33,25 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
     // All types of features are stored in here.
     public partial class Basic : Node
     {
-        public Resource.RList<Resource.RGroupRequests<Resource.IResource>> FactorsLocal { get; set; } = new();
+        /// <summary>
+        ///  Contains factors pooled with parent rp.
+        ///  Currently 000-800
+        /// </summary>
         public Resource.RList<Resource.RGroupRequests<Resource.RRequest>> FactorsGlobal { get; set; } = new();
+
+        /// <summary>
+        ///  Contains factors not pooled with parent rp.
+        ///  Currently 801-900
+        /// </summary>
+        public Resource.RList<Resource.RGroupRequests<Resource.IResource>> FactorsLocal { get; set; } = new();
+
+        /// <summary>
+        ///  Contains factors that are a single value.
+        ///  Currently 900+
+        /// </summary>
+        public Resource.RList<Resource.RStatic> FactorsSingle { get; set; } = new();
+
+
         public List<Condition.BaseCondition> Conditions { get; set; } = new();
 
         public Basic Template { get; set; } = null;
@@ -162,6 +179,10 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
                 else if (kvp.Key == "outputConstant")
                 {
                     yield return new Condition.OutputConstant(kvp.Value);
+                }
+                else if (kvp.Key == "scalable")
+                {
+                    yield return new Condition.Scalable(kvp.Value);
                 }
                 else
                 {

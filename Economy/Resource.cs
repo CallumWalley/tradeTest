@@ -108,7 +108,7 @@ public partial class Resource
     /// <summary>
     /// Group of multiple resources added/summed together.
     /// </summary>
-    public partial class RGroup<T> : IResourceGroup<T> where T : IResource
+    public partial class RGroup<T> : IResourceGroup<IResource> where T : IResource
     {
         public int Type
         {
@@ -119,7 +119,7 @@ public partial class Resource
         protected List<T> _adders { get; set; }
         protected List<T> _muxxers { get; set; }
 
-        public IEnumerator<T> GetEnumerator()
+        public IEnumerator<IResource> GetEnumerator()
         {
             foreach (T element in _adders)
             {
@@ -260,7 +260,7 @@ public partial class Resource
     /// RGroup, but requestable.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public partial class RGroupRequests<T> : RGroup<IRequestable>, IResourceGroup<IRequestable>, IRequestable
+    public partial class RGroupRequests<T> : RGroup<IResource>, IResourceGroup<IResource>, IRequestable
     {
         // Same as in group but also sum requests.
         public RGroupRequests(IEnumerable<IRequestable> _add, string _name = "Sum", string _details = "Sum") : base(_add, _name, _details) { }
@@ -302,7 +302,7 @@ public partial class Resource
         // Request is actual amount given
         public int State
         {
-            get { return _adders.Sum(x => x.State); }
+            get { return _adders.Sum(x => ((IRequestable)x).State); }
             set
             {
                 { throw new InvalidOperationException("Set method is not valid for groups"); }
@@ -492,11 +492,13 @@ public partial class Resource
             {3, new ResourceType("Food", GD.Load<Texture2D>("res://assets/icons/resources/food.dds"),  true)},
             {4, new ResourceType("H2O", GD.Load<Texture2D>("res://assets/icons/resources/h2o.png"),  true)},
             {801, new ResourceType("Fulfillment", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.dds"), false)},
+            {811, new ResourceType("Freighter", GD.Load<Texture2D>("res://assets/icons/freighter.png"), false)},
 
             // {801, new ResourceType("Operational Capacity", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.dds"), false)},
             // {802, new ResourceType("Capacity Utilisation", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.dds"), false)},
             // {803, new ResourceType("Efficiency", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.dds"), false)},
-            {901, new ResourceType("Freighter", GD.Load<Texture2D>("res://assets/icons/freighter.png"), false)}
+            {901, new ResourceType("Scale", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.dds"), false)},
+
         };
 
 

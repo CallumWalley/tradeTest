@@ -57,7 +57,7 @@ public partial class PlayerTrade : Node
 		PlayerTrade player;
 		public ResourcePool Tail { get; private set; }
 		public ResourcePool Head { get; private set; }
-		public Resource.RStatic TradeWeight { get; set; } = new Resource.RStatic(901, 0);
+		public Resource.RStatic TradeWeight { get; set; } = new Resource.RStatic(811, 0);
 
 		//TODO: Might be tidier way to get parent instance?
 		public ValidTradeHead(PlayerTrade _player, ResourcePool _head, ResourcePool _tail)

@@ -24,23 +24,28 @@
         "description": "Large quantities of dihydrogen oxide, pressurised in order to maintain a subcritical state."
     },
     {
-        "name": "Surface Mine",
+        "name": "Mineral Mine",
         "slug": "planet_mine_minerals",
         "tags": [
             "planetary"
         ],
         "conditions": {
+            "scalable": "1",
             "inputFulfilment": "{'2': -1.0}",
             "outputFulfilment": "{'1': 2.0}"
         },
         "description": "Surface Mining using hand tools."
     },
     {
-        "name": "Ice Mine",
+        "name": "Desalination Plant",
         "slug": "planet_mine_h2o",
         "tags": [
             "planetary"
         ],
+        "conditions": {
+            "inputFulfilment": "{'2': -1.0}",
+            "outputFulfilment": "{'4': 3.0}"
+        },
         "description": "Extraction of DHMO from surface ice deposits."
     },
     {
@@ -58,10 +63,11 @@
         "name": "Chemical Fuel Plant",
         "slug": "cfuel_water",
         "tags": [
-            "orbital"
+            "planetary"
         ],
         "conditions": {
-            "outputConstant": "{'2': 2.0}"
+            "inputFulfilment": "{'4': -2.0}",
+            "outputFulfilment": "{'2': 1.0}"
         },
         "description": "Facilities for converting H2O into chemical fuel."
     }

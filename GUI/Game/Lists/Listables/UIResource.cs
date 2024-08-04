@@ -38,7 +38,6 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
         name = GetNode<Label>("Name");
         details = GetNode<Label>("Details");
         ((TextureRect)GetNode("Icon")).Texture = Resource.Icon((resource != null) ? resource.Type : 0);
-        TooltipText = resource.Name;
     }
 
 
@@ -57,6 +56,7 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
             //Visible = !(resource.Count < 1 && Mathf.Abs(resource.Sum) < 0.1);
             details.Visible = ShowDetails;
             name.Visible = ShowName;
+            TooltipText = resource.Name;
         }
     }
 

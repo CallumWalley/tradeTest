@@ -32,8 +32,32 @@ public partial class Condition
         public virtual void OnEFrame() { } //Called every eframe.
 
     }
+    /// <summary>
+    /// Represents a thing that can be larger or smaller.
+    /// </summary>
+    public partial class Scalable : BaseCondition
+    {
+
+        // For things that have their primary properties modified by their size.
+        public Resource.RList<Resource.RRequest> outputs = new Resource.RList<Resource.RRequest>();
+        double InitialScale { get; set; }
+
+        public Scalable() : this(1) { }
+        public Scalable(string _initialScale) : this(Convert.ToDouble(_initialScale)) { }
+
+        public Scalable(double _initialScale)
+        {
+            InitialScale = _initialScale;
+        }
+        public override void OnAdd()
+        {
+            base.OnAdd();
+            Feature.FactorsSingle.Add(new Resource.RStatic(800, InitialScale, "HasScale", "Facility Size"));
+        }
+    }
     public partial class FulfilmentOutput : BaseCondition
     {
+        // Sets 'output' in proportion to fulfillment.
         public Resource.RList<Resource.RRequest> outputs = new Resource.RList<Resource.RRequest>();
         public FulfilmentOutput(string str) : this(JsonConvert.DeserializeObject<Dictionary<int, double>>(str)) { }
 
@@ -60,8 +84,8 @@ public partial class Condition
     public partial class InputFulfilment : BaseCondition
     {
 
-        // All Resources in outputs will have their quantity scaled based on percentage of input fullfilled.
-        Dictionary<Resource.RRequest, Resource.RRequest> inputFullfillments = new();
+        // Sets 'fulfillment' in proportion to received inputs.
+        Dictionary<Resource.RGroupRequests<Resource.RRequest>, Resource.RRequest> inputFullfillments = new();
 
         public InputFulfilment(string str) : this(JsonConvert.DeserializeObject<Dictionary<int, double>>(str)) { }
 
@@ -69,7 +93,8 @@ public partial class Condition
         {
             foreach (KeyValuePair<int, double> kvp in inputs)
             {
-                Resource.RRequest newr = new(kvp.Key, kvp.Value, "Input", "Required input");
+                Resource.RGroupRequests<Resource.RRequest> newr = new(new Resource.RRequest(kvp.Key, kvp.Value, "Base", "Base input"));
+                //                newr.Mux(Feature.FactorsSingle[800]);
                 Resource.RRequest newf = new Resource.RRequest(801, 1, $"{Resource.Name(kvp.Key)} Fullfilment.", $"How much of the requested resource was delivered");
                 inputFullfillments[newr] = newf;
             }
@@ -79,18 +104,18 @@ public partial class Condition
             base.OnAdd();
             Feature.FactorsLocal[801].Name = "Input Fulfillment";
             Feature.FactorsLocal[801].Add(new Resource.RRequest(801, 1, "Base", "Expected Fulfillment", true));
-            foreach (KeyValuePair<Resource.RRequest, Resource.RRequest> kvp in inputFullfillments)
+            foreach (KeyValuePair<Resource.RGroupRequests<Resource.RRequest>, Resource.RRequest> kvp in inputFullfillments)
             {
+                /// fulfilment is equal to this
                 Feature.FactorsLocal[801].Mux(kvp.Value);
                 Feature.FactorsGlobal[kvp.Key.Type].Add(kvp.Key);
+
             }
-
-
         }
         public override void OnEFrame()
         {
             base.OnEFrame();
-            foreach (KeyValuePair<Resource.RRequest, Resource.RRequest> kvp in inputFullfillments)
+            foreach (KeyValuePair<Resource.RGroupRequests<Resource.RRequest>, Resource.RRequest> kvp in inputFullfillments)
             {
                 kvp.Value.Set(kvp.Key.Fraction());
             }

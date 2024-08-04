@@ -1,4 +1,5 @@
 using Godot;
+using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,13 +15,13 @@ public partial class UIPanelFeatureFactoryList : UIPanel, UIInterfaces.IEFrameUp
     Label altNameLabel;
     ItemList list;
     ScrollContainer display;
-	List<Features.BasicFactory> featureList = new();
+    List<Features.BasicFactory> featureList = new();
     static readonly PackedScene prefab_UIPanelFeatureFactoryFull = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Panels/UIPanelFeatureFactoryFull.tscn");
 
     public Features.BasicFactory selected;
     int selectedIndex = 0;
     UIList<Features.Basic> vbox;
-    
+
     public override void _Ready()
     {
         base._Ready();
@@ -31,8 +32,9 @@ public partial class UIPanelFeatureFactoryList : UIPanel, UIInterfaces.IEFrameUp
     }
 
     public void OnItemListItemSelected(int i)
-    {   
+    {
         selectedIndex = i;
+        if (selectedIndex >= featureList.Count) { return; }
         selected = (Features.BasicFactory)featureList[selectedIndex];
         DrawDisplay();
     }
@@ -62,8 +64,10 @@ public partial class UIPanelFeatureFactoryList : UIPanel, UIInterfaces.IEFrameUp
     {
         // If visible, and there are features, update the list to reflect reality.
         base.OnEFrameUpdate();
-        featureList = GetNode<Features>("/root/Features").ToList(); //.Where(x => x.IsBuildable()).ToList();
-        if (IsVisibleInTree() && featureList.Count > 0){
+        string location = "planetary";
+        featureList = GetNode<Features>("/root/Features").ToList().Where(x => x.Tags.Contains(location)).ToList();
+        if (IsVisibleInTree() && featureList.Count > 0)
+        {
             list.Clear();
             foreach (Node f in featureList)
             {
@@ -72,5 +76,5 @@ public partial class UIPanelFeatureFactoryList : UIPanel, UIInterfaces.IEFrameUp
             list.Select(selectedIndex);
             DrawDisplay();
         }
-    } 
+    }
 }

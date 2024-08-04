@@ -15,7 +15,7 @@ public partial class UIRename : LineEdit
 		base._Draw();
 		if (!HasFocus())
 		{
-			Text = node.Name;
+			Text = node.Name ?? "Unknown";
 		}
 	}
 

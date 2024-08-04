@@ -2,7 +2,7 @@ using Godot;
 using System;
 
 public partial class UIWindowPoolFeaturePlan : UIWindow
-{	
+{
 	[Export]
 	public ResourcePool resourcePool;
 
@@ -24,10 +24,11 @@ public partial class UIWindowPoolFeaturePlan : UIWindow
 	{
 	}
 
-	public void OnButtonPressed(){
+	public void OnButtonPressed()
+	{
 		Features.Basic newFeature = templateList.selected.Instantiate();
 		resourcePool.AddFeature(newFeature);
-		templateList.OnItemListItemSelected(newFeature.GetIndex());
+		//templateList.OnItemListItemSelected(newFeature.GetIndex());
 		OnCloseRequested();
 	}
 }
