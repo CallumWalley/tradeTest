@@ -63,9 +63,9 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
     public void Update()
     {
         // 
-        if (resource is Resource.IRequestable && ((Resource.IRequestable)resource).State > 0)
+        if (resource is Resource.IResource && ((Resource.IResource)resource).State > 0)
         {
-            value.Text = string.Format("{0:G}/{1:G}", resource.Sum, ((Resource.IRequestable)resource).Request);
+            value.Text = string.Format("{0:G}/{1:G}", resource.Sum, ((Resource.IResource)resource).Request);
             name.Text = $"{resource.Name}";
             value.AddThemeColorOverride("font_color", colorBad);
             name.AddThemeColorOverride("font_color", colorBad);
@@ -97,7 +97,7 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
         ExpandDetails(resource, vbc1);
         return vbc1;
     }
-    // private void ExpandDetails(Resource.IResourceGroup<Resource.IRequestable> r1, VBoxContainer vbc1)
+    // private void ExpandDetails(Resource.IResourceGroup<Resource.IResource> r1, VBoxContainer vbc1)
     // {
     //     // Don't know why, but this is called before ready.
     //     // Create element representing this.
@@ -113,7 +113,7 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
     //         VBoxContainer vbc2 = new();
     //         hbc.AddChild(new VSeparator());
     //         hbc.AddChild(vbc2);
-    //         foreach (Resource.IRequestable r2 in r1)
+    //         foreach (Resource.IResource r2 in r1)
     //         {
     //             ExpandDetails(r2, vbc2);
     //         }

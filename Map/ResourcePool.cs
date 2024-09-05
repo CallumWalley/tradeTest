@@ -155,9 +155,9 @@ public partial class ResourcePool : Node, IEnumerable<Features.Basic>
     public class _Trade
     {
         ResourcePool ResourcePool;
-        public Resource.RGroupRequests<Resource.IRequestable> shipDemand = new Resource.RGroupRequests<Resource.IRequestable>("Trade vessels in use.");
+        public Resource.RGroup<Resource.IResource> shipDemand = new Resource.RGroup<Resource.IResource>("Trade vessels in use.");
         // needs custom ui element
-        public Resource.RGroupRequests<Resource.IRequestable> ShipDemand
+        public Resource.RGroup<Resource.IResource> ShipDemand
         {
             get
             {

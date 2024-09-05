@@ -11,16 +11,16 @@ public partial class TradeRoute : Node
 
     [Export]
     public ResourcePool Tail { get; set; }
-    Resource.RList<RRequestTail> listTailLoss;
-    Resource.RList<RRequestTail> listTailGain;
-    Resource.RList<RRequestHead> listHeadLoss;
-    Resource.RList<RRequestHead> listHeadGain;
+    Resource.RDict<RStaticTail> listTailLoss;
+    Resource.RDict<RStaticTail> listTailGain;
+    Resource.RDict<RStaticHead> listHeadLoss;
+    Resource.RDict<RStaticHead> listHeadGain;
 
-    public Resource.RList<RRequestTail> ListTailLoss { get { return listTailLoss; } }
-    public Resource.RList<RRequestTail> ListTailGain { get { return listTailGain; } }
-    public Resource.RList<RRequestHead> ListHeadLoss { get { return listHeadLoss; } }
-    public Resource.RList<RRequestHead> ListHeadGain { get { return listHeadGain; } }
-    Resource.RRequest shipDemand = new Resource.RRequest(811, 0);
+    public Resource.RDict<RStaticTail> ListTailLoss { get { return listTailLoss; } }
+    public Resource.RDict<RStaticTail> ListTailGain { get { return listTailGain; } }
+    public Resource.RDict<RStaticHead> ListHeadLoss { get { return listHeadLoss; } }
+    public Resource.RDict<RStaticHead> ListHeadGain { get { return listHeadGain; } }
+    Resource.RStatic shipDemand = new Resource.RStatic(811, 0);
     double InboundShipDemand
     {
         get
@@ -36,7 +36,7 @@ public partial class TradeRoute : Node
             return (ListHeadLoss == null) ? 0 : ListHeadLoss.Sum(x => x.Request);
         }
     }
-    public Resource.IRequestable ShipDemand
+    public Resource.IResource ShipDemand
     {
         get
         {
@@ -89,11 +89,11 @@ public partial class TradeRoute : Node
         distance = 10; // Tail.GetParent<Body>().Position.DistanceTo(Head.GetParent<Body>().Position);
         Name = $"Trade route from {Head.Name} to {Tail.Name}";
 
-        listHeadGain = new Resource.RList<RRequestHead>();
-        listHeadLoss = new Resource.RList<RRequestHead>();
+        listHeadGain = new Resource.RDict<RStaticHead>();
+        listHeadLoss = new Resource.RDict<RStaticHead>();
 
-        listTailGain = new Resource.RList<RRequestTail>();
-        listTailLoss = new Resource.RList<RRequestTail>();
+        listTailGain = new Resource.RDict<RStaticTail>();
+        listTailLoss = new Resource.RDict<RStaticTail>();
 
         shipDemand.Name = Name;
     }
@@ -156,8 +156,8 @@ public partial class TradeRoute : Node
         }
         else
         {
-            RRequestHead head = new RRequestHead(key, this);
-            RRequestTail tail = new RRequestTail(key, this);
+            RStaticHead head = new RStaticHead(key, this);
+            RStaticTail tail = new RStaticTail(key, this);
             tail.twin = head;
             head.twin = tail;
             head.Request = value;
@@ -179,8 +179,8 @@ public partial class TradeRoute : Node
     // {
     //     if (!ListHeadGain.ContainsKey(index))
     //     {
-    //         RRequestTail tail = new RRequestTail(index, tradeRoute);
-    //         RRequestHead head = new RRequestHead(index, tradeRoute);
+    //         RStaticTail tail = new RStaticTail(index, tradeRoute);
+    //         RStaticHead head = new RStaticHead(index, tradeRoute);
     //         tail.twin = head;
     //         head.twin = tail;
     //         members.Add(index, tail);
@@ -201,7 +201,7 @@ public partial class TradeRoute : Node
 
     // Same as regular list except makes sure to add corresponding element.
     // When adding to tail, create corresponding in head. 
-    // public class RListRequestTail<T> : Resource.RList<RRequestTail>
+    // public class RListRequestTail<T> : Resource.RList<RStaticTail>
     // {
 
     // }
@@ -209,7 +209,7 @@ public partial class TradeRoute : Node
     /// Same as regular request except details linked to trade.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    // class RListRequestHead<T> : Resource.RList<RRequestHead>
+    // class RListRequestHead<T> : Resource.RList<RStaticHead>
     // {
     // 	TradeRoute tradeRoute;
     // 	public RListRequestHead(int _type, TradeRoute _tradeRoute) : base(_type, 0)
@@ -218,13 +218,13 @@ public partial class TradeRoute : Node
     // 	}
 
     // }
-    public class RRequestHead : Resource.RRequest
+    public class RStaticHead : Resource.RStatic
     {
         public TradeRoute tradeRoute;
-        public RRequestTail twin;
+        public RStaticTail twin;
 
-        public RRequestHead() { }
-        public RRequestHead(int _type = 0, TradeRoute _tradeRoute = null) : base(_type, 0)
+        public RStaticHead() { }
+        public RStaticHead(int _type = 0, TradeRoute _tradeRoute = null) : base(_type, 0)
         {
             tradeRoute = _tradeRoute;
         }
@@ -266,14 +266,14 @@ public partial class TradeRoute : Node
     /// <summary>
     /// Drives RequestHead
     /// </summary>
-    public class RRequestTail : Resource.RRequest
+    public class RStaticTail : Resource.RStatic
     {
         TradeRoute tradeRoute;
-        public RRequestHead twin;
+        public RStaticHead twin;
 
-        public RRequestTail() : base() { }
+        public RStaticTail() : base() { }
 
-        public RRequestTail(int _type = 0, TradeRoute _tradeRoute = null) : base(_type, 0)
+        public RStaticTail(int _type = 0, TradeRoute _tradeRoute = null) : base(_type, 0)
         {
             tradeRoute = _tradeRoute;
             // Touch leder if non existant.

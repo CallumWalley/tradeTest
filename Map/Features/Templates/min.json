@@ -32,7 +32,7 @@
         "conditions": {
             "scalable": "1",
             "inputFulfilment": "{'2': -1.0}",
-            "outputFulfilment": "{'1': 2.0}"
+            "fulfilmentOutput": "{'1': 2.0}"
         },
         "description": "Surface Mining using hand tools."
     },
@@ -43,8 +43,9 @@
             "planetary"
         ],
         "conditions": {
+            "scalable": "1",
             "inputFulfilment": "{'2': -1.0}",
-            "outputFulfilment": "{'4': 3.0}"
+            "fulfilmentOutput": "{'4': 3.0}"
         },
         "description": "Extraction of DHMO from surface ice deposits."
     },
@@ -55,6 +56,7 @@
             "planetary"
         ],
         "conditions": {
+            "scalable": "1",
             "outputConstant": "{'1': 1.0}"
         },
         "description": "Sorting facilities to recover useful resources from industrial waste."
@@ -66,8 +68,9 @@
             "planetary"
         ],
         "conditions": {
+            "scalable": "1",
             "inputFulfilment": "{'4': -2.0}",
-            "outputFulfilment": "{'2': 1.0}"
+            "fulfilmentOutput": "{'2': 1.0}"
         },
         "description": "Facilities for converting H2O into chemical fuel."
     }

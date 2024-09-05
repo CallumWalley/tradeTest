@@ -178,7 +178,7 @@ public partial class Logistics
                 // How much of this request can be filled.
                 double resourceSupplyFraction = Math.Max(Math.Min(-tally / kvp.Value.LocalLoss.Request, 1), 0);
 
-                foreach (Resource.IRequestable r in kvp.Value.LocalLoss)
+                foreach (Resource.IResource r in kvp.Value.LocalLoss)
                 {
                     if (r.Request >= 0) { continue; }
                     double alloc = r.Request * resourceSupplyFraction;
@@ -203,7 +203,7 @@ public partial class Logistics
                 //  ...
                 // recalculate shortfall.
 
-                foreach (Resource.IRequestable r in kvp.Value.DownlineLoss)
+                foreach (Resource.IResource r in kvp.Value.DownlineLoss)
                 {
                     double alloc = r.Request * resourceSupplyFraction;
                     r.Respond(r.Request * resourceSupplyFraction);
@@ -232,7 +232,7 @@ public partial class Logistics
 
         foreach (Features.Basic rp in ResourcePool.GetChildren().Cast<Features.Basic>())
         {
-            foreach (Resource.IRequestable f in rp.FactorsGlobal)
+            foreach (Resource.IResource f in rp.FactorsGlobal)
             {
                 if (f.Sum > 0)
                 {

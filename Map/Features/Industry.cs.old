@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public partial class Industry : Node
 {
 
-    public Resource.RList<Resource.IRequestable> Factors { get; set; }
+    public Resource.RList<Resource.IResource> Factors { get; set; }
     public List<Situations.Base> Situations { get; protected set; }
 
     public Texture2D iconMedium;
@@ -94,12 +94,12 @@ public partial class Industry : Node
     //         yield return new Requester(new Resource.IResource.RStatic(kvp.Key, kvp.Value, Name));
     //     }
     // }
-    IEnumerable<Resource.IRequestable> GetFactorsFromTemplate(Dictionary<int, double> template)
+    IEnumerable<Resource.IResource> GetFactorsFromTemplate(Dictionary<int, double> template)
     {
         if (template == null) { yield break; }
         foreach (KeyValuePair<int, double> kvp in template)
         {
-            yield return new Resource.RGroupRequests<Resource.IRequestable>(new Resource.RRequest(kvp.Key, kvp.Value, "Base Yield", "Base Yield", true), Name, Description);
+            yield return new Resource.RGroup<Resource.IResource>(new Resource.RStatic(kvp.Key, kvp.Value, "Base Yield", "Base Yield", true), Name, Description);
         }
     }
 

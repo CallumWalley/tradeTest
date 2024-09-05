@@ -37,19 +37,19 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
         ///  Contains factors pooled with parent rp.
         ///  Currently 000-800
         /// </summary>
-        public Resource.RList<Resource.RGroupRequests<Resource.RRequest>> FactorsGlobal { get; set; } = new();
+        public Resource.RDict<Resource.RGroup<Resource.IResource>> FactorsGlobal { get; set; } = new();
 
         /// <summary>
         ///  Contains factors not pooled with parent rp.
         ///  Currently 801-900
         /// </summary>
-        public Resource.RList<Resource.RGroupRequests<Resource.IResource>> FactorsLocal { get; set; } = new();
+        public Resource.RDict<Resource.RGroup<Resource.IResource>> FactorsLocal { get; set; } = new();
 
         /// <summary>
         ///  Contains factors that are a single value.
         ///  Currently 900+
         /// </summary>
-        public Resource.RList<Resource.RStatic> FactorsSingle { get; set; } = new();
+        public Resource.RDict<Resource.RStatic> FactorsSingle { get; set; } = new();
 
 
         public List<Condition.BaseCondition> Conditions { get; set; } = new();
@@ -147,19 +147,19 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
 
             featureBase.Description = Description;
             // Give factors sensible names.
-            foreach (Resource.RGroupRequests<Resource.RRequest> f in featureBase.FactorsGlobal)
+            foreach (Resource.RGroup<Resource.IResource> f in featureBase.FactorsGlobal)
             {
                 f.Name = Name;
             }
 
             return featureBase;
         }
-        IEnumerable<Resource.IRequestable> GetFactorsFromTemplate(Godot.Collections.Dictionary<int, double> template)
+        IEnumerable<Resource.IResource> GetFactorsFromTemplate(Godot.Collections.Dictionary<int, double> template)
         {
             if (template == null) { yield break; }
             foreach (KeyValuePair<int, double> kvp in template)
             {
-                yield return new Resource.RGroupRequests<Resource.IRequestable>(new Resource.RRequest(kvp.Key, kvp.Value, "Base Yield", "Base Yield", true), Name, Description);
+                yield return new Resource.RGroup<Resource.IResource>(new Resource.RStatic(kvp.Key, kvp.Value, 0, "Base Yield", "Base Yield"), Name, Description);
             }
         }
         IEnumerable<Condition.BaseCondition> GetContitionsFromTemplate(Godot.Collections.Dictionary<string, string> template)
@@ -172,9 +172,9 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
                 {
                     yield return new Condition.InputFulfilment(kvp.Value);
                 }
-                else if (kvp.Key == "outputFulfilment")
+                else if (kvp.Key == "fulfilmentOutput")
                 {
-                    yield return new Condition.OutputConstant(kvp.Value);
+                    yield return new Condition.FulfilmentOutput(kvp.Value);
                 }
                 else if (kvp.Key == "outputConstant")
                 {

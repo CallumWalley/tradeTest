@@ -105,7 +105,7 @@
                 <mxCell id="203" value="int type;&lt;br&gt;float Sum()&lt;br&gt;int Count()&lt;br&gt;string Name&lt;br&gt;string Description" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="202" vertex="1">
                     <mxGeometry y="30" width="140" height="100" as="geometry"/>
                 </mxCell>
-                <mxCell id="212" value="IRequestable" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                <mxCell id="212" value="IResource" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
                     <mxGeometry x="430" y="470" width="140" height="130" as="geometry"/>
                 </mxCell>
                 <mxCell id="213" value="int type;&lt;br&gt;float Sum()&lt;br&gt;int Count()&lt;br&gt;string Name&lt;br&gt;string Description" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="212" vertex="1">

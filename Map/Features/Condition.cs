@@ -39,7 +39,7 @@ public partial class Condition
     {
 
         // For things that have their primary properties modified by their size.
-        public Resource.RList<Resource.RRequest> outputs = new Resource.RList<Resource.RRequest>();
+        public Resource.RDict<Resource.RStatic> outputs = new Resource.RDict<Resource.RStatic>();
         double InitialScale { get; set; }
 
         public Scalable() : this(1) { }
@@ -52,27 +52,27 @@ public partial class Condition
         public override void OnAdd()
         {
             base.OnAdd();
-            Feature.FactorsSingle.Add(new Resource.RStatic(800, InitialScale, "HasScale", "Facility Size"));
+            Feature.FactorsSingle.Add(new Resource.RStatic(901, InitialScale, 0, "HasScale", "Facility Size"));
         }
     }
     public partial class FulfilmentOutput : BaseCondition
     {
         // Sets 'output' in proportion to fulfillment.
-        public Resource.RList<Resource.RRequest> outputs = new Resource.RList<Resource.RRequest>();
+        public Resource.RDict<Resource.RStatic> outputs = new Resource.RDict<Resource.RStatic>();
         public FulfilmentOutput(string str) : this(JsonConvert.DeserializeObject<Dictionary<int, double>>(str)) { }
 
         public FulfilmentOutput(Dictionary<int, double> _outputs)
         {
             foreach (KeyValuePair<int, double> kvp in _outputs)
             {
-                outputs.Add(new Resource.RRequest(kvp.Key, kvp.Value, "Base", "Expected Yield", true));
+                outputs.Add(new Resource.RStatic(kvp.Key, 0, kvp.Value, "Base", "Expected Yield"));
             }
         }
 
         public override void OnAdd()
         {
             base.OnAdd();
-            foreach (Resource.RRequest r in outputs)
+            foreach (Resource.RStatic r in outputs)
             {
                 Feature.FactorsGlobal[r.Type].Add(r);
                 Feature.FactorsGlobal[r.Type].Mux(Feature.FactorsLocal[801]);
@@ -85,7 +85,7 @@ public partial class Condition
     {
 
         // Sets 'fulfillment' in proportion to received inputs.
-        Dictionary<Resource.RGroupRequests<Resource.RRequest>, Resource.RRequest> inputFullfillments = new();
+        Dictionary<Resource.RGroup<Resource.RStatic>, Resource.RStatic> inputFullfillments = new();
 
         public InputFulfilment(string str) : this(JsonConvert.DeserializeObject<Dictionary<int, double>>(str)) { }
 
@@ -93,9 +93,9 @@ public partial class Condition
         {
             foreach (KeyValuePair<int, double> kvp in inputs)
             {
-                Resource.RGroupRequests<Resource.RRequest> newr = new(new Resource.RRequest(kvp.Key, kvp.Value, "Base", "Base input"));
+                Resource.RGroup<Resource.RStatic> newr = new(new Resource.RStatic(kvp.Key, 0, kvp.Value, "Base", "Base input"));
                 //                newr.Mux(Feature.FactorsSingle[800]);
-                Resource.RRequest newf = new Resource.RRequest(801, 1, $"{Resource.Name(kvp.Key)} Fullfilment.", $"How much of the requested resource was delivered");
+                Resource.RStatic newf = new Resource.RStatic(801, 1, 0, $"{Resource.Name(kvp.Key)} Fullfilment.", $"How much of the requested resource was delivered");
                 inputFullfillments[newr] = newf;
             }
         }
@@ -103,19 +103,18 @@ public partial class Condition
         {
             base.OnAdd();
             Feature.FactorsLocal[801].Name = "Input Fulfillment";
-            Feature.FactorsLocal[801].Add(new Resource.RRequest(801, 1, "Base", "Expected Fulfillment", true));
-            foreach (KeyValuePair<Resource.RGroupRequests<Resource.RRequest>, Resource.RRequest> kvp in inputFullfillments)
+            Feature.FactorsLocal[801].Add(new Resource.RStatic(801, 1, 0, "Base", "Expected Fulfillment"));
+            foreach (KeyValuePair<Resource.RGroup<Resource.RStatic>, Resource.RStatic> kvp in inputFullfillments)
             {
                 /// fulfilment is equal to this
                 Feature.FactorsLocal[801].Mux(kvp.Value);
                 Feature.FactorsGlobal[kvp.Key.Type].Add(kvp.Key);
-
             }
         }
         public override void OnEFrame()
         {
             base.OnEFrame();
-            foreach (KeyValuePair<Resource.RGroupRequests<Resource.RRequest>, Resource.RRequest> kvp in inputFullfillments)
+            foreach (KeyValuePair<Resource.RGroup<Resource.RStatic>, Resource.RStatic> kvp in inputFullfillments)
             {
                 kvp.Value.Set(kvp.Key.Fraction());
             }
@@ -125,23 +124,23 @@ public partial class Condition
 
     public partial class OutputConstant : BaseCondition
     {
-        public Resource.RList<Resource.RRequest> outputs;
+        public Resource.RDict<Resource.RStatic> outputs;
 
         public OutputConstant(string str) : this(JsonConvert.DeserializeObject<Dictionary<int, double>>(str)) { }
 
         public OutputConstant(Dictionary<int, double> _outputs)
         {
-            outputs = new Resource.RList<Resource.RRequest>();
+            outputs = new Resource.RDict<Resource.RStatic>();
             foreach (KeyValuePair<int, double> kvp in _outputs)
             {
-                Resource.RRequest newResource = new(kvp.Key, kvp.Value, _fulfilled: true);
+                Resource.RStatic newResource = new(kvp.Key, kvp.Value);
                 outputs.Add(newResource);
             }
         }
 
         public override void OnAdd()
         {
-            foreach (Resource.RRequest r in outputs)
+            foreach (Resource.RStatic r in outputs)
             {
                 Feature.FactorsGlobal[r.Type].Add(r);
             }
