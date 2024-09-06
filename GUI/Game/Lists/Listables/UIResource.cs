@@ -62,11 +62,13 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
 
     public void Update()
     {
+        if (resource is not Resource.IResource) { return; }
         // 
-        if (resource is Resource.IResource && ((Resource.IResource)resource).State > 0)
+        name.Text = $"{resource.Name}";
+        if (((Resource.IResource)resource).State > 0)
         {
             value.Text = string.Format("{0:G}/{1:G}", resource.Sum, ((Resource.IResource)resource).Request);
-            name.Text = $"{resource.Name}";
+
             value.AddThemeColorOverride("font_color", colorBad);
             name.AddThemeColorOverride("font_color", colorBad);
         }
@@ -81,8 +83,7 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
         {
             value.RemoveThemeColorOverride("font_color");
             name.RemoveThemeColorOverride("font_color");
-            value.Text = string.Format("{0:G}", resource.Sum);
-            name.Text = $"{resource.Name} : ";
+            value.Text = string.Format(resource.ValueFormat, resource.Sum);
         }
     }
 

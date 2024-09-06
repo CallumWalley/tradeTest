@@ -63,6 +63,7 @@ public partial class UIPanelFeatureFull : UIPanel
 	public override void OnEFrameUpdate()
 	{
 		base.OnEFrameUpdate();
+		singularFactors.Update();
 		globalFactors.Update();
 		localFactors.Update();
 

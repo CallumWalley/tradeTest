@@ -29,6 +29,11 @@ public partial class Resource
         //  2 unfulfilled.
 
 
+        /// Display 
+        public string ValueFormat { get; set; }
+        public bool IsHidden { get; set; }
+
+
         /// <summary>
         /// Sets the resource value.
         /// </summary>
@@ -60,6 +65,9 @@ public partial class Resource
         public virtual string Details { get; set; } = "Base value";
         public virtual string Name { get; set; } = "Unknown";
         public virtual double Request { get; set; }
+        public bool IsHidden { get; set; } = false;
+        public string ValueFormat { get; set; } = "{0:G}";
+
 
         // Request is actual amount given
         public virtual int State { get; set; } = 0;
@@ -159,6 +167,9 @@ public partial class Resource
         }
         public string Details { get; set; } = "Sum";
         public string Name { get; set; } = "Sum";
+
+        public bool IsHidden { get; set; } = false;
+        public string ValueFormat { get; set; } = "{0:G}";
         protected List<T> _adders { get; set; }
         protected List<T> _muxxers { get; set; }
 

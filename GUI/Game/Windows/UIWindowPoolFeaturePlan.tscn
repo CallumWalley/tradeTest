@@ -1,9 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://c2xbjx0sqmnma"]
+[gd_scene load_steps=4 format=3 uid="uid://c2xbjx0sqmnma"]
 
 [ext_resource type="Script" path="res://GUI/Game/Windows/UIWindowPoolFeaturePlan.cs" id="1_1p545"]
 [ext_resource type="PackedScene" uid="uid://b5mtlqpxrceqn" path="res://GUI/Game/Panels/UIPanelFeatureFactoryList.tscn" id="2_nrcrv"]
+[ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="3_2u68v"]
 
-[node name="Window" type="Window" node_paths=PackedStringArray("templateList", "addButton")]
+[node name="Window" type="Window" node_paths=PackedStringArray("templateList", "addButton", "scaleSpinbox", "nameLineEdit")]
 sdf_oversize = 0
 initial_position = 1
 size = Vector2i(800, 400)
@@ -11,7 +12,9 @@ content_scale_mode = 2
 content_scale_aspect = 1
 script = ExtResource("1_1p545")
 templateList = NodePath("VBoxContainer/Industry Templates")
-addButton = NodePath("VBoxContainer/HBoxContainer/Button")
+addButton = NodePath("VBoxContainer/VBoxContainer/HBoxContainer/Button")
+scaleSpinbox = NodePath("VBoxContainer/VBoxContainer/HBoxContainer/SpinBox")
+nameLineEdit = NodePath("VBoxContainer/VBoxContainer/NameEdit")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchors_preset = 15
@@ -24,29 +27,33 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-custom_minimum_size = Vector2(0, 30)
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 0
+
+[node name="NameEdit" type="LineEdit" parent="VBoxContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Industry Name"
+shortcut_keys_enabled = false
+middle_mouse_paste_enabled = false
+selecting_enabled = false
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer"]
+layout_mode = 2
 alignment = 1
 
-[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(10, 0)
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
-text = "x"
-fit_content = true
-scroll_active = false
-context_menu_enabled = true
-shortcut_keys_enabled = false
+min_value = 1.0
+value = 1.0
+update_on_text_changed = true
+prefix = "×"
 
-[node name="LineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
-layout_mode = 2
-
-[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="Button" type="Button" parent="VBoxContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme = ExtResource("3_2u68v")
 text = "Build"
 
 [connection signal="close_requested" from="." to="." method="_on_close_requested"]
+
+[editable path="VBoxContainer/Industry Templates"]

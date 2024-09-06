@@ -39,7 +39,6 @@ public partial class Condition
     {
 
         // For things that have their primary properties modified by their size.
-        public Resource.RDict<Resource.RStatic> outputs = new Resource.RDict<Resource.RStatic>();
         double InitialScale { get; set; }
 
         public Scalable() : this(1) { }
@@ -52,7 +51,7 @@ public partial class Condition
         public override void OnAdd()
         {
             base.OnAdd();
-            Feature.FactorsSingle.Add(new Resource.RStatic(901, InitialScale, 0, "HasScale", "Facility Size"));
+            Feature.FactorsSingle.Add(new Resource.RStatic(901, InitialScale, 0, "Size", "Facility Size"));
         }
     }
     public partial class FulfilmentOutput : BaseCondition
@@ -65,7 +64,7 @@ public partial class Condition
         {
             foreach (KeyValuePair<int, double> kvp in _outputs)
             {
-                outputs.Add(new Resource.RStatic(kvp.Key, 0, kvp.Value, "Base", "Expected Yield"));
+                outputs.Add(new Resource.RStatic(kvp.Key, kvp.Value, kvp.Value, "Base", "Expected Yield"));
             }
         }
 
@@ -75,7 +74,8 @@ public partial class Condition
             foreach (Resource.RStatic r in outputs)
             {
                 Feature.FactorsGlobal[r.Type].Add(r);
-                Feature.FactorsGlobal[r.Type].Mux(Feature.FactorsLocal[801]);
+                Feature.FactorsGlobal[r.Type].Mux(Feature.FactorsLocal[801]); // Input fulfillment
+                Feature.FactorsGlobal[r.Type].Mux(Feature.FactorsSingle[901]); // Scale
             }
         }
 
@@ -109,6 +109,7 @@ public partial class Condition
                 /// fulfilment is equal to this
                 Feature.FactorsLocal[801].Mux(kvp.Value);
                 Feature.FactorsGlobal[kvp.Key.Type].Add(kvp.Key);
+                Feature.FactorsGlobal[kvp.Key.Type].Mux(Feature.FactorsSingle[901]); // Scale
             }
         }
         public override void OnEFrame()
