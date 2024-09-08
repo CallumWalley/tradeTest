@@ -1,0 +1,59 @@
+[gd_scene load_steps=4 format=3 uid="uid://pjqrwbai087n"]
+
+[ext_resource type="Script" path="res://GUI/Game/Windows/UIWindowPoolFeaturePlan.cs" id="1_tb0ig"]
+[ext_resource type="PackedScene" uid="uid://b5mtlqpxrceqn" path="res://GUI/Game/Panels/UIPanelFeatureFactoryList.tscn" id="2_jgl2f"]
+[ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="3_bj1d3"]
+
+[node name="Window" type="Window" node_paths=PackedStringArray("templateList", "addButton", "scaleSpinbox", "nameLineEdit")]
+sdf_oversize = 0
+initial_position = 1
+size = Vector2i(800, 400)
+content_scale_mode = 2
+content_scale_aspect = 1
+script = ExtResource("1_tb0ig")
+templateList = NodePath("VBoxContainer/Industry Templates")
+addButton = NodePath("VBoxContainer/VBoxContainer/HBoxContainer/Button")
+scaleSpinbox = NodePath("VBoxContainer/VBoxContainer/HBoxContainer/SpinBox")
+nameLineEdit = NodePath("VBoxContainer/VBoxContainer/NameEdit")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Industry Templates" parent="VBoxContainer" instance=ExtResource("2_jgl2f")]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="NameEdit" type="LineEdit" parent="VBoxContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Industry Name"
+shortcut_keys_enabled = false
+middle_mouse_paste_enabled = false
+selecting_enabled = false
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+min_value = 1.0
+value = 1.0
+update_on_text_changed = true
+prefix = "×"
+
+[node name="Button" type="Button" parent="VBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_bj1d3")
+text = "Build"
+
+[connection signal="close_requested" from="." to="." method="_on_close_requested"]
+
+[editable path="VBoxContainer/Industry Templates"]

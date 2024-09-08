@@ -26,6 +26,7 @@ public partial class UIWindowPoolFeaturePlan : UIWindow
 		nameLineEdit.Connect("text_changed", new Callable(this, "OnLineEditTextChanged"));
 
 		scaleSpinbox.Value = 1;
+		ValidateName(nameLineEdit.Text);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -35,6 +36,10 @@ public partial class UIWindowPoolFeaturePlan : UIWindow
 
 	public void OnLineEditTextChanged(string new_text)
 	{
+		ValidateName(new_text);
+	}
+
+	public void ValidateName(string new_text){
 		if (resourcePool.Any(x => x.Name == new_text))
 		{
 			addButton.Disabled = true;

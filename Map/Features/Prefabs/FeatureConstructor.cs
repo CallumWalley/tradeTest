@@ -15,9 +15,11 @@ public partial class FeatureConstructor : Features.BasicFactory
         // QueueFree();
     }
     void Setup()
-    {
-        GetParent().AddChild(Instantiate());
-        GetParent().RemoveChild(this);
+    {   
+        Node newNode = Instantiate();
+        Node parent = GetParent();
+        parent.RemoveChild(this);
+        parent.AddChild(newNode);
         QueueFree();
     }
 }
