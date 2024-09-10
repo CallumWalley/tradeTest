@@ -24,7 +24,7 @@ public partial class UIPanelFeatureFull : UIPanel
 		tags = GetNode<HFlowContainer>("PanelContainer/Details/Tags");
 
 
-		foreach (string tag in feature.Tags)
+		foreach (string tag in feature.NeedsTags)
 		{
 			UIPill pill = prefab_pill.Instantiate<UIPill>();
 			pill.tag = tag;

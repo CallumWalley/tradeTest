@@ -2,15 +2,28 @@
     {
         "name": "Freighter Dockyard",
         "slug": "f_dockyard",
-        "tags": [
+        "needsTags": [
             "orbital"
         ],
         "description": "All the trade gantries, maintainance facilites and refueling shuttles required to maintain a fleet of starships frieghters."
     },
     {
+        "name": "Shuttle Launch Complex",
+        "slug": "f_shuttle",
+        "needsTags": [
+            "planetary"
+        ],
+        "conditions": {
+            "scalable": "1",
+            "inputFulfilment": "{'2': -2.0}",
+            "fulfilmentOutput": "{'811': 1.0}"
+        },
+        "description": "All the trade gantries, maintainance facilites and refueling shuttles required to maintain a fleet of starships frieghters."
+    },
+    {
         "name": "Fuel Reserves",
         "slug": "orbit_storage_fuel",
-        "tags": [
+        "needsTags": [
             "orbital"
         ],
         "description": "Strategic fuel reserves."
@@ -18,7 +31,7 @@
     {
         "name": "Water Reserves",
         "slug": "orbit_storage_h2o",
-        "tags": [
+        "needsTags": [
             "orbital"
         ],
         "description": "Large quantities of dihydrogen oxide, pressurised in order to maintain a subcritical state."
@@ -26,11 +39,12 @@
     {
         "name": "Mineral Mine",
         "slug": "planet_mine_minerals",
-        "tags": [
+        "needsTags": [
             "planetary"
         ],
         "conditions": {
             "scalable": "1",
+            "slowStart": "1",
             "inputFulfilment": "{'2': -1.0}",
             "fulfilmentOutput": "{'1': 2.0}"
         },
@@ -39,11 +53,12 @@
     {
         "name": "Desalination Plant",
         "slug": "planet_mine_h2o",
-        "tags": [
+        "needsTags": [
             "planetary"
         ],
         "conditions": {
             "scalable": "1",
+            "slowStart": "1",
             "inputFulfilment": "{'2': -1.0}",
             "fulfilmentOutput": "{'4': 3.0}"
         },
@@ -52,11 +67,12 @@
     {
         "name": "Reclaimation Facility",
         "slug": "reclaim",
-        "tags": [
+        "needsTags": [
             "planetary"
         ],
         "conditions": {
             "scalable": "1",
+            "slowStart": "1",
             "outputConstant": "{'1': 1.0}"
         },
         "description": "Sorting facilities to recover useful resources from industrial waste."
@@ -64,11 +80,12 @@
     {
         "name": "Chemical Fuel Plant",
         "slug": "cfuel_water",
-        "tags": [
+        "needsTags": [
             "planetary"
         ],
         "conditions": {
             "scalable": "1",
+            "slowStart": "1",
             "inputFulfilment": "{'4': -2.0}",
             "fulfilmentOutput": "{'2': 1.0}"
         },

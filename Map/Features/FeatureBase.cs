@@ -36,14 +36,14 @@ public partial class FeatureBase : Node
     public string TypeSlug { get; set; } = "unset";
     // public string TypeName { get { return ttype.Name; } }
     [Export(PropertyHint.Enum, "planetary")]
-    public Godot.Collections.Array<string> Tags { get; set; } = new Godot.Collections.Array<string>();
+    public Godot.Collections.Array<string> NeedsTags { get; set; } = new Godot.Collections.Array<string>();
     public string Description { get; set; }
 
     public bool IsBuildable()
     {
         if (Template is null) { return true; }
         // Hard code only buildable on planet.
-        return (Tags.Contains("planetary"));
+        return (NeedsTags.Contains("planetary"));
     }
 
     public void AddCondition(Condition.BaseCondition s)

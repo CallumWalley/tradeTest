@@ -82,9 +82,9 @@ public partial class ResourcePool : Node, IEnumerable<FeatureBase>
     // RDeltaLocal + RDeltaTrade = RDeltaTotal
 
     public Resource.Ledger Ledger = new();
-    // Used to carry through numbers to next step.
-    protected Dictionary<int, double> productionBuffer = new();
-    protected Dictionary<int, double> consumptionBuffer = new();
+    // // Used to carry through numbers to next step.
+    // protected Dictionary<int, double> productionBuffer = new();
+    // protected Dictionary<int, double> consumptionBuffer = new();
     // Helper methods
     public Godot.Collections.Array<Node> Children { get { return GetChildren(true); } }
 

@@ -21,6 +21,9 @@ script = ExtResource("1_1b3uo")
 
 [node name="Earth" parent="Map/Galaxy/Sol" instance=ExtResource("5_438b2")]
 _validTradeReceiver = true
+StartingResources = {
+"2": "1000"
+}
 
 [node name="Moon" parent="Map/Galaxy/Sol" instance=ExtResource("5_438b2")]
 

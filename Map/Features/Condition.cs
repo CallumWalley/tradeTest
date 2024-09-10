@@ -17,6 +17,8 @@ public partial class Condition
         public FeatureBase Feature { get; set; } // parent reference.
 
         public virtual void OnAdd() { } //Called when added to feature.
+        public virtual void OnRemove() { } //Called when added to feature.
+
         public virtual void OnEFrame() { } //Called every eframe.
 
     }
@@ -29,6 +31,11 @@ public partial class Condition
         public BaseCondition() { }
 
         public virtual void OnAdd() { } //Called when added to feature.
+        public virtual void OnRemove()
+        {
+            Feature.Conditions.Remove(this);
+        } //Called when removed
+
         public virtual void OnEFrame() { } //Called every eframe.
 
     }
@@ -76,6 +83,7 @@ public partial class Condition
                 Feature.FactorsGlobal[r.Type].Add(r);
                 Feature.FactorsGlobal[r.Type].Mux(Feature.FactorsLocal[801]); // Input fulfillment
                 Feature.FactorsGlobal[r.Type].Mux(Feature.FactorsSingle[901]); // Scale
+                Feature.FactorsGlobal[r.Type].Mux(Feature.FactorsLocal[802]); // Cabability
             }
         }
 
@@ -104,12 +112,16 @@ public partial class Condition
             base.OnAdd();
             Feature.FactorsLocal[801].Name = "Input Fulfillment";
             Feature.FactorsLocal[801].Add(new Resource.RStatic(801, 1, 0, "Base", "Expected Fulfillment"));
+            Feature.FactorsLocal[802].Name = "Capability";
+            Feature.FactorsLocal[802].Add(new Resource.RStatic(802, 1, 0, "Base", "Cabability"));
             foreach (KeyValuePair<Resource.RGroup<Resource.RStatic>, Resource.RStatic> kvp in inputFullfillments)
             {
                 /// fulfilment is equal to this
                 Feature.FactorsLocal[801].Mux(kvp.Value);
+
                 Feature.FactorsGlobal[kvp.Key.Type].Add(kvp.Key);
                 Feature.FactorsGlobal[kvp.Key.Type].Mux(Feature.FactorsSingle[901]); // Scale
+                Feature.FactorsGlobal[kvp.Key.Type].Mux(Feature.FactorsLocal[802]); // Cabability
             }
         }
         public override void OnEFrame()
@@ -141,9 +153,44 @@ public partial class Condition
 
         public override void OnAdd()
         {
+            Feature.FactorsLocal[801].Name = "Input Fulfillment";
+            Feature.FactorsLocal[801].Add(new Resource.RStatic(801, 1, 0, "Base", "Expected Fulfillment"));
+            Feature.FactorsLocal[802].Name = "Capability";
+            Feature.FactorsLocal[802].Add(new Resource.RStatic(802, 1, 0, "Base", "Cabability"));
+
             foreach (Resource.RStatic r in outputs)
             {
                 Feature.FactorsGlobal[r.Type].Add(r);
+                Feature.FactorsGlobal[r.Type].Mux(Feature.FactorsSingle[901]); // Scale
+                Feature.FactorsGlobal[r.Type].Mux(Feature.FactorsLocal[802]); // Cabability
+            }
+        }
+    }
+    public partial class SlowStart : BaseCondition
+    {
+
+        // Starts efficiency out at zero and slowly increases.
+
+        public Resource.RStatic slowStart = new Resource.RStatic(802, 0.0, 0, "Slow Start", "Slow Start Size");
+        public SlowStart(string _initialScale) { }
+
+        public override void OnAdd()
+        {
+            base.OnAdd();
+            Feature.FactorsLocal[802].Mux(slowStart);
+        }
+        public override void OnRemove()
+        {
+            Feature.FactorsLocal[802].UnMux(slowStart);
+            base.OnRemove();
+        }
+        public override void OnEFrame()
+        {
+            base.OnEFrame();
+            slowStart.Set((0.1 * Feature.FactorsLocal[801].Sum) + slowStart.Sum);
+            if (slowStart.Sum > 0.9)
+            {
+                OnRemove();
             }
         }
     }

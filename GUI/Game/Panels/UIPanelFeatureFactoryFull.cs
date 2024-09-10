@@ -23,15 +23,15 @@ public partial class UIPanelFeatureFactoryFull : UIPanel
 		tags = GetNode<HFlowContainer>("PanelContainer/Details/Tags");
 
 
-		foreach (string tag in feature.Tags)
+		foreach (string tag in feature.NeedsTags)
 		{
 			UIPill pill = prefab_pill.Instantiate<UIPill>();
 			pill.tag = tag;
 			tags.AddChild(pill);
 		}
 		// factors.Init(feature.FactorsGlobal);
-		//GetNode<VBoxContainer>("PanelContainer/Details").AddChild(factors);
-		//factors.Update();
+		// GetNode<VBoxContainer>("PanelContainer/Details").AddChild(factors);
+		// factors.Update();
 	}
 
 	public override void _Draw()

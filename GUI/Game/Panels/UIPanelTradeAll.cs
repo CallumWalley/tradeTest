@@ -26,16 +26,12 @@ public partial class UIPanelTradeAll : UIPanel
 
 		tradeRouteScroll = GetNode<ScrollContainer>("ScrollContainer");
 		noTradeRoutes = GetNode<MarginContainer>("NoTradeRoutes");
-
-	}
-
-	public void Init()
-	{
 		tradeRouteList = new UIList<TradeRoute>();
 		tradeRouteList.Vertical = true;
 		tradeRouteList.Init(player.trade.Routes, prefab_TradeRoute);
 		tradeRouteScroll.AddChild(tradeRouteList);
 	}
+
 
 	public override void _Draw()
 	{
@@ -51,9 +47,9 @@ public partial class UIPanelTradeAll : UIPanel
 			tradeRouteScroll.Visible = false;
 		}
 	}
-
-	public void Update()
+	public override void OnEFrameUpdate()
 	{
 		tradeRouteList.Update();
 	}
+
 }

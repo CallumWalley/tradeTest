@@ -217,9 +217,13 @@ public partial class Resource
         {
             _muxxers.Add(ra);
         }
-        public void Remove(T ra)
+        public void UnAdd(T ra)
         {
             _adders.Remove(ra);
+        }
+        public void UnMux(T ra)
+        {
+            _muxxers.Remove(ra);
         }
         public IResource First()
         {
@@ -420,6 +424,7 @@ public partial class Resource
             {3, new ResourceType("Food", GD.Load<Texture2D>("res://assets/icons/resources/food.dds"),  true)},
             {4, new ResourceType("H2O", GD.Load<Texture2D>("res://assets/icons/resources/h2o.png"),  true)},
             {801, new ResourceType("Fulfillment", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.dds"), false)},
+            {802, new ResourceType("Capability", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.dds"), false)},
             {811, new ResourceType("Freighter", GD.Load<Texture2D>("res://assets/icons/freighter.png"), false)},
 
             // {801, new ResourceType("Operational Capacity", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.dds"), false)},

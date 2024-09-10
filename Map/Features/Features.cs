@@ -40,7 +40,7 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
         [Export(PropertyHint.Enum, "unset,f_dockyard,orbit_storage_fuel,orbit_storage_h2o,planet_mine_minerals,planet_mine_h2o,reclaim,cfuel_water")]
         public string Slug { get; set; }
         [Export]
-        public Godot.Collections.Array<string> Tags { get; set; } = new();
+        public Godot.Collections.Array<string> NeedsTags { get; set; } = new();
 
         [Export]
         public Godot.Collections.Dictionary<string, string> Conditions { get; set; } = new();
@@ -70,7 +70,7 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
             {
                 featureBase.AddCondition(condition);
             }
-            featureBase.Tags = Tags;
+            featureBase.NeedsTags = NeedsTags;
 
             featureBase.Description = Description;
             // Give factors sensible names.
@@ -102,6 +102,10 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
                 else if (kvp.Key == "scalable")
                 {
                     yield return new Condition.Scalable(kvp.Value);
+                }
+                else if (kvp.Key == "slowStart")
+                {
+                    yield return new Condition.SlowStart(kvp.Value);
                 }
                 else
                 {

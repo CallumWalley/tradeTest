@@ -80,7 +80,7 @@ public partial class UIPanelFeatureFactoryList : UIPanel, UIInterfaces.IEFrameUp
         // If visible, and there are features, update the list to reflect reality.
         base.OnEFrameUpdate();
         string location = "planetary";
-        featureList = GetNode<Features>("/root/Features").ToList().Where(x => x.Tags.Contains(location)).ToList();
+        featureList = GetNode<Features>("/root/Features").ToList().Where(x => x.NeedsTags.Contains(location)).ToList();
         if (IsVisibleInTree() && featureList.Count > 0)
         {
             UpdateElements();
