@@ -20,7 +20,7 @@ public partial class UIPanelFeatureFactoryList : UIPanel, UIInterfaces.IEFrameUp
 
     public Features.BasicFactory selected;
     int selectedIndex = 0;
-    UIList<Features.Basic> vbox;
+    UIList<FeatureBase> vbox;
 
     public override void _Ready()
     {
@@ -29,6 +29,7 @@ public partial class UIPanelFeatureFactoryList : UIPanel, UIInterfaces.IEFrameUp
         display = GetNode<ScrollContainer>("VBoxContainer/HSplitContainer/Display");
 
         list.Connect("item_selected", new Callable(this, "OnItemListItemSelected"));
+        UpdateElements();
     }
 
     public void OnItemListItemSelected(int i)
@@ -41,24 +42,38 @@ public partial class UIPanelFeatureFactoryList : UIPanel, UIInterfaces.IEFrameUp
 
     void DrawDisplay()
     {
-        if (featureList.Count > 0)
+        // Draws the UI. Does not refresh elements.
+        if (featureList.Count < 1) { return; }
+
+        // If selected feature changed, or none.
+        if ((display.GetChildCount() < 1) || display.GetChild<UIPanelFeatureFactoryFull>(0).feature != selected)
         {
-            // If selected feature changed, or none.
-            if ((display.GetChildCount() < 1) || display.GetChild<UIPanelFeatureFactoryFull>(0).feature != selected)
+            foreach (Control c in display.GetChildren().Cast<Control>())
             {
-                foreach (Control c in display.GetChildren().Cast<Control>())
-                {
-                    c.Visible = false;
-                    c.QueueFree();
-                    display.RemoveChild(c);
-                }
-                selected ??= (Features.BasicFactory)featureList[0];
-                UIPanelFeatureFactoryFull uipff = prefab_UIPanelFeatureFactoryFull.Instantiate<UIPanelFeatureFactoryFull>();
-                uipff.feature = selected;
-                display.AddChild(uipff);
+                c.Visible = false;
+                c.QueueFree();
+                display.RemoveChild(c);
             }
-            display.GetChild<UIPanelFeatureFactoryFull>(0).OnEFrameUpdate();
+            selected ??= (Features.BasicFactory)featureList[0];
+            UIPanelFeatureFactoryFull uipff = prefab_UIPanelFeatureFactoryFull.Instantiate<UIPanelFeatureFactoryFull>();
+            uipff.feature = selected;
+            display.AddChild(uipff);
         }
+        display.GetChild<UIPanelFeatureFactoryFull>(0).OnEFrameUpdate();
+
+    }
+    public void UpdateElements()
+    {
+        // Updates list elements. Does not draw them.
+        if (featureList.Count < 1) { return; }
+
+        list.Clear();
+        foreach (Node f in featureList)
+        {
+            list.AddItem(((Features.BasicFactory)f).Name, ((Features.BasicFactory)f).iconMedium);
+        }
+        list.Select(selectedIndex);
+
     }
     public override void OnEFrameUpdate()
     {
@@ -68,12 +83,7 @@ public partial class UIPanelFeatureFactoryList : UIPanel, UIInterfaces.IEFrameUp
         featureList = GetNode<Features>("/root/Features").ToList().Where(x => x.Tags.Contains(location)).ToList();
         if (IsVisibleInTree() && featureList.Count > 0)
         {
-            list.Clear();
-            foreach (Node f in featureList)
-            {
-                list.AddItem(((Features.BasicFactory)f).Name, ((Features.BasicFactory)f).iconMedium);
-            }
-            list.Select(selectedIndex);
+            UpdateElements();
             DrawDisplay();
         }
     }

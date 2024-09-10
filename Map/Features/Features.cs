@@ -19,9 +19,9 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
             }
         }
     }
-    public IEnumerator<Features.BasicFactory> GetEnumerator()
+    public IEnumerator<BasicFactory> GetEnumerator()
     {
-        foreach (Features.BasicFactory f in GetChildren().Cast<BasicFactory>())
+        foreach (BasicFactory f in GetChildren().Cast<BasicFactory>())
         {
             yield return f;
         }
@@ -30,77 +30,6 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
     {
         return GetEnumerator();
     }
-    // All types of features are stored in here.
-    public partial class Basic : Node
-    {
-        /// <summary>
-        ///  Contains factors pooled with parent rp.
-        ///  Currently 000-800
-        /// </summary>
-        public Resource.RDict<Resource.RGroup<Resource.IResource>> FactorsGlobal { get; set; } = new();
-
-        /// <summary>
-        ///  Contains factors not pooled with parent rp.
-        ///  Currently 801-900
-        /// </summary>
-        public Resource.RDict<Resource.RGroup<Resource.IResource>> FactorsLocal { get; set; } = new();
-
-        /// <summary>
-        ///  Contains factors that are a single value.
-        ///  Currently 900+
-        /// </summary>
-        public Resource.RDict<Resource.RStatic> FactorsSingle { get; set; } = new();
-
-
-        public List<Condition.BaseCondition> Conditions { get; set; } = new();
-
-        public Basic Template { get; set; } = null;
-        public Texture2D iconMedium;
-
-        [Export(PropertyHint.Enum, "unset,f_dockyard,orbit_storage_fuel,orbit_storage_h2o,planet_mine_minerals,planet_mine_h2o,reclaim,cfuel_water")]
-        public string TypeSlug { get; set; } = "unset";
-        // public string TypeName { get { return ttype.Name; } }
-        public List<string> Tags { get; set; }
-        public string Description { get; set; }
-
-        public bool IsBuildable()
-        {
-            if (Template is null) { return true; }
-            // Hard code only buildable on planet.
-            return (Tags.Contains("planetary"));
-        }
-
-        public void AddCondition(Condition.BaseCondition s)
-        {
-            Conditions.Add(s);
-            s.Feature = this;
-            s.OnAdd();
-        }
-
-        public void OnEFrame()
-        {
-            foreach (Condition.BaseCondition c in Conditions)
-            {
-                c.OnEFrame();
-            }
-        }
-        // public Basic NewFeatureFromTemplate()
-        // {
-        //     Basic newFeature = new();
-        //     newFeature.Template = this;
-        //     newFeature.Name = Name;
-        //     newFeature.Description = Description;
-        //     foreach (var c in Conditions)
-        //     {
-        //         newFeature.AddCondition(c.Instantiate());   
-        //     }
-        //     newFeature.Tags = new(Tags);
-        //     newFeature.iconMedium = iconMedium;
-        //     return newFeature;
-        // }
-    }
-
-
 
 
     /// <summary>
@@ -120,18 +49,16 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
         [Export]
         public string Splash { get; set; }
 
-
         [Export]
         public Texture2D iconMedium;
-
 
         /// <summary>
         /// Converts feature constructor to actual feature.
         /// </summary>
         /// <returns></returns>
-        public Basic Instantiate()
+        public FeatureBase Instantiate()
         {
-            Basic featureBase = new();
+            FeatureBase featureBase = new();
 
             featureBase.FactorsGlobal = new();
             featureBase.FactorsLocal = new();
@@ -143,7 +70,7 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
             {
                 featureBase.AddCondition(condition);
             }
-            featureBase.Tags = Tags.ToList();
+            featureBase.Tags = Tags;
 
             featureBase.Description = Description;
             // Give factors sensible names.
@@ -153,14 +80,6 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
             }
 
             return featureBase;
-        }
-        IEnumerable<Resource.IResource> GetFactorsFromTemplate(Godot.Collections.Dictionary<int, double> template)
-        {
-            if (template == null) { yield break; }
-            foreach (KeyValuePair<int, double> kvp in template)
-            {
-                yield return new Resource.RGroup<Resource.IResource>(new Resource.RStatic(kvp.Key, kvp.Value, 0, "Base Yield", "Base Yield"), Name, Description);
-            }
         }
         IEnumerable<Condition.BaseCondition> GetContitionsFromTemplate(Godot.Collections.Dictionary<string, string> template)
         {

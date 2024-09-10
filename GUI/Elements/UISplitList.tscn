@@ -1,0 +1,58 @@
+[gd_scene load_steps=3 format=3 uid="uid://c5gp4qrp06ynj"]
+
+[ext_resource type="Script" path="res://GUI/Elements/UIListSelector.cs" id="1_2cinq"]
+[ext_resource type="Script" path="res://GUI/Elements/UISplitList.cs" id="1_r2ced"]
+
+[node name="UISplitList" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+script = ExtResource("1_r2ced")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Filters" type="PanelContainer" parent="VBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+
+[node name="VBoxContainers" type="VBoxContainer" parent="VBoxContainer/Filters"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Filters/VBoxContainers"]
+layout_mode = 2
+
+[node name="CheckButton3" type="CheckButton" parent="VBoxContainer/Filters/VBoxContainers/HBoxContainer"]
+layout_mode = 2
+text = "Example"
+flat = true
+
+[node name="CheckButton2" type="CheckButton" parent="VBoxContainer/Filters/VBoxContainers/HBoxContainer"]
+layout_mode = 2
+text = "Example"
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/Filters/VBoxContainers/HBoxContainer"]
+layout_mode = 2
+text = "Example"
+
+[node name="HSplitContainer" type="HSplitContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_scroll_mode = 0
+
+[node name="UIListSelector" type="VBoxContainer" parent="VBoxContainer/HSplitContainer/ScrollContainer"]
+layout_mode = 2
+script = ExtResource("1_2cinq")
+
+[node name="Display" type="ScrollContainer" parent="VBoxContainer/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_scroll_mode = 0

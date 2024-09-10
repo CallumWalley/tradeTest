@@ -1,0 +1,72 @@
+using Godot;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+public partial class UIListSelector<T> : UIList<T> where T : Lists.IListable<T>
+{
+    // Sub class of List, except allows elements to be selected.
+    // Wraps each element in button.
+
+    /// <summary>
+    ///  Call to recalculate all child elements.
+    /// </summary>
+    public override void Update()
+    {
+        /// Queue all children for deletion
+        foreach (Button uichild in GetChildren())
+        {
+            uichild.GetChild<Lists.IListable<T>>(0).Destroy = true;
+        }
+        if (list == null) { GD.Print("List instantiated will null list."); return; }
+        /// For each in list, check if element exists. 
+        foreach (T r in list)
+        {
+            UpdateElement(r);
+        }
+    }
+
+    public override void _Draw()
+    {
+        base._Draw();
+        // Delete empty buttons.
+        foreach (Button uichild in GetChildren())
+        {
+            if (uichild.GetChildCount() < 1)
+            {
+                uichild.QueueFree();
+            }
+        }
+    }
+
+    protected override void UpdateElement(T r)
+    {
+        foreach (Button uir in GetChildren())
+        {
+            Lists.IListable<T> child = uir.GetChild<Lists.IListable<T>>(0);
+            if (ReferenceEquals(child.GameElement, r))
+            {
+                child.Destroy = false;
+                child.Update();
+                return;
+            }
+        }
+        // If doesn't exist, add it and insert at postition.
+        InsertNewElement(CreateNewElement(r));
+    }
+
+    /// <summary>
+    ///  Overwrite this, for elements needing a more complicated init.
+    /// </summary>
+    /// <param name="r"></param>
+    /// <returns></returns>
+
+    protected override void InsertNewElement(Lists.IListable<T> r)
+    {
+        Button button = new Button();
+        button.Flat = true;
+        button.Connect("pressed", new Callable(this, "OnButtonPressed"));
+        button.AddChild((Control)r);
+        AddChild((Control)r);
+    }
+}
+

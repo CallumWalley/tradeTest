@@ -14,13 +14,12 @@ public partial class UIDropDown : VBoxContainer
     protected MarginContainer buttonContent;
     protected Label buttonDefault;
     protected TextureButton buttonSettings;
+    ButtonGroup buttonGroup = new ButtonGroup();
+
 
 
 
     public bool buttonDefaultVisible { get { return buttonDefault.Visible; } set { buttonDefault.Visible = value; buttonContent.Visible = !value; } }
-
-    static readonly PackedScene p_tradeSource = (PackedScene)GD.Load<PackedScene>("res://GUI/Components/UITradeSource.tscn");
-    static readonly PackedScene p_settings = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Buttons/UISettings.tscn");
 
     Control displayedElement;
 
@@ -67,7 +66,6 @@ public partial class UIDropDown : VBoxContainer
     {
         if (toggled)
         {
-
             popup.Popup(new Rect2I(GetWindow().Position + (Vector2I)GlobalPosition + new Vector2I(0, (int)Size.Y), new Vector2I((int)Size.X, 0)));
         }
         else
@@ -101,8 +99,6 @@ public partial class UIDropDown : VBoxContainer
     //     return label;
     // }
 
-
-
     public override void _Draw()
     {
         base._Draw();
@@ -110,8 +106,6 @@ public partial class UIDropDown : VBoxContainer
 
     public override void _Process(double delta)
     {
-
-
         base._Process(delta);
     }
 }

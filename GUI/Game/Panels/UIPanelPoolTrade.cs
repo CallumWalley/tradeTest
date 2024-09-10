@@ -3,9 +3,13 @@ using System;
 
 public partial class UIPanelPoolTrade : UIPanel
 {
-	// Called when the node enters the scene tree for the first time.
+	public ResourcePool resourcePool;
+
+	public UIDropDownSetHead uIDropDownSetHead;
 	public override void _Ready()
 	{
+		uIDropDownSetHead = GetNode<UIDropDownSetHead>("VBoxContainer/DropDown");
+		uIDropDownSetHead.Init(resourcePool);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bqwjnbtt5kf3p"]
+[gd_scene load_steps=8 format=3 uid="uid://bqwjnbtt5kf3p"]
 
 [ext_resource type="Script" path="res://Global.cs" id="1_1b3uo"]
 [ext_resource type="PackedScene" uid="uid://con3ea5txcdnn" path="res://Player/Player.tscn" id="1_w03ia"]
@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://bs11ngj4r7eb4" path="res://Map/Galaxy.tscn" id="3_x7akn"]
 [ext_resource type="PackedScene" uid="uid://bdustjrq7vtln" path="res://Map/PlanetarySystem.tscn" id="4_hdweb"]
 [ext_resource type="PackedScene" uid="uid://cf5ty6my7thnc" path="res://Map/SatelliteSystem.tscn" id="5_438b2"]
-[ext_resource type="PackedScene" uid="uid://dqg1qvrefxjig" path="res://Map/Features/Prefabs/FeatureConstructor.tscn" id="6_cx087"]
 
 [node name="Global" type="Node"]
 script = ExtResource("1_1b3uo")
@@ -21,28 +20,8 @@ script = ExtResource("1_1b3uo")
 [node name="Sol" parent="Map/Galaxy" instance=ExtResource("4_hdweb")]
 
 [node name="Earth" parent="Map/Galaxy/Sol" instance=ExtResource("5_438b2")]
-aphelion = null
-perihelion = null
-semiMajorAxis = null
-eccentricity = null
-period = null
-Active = null
-_validTradeReceiver = null
-StartingResources = null
+_validTradeReceiver = true
 
-[node name="Magic Power Station" parent="Map/Galaxy/Sol/Earth" instance=ExtResource("6_cx087")]
-Slug = "planet_mine_minerals"
-Conditions = {
-"outputConstant": "{'2': 2.0}"
-}
-Description = "Test Feature"
-
-[node name="Test Mine" parent="Map/Galaxy/Sol/Earth" instance=ExtResource("6_cx087")]
-Slug = "planet_mine_minerals"
-Conditions = {
-"inputFulfilment": "{'2': -1.0}",
-"outputFulfilment": "{'1': 2.0}"
-}
-Description = "Test Feature"
+[node name="Moon" parent="Map/Galaxy/Sol" instance=ExtResource("5_438b2")]
 
 [node name="Screen" parent="." instance=ExtResource("2_ohuhm")]

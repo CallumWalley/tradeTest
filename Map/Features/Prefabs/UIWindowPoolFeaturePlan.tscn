@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://pjqrwbai087n"]
+[gd_scene load_steps=4 format=3 uid="uid://dr0kmb7haf84v"]
 
 [ext_resource type="Script" path="res://GUI/Game/Windows/UIWindowPoolFeaturePlan.cs" id="1_tb0ig"]
 [ext_resource type="PackedScene" uid="uid://b5mtlqpxrceqn" path="res://GUI/Game/Panels/UIPanelFeatureFactoryList.tscn" id="2_jgl2f"]

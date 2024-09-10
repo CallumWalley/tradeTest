@@ -4,7 +4,7 @@ using System;
 public partial class UIPanelFeatureFull : UIPanel
 {
 	// Called when the node enters the scene tree for the first time.
-	public Features.Basic feature;
+	public FeatureBase feature;
 	UIRename name;
 	Label type;
 	RichTextLabel description;

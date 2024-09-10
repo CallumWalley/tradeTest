@@ -1,16 +1,16 @@
 using Godot;
 using System;
 
-public partial class UIFeatureSmall : UIButton, Lists.IListable<Features.Basic>
+public partial class UIFeatureSmall : UIButton, Lists.IListable<FeatureBase>
 {
 
     public bool Destroy { get; set; }
 
-    public Features.Basic feature;
-    public Features.Basic GameElement { get { return feature; } }
+    public FeatureBase feature;
+    public FeatureBase GameElement { get { return feature; } }
 
 
-    public void Init(Features.Basic _feature)
+    public void Init(FeatureBase _feature)
     {
         feature = _feature;
     }

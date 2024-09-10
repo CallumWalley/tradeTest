@@ -18,11 +18,22 @@ public partial class UISatelliteSystemNav : Button
 	}
 	public void OnButtonPressed()
 	{
-		UIWindow uiw = prefab_UIWindow.Instantiate<UIWindow>();
-		UITabContainerPool uit = prefab_UITabContainerPool.Instantiate<UITabContainerPool>();
+		UIWindow existingWindow = canvasLayer.GetNodeOrNull<UIWindow>($"UIWindow-{satelliteSystem.Name}");
+		if (existingWindow != null)
+		{
+			GD.Print($"UIWindow-{satelliteSystem.Name}");
+			existingWindow.PopupCentered();
+		}
+		else
+		{
+			UIWindow uiw = prefab_UIWindow.Instantiate<UIWindow>();
+			uiw.Name = $"UIWindow-{satelliteSystem.Name}";
+			UITabContainerPool uit = prefab_UITabContainerPool.Instantiate<UITabContainerPool>();
 
-		uit.Init(satelliteSystem);
-		uiw.AddChild(uit);
-		canvasLayer.AddChild(uiw);
+			uit.Init(satelliteSystem);
+			uiw.AddChild(uit);
+			canvasLayer.AddChild(uiw);
+		}
+
 	}
 }

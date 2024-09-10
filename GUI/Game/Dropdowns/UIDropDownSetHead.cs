@@ -20,6 +20,7 @@ public partial class UIDropDownSetHead : UIDropDown
 	{
 		base._Ready();
 		player = GetNode<Player>("/root/Global/Player");
+
 		SetButtonContent();
 	}
 	public override void _AboutToPopup()
@@ -32,6 +33,8 @@ public partial class UIDropDownSetHead : UIDropDown
 		{
 			UIValidTradeRoute vtr = prefab_UIValidTradeRoute.Instantiate<UIValidTradeRoute>();
 			vtr.Init(vth);
+			vtr.Driver = this;
+			GD.Print(vtr.Name);
 			popupPanelList.AddChild(vtr);
 		}
 		base._AboutToPopup();
@@ -71,13 +74,21 @@ public partial class UIDropDownSetHead : UIDropDown
 
 	}
 
+	public void OnButtonPressed(Control listable)
+	{
+		((Lists.IListable<PlayerTrade.ValidTradeHead>)listable).GameElement.Create();
+
+		CloseRequested();
+		SetButtonContent();
+	}
+
 	public void SetButtonContent()
 	{
 		foreach (Control child in buttonContent.GetChildren())
 		{
 			child.QueueFree();
 		}
-		if (ResourcePool.Trade.UplineTraderoute != null)
+		if (ResourcePool != null && ResourcePool.Trade.UplineTraderoute != null)
 		{
 			UITradeRouteFull uitrf = prefab_UITradeRouteFull.Instantiate<UITradeRouteFull>();
 			uitrf.Init(ResourcePool.Trade.UplineTraderoute);

@@ -26,10 +26,6 @@ public partial class Lists
     }
 
     // Sub-class of listable element used in UIListSelector
-    public interface IListableSelect<T>
-    {
-        T OnValueSelected();
-    }
     public interface IOrderable<T> : IListable<T>
     {
 

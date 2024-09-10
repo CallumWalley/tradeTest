@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq;
 
 
 /// <summary>
@@ -7,37 +8,52 @@ using System;
 /// </summary>
 public partial class UIPanelTradeAll : UIPanel
 {
-	UIList<ResourcePool> ResourcePoolList;
+	ScrollContainer tradeRouteScroll;
+
 	UIList<TradeRoute> tradeRouteList;
 
-	static readonly PackedScene prefab_Insallation = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables//ResourcePool/UIResourcePoolSmall.tscn");
+	MarginContainer noTradeRoutes;
+
 	static readonly PackedScene prefab_TradeRoute = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/TradeRoute/UITradeRouteFull.tscn");
 
 	Player player;
-
-	public Button toggleButton;
-
-	VBoxContainer tabReceivers;
-	VBoxContainer tabTradeRoutes;
 
 	public override void _Ready()
 	{
 		base._Ready();
 		player = GetNode<Player>("/root/Global/Player");
 
-		//tabReceivers = GetNode<VBoxContainer>("TabContainer/Shipyards");
-		//tabTradeRoutes = GetNode<VBoxContainer>("Trade Routes");
 
-		//ResourcePoolList = new();
-		tradeRouteList = new();
+		tradeRouteScroll = GetNode<ScrollContainer>("ScrollContainer");
+		noTradeRoutes = GetNode<MarginContainer>("NoTradeRoutes");
 
-		//ResourcePoolList.Vertical = true;
+	}
+
+	public void Init()
+	{
+		tradeRouteList = new UIList<TradeRoute>();
 		tradeRouteList.Vertical = true;
-
-		//ResourcePoolList.Init(player.trade.Heads, prefab_Insallation);
 		tradeRouteList.Init(player.trade.Routes, prefab_TradeRoute);
+		tradeRouteScroll.AddChild(tradeRouteList);
+	}
 
-		//tabReceivers.AddChild(ResourcePoolList);
-		//tabTradeRoutes.AddChild(tradeRouteList);
+	public override void _Draw()
+	{
+		base._Draw();
+		if (player.trade.Routes.Count() > 0)
+		{
+			noTradeRoutes.Visible = false;
+			tradeRouteScroll.Visible = true;
+		}
+		else
+		{
+			noTradeRoutes.Visible = true;
+			tradeRouteScroll.Visible = false;
+		}
+	}
+
+	public void Update()
+	{
+		tradeRouteList.Update();
 	}
 }

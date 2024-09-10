@@ -1,0 +1,20 @@
+using Godot;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+public partial class UISplitList<T> : PanelContainer where T : Lists.IListable<T>
+{
+	UIListSelector<T> uIListSelector;
+	public IEnumerable<T> list;
+	protected PackedScene prefab1; // Prefab for use in list.
+	protected PackedScene prefab2; // Prefab for use in the display.
+	public override void _Ready()
+	{
+		uIListSelector = GetNode<UIListSelector<T>>("VBoxContainer/HSplitContainer/ScrollContainer/UIListSelector");
+	}
+	public virtual void Init(IEnumerable<T> _list, PackedScene _prefab)
+	{
+		uIListSelector.Init(_list, _prefab);
+	}
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
+}

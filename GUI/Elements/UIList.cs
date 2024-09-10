@@ -3,12 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 public partial class UIList<T> : BoxContainer
+// where T : Lists.IListable<T>
 {
     public IEnumerable<T> list;
     protected PackedScene prefab;
 
     Control unset;
-
 
     public virtual void Init(IEnumerable<T> _list, PackedScene _prefab)
     {
@@ -31,14 +31,14 @@ public partial class UIList<T> : BoxContainer
     /// <summary>
     ///  Call to recalculate all child elements.
     /// </summary>
-    public void Update()
+    public virtual void Update()
     {
         /// Queue all children for deletion
         foreach (Lists.IListable<T> uichild in GetChildren())
         {
             uichild.Destroy = true;
         }
-        if (list == null) { GD.Print("List instantiated will null list."); QueueFree(); return; }
+        if (list == null) { GD.Print("List instantiated will null list."); return; }
         /// For each in list, check if element exists. 
         foreach (T r in list)
         {
@@ -55,7 +55,7 @@ public partial class UIList<T> : BoxContainer
         }
     }
 
-    protected void UpdateElement(T r)
+    protected virtual void UpdateElement(T r)
     {
         foreach (Lists.IListable<T> uir in GetChildren())
         {
@@ -67,14 +67,22 @@ public partial class UIList<T> : BoxContainer
             }
         }
         // If doesn't exist, add it and insert at postition.
-
-        AddChild((Control)CreateNewElement(r));
+        InsertNewElement(CreateNewElement(r));
     }
 
+    /// <summary>
+    ///  Overwrite this, for elements needing a more complicated init.
+    /// </summary>
+    /// <param name="r"></param>
+    /// <returns></returns>
     protected virtual Lists.IListable<T> CreateNewElement(T r)
     {
         Lists.IListable<T> newui = (Lists.IListable<T>)prefab.Instantiate();
         newui.Init(r);
         return newui;
+    }
+    protected virtual void InsertNewElement(Lists.IListable<T> r)
+    {
+        AddChild((Control)r);
     }
 }

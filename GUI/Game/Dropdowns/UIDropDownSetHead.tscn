@@ -5,3 +5,9 @@
 
 [node name="DropDown" instance=ExtResource("1_eqp80")]
 script = ExtResource("2_khe8n")
+
+[node name="Popup" parent="." index="1"]
+size = Vector2i(100, 1)
+
+[node name="Panel" parent="Popup" index="0"]
+visible = true

@@ -14,13 +14,13 @@ public partial class UIPanelFeatureList : UIPanel, UIInterfaces.IEFrameUpdatable
     Label altNameLabel;
     ItemList list;
     ScrollContainer display;
-	List<Features.Basic> featureList = new();
+	List<FeatureBase> featureList = new();
     static readonly PackedScene prefab_UIFeatureSmall = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/Feature/UIFeatureSmall.tscn");
     static readonly PackedScene prefab_UIPanelFeatureFull = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Panels/UIPanelFeatureFull.tscn");
 
-    public Features.Basic selected;
+    public FeatureBase selected;
     int selectedIndex = 0;
-    UIList<Features.Basic> vbox;
+    UIList<FeatureBase> vbox;
     
     public override void _Ready()
     {
@@ -34,7 +34,7 @@ public partial class UIPanelFeatureList : UIPanel, UIInterfaces.IEFrameUpdatable
     public void OnItemListItemSelected(int i)
     {   
         selectedIndex = i;
-        selected = (Features.Basic)featureList[selectedIndex];
+        selected = (FeatureBase)featureList[selectedIndex];
         DrawDisplay();
     }
 
@@ -51,7 +51,7 @@ public partial class UIPanelFeatureList : UIPanel, UIInterfaces.IEFrameUpdatable
                     c.QueueFree();
                     display.RemoveChild(c);
                 }
-                selected ??= (Features.Basic)featureList[0];
+                selected ??= (FeatureBase)featureList[0];
                 UIPanelFeatureFull uipff = prefab_UIPanelFeatureFull.Instantiate<UIPanelFeatureFull>();
                 uipff.feature = selected;
                 display.AddChild(uipff);
@@ -68,8 +68,8 @@ public partial class UIPanelFeatureList : UIPanel, UIInterfaces.IEFrameUpdatable
             list.Clear();
             foreach (Node f in featureList)
             {
-                if (f is Features.Basic){
-                    list.AddItem(((Features.Basic)f).Name, ((Features.Basic)f).iconMedium);
+                if (f is FeatureBase){
+                    list.AddItem(((FeatureBase)f).Name, ((FeatureBase)f).iconMedium);
                 }
             }
             list.Select(selectedIndex);

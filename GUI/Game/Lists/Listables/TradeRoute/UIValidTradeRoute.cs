@@ -1,12 +1,15 @@
 using Godot;
 using System;
 
-public partial class UIValidTradeRoute : Button // UIList.IListable<PlayerTrade.ValidTradeHead>
+public partial class UIValidTradeRoute : Button, Lists.IListable<PlayerTrade.ValidTradeHead>
 {
 	public PlayerTrade.ValidTradeHead validTradeHead;
+	public bool Destroy { get; set; }
+	public PlayerTrade.ValidTradeHead GameElement { get { return validTradeHead; } }
+	Label labelDistance;
 
-	// public PlayerTrade.ValidTradeHead GameElement { get { return validTradeHead; } }
-	// public bool Destroy { get; set; }
+	public Node Driver;
+
 
 	public void Init(PlayerTrade.ValidTradeHead _validTradeHead)
 	{
@@ -15,19 +18,28 @@ public partial class UIValidTradeRoute : Button // UIList.IListable<PlayerTrade.
 		// These should be in '_Ready' but at moment, trying to instantiate summary without target causes error.
 		GetNode<UIResourcePoolTiny>("HBoxContainer/ResourcePoolSummary").Init(validTradeHead.Head);
 		GetNode<UIResource>("HBoxContainer/UIResource").Init(validTradeHead.TradeWeight);
+		labelDistance = GetNode<Label>("HBoxContainer/Distance");
 	}
 	public override void _Ready()
 	{
-		GetNode<Label>("HBoxContainer/Distance").Text = String.Format("{0:N2} ly", validTradeHead.distance);
+
 	}
 
 	public override void _Pressed()
 	{
 		base._Pressed();
-		validTradeHead.Create();
+		if (Driver != null)
+		{
+			((UIDropDownSetHead)Driver).OnButtonPressed(this);
+		}
 		Disabled = true;
-
-		GetNode<UIDropDownSetHead>("../../../../").CloseRequested();
-		GetNode<UIDropDownSetHead>("../../../../").SetButtonContent();
 	}
+
+	public void Update()
+	{
+		labelDistance.Text = String.Format("{0:N2} ly", validTradeHead.distance);
+	}
+
+
+
 }

@@ -14,7 +14,7 @@ public partial class Condition
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public Features.Basic Feature { get; set; } // parent reference.
+        public FeatureBase Feature { get; set; } // parent reference.
 
         public virtual void OnAdd() { } //Called when added to feature.
         public virtual void OnEFrame() { } //Called every eframe.
@@ -24,7 +24,7 @@ public partial class Condition
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public Features.Basic Feature { get; set; } // parent reference.
+        public FeatureBase Feature { get; set; } // parent reference.
 
         public BaseCondition() { }
 

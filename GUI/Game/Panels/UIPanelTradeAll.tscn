@@ -1,6 +1,24 @@
-[gd_scene load_steps=2 format=3 uid="uid://c28stn4qsv6rp"]
+[gd_scene load_steps=2 format=3 uid="uid://hryxon3gub4"]
 
 [ext_resource type="Script" path="res://GUI/Game/Panels/UIPanelTradeAll.cs" id="1_ge5jg"]
 
-[node name="UiPanelTradeAll" type="PanelContainer"]
+[node name="TradeAll" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_ge5jg")
+
+[node name="NoTradeRoutes" type="MarginContainer" parent="."]
+layout_mode = 2
+
+[node name="NoTradeRoutes" type="Label" parent="NoTradeRoutes"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "No Trade Routes"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+visible = false
+layout_mode = 2
+horizontal_scroll_mode = 0

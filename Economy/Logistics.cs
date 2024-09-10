@@ -64,7 +64,7 @@ public partial class Logistics
         {
             if (ResourcePool.Order > 1) { return; }
             ResolveRequests(ResourcePool);
-            foreach (Features.Basic f in ResourcePool)
+            foreach (FeatureBase f in ResourcePool)
             {
                 f.OnEFrame();
             }
@@ -230,7 +230,7 @@ public partial class Logistics
         // Zero Ledger
         ResourcePool.Ledger.Clear();
 
-        foreach (Features.Basic rp in ResourcePool.GetChildren().Cast<Features.Basic>())
+        foreach (FeatureBase rp in ResourcePool.GetChildren().Cast<FeatureBase>())
         {
             foreach (Resource.IResource f in rp.FactorsGlobal)
             {

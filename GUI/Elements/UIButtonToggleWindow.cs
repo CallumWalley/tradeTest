@@ -12,15 +12,16 @@ public partial class UIButtonToggleWindow : UIButton
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void OnButtonPressed() { 
+	public override void OnButtonPressed()
+	{
 
 		base.OnButtonPressed();
 		window.Visible = ButtonPressed;
 	}
 
-    public override void _Draw()
-    {
-        base._Draw();
+	public override void _Draw()
+	{
+		base._Draw();
 		ButtonPressed = window.Visible;
-    }
+	}
 }

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public partial class ResourcePool : Node, IEnumerable<Features.Basic>
+public partial class ResourcePool : Node, IEnumerable<FeatureBase>
 {
     [Export]
     public bool Active;
@@ -12,10 +12,11 @@ public partial class ResourcePool : Node, IEnumerable<Features.Basic>
     {
         get { return new Vector2(0, 0); }
     }
-
+    // Can receive trade. Should be determined 
     [Export]
+    // Can receive trade. Should be determined by port.
+    bool _validTradeReceiver = false;     // Can receive trade. Should 
 
-    bool _validTradeReceiver = false;
     public bool ValidTradeReceiver
 
     {
@@ -139,9 +140,9 @@ public partial class ResourcePool : Node, IEnumerable<Features.Basic>
 
     public void Setup() { }
 
-    public IEnumerator<Features.Basic> GetEnumerator()
+    public IEnumerator<FeatureBase> GetEnumerator()
     {
-        foreach (Features.Basic f in GetChildren())
+        foreach (FeatureBase f in GetChildren())
         {
             yield return f;
         }
@@ -215,7 +216,7 @@ public partial class ResourcePool : Node, IEnumerable<Features.Basic>
 
     public override string ToString() { return Name; }
 
-    public void AddFeature(Features.Basic feature)
+    public void AddFeature(FeatureBase feature)
     {
         AddChild(feature);
     }

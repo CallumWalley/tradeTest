@@ -43,6 +43,7 @@ transparent = true
 content_scale_mode = 1
 
 [node name="Panel" type="PanelContainer" parent="Popup"]
+visible = false
 anchors_preset = 10
 anchor_right = 1.0
 grow_horizontal = 2
