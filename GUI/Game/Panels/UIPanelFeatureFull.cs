@@ -9,7 +9,9 @@ public partial class UIPanelFeatureFull : UIPanel
 	Label type;
 	RichTextLabel description;
 	HFlowContainer tags;
-	UIListResources globalFactors = new();
+	UIListResources globalFactorsInput = new();
+	UIListResources globalFactorsOutput = new();
+
 	UIListResources localFactors = new();
 	UIListResources singularFactors = new();
 
@@ -32,23 +34,29 @@ public partial class UIPanelFeatureFull : UIPanel
 		}
 		singularFactors.Vertical = false;
 		localFactors.Vertical = false;
-		globalFactors.Vertical = false;
+		globalFactorsInput.Vertical = false;
+		globalFactorsOutput.Vertical = false;
 
 		singularFactors.ShowBreakdown = false;
 		localFactors.ShowBreakdown = true;
-		globalFactors.ShowBreakdown = true;
+		globalFactorsInput.ShowBreakdown = true;
+		globalFactorsOutput.ShowBreakdown = true;
 
 		singularFactors.Init(feature.FactorsSingle);
 		localFactors.Init(feature.FactorsLocal);
-		globalFactors.Init(feature.FactorsGlobal);
+		globalFactorsInput.Init(feature.FactorsGlobalInput);
+		globalFactorsOutput.Init(feature.FactorsGlobalOutput);
 
 		GetNode<VBoxContainer>("PanelContainer/Details/Factors/VBoxContainer").AddChild(singularFactors);
 		GetNode<VBoxContainer>("PanelContainer/Details/Factors/VBoxContainer").AddChild(localFactors);
-		GetNode<VBoxContainer>("PanelContainer/Details/Factors/VBoxContainer").AddChild(globalFactors);
+		GetNode<VBoxContainer>("PanelContainer/Details/Factors/VBoxContainer").AddChild(globalFactorsInput);
+		GetNode<VBoxContainer>("PanelContainer/Details/Factors/VBoxContainer").AddChild(globalFactorsOutput);
 
 		singularFactors.Update();
 		localFactors.Update();
-		globalFactors.Update();
+		globalFactorsInput.Update();
+		globalFactorsOutput.Update();
+
 	}
 
 	public override void _Draw()
@@ -64,7 +72,8 @@ public partial class UIPanelFeatureFull : UIPanel
 	{
 		base.OnEFrameUpdate();
 		singularFactors.Update();
-		globalFactors.Update();
+		globalFactorsInput.Update();
+		globalFactorsOutput.Update();
 		localFactors.Update();
 
 	}

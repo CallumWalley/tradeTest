@@ -3,17 +3,69 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Dynamic;
 using System.Linq;
+using System.Reflection;
+
+
 public partial class Features : Node, IEnumerable<Features.BasicFactory>
 {
+
+    public class IFeatureConverter : JsonConverter
+    {
+
+
+        public override bool CanConvert(Type objectType)
+        {
+            return typeof(IFeatureConverter).IsAssignableFrom(objectType);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            JObject itemsJson = JObject.Load(reader);
+            // You can use a property in the JSON to determine the type, like a "type" field
+            List<Condition.IConditionable> items = new();
+
+            foreach (var property in itemsJson.Properties())
+            {
+                string typeName = property.Name;
+                JObject itemObject = (JObject)property.Value;
+
+
+                Condition.IConditionable target = typeName switch
+                {
+                    "simpleIndustry" => new Condition.SimpleIndustry(),
+                    "slowStart" => new Condition.SlowStart(),
+                    _ => throw new NotSupportedException($"Unknown class type : {typeName}")
+                };
+
+                items.Add(target);
+            }
+            return items;
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            throw new NotImplementedException();
+        }
+    }
     public override void _Ready()
     {
         foreach (string file in System.IO.Directory.GetFiles("Map/Features/Templates", "*.json"))
         {
-            using StreamReader fi = System.IO.File.OpenText(file);
-            JsonSerializer serializer = new();
-            foreach (BasicFactory tt in (List<BasicFactory>)serializer.Deserialize(fi, typeof(List<BasicFactory>)))
+            // using StreamReader fi = ;
+            using JsonTextReader jsonReader = new JsonTextReader(System.IO.File.OpenText(file));
+
+
+            JsonSerializerSettings settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.None,
+                Converters = new List<JsonConverter> { new IFeatureConverter() }
+            };
+
+            //JObject partial = JObject.Parse(fi);
+            foreach (BasicFactory tt in JsonSerializer.Create(settings).Deserialize<IEnumerable<BasicFactory>>(jsonReader))
             {
                 AddChild(tt);
             }
@@ -42,8 +94,8 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
         [Export]
         public Godot.Collections.Array<string> NeedsTags { get; set; } = new();
 
-        [Export]
-        public Godot.Collections.Dictionary<string, string> Conditions { get; set; } = new();
+        // [Export]
+        public List<Condition.IConditionable> Conditions { get; set; } = new();
         [Export]
         public string Description { get; set; }
         [Export]
@@ -55,63 +107,60 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
         /// <summary>
         /// Converts feature constructor to actual feature.
         /// </summary>
-        /// <returns></returns>
-        public FeatureBase Instantiate()
-        {
-            FeatureBase featureBase = new();
+        // /// <returns></returns>
+        // public FeatureBase Instantiate()
+        // {
+        //     FeatureBase featureBase = new();
 
-            featureBase.FactorsGlobal = new();
-            featureBase.FactorsLocal = new();
+        //     featureBase.FactorsGlobalOutput = new();
+        //     featureBase.FactorsGlobalInput = new();
 
-            featureBase.TypeSlug = Slug;
-            featureBase.Name = Name;
-            featureBase.Conditions = new();
-            foreach (Condition.BaseCondition condition in GetContitionsFromTemplate(Conditions))
-            {
-                featureBase.AddCondition(condition);
-            }
-            featureBase.NeedsTags = NeedsTags;
+        //     featureBase.FactorsLocal = new();
 
-            featureBase.Description = Description;
-            // Give factors sensible names.
-            foreach (Resource.RGroup<Resource.IResource> f in featureBase.FactorsGlobal)
-            {
-                f.Name = Name;
-            }
-
-            return featureBase;
-        }
+        //     featureBase.TypeSlug = Slug;
+        //     featureBase.Name = Name;
+        //     featureBase.Conditions = new();
+        //     foreach (Condition.BaseCondition condition in GetContitionsFromTemplate(Conditions))
+        //     {
+        //         featureBase.AddCondition(condition);
+        //     }
+        //     featureBase.NeedsTags = NeedsTags;
+        //     featureBase.Description = Description;
+        //     // Give factors sensible names.
+        //     foreach (Resource.RGroup<Resource.IResource> f in featureBase.FactorsGlobalInput)
+        //     {
+        //         f.Name = $"{Name} Input";
+        //     }
+        //     foreach (Resource.RGroup<Resource.IResource> f in featureBase.FactorsGlobalOutput)
+        //     {
+        //         f.Name = $"{Name} Output";
+        //     }
+        //     return featureBase;
+        // }
         IEnumerable<Condition.BaseCondition> GetContitionsFromTemplate(Godot.Collections.Dictionary<string, string> template)
         {
             if (template == null) { yield break; }
-            foreach (KeyValuePair<string, string> kvp in template)
-            {
-                // Select type based on key
-                if (kvp.Key == "inputFulfilment")
-                {
-                    yield return new Condition.InputFulfilment(kvp.Value);
-                }
-                else if (kvp.Key == "fulfilmentOutput")
-                {
-                    yield return new Condition.FulfilmentOutput(kvp.Value);
-                }
-                else if (kvp.Key == "outputConstant")
-                {
-                    yield return new Condition.OutputConstant(kvp.Value);
-                }
-                else if (kvp.Key == "scalable")
-                {
-                    yield return new Condition.Scalable(kvp.Value);
-                }
-                else if (kvp.Key == "slowStart")
-                {
-                    yield return new Condition.SlowStart(kvp.Value);
-                }
-                else
-                {
-                    GD.Print($"Condition class '{kvp.Key}' not found");
-                }
-            }
+            // foreach (KeyValuePair<string, object> kvp in template)
+            // {
+            //     // Select type based on key
+            //     // There must be a better way to do this.
+            //     if (kvp.Key == "scaleCondition")
+            //     {
+            //         yield return new Condition.ScaleCondition(kvp.Value);
+            //     }
+            //     else if (kvp.Key == "simpleIndustry")
+            //     {
+            //         yield return new Condition.SimpleIndustry(kvp.Value);
+            //     }
+            //     else if (kvp.Key == "slowStart")
+            //     {
+            //         yield return new Condition.SlowStart(kvp.Value);
+            //     }
+            //     else
+            //     {
+            //         GD.Print($"Condition class '{kvp.Key}' not found");
+            //     }
+            // }
         }
     }
 

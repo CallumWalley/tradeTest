@@ -12,7 +12,8 @@ public partial class FeatureBase : Node
     ///  Contains factors pooled with parent rp.
     ///  Currently 000-800
     /// </summary>
-    public Resource.RDict<Resource.RGroup<Resource.IResource>> FactorsGlobal { get; set; } = new();
+    public Resource.RDict<Resource.RGroup<Resource.IResource>> FactorsGlobalOutput { get; set; } = new();
+    public Resource.RDict<Resource.RGroup<Resource.IResource>> FactorsGlobalInput { get; set; } = new();
 
     /// <summary>
     ///  Contains factors not pooled with parent rp.

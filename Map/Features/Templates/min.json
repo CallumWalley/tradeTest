@@ -14,81 +14,102 @@
             "planetary"
         ],
         "conditions": {
-            "scalable": "1",
-            "inputFulfilment": "{'2': -2.0}",
-            "fulfilmentOutput": "{'811': 1.0}"
+            "simpleIndustry": //"{\"input\":{\"2\":-2.0},\"output\":{\"811\":1.0}}"
+            {
+                "input": {
+                    "2": -2.0
+                },
+                "output": {
+                    "811": 1.0
+                }
+            },
+            "slowStart": {
+                "initialModifier": "0"
+            }
         },
         "description": "All the trade gantries, maintainance facilites and refueling shuttles required to maintain a fleet of starships frieghters."
     },
-    {
-        "name": "Fuel Reserves",
-        "slug": "orbit_storage_fuel",
-        "needsTags": [
-            "orbital"
-        ],
-        "description": "Strategic fuel reserves."
-    },
-    {
-        "name": "Water Reserves",
-        "slug": "orbit_storage_h2o",
-        "needsTags": [
-            "orbital"
-        ],
-        "description": "Large quantities of dihydrogen oxide, pressurised in order to maintain a subcritical state."
-    },
-    {
-        "name": "Mineral Mine",
-        "slug": "planet_mine_minerals",
-        "needsTags": [
-            "planetary"
-        ],
-        "conditions": {
-            "scalable": "1",
-            "slowStart": "1",
-            "inputFulfilment": "{'2': -1.0}",
-            "fulfilmentOutput": "{'1': 2.0}"
-        },
-        "description": "Surface Mining using hand tools."
-    },
-    {
-        "name": "Desalination Plant",
-        "slug": "planet_mine_h2o",
-        "needsTags": [
-            "planetary"
-        ],
-        "conditions": {
-            "scalable": "1",
-            "slowStart": "1",
-            "inputFulfilment": "{'2': -1.0}",
-            "fulfilmentOutput": "{'4': 3.0}"
-        },
-        "description": "Extraction of DHMO from surface ice deposits."
-    },
-    {
-        "name": "Reclaimation Facility",
-        "slug": "reclaim",
-        "needsTags": [
-            "planetary"
-        ],
-        "conditions": {
-            "scalable": "1",
-            "slowStart": "1",
-            "outputConstant": "{'1': 1.0}"
-        },
-        "description": "Sorting facilities to recover useful resources from industrial waste."
-    },
-    {
-        "name": "Chemical Fuel Plant",
-        "slug": "cfuel_water",
-        "needsTags": [
-            "planetary"
-        ],
-        "conditions": {
-            "scalable": "1",
-            "slowStart": "1",
-            "inputFulfilment": "{'4': -2.0}",
-            "fulfilmentOutput": "{'2': 1.0}"
-        },
-        "description": "Facilities for converting H2O into chemical fuel."
-    }
+    // {
+    //     "name": "Fuel Reserves",
+    //     "slug": "orbit_storage_fuel",
+    //     "needsTags": [
+    //         "orbital"
+    //     ],
+    //     "description": "Strategic fuel reserves."
+    // },
+    // {
+    //     "name": "Water Reserves",
+    //     "slug": "orbit_storage_h2o",
+    //     "needsTags": [
+    //         "orbital"
+    //     ],
+    //     "description": "Large quantities of dihydrogen oxide, pressurised in order to maintain a subcritical state."
+    // },
+    // {
+    //     "name": "Mineral Mine",
+    //     "slug": "planet_mine_minerals",
+    //     "needsTags": [
+    //         "planetary"
+    //     ],
+    //     "conditions": {
+    //         "simpleIndustry": {
+    //             "input": "{'2': -1.0}",
+    //             "output": "{'1': 2.0}"
+    //         },
+    //         "slowStart": {
+    //             "initialModifier": "0"
+    //         }
+    //     },
+    //     "description": "Surface Mining using hand tools."
+    // },
+    // {
+    //     "name": "Desalination Plant",
+    //     "slug": "planet_mine_h2o",
+    //     "needsTags": [
+    //         "planetary"
+    //     ],
+    //     "conditions": {
+    //         "simpleIndustry": {
+    //             "input": "{'2': -1.0}",
+    //             "output": "{'4': 3.0}"
+    //         },
+    //         "slowStart": {
+    //             "initialModifier": "0"
+    //         }
+    //     },
+    //     "description": "Extraction of DHMO from surface ice deposits."
+    // },
+    // {
+    //     "name": "Reclaimation Facility",
+    //     "slug": "reclaim",
+    //     "needsTags": [
+    //         "planetary"
+    //     ],
+    //     "conditions": {
+    //         "simpleIndustry": {
+    //             "output": "{'1': 1.0}"
+    //         },
+    //         "slowStart": {
+    //             "initialModifier": "0"
+    //         }
+    //     },
+    //     "description": "Sorting facilities to recover useful resources from industrial waste."
+    // },
+    // {
+    //     "name": "Chemical Fuel Plant",
+    //     "slug": "cfuel_water",
+    //     "needsTags": [
+    //         "planetary"
+    //     ],
+    //     "conditions": {
+    //         "simpleIndustry": {
+    //             "input": "{'4': -2.0}",
+    //             "output": "{'2': 1.0}"
+    //         },
+    //         "slowStart": {
+    //             "initialModifier": "0"
+    //         }
+    //     },
+    //     "description": "Facilities for converting H2O into chemical fuel."
+    // }
 ]

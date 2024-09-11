@@ -232,18 +232,15 @@ public partial class Logistics
 
         foreach (FeatureBase rp in ResourcePool.GetChildren().Cast<FeatureBase>())
         {
-            foreach (Resource.IResource f in rp.FactorsGlobal)
+            foreach (Resource.IResource f in rp.FactorsGlobalOutput)
             {
-                if (f.Sum > 0)
-                {
-                    ResourcePool.Ledger[f.Type].LocalGain.Add(f);
-                }
-                else
-                {
-                    ResourcePool.Ledger[f.Type].LocalLoss.Add(f);
-                }
-
+                ResourcePool.Ledger[f.Type].LocalGain.Add(f);
             }
+            foreach (Resource.IResource f in rp.FactorsGlobalInput)
+            {
+                ResourcePool.Ledger[f.Type].LocalLoss.Add(f);
+            }
+
         }
     }
 }

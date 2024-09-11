@@ -56,7 +56,7 @@ public partial class UIWindowPoolFeaturePlan : UIWindow
 
 	public void OnButtonPressed()
 	{
-		FeatureBase newFeature = templateList.selected.Instantiate();
+		FeatureBase newFeature = new(); //= templateList.selected.Instantiate();
 		resourcePool.AddFeature(newFeature);
 
 		newFeature.Name = nameLineEdit.Text;
