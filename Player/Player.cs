@@ -6,7 +6,7 @@ public partial class Player : Node
 {
 	public PlayerTech tech;
 	public PlayerTrade trade;
-	public List<ResourcePool> ResourcePools { get; set; } = new List<ResourcePool>();
+	public List<Domain> Domains { get; set; } = new List<Domain>();
 
 	public override void _Ready()
 	{

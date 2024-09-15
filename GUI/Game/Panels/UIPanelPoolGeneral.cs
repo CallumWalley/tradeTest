@@ -4,7 +4,7 @@ using System;
 public partial class UIPanelPoolGeneral : UIPanel
 {
 
-    public ResourcePool resourcePool;
+    public Domain resourcePool;
     Label nameLabel;
     Label adjLabel;
     Label altNameLabel;

@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://cup72op0iv7t6"]
 
 [ext_resource type="Script" path="res://GUI/Game/Lists/Listables/TradeRoute/UITradeRouteFull.cs" id="1_tiksk"]
-[ext_resource type="PackedScene" uid="uid://fiabywy3cj4i" path="res://GUI/Game/Lists/Listables/ResourcePool/UIResourcePoolTiny.tscn" id="2_jqcgi"]
+[ext_resource type="PackedScene" uid="uid://fiabywy3cj4i" path="res://GUI/Game/Lists/Listables/Domain/UIDomainTiny.tscn" id="2_jqcgi"]
 [ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="3_06pva"]
 [ext_resource type="PackedScene" path="res://GUI/Game/Lists/Listables/UIResource.tscn" id="4_ndr0k"]
 [ext_resource type="Texture2D" uid="uid://dssccajo2oiby" path="res://assets/icons/resources/minerals.png" id="5_nlv7l"]
@@ -48,7 +48,7 @@ columns = 3
 [node name="Head" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer"]
 layout_mode = 2
 
-[node name="ResourcePoolSummary" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Head" instance=ExtResource("2_jqcgi")]
+[node name="DomainSummary" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Head" instance=ExtResource("2_jqcgi")]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Head"]
@@ -117,10 +117,10 @@ layout_mode = 2
 layout_mode = 2
 text = "<-"
 
-[node name="ResourcePoolSummary" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Tail" instance=ExtResource("2_jqcgi")]
+[node name="DomainSummary" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Tail" instance=ExtResource("2_jqcgi")]
 layout_mode = 2
 
-[node name="Name" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Tail/ResourcePoolSummary" index="1"]
+[node name="Name" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Tail/DomainSummary" index="1"]
 text = "Earth Station"
 
 [node name="VSeparator2" type="VSeparator" parent="VBoxContainer/HBoxContainer/HSplitContainer"]
@@ -181,4 +181,4 @@ layout_mode = 2
 [editable path="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/HeadResources/UIResource2"]
 [editable path="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/TailResources/UIResource"]
 [editable path="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/TailResources/UIResource2"]
-[editable path="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Tail/ResourcePoolSummary"]
+[editable path="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Tail/DomainSummary"]

@@ -5,7 +5,7 @@ using System.Linq;
 public partial class UIWindowPoolFeaturePlan : UIWindow
 {
 	[Export]
-	public ResourcePool resourcePool;
+	public Domain resourcePool;
 
 	[Export]
 	public UIPanelFeatureFactoryList templateList;

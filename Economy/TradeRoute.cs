@@ -7,10 +7,10 @@ public partial class TradeRoute : Node
 {
 
     [Export]
-    public ResourcePool Head { get; set; }
+    public Domain Head { get; set; }
 
     [Export]
-    public ResourcePool Tail { get; set; }
+    public Domain Tail { get; set; }
     Resource.RDict<RStaticTail> listTailLoss;
     Resource.RDict<RStaticTail> listTailGain;
     Resource.RDict<RStaticHead> listHeadLoss;
@@ -97,7 +97,7 @@ public partial class TradeRoute : Node
 
         shipDemand.Name = Name;
     }
-    public void Init(ResourcePool _head, ResourcePool _tail)
+    public void Init(Domain _head, Domain _tail)
     {
         (Head, Tail) = (_head, _tail);
         Init();

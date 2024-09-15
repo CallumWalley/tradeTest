@@ -6,15 +6,15 @@ using System.Linq;
 public partial class UIDropDownSetHead : UIDropDown
 {
 	Player player;
-	ResourcePool ResourcePool;
+	Domain Domain;
 
 	static readonly PackedScene prefab_UIValidTradeRoute = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/TradeRoute/UIValidTradeRoute.tscn");
 	static readonly PackedScene prefab_UITradeRouteFull = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/TradeRoute/UITradeRouteFull.tscn");
 	IEnumerable<PlayerTrade.ValidTradeHead> validTradeHeads;
 
-	public void Init(ResourcePool _ResourcePool)
+	public void Init(Domain _Domain)
 	{
-		ResourcePool = _ResourcePool;
+		Domain = _Domain;
 	}
 	public override void _Ready()
 	{
@@ -48,8 +48,8 @@ public partial class UIDropDownSetHead : UIDropDown
 	public override void _Draw()
 	{
 		base._Draw();
-		validTradeHeads = player.trade.GetValidTradeHeads(ResourcePool);
-		if (ResourcePool.Trade.UplineTraderoute == null)
+		validTradeHeads = player.trade.GetValidTradeHeads(Domain);
+		if (Domain.Trade.UplineTraderoute == null)
 		{
 			buttonDefault.Text = "No Upline Trade Route Set";
 			buttonDefaultVisible = true;
@@ -88,10 +88,10 @@ public partial class UIDropDownSetHead : UIDropDown
 		{
 			child.QueueFree();
 		}
-		if (ResourcePool != null && ResourcePool.Trade.UplineTraderoute != null)
+		if (Domain != null && Domain.Trade.UplineTraderoute != null)
 		{
 			UITradeRouteFull uitrf = prefab_UITradeRouteFull.Instantiate<UITradeRouteFull>();
-			uitrf.Init(ResourcePool.Trade.UplineTraderoute);
+			uitrf.Init(Domain.Trade.UplineTraderoute);
 			buttonContent.AddChild(uitrf);
 			// TODO make less messy.
 			uitrf.cancelButton.Connect("pressed", callable: new Callable(this, "SetButtonContent"));

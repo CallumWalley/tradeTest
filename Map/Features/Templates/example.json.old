@@ -19,7 +19,7 @@
         "defaultPrioroty": 0,
         "requirements": {
             "player": [],
-            "ResourcePool": [
+            "Domain": [
                 "orbital"
             ]
         },
@@ -42,7 +42,7 @@
         "defaultPrioroty": 0,
         "requirements": {
             "player": [],
-            "ResourcePool": [
+            "Domain": [
                 "orbital"
             ]
         },
@@ -65,7 +65,7 @@
         "defaultPrioroty": 0,
         "requirements": {
             "player": [],
-            "ResourcePool": [
+            "Domain": [
                 "orbital"
             ]
         },
@@ -93,7 +93,7 @@
         "defaultPrioroty": 0,
         "requirements": {
             "player": [],
-            "ResourcePool": [
+            "Domain": [
                 "surface",
                 "atmosphere"
             ]
@@ -117,7 +117,7 @@
         "defaultPrioroty": 0,
         "requirements": {
             "player": [],
-            "ResourcePool": [
+            "Domain": [
                 "surface",
                 "atmosphere"
             ]
@@ -146,7 +146,7 @@
         "defaultPrioroty": 0,
         "requirements": {
             "player": [],
-            "ResourcePool": [
+            "Domain": [
                 "orbital"
             ]
         },

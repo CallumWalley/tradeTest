@@ -692,13 +692,13 @@ public partial class Resource
     public class Ledger : IEnumerable<KeyValuePair<int, Ledger.Entry>>
     {
 
-        // Consider moving to ResourcePool.
+        // Consider moving to Domain.
 
         /// <summary>
         /// Ledger is the complete list of all the resources at a specific location. 
         /// It is sparce on the resource axis, but dense on the type axis.
         /// </summary>
-        public ResourcePool ResourcePool;
+        public Domain Domain;
         /// Dummy method to make sure resource exists.
 
         public Dictionary<int, RStatic> Storage
@@ -732,17 +732,17 @@ public partial class Resource
 
             public IResource UplineLoss
             {
-                get { return ledger.ResourcePool.Trade.UplineTraderoute == null ? null : ledger.ResourcePool.Trade.UplineTraderoute.ListTailLoss.ContainsKey(Type) ? ledger.ResourcePool.Trade.UplineTraderoute.ListTailLoss[Type] : null; }
+                get { return ledger.Domain.Trade.UplineTraderoute == null ? null : ledger.Domain.Trade.UplineTraderoute.ListTailLoss.ContainsKey(Type) ? ledger.Domain.Trade.UplineTraderoute.ListTailLoss[Type] : null; }
             }
             public IResource UplineGain
             {
-                get { return ledger.ResourcePool.Trade.UplineTraderoute == null ? null : ledger.ResourcePool.Trade.UplineTraderoute.ListTailGain.ContainsKey(Type) ? ledger.ResourcePool.Trade.UplineTraderoute.ListTailGain[Type] : null; }
+                get { return ledger.Domain.Trade.UplineTraderoute == null ? null : ledger.Domain.Trade.UplineTraderoute.ListTailGain.ContainsKey(Type) ? ledger.Domain.Trade.UplineTraderoute.ListTailGain[Type] : null; }
             }
             public IEnumerable<IResource> DownlineGain
             {
                 get
                 {
-                    foreach (TradeRoute tradeRoute in ledger.ResourcePool.Trade.DownlineTraderoutes)
+                    foreach (TradeRoute tradeRoute in ledger.Domain.Trade.DownlineTraderoutes)
                     {
                         if (tradeRoute.ListHeadGain.ContainsKey(Type))
                         {
@@ -755,7 +755,7 @@ public partial class Resource
             {
                 get
                 {
-                    foreach (TradeRoute tradeRoute in ledger.ResourcePool.Trade.DownlineTraderoutes)
+                    foreach (TradeRoute tradeRoute in ledger.Domain.Trade.DownlineTraderoutes)
                     {
                         if (tradeRoute.ListHeadLoss.ContainsKey(Type))
                         {
@@ -819,9 +819,9 @@ public partial class Resource
             public int Type { get; set; }
             public Entry(int _type)
             {
-                localNet = new("Local", "All production and consumption occuring at this ResourcePool.");
+                localNet = new("Local", "All production and consumption occuring at this Domain.");
                 net = new("Total", "All resources produced or traded");
-                tradeNet = new("Trade", "All Exports and Imports to this ResourcePool");
+                tradeNet = new("Trade", "All Exports and Imports to this Domain");
 
                 //Local = 
                 LocalGain = new RGroup<IResource>("Local Production", "Sum Produced");

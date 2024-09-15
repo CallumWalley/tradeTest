@@ -3,10 +3,10 @@ using System;
 using System.Linq;
 using System.Collections;
 
-public partial class UIResourcePoolSmall : Control, Lists.IListable<ResourcePool>
+public partial class UIDomainSmall : Control, Lists.IListable<Domain>
 {
-    ResourcePool ResourcePool;
-    public ResourcePool GameElement { get { return ResourcePool; } }
+    Domain Domain;
+    public Domain GameElement { get { return Domain; } }
     public bool Destroy { get; set; } = false;
 
     Label labelName;
@@ -15,9 +15,9 @@ public partial class UIResourcePoolSmall : Control, Lists.IListable<ResourcePool
     {
         labelName = GetNode<Label>("Name");
     }
-    public void Init(ResourcePool _ResourcePool)
+    public void Init(Domain _Domain)
     {
-        ResourcePool = _ResourcePool;
+        Domain = _Domain;
     }
     public void Update()
     {
@@ -25,8 +25,8 @@ public partial class UIResourcePoolSmall : Control, Lists.IListable<ResourcePool
     }
     public override void _Draw()
     {
-        if (ResourcePool == null) { return; }
-        labelName.Text = ResourcePool.Name;
+        if (Domain == null) { return; }
+        labelName.Text = Domain.Name;
         if (Destroy)
         {
             QueueFree();

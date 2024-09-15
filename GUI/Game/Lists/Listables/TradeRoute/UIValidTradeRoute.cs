@@ -16,7 +16,7 @@ public partial class UIValidTradeRoute : Button, Lists.IListable<PlayerTrade.Val
 		validTradeHead = _validTradeHead;
 
 		// These should be in '_Ready' but at moment, trying to instantiate summary without target causes error.
-		GetNode<UIResourcePoolTiny>("HBoxContainer/ResourcePoolSummary").Init(validTradeHead.Head);
+		GetNode<UIDomainTiny>("HBoxContainer/DomainSummary").Init(validTradeHead.Head);
 		GetNode<UIResource>("HBoxContainer/UIResource").Init(validTradeHead.TradeWeight);
 		labelDistance = GetNode<Label>("HBoxContainer/Distance");
 	}

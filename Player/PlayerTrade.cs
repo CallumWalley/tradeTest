@@ -9,7 +9,7 @@ public partial class PlayerTrade : Node
 
 	static readonly PackedScene ps_TradeRoute = (PackedScene)GD.Load<PackedScene>("res://Map/TradeRoute.tscn");
 
-	public List<ResourcePool> Heads { get; set; } = new List<ResourcePool>();
+	public List<Domain> Heads { get; set; } = new List<Domain>();
 	public IEnumerable<TradeRoute> Routes
 	{
 		get
@@ -35,7 +35,7 @@ public partial class PlayerTrade : Node
 			t.Init();
 		}
 	}
-	public void RegisterTradeRoute(ResourcePool head, ResourcePool tail)
+	public void RegisterTradeRoute(Domain head, Domain tail)
 	{
 		TradeRoute newTradeRoute = ps_TradeRoute.Instantiate<TradeRoute>();
 		newTradeRoute.Init(head, tail);
@@ -55,12 +55,12 @@ public partial class PlayerTrade : Node
 	public partial class ValidTradeHead
 	{
 		PlayerTrade player;
-		public ResourcePool Tail { get; private set; }
-		public ResourcePool Head { get; private set; }
+		public Domain Tail { get; private set; }
+		public Domain Head { get; private set; }
 		public Resource.RStatic TradeWeight { get; set; } = new Resource.RStatic(811, 0);
 
 		//TODO: Might be tidier way to get parent instance?
-		public ValidTradeHead(PlayerTrade _player, ResourcePool _head, ResourcePool _tail)
+		public ValidTradeHead(PlayerTrade _player, Domain _head, Domain _tail)
 		{
 			(player, Head, Tail) = (_player, _head, _tail);
 			distance = 10;//Tail.GetParent<Body>().Position.DistanceTo(Head.GetParent<Body>().Position);
@@ -72,9 +72,9 @@ public partial class PlayerTrade : Node
 		}
 	}
 
-	public IEnumerable<ValidTradeHead> GetValidTradeHeads(ResourcePool Tail)
+	public IEnumerable<ValidTradeHead> GetValidTradeHeads(Domain Tail)
 	{
-		foreach (ResourcePool head in Heads)
+		foreach (Domain head in Heads)
 		{
 			if (Tail == head) { continue; }
 			yield return new ValidTradeHead(this, head, Tail);

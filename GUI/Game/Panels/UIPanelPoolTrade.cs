@@ -3,7 +3,7 @@ using System;
 
 public partial class UIPanelPoolTrade : UIPanel
 {
-	public ResourcePool resourcePool;
+	public Domain resourcePool;
 
 	public UIDropDownSetHead uIDropDownSetHead;
 	public override void _Ready()

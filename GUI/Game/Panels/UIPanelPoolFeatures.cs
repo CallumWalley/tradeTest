@@ -8,7 +8,7 @@ using System.Linq;
 public partial class UIPanelPoolFeatures : UIPanel, UIInterfaces.IEFrameUpdatable
 {
 
-    public ResourcePool resourcePool;
+    public Domain resourcePool;
     Label nameLabel;
     Label adjLabel;
     Label altNameLabel;

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://GUI/Game/Lists/Listables/TradeRoute/UITradeRouteFull.cs" id="1_acrdv"]
 [ext_resource type="PackedScene" uid="uid://c6l1f58cf2j1w" path="res://GUI/Game/Lists/UIListResources.tscn" id="3_7vo1k"]
-[ext_resource type="PackedScene" uid="uid://fiabywy3cj4i" path="res://GUI/Game/Lists/Listables/ResourcePool/UIResourcePoolTiny.tscn" id="3_cmyw0"]
+[ext_resource type="PackedScene" uid="uid://fiabywy3cj4i" path="res://GUI/Game/Lists/Listables/Domain/UIDomainTiny.tscn" id="3_cmyw0"]
 [ext_resource type="PackedScene" uid="uid://chy6hnvyi7yb7" path="res://GUI/Game/Buttons/UIButtonPause.tscn" id="4_dfy41"]
 [ext_resource type="PackedScene" uid="uid://dui8s5f2ql5qm" path="res://GUI/Game/Lists/Listables/UIResource.tscn" id="4_htsp3"]
 
@@ -44,7 +44,7 @@ columns = 3
 [node name="Head" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer"]
 layout_mode = 2
 
-[node name="ResourcePoolSummary" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Head" instance=ExtResource("3_cmyw0")]
+[node name="DomainSummary" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Head" instance=ExtResource("3_cmyw0")]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Head"]
@@ -70,7 +70,7 @@ layout_mode = 2
 layout_mode = 2
 text = "<-"
 
-[node name="ResourcePoolSummary" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Tail" instance=ExtResource("3_cmyw0")]
+[node name="DomainSummary" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Tail" instance=ExtResource("3_cmyw0")]
 layout_mode = 2
 
 [node name="VSeparator2" type="VSeparator" parent="VBoxContainer/HBoxContainer/HSplitContainer"]

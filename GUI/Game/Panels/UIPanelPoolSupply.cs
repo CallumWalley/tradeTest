@@ -4,7 +4,7 @@ using System;
 public partial class UIPanelPoolSupply : UIPanel
 {
     UIPanelLedger panelLedger;
-    public ResourcePool resourcePool;
+    public Domain resourcePool;
     public override void _Ready()
     {
         base._Ready();

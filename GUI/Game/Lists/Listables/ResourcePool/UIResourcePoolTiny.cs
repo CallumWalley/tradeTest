@@ -1,13 +1,13 @@
 using Godot;
 using System;
 
-public partial class UIResourcePoolTiny : HBoxContainer
+public partial class UIDomainTiny : HBoxContainer
 {
-    ResourcePool ResourcePool;
+    Domain Domain;
 
-    public void Init(ResourcePool _ResourcePool)
+    public void Init(Domain _Domain)
     {
-        ResourcePool = _ResourcePool;
+        Domain = _Domain;
     }
 
     public override void _Draw()
@@ -15,6 +15,6 @@ public partial class UIResourcePoolTiny : HBoxContainer
         base._Draw();
         // all icons currently the same.
         //GetNode<TextureRect>("Icon").Texture;
-        GetNode<Label>("Name").Text = ResourcePool.Name;
+        GetNode<Label>("Name").Text = Domain.Name;
     }
 }

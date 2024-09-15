@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class SatelliteSystem : ResourcePool
+public partial class SatelliteSystem : Domain
 {
 	[ExportGroup("Orbital")]
 	[Export]

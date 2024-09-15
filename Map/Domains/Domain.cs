@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public partial class ResourcePool : Node, IEnumerable<FeatureBase>
+public partial class Domain : Node, IEnumerable<FeatureBase>
 {
     [Export]
     public bool Active;
@@ -115,7 +115,7 @@ public partial class ResourcePool : Node, IEnumerable<FeatureBase>
 
         // Name = $"{Body.Name} station";
 
-        Ledger.ResourcePool = this;
+        Ledger.Domain = this;
         // Initial storage count.
         foreach (KeyValuePair<int, double> kvp in StartingResources)
         {
@@ -155,18 +155,18 @@ public partial class ResourcePool : Node, IEnumerable<FeatureBase>
     // Class for orgasnisng
     public class _Trade
     {
-        ResourcePool ResourcePool;
+        Domain Domain;
         public Resource.RGroup<Resource.IResource> shipDemand = new Resource.RGroup<Resource.IResource>("Trade vessels in use.");
         // needs custom ui element
         public Resource.RGroup<Resource.IResource> ShipDemand
         {
             get
             {
-                return ResourcePool.Ledger[811].LocalLoss;
+                return Domain.Ledger[811].LocalLoss;
             }
         }
 
-        public _Trade(ResourcePool _ResourcePool) { ResourcePool = _ResourcePool; }
+        public _Trade(Domain _Domain) { Domain = _Domain; }
         public TradeRoute UplineTraderoute = null;
         public List<TradeRoute> DownlineTraderoutes = new List<TradeRoute>();
         public void RegisterUpline(TradeRoute i)
@@ -179,7 +179,7 @@ public partial class ResourcePool : Node, IEnumerable<FeatureBase>
             UplineTraderoute = null;
 
             // 0 is not in network. 
-            ResourcePool.Order = Math.Min(DownlineTraderoutes.Count, 1);
+            Domain.Order = Math.Min(DownlineTraderoutes.Count, 1);
 
             //DeregisterTransformer(i.TransformerHead);
         }
@@ -187,11 +187,11 @@ public partial class ResourcePool : Node, IEnumerable<FeatureBase>
         {
             // If made head of trade network, set order to 1;
             DownlineTraderoutes.Add(i);
-            ResourcePool.Order = 1;
-            if (ResourcePool.Order < 2)
+            Domain.Order = 1;
+            if (Domain.Order < 2)
             {
 
-                GD.Print(string.Format("{0} is the head of the new '{1}' network.", ResourcePool.Name, ResourcePool.Network));
+                GD.Print(string.Format("{0} is the head of the new '{1}' network.", Domain.Name, Domain.Network));
             }
 
             GD.Print("Downline registered");
@@ -201,10 +201,10 @@ public partial class ResourcePool : Node, IEnumerable<FeatureBase>
             DownlineTraderoutes.Remove(i);
 
             // If no longer part of a trade network, set order to 0;
-            if (ResourcePool.Order == 1 && DownlineTraderoutes.Count < 1)
+            if (Domain.Order == 1 && DownlineTraderoutes.Count < 1)
             {
-                GD.Print(string.Format("{0} is not longer part of a network, so order is set to '0'", ResourcePool.Name));
-                ResourcePool.Order = 0;
+                GD.Print(string.Format("{0} is not longer part of a network, so order is set to '0'", Domain.Name));
+                Domain.Order = 0;
             }
         }
     }

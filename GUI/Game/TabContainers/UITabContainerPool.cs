@@ -5,14 +5,14 @@ using System.Collections.Generic;
 public partial class UITabContainerPool : TabContainer
 {
     [Export]
-    public ResourcePool rp;
+    public Domain rp;
     UIPanelPoolGeneral panelGeneral;
     UIPanelPoolFeatures panelFeatures;
     UIPanelPoolSupply panelSupply;
     UIPanelPoolTrade panelTrade;
 
 
-    public void Init(ResourcePool _body)
+    public void Init(Domain _body)
     {
         rp = _body;
         Name = $"UIWindow-{rp.Name}";

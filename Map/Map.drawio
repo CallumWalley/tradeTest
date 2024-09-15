@@ -35,7 +35,7 @@
                 <mxCell id="9" value="&lt;span style=&quot;text-align: center;&quot;&gt;IResource&lt;/span&gt;[] _add&lt;span style=&quot;text-align: center;&quot;&gt;&lt;br&gt;IEnumerable Adders()&lt;/span&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="8" vertex="1">
                     <mxGeometry y="30" width="140" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="24" value="ResourcePool" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                <mxCell id="24" value="Domain" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
                     <mxGeometry x="240" y="-120" width="140" height="140" as="geometry"/>
                 </mxCell>
                 <mxCell id="81" value="bool isTradeDest&lt;br&gt;List&amp;lt;Producers&amp;gt;&lt;br&gt;List&amp;lt;TradeRoutes&amp;gt;&lt;br&gt;List&amp;lt;Industry&amp;gt;&lt;br&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="24" vertex="1">
@@ -262,7 +262,7 @@
                 <mxCell id="290" value="" style="group" parent="1" vertex="1" connectable="0">
                     <mxGeometry x="-413" y="-1130" width="348" height="140" as="geometry"/>
                 </mxCell>
-                <mxCell id="225" value="ResourcePool" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=29;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;" parent="290" vertex="1">
+                <mxCell id="225" value="Domain" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=29;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;" parent="290" vertex="1">
                     <mxGeometry x="30" width="318" height="140" as="geometry"/>
                 </mxCell>
                 <mxCell id="285" value="Resource pool is anywhere that can 'have' resources'" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;dashed=1;whiteSpace=wrap;" parent="225" vertex="1">

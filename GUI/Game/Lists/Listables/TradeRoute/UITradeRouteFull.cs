@@ -10,8 +10,8 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
 
     // Components
     LineEdit labelName;
-    UIResourcePoolTiny ResourcePoolHead;
-    UIResourcePoolTiny ResourcePoolTail;
+    UIDomainTiny DomainHead;
+    UIDomainTiny DomainTail;
     UIResource friegherRequirement;
     public TextureButton cancelButton;
     ScrollContainer details;
@@ -43,15 +43,15 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
         //vbox.AddChild(BalancePanel());
 
         // Init resource pool display.
-        // UIResource uir = GetNode<UIResource>("DetailContent/ResourcePool");
+        // UIResource uir = GetNode<UIResource>("DetailContent/Domain");
         // uir.Init(tradeRoute.Balance);
     }
 
     // HBoxContainer BalancePanel()
     // {
     //     HBoxContainer hbox = new();
-    //     UIResourcePoolSmall head = prefab_UIPanelResourcePoolSmall.Instantiate<UIResourcePoolSmall>();
-    //     UIResourcePoolSmall tail = prefab_UIPanelResourcePoolSmall.Instantiate<UIResourcePoolSmall>();
+    //     UIDomainSmall head = prefab_UIPanelDomainSmall.Instantiate<UIDomainSmall>();
+    //     UIDomainSmall tail = prefab_UIPanelDomainSmall.Instantiate<UIDomainSmall>();
     //     VBoxContainer vbox = new();
 
     //     // just bance for now pending trade rework.
@@ -84,10 +84,10 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
         labelName = GetNode<LineEdit>("VBoxContainer/Panel/LineEdit");
         labelName.Text = tradeRoute.Name;
 
-        ResourcePoolHead = GetNode<UIResourcePoolTiny>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Head/ResourcePoolSummary");
-        ResourcePoolTail = GetNode<UIResourcePoolTiny>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Tail/ResourcePoolSummary");
-        ResourcePoolHead.Init(tradeRoute.Head);
-        ResourcePoolTail.Init(tradeRoute.Tail);
+        DomainHead = GetNode<UIDomainTiny>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Head/DomainSummary");
+        DomainTail = GetNode<UIDomainTiny>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Tail/DomainSummary");
+        DomainHead.Init(tradeRoute.Head);
+        DomainTail.Init(tradeRoute.Tail);
 
 
         toHead = GetNode<UIListResources>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/toHead");

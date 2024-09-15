@@ -3,14 +3,14 @@ using System;
 using System.Collections.Generic;
 using Godot.Collections;
 
-public partial class UIPanelResourcePool : Control
+public partial class UIPanelDomain : Control
 {
     // Declare member variables here. Examples:
     // private int a = 2;
     // private string b = "text";
     public Body Body { get { return GetParent<Body>(); } }
 
-    ResourcePool ResourcePool;
+    Domain Domain;
     TabContainer tabContainer;
     BoxContainer supplyPanel;
     BoxContainer tradePanel;
@@ -27,10 +27,10 @@ public partial class UIPanelResourcePool : Control
     static readonly PackedScene prefab_UplineSelector = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Dropdowns/UIDropDownSetHead.tscn");
     UIPanelLedger panelLedger;
     UIList<TradeRoute> tradeRouteList;
-    public void Init(ResourcePool _ResourcePool)
+    public void Init(Domain _Domain)
     {
         tabContainer = GetNode<VBoxContainer>("VBoxContainer").GetNode<TabContainer>("TabContainer");
-        ResourcePool = _ResourcePool;
+        Domain = _Domain;
 
         // tabContainer.AddChild(SupplyPanel());
         // tabContainer.AddChild(TradePanel());
@@ -41,7 +41,7 @@ public partial class UIPanelResourcePool : Control
         tradePanelNetwork = tradePanel.GetNode<Label>("Network/Label");
 
         panelLedger = new();
-        panelLedger.Ledger = ResourcePool.Ledger;
+        panelLedger.Ledger = Domain.Ledger;
         supplyPanel.AddChild(panelLedger);
 
         // Lists.UIListResources uiResourceProduced = new();
@@ -49,17 +49,17 @@ public partial class UIPanelResourcePool : Control
         // Lists.UIListResources uiResourceDelta = new();
         // Lists.UIListResources uiResourceTraded = new();
 
-        // UIList<KeyValuePair<int, ResourcePool.StorageElement>> uiStorage = new();
+        // UIList<KeyValuePair<int, Domain.StorageElement>> uiStorage = new();
 
-        // uiResourceProduced.Init(ResourcePool.produced);
-        // uiResourceConsumed.Init(ResourcePool.consumed);
+        // uiResourceProduced.Init(Domain.produced);
+        // uiResourceConsumed.Init(Domain.consumed);
         // uiResourceConsumed.ShowBreakdown = true;
         // uiResourceProduced.ShowBreakdown = true;
 
-        // uiResourceTraded.Init(ResourcePool.traded);
+        // uiResourceTraded.Init(Domain.traded);
 
-        // uiResourceDelta.Init(ResourcePool.delta);
-        // uiStorage.Init(ResourcePool.Storage, p_uistorage);
+        // uiResourceDelta.Init(Domain.delta);
+        // uiStorage.Init(Domain.Storage, p_uistorage);
 
         // supplyPanel.GetNode<VBoxContainer>("Produced").AddChild(uiResourceProduced);
         // supplyPanel.GetNode<VBoxContainer>("Consumed").AddChild(uiResourceConsumed);
@@ -69,8 +69,8 @@ public partial class UIPanelResourcePool : Control
 
         tradeRouteList = new();
         UIDropDownSetHead setUpline = tradePanel.GetNode<UIDropDownSetHead>("DropDown");
-        setUpline.Init(ResourcePool);
-        tradeRouteList.Init(ResourcePool.Trade.DownlineTraderoutes, prefab_TradeRoute);
+        setUpline.Init(Domain);
+        tradeRouteList.Init(Domain.Trade.DownlineTraderoutes, prefab_TradeRoute);
         tradeRouteList.Vertical = true;
         tradePanel.AddChild(tradeRouteList);
 
@@ -82,17 +82,17 @@ public partial class UIPanelResourcePool : Control
     public override void _Draw()
     {
         base._Draw();
-        if (ResourcePool.Order > 0)
+        if (Domain.Order > 0)
         {
-            tradePanelNetwork.Text = string.Format("{0} order member of {1}", ResourcePool.Order, ResourcePool.Network);
+            tradePanelNetwork.Text = string.Format("{0} order member of {1}", Domain.Order, Domain.Network);
             //tradePanelNetwork.Visible = true;
         }
         else
         {
-            tradePanelNetwork.Text = string.Format("No trade network connected.", ResourcePool.Order, ResourcePool.Network);
+            tradePanelNetwork.Text = string.Format("No trade network connected.", Domain.Order, Domain.Network);
             //tradePanelNetwork.Visible = false;
         }
-        bool showTrade = (ResourcePool.Trade.UplineTraderoute != null || ResourcePool.Trade.DownlineTraderoutes.Count > 0);
+        bool showTrade = (Domain.Trade.UplineTraderoute != null || Domain.Trade.DownlineTraderoutes.Count > 0);
         GetNode<Label>("VBoxContainer/TabContainer/Supply/VBoxContainer/Trade").Visible = showTrade;
         panelLedger.ShowTrade = showTrade;
         panelLedger.Update();
