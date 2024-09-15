@@ -8,14 +8,13 @@ using System.Dynamic;
 using System.Linq;
 using System.Reflection;
 
-
+/// <summary>
+/// Helper class for features
+/// </summary>
 public partial class Features : Node, IEnumerable<Features.BasicFactory>
 {
-
     public class IFeatureConverter : JsonConverter
     {
-
-
         public override bool CanConvert(Type objectType)
         {
             return typeof(IFeatureConverter).IsAssignableFrom(objectType);

@@ -5,7 +5,11 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Dynamic;
 using System.Linq;
-// All types of features are stored in here.
+
+/// <summary>
+/// Base class for features.
+/// </summary>
+
 public partial class FeatureBase : Node
 {
     /// <summary>
