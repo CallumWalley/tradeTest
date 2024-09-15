@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public partial class TradeRoute : Node
+public partial class TradeRoute : Entity
 {
 
     [Export]

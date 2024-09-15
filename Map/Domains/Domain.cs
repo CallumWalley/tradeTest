@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public partial class Domain : Node, IEnumerable<FeatureBase>
+public partial class Domain : Entity, IEnumerable<FeatureBase>
 {
     [Export]
     public bool Active;

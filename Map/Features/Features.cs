@@ -24,7 +24,7 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
         {
             JObject itemsJson = JObject.Load(reader);
             // You can use a property in the JSON to determine the type, like a "type" field
-            List<Condition.IConditionable> items = new();
+            List<Conditions.IConditionable> items = new();
 
             foreach (var property in itemsJson.Properties())
             {
@@ -32,10 +32,10 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
                 JObject itemObject = (JObject)property.Value;
 
 
-                Condition.IConditionable target = typeName switch
+                Conditions.IConditionable target = typeName switch
                 {
-                    "simpleIndustry" => new Condition.SimpleIndustry(),
-                    "slowStart" => new Condition.SlowStart(),
+                    "simpleIndustry" => new SimpleIndustry(),
+                    "slowStart" => new SlowStart(),
                     _ => throw new NotSupportedException($"Unknown class type : {typeName}")
                 };
 
@@ -94,7 +94,7 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
         public Godot.Collections.Array<string> NeedsTags { get; set; } = new();
 
         // [Export]
-        public List<Condition.IConditionable> Conditions { get; set; } = new();
+        public List<Conditions.IConditionable> Conditions { get; set; } = new();
         [Export]
         public string Description { get; set; }
         [Export]
@@ -136,7 +136,7 @@ public partial class Features : Node, IEnumerable<Features.BasicFactory>
         //     }
         //     return featureBase;
         // }
-        IEnumerable<Condition.BaseCondition> GetContitionsFromTemplate(Godot.Collections.Dictionary<string, string> template)
+        IEnumerable<ConditionBase> GetContitionsFromTemplate(Godot.Collections.Dictionary<string, string> template)
         {
             if (template == null) { yield break; }
             // foreach (KeyValuePair<string, object> kvp in template)

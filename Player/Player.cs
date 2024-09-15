@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class Player : Node
+public partial class Player : Entity
 {
 	public PlayerTech tech;
 	public PlayerTrade trade;

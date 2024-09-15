@@ -10,7 +10,7 @@ using System.Linq;
 /// Base class for features.
 /// </summary>
 
-public partial class FeatureBase : Node
+public partial class FeatureBase : Entity
 {
     /// <summary>
     ///  Contains factors pooled with parent rp.
@@ -31,8 +31,7 @@ public partial class FeatureBase : Node
     /// </summary>
     public Resource.RDict<Resource.RStatic> FactorsSingle { get; set; } = new();
 
-
-    public List<Condition.BaseCondition> Conditions { get; set; } = new();
+    public List<Conditions.IConditionable> Conditions { get { return GetChildren().Cast<Conditions.IConditionable>().ToList(); } }
 
     public FeatureBase Template { get; set; } = null;
     public Texture2D iconMedium;
@@ -42,7 +41,6 @@ public partial class FeatureBase : Node
     // public string TypeName { get { return ttype.Name; } }
     [Export(PropertyHint.Enum, "planetary")]
     public Godot.Collections.Array<string> NeedsTags { get; set; } = new Godot.Collections.Array<string>();
-    public string Description { get; set; }
 
     public bool IsBuildable()
     {
@@ -51,16 +49,19 @@ public partial class FeatureBase : Node
         return (NeedsTags.Contains("planetary"));
     }
 
-    public void AddCondition(Condition.BaseCondition s)
+    public void AddCondition(ConditionBase s)
     {
-        Conditions.Add(s);
-        s.Feature = this;
+        AddChild(s);
         s.OnAdd();
     }
-
+    public void RemoveCondition(ConditionBase s)
+    {
+        RemoveChild(s);
+        s.OnRemove();
+    }
     public void OnEFrame()
     {
-        foreach (Condition.BaseCondition c in Conditions)
+        foreach (Conditions.IConditionable c in Conditions)
         {
             c.OnEFrame();
         }
