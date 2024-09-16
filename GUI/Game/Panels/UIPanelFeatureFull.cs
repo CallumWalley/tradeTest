@@ -15,7 +15,12 @@ public partial class UIPanelFeatureFull : UIPanel
 	UIListResources localFactors = new();
 	UIListResources singularFactors = new();
 
+	UIList<ConditionBase> conditions = new();
+
+
 	static readonly PackedScene prefab_pill = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/UIPill.tscn");
+	static readonly PackedScene prefab_conditionTiny = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/Condition/UIConditionTiny.tscn");
+
 
 	public override void _Ready()
 	{
@@ -36,6 +41,7 @@ public partial class UIPanelFeatureFull : UIPanel
 		localFactors.Vertical = false;
 		globalFactorsInput.Vertical = false;
 		globalFactorsOutput.Vertical = false;
+		conditions.Vertical = true;
 
 		singularFactors.ShowBreakdown = false;
 		localFactors.ShowBreakdown = true;
@@ -46,16 +52,17 @@ public partial class UIPanelFeatureFull : UIPanel
 		localFactors.Init(feature.FactorsLocal);
 		globalFactorsInput.Init(feature.FactorsGlobalInput);
 		globalFactorsOutput.Init(feature.FactorsGlobalOutput);
+		conditions.Init(feature.Conditions, prefab_conditionTiny);
 
 		GetNode<VBoxContainer>("PanelContainer/Details/Factors/VBoxContainer").AddChild(singularFactors);
 		GetNode<VBoxContainer>("PanelContainer/Details/Factors/VBoxContainer").AddChild(localFactors);
 		GetNode<VBoxContainer>("PanelContainer/Details/Factors/VBoxContainer").AddChild(globalFactorsInput);
 		GetNode<VBoxContainer>("PanelContainer/Details/Factors/VBoxContainer").AddChild(globalFactorsOutput);
 
-		singularFactors.Update();
-		localFactors.Update();
-		globalFactorsInput.Update();
-		globalFactorsOutput.Update();
+		GetNode<VBoxContainer>("PanelContainer/Details/Conditions/VBoxContainer").AddChild(conditions);
+
+		OnEFrameUpdate();
+
 
 	}
 
@@ -75,6 +82,6 @@ public partial class UIPanelFeatureFull : UIPanel
 		globalFactorsInput.Update();
 		globalFactorsOutput.Update();
 		localFactors.Update();
-
+		conditions.Update();
 	}
 }

@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://chcyhs01eor0"]
+
+[ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="1_lkyhb"]
+[ext_resource type="Script" path="res://GUI/Game/Lists/Listables/Condition/UIConditionTiny.cs" id="2_nwilc"]
+[ext_resource type="Texture2D" path="res://assets/icons/trade_value.dds" id="2_sdgxt"]
+
+[node name="ConditionTiny" type="HBoxContainer"]
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -29.0
+offset_bottom = 29.0
+theme = ExtResource("1_lkyhb")
+script = ExtResource("2_nwilc")
+
+[node name="Icon" type="TextureRect" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("2_sdgxt")
+
+[node name="Name" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Condition"

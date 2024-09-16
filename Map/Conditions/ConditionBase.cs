@@ -10,8 +10,6 @@ public partial class ConditionBase : Entity, Conditions.IConditionable
 {
     public FeatureBase Feature { get { return (FeatureBase)GetParent(); } } // parent reference.
 
-    public ConditionBase() { }
-
     public virtual void OnAdd() { } //Called when added to feature.
     public virtual void OnRemove()
     {

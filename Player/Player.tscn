@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://con3ea5txcdnn"]
+[gd_scene load_steps=9 format=3 uid="uid://con3ea5txcdnn"]
 
 [ext_resource type="Script" path="res://Player/Player.cs" id="1_ee032"]
 [ext_resource type="Script" path="res://Player/PlayerTrade.cs" id="3_3mavi"]
@@ -6,6 +6,8 @@
 [ext_resource type="Script" path="res://Map/Features/PlayerFeatureTemplate.cs" id="4_opta7"]
 [ext_resource type="Script" path="res://Player/PlayerFeatureTemplates.cs" id="4_x4tam"]
 [ext_resource type="Script" path="res://Map/Features/FeatureBase.cs" id="6_g7q3k"]
+[ext_resource type="PackedScene" uid="uid://b81a02d1keo5i" path="res://Map/Conditions/SimpleIndustry.tscn" id="7_f7g6h"]
+[ext_resource type="PackedScene" uid="uid://e4cfn5gaacki" path="res://Map/Conditions/SlowStart.tscn" id="8_rx0td"]
 
 [node name="Player" type="Node"]
 process_priority = -100
@@ -24,10 +26,18 @@ script = ExtResource("3_3mavi")
 [node name="PlayerFeatureTemplates" type="Node" parent="."]
 script = ExtResource("4_x4tam")
 
-[node name="Moon Mine" type="Node" parent="PlayerFeatureTemplates"]
+[node name="Moon Mine" type="Node" parent="PlayerFeatureTemplates" node_paths=PackedStringArray("Feature")]
 script = ExtResource("4_opta7")
 Feature = NodePath("Moon Mine")
 
 [node name="Moon Mine" type="Node" parent="PlayerFeatureTemplates/Moon Mine"]
 script = ExtResource("6_g7q3k")
 NeedsTags = ["planetary"]
+
+[node name="SimpleIndustry" parent="PlayerFeatureTemplates/Moon Mine/Moon Mine" instance=ExtResource("7_f7g6h")]
+Factors = {
+1: 2,
+2: -1.0
+}
+
+[node name="SlowStart" parent="PlayerFeatureTemplates/Moon Mine/Moon Mine" instance=ExtResource("8_rx0td")]

@@ -14,12 +14,10 @@ public partial class ConditionScale : ConditionBase
     // For things that have their primary properties modified by their size.
     [Export]
     public static double InitialScale { get; set; }
-    public ConditionScale(double _initialScale = 1)
-    {
-        InitialScale = _initialScale;
-    }
-
-    public ConditionScale() { }
+    // public ConditionScale(double _initialScale = 1)
+    // {
+    //     InitialScale = _initialScale;
+    // }
 
     //Called when added to feature.
     public override void OnAdd()

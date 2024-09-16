@@ -10,12 +10,8 @@ public partial class SlowStart : ConditionBase
 {
 
     // Starts efficiency out at zero and slowly increases.
-    public SlowStart(Dictionary<string, object> kvp) : this(Convert.ToDouble(Conditions.TryGetDefault(kvp, "initialModifier", "0"))) { }
 
-    //public SlowStart(Dictionary<string, object> kvp) : this(Convert.ToDouble(TryGetDefault(kvp, "initialModifier", "0"))) { }
-    public SlowStart(double initialModifier) { }
-    public SlowStart() { }
-    public Resource.RStatic slowStart = new Resource.RStatic(802, 0.0, 0, "Slow Start", "Slow Start Size");
+    public Resource.RStatic slowStart = new Resource.RStatic(802, 0.0, 1, "Slow Start", "Slow Start Size");
 
     public override void OnAdd()
     {

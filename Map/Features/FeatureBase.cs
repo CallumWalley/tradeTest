@@ -31,7 +31,7 @@ public partial class FeatureBase : Entity
     /// </summary>
     public Resource.RDict<Resource.RStatic> FactorsSingle { get; set; } = new();
 
-    public List<Conditions.IConditionable> Conditions { get { return GetChildren().Cast<Conditions.IConditionable>().ToList(); } }
+    public List<ConditionBase> Conditions { get { return GetChildren().Cast<ConditionBase>().ToList(); } }
 
     [Export]
     public PlayerFeatureTemplate Template { get; set; } = null;
@@ -44,6 +44,14 @@ public partial class FeatureBase : Entity
     [Export(PropertyHint.Enum, "planetary")]
     public Godot.Collections.Array<string> NeedsTags { get; set; } = new Godot.Collections.Array<string>();
 
+    public override void _Ready()
+    {
+        base._Ready();
+        foreach (ConditionBase conditionBase in Conditions)
+        {
+            conditionBase.OnAdd();
+        }
+    }
     public bool IsBuildable()
     {
         if (Template is null) { return true; }
@@ -63,7 +71,7 @@ public partial class FeatureBase : Entity
     }
     public void OnEFrame()
     {
-        foreach (Conditions.IConditionable c in Conditions)
+        foreach (ConditionBase c in Conditions)
         {
             c.OnEFrame();
         }

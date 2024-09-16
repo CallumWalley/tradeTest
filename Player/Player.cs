@@ -15,6 +15,5 @@ public partial class Player : Entity
 		tech = GetNode<PlayerTech>("PlayerTech");
 		trade = GetNode<PlayerTrade>("PlayerTrade");
 		featureTemplates = GetNode<PlayerFeatureTemplates>("PlayerFeatureTemplates");
-
 	}
 }

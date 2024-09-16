@@ -8,12 +8,9 @@ using System.Linq;
 
 public partial class SimpleIndustry : ConditionScale
 {
-
     [Export]
-
-    public static string Factors { get; set; }
-    public Dictionary<int, double> factorsDict;
-    public Resource.RDict<Resource.RStatic> factors = new Resource.RDict<Resource.RStatic>();
+    public Godot.Collections.Dictionary Factors;
+    //public Resource.RDict<Resource.RStatic> factors = new Resource.RDict<Resource.RStatic>();
 
     Dictionary<Resource.RGroup<Resource.RStatic>, Resource.RStatic> inputFullfillments = new();
     protected JsonSerializer serializer = new();
@@ -21,44 +18,44 @@ public partial class SimpleIndustry : ConditionScale
     // Sets 'output' in proportion to fulfillment.
 
     // public SimpleIndustry(object obj) : this() { }
-    public SimpleIndustry() : this(InitialScale, Factors) { }
-    public SimpleIndustry(double _initialScale, string _factorString) : this(InitialScale, JsonConvert.DeserializeObject<Dictionary<int, double>>(_factorString)) { }
-    public SimpleIndustry(double _initialScale, Dictionary<int, double> _factors) : base()
-    {
-        InitialScale = _initialScale;
-        factorsDict = _factors;
-        // foreach (KeyValuePair<int, double> kvp in _inputs)
-        // {
-        //     if (kvp.Key < 800)
-        //     {
-        //         if (kvp.Value < 0)
-        //         {
+    // public SimpleIndustry() : this(InitialScale, Factors) { }
+    // public SimpleIndustry(double _initialScale, string _factorString) : this(InitialScale, JsonConvert.DeserializeObject<Dictionary<int, double>>(_factorString)) { }
+    // public SimpleIndustry(double _initialScale, Dictionary<int, double> _factors) : base()
+    // {
+    //     InitialScale = _initialScale;
+    //     factorsDict = _factors;
+    //     // foreach (KeyValuePair<int, double> kvp in _inputs)
+    //     // {
+    //     //     if (kvp.Key < 800)
+    //     //     {
+    //     //         if (kvp.Value < 0)
+    //     //         {
 
-        //         }
-        //         else
-        //         {
+    //     //         }
+    //     //         else
+    //     //         {
 
-        //         }
-        //     }
-        //     else if (kvp.Key < 900)
-        //     {
+    //     //         }
+    //     //     }
+    //     //     else if (kvp.Key < 900)
+    //     //     {
 
-        //     }
-        //     else if (kvp.Key < 1000)
-        //     {
+    //     //     }
+    //     //     else if (kvp.Key < 1000)
+    //     //     {
 
-        //     }
-        //     else
-        //     {
-        //         throw new Exception("Invalid key");
-        //     }
-        //     Resource.RGroup<Resource.RStatic> newr = new(new Resource.RStatic(kvp.Key, 0, kvp.Value, "Base", "Base input"));
-        //     // newr.Mux(Feature.FactorsSingle[800]);
-        //     Resource.RStatic newf = new Resource.RStatic(801, 1, 0, $"{Resource.Name(kvp.Key)} Fullfilment.", $"How much of the requested resource was delivered");
-        //     inputFullfillments[newr] = newf;
-        // }
-    }
-    //     if (_outputs == null)
+    //     //     }
+    //     //     else
+    //     //     {
+    //     //         throw new Exception("Invalid key");
+    //     //     }
+    //     //     Resource.RGroup<Resource.RStatic> newr = new(new Resource.RStatic(kvp.Key, 0, kvp.Value, "Base", "Base input"));
+    //     //     // newr.Mux(Feature.FactorsSingle[800]);
+    //     //     Resource.RStatic newf = new Resource.RStatic(801, 1, 0, $"{Resource.Name(kvp.Key)} Fullfilment.", $"How much of the requested resource was delivered");
+    //     //     inputFullfillments[newr] = newf;
+    //     // }
+    // }
+    // //     if (_outputs == null)
     //     {
     //         foreach (KeyValuePair<int, double> kvp in _outputs)
     //         {
@@ -70,31 +67,50 @@ public partial class SimpleIndustry : ConditionScale
     public override void OnAdd()
     {
         base.OnAdd();
-
-        foreach (Resource.RStatic r in factors)
-        {
-            if (r.Sum < 0)
-            {
-
-            }
-
-            Feature.FactorsGlobalOutput[r.Type].Add(r);
-            Feature.FactorsGlobalOutput[r.Type].Mux(Feature.FactorsLocal[801]); // Input fulfillment
-            Feature.FactorsGlobalOutput[r.Type].Mux(Feature.FactorsSingle[901]); // Scale
-            Feature.FactorsGlobalOutput[r.Type].Mux(Feature.FactorsLocal[802]); // Cabability
-        }
         Feature.FactorsLocal[801].Name = "Input Fulfillment";
         Feature.FactorsLocal[801].Add(new Resource.RStatic(801, 1, 0, "Base", "Expected Fulfillment"));
         Feature.FactorsLocal[802].Name = "Capability";
         Feature.FactorsLocal[802].Add(new Resource.RStatic(802, 1, 0, "Base", "Cabability"));
+        foreach (KeyValuePair<Variant, Variant> r in Factors)
+        {
+            switch ((int)r.Key)
+            {
+                case < 800:
+                    if ((double)r.Value > 0)
+                    {
+                        Feature.FactorsGlobalOutput[(int)r.Key].Add(new Resource.RStatic((int)r.Key, (double)r.Value, (double)r.Value, "Base", "Expected Yield"));
+                        Feature.FactorsGlobalOutput[(int)r.Key].Mux(Feature.FactorsLocal[801]); // Input fulfillment
+                        Feature.FactorsGlobalOutput[(int)r.Key].Mux(Feature.FactorsSingle[901]); // Scale
+                        Feature.FactorsGlobalOutput[(int)r.Key].Mux(Feature.FactorsLocal[802]); // Efficacy
+                    }
+                    else
+                    {
+
+                        Resource.RGroup<Resource.RStatic> input = new(new Resource.RStatic((int)r.Key, 0, (double)r.Value, "Base", "Base input"));
+                        inputFullfillments[input] = new Resource.RStatic(801, 0, 1, $"{Resource.Name((int)r.Key)} fullfillment.", $"{Resource.Name((int)r.Key)} fullfillment.");
+                        Feature.FactorsLocal[801].Mux(inputFullfillments[input]);
+
+                        Feature.FactorsGlobalInput[(int)r.Key].Add(input);
+                        Feature.FactorsGlobalInput[(int)r.Key].Mux(Feature.FactorsSingle[901]); // Scale
+                        Feature.FactorsGlobalInput[(int)r.Key].Mux(Feature.FactorsLocal[802]); // Cabability
+                    }
+                    break;
+                case < 900:
+                    break;
+                case < 999:
+                    break;
+                default:
+                    throw new ArgumentException($"Invalid factor key {r.Key}");
+            }
+
+
+            // Cabability
+        }
+
         foreach (KeyValuePair<Resource.RGroup<Resource.RStatic>, Resource.RStatic> kvp in inputFullfillments)
         {
             /// fulfilment is equal to this
-            Feature.FactorsLocal[801].Mux(kvp.Value);
 
-            Feature.FactorsGlobalInput[kvp.Key.Type].Add(kvp.Key);
-            Feature.FactorsGlobalInput[kvp.Key.Type].Mux(Feature.FactorsSingle[901]); // Scale
-            Feature.FactorsGlobalInput[kvp.Key.Type].Mux(Feature.FactorsLocal[802]); // Cabability
         }
     }
 
