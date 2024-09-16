@@ -5,8 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://c8uihqqtni6cg" path="res://Map/Map.tscn" id="2_b0thp"]
 [ext_resource type="PackedScene" uid="uid://r5ytkwljq7nb" path="res://GUI/Screen.tscn" id="2_ohuhm"]
 [ext_resource type="PackedScene" uid="uid://bs11ngj4r7eb4" path="res://Map/Galaxy.tscn" id="3_x7akn"]
-[ext_resource type="PackedScene" uid="uid://bdustjrq7vtln" path="res://Map/PlanetarySystem.tscn" id="4_hdweb"]
-[ext_resource type="PackedScene" uid="uid://cf5ty6my7thnc" path="res://Map/SatelliteSystem.tscn" id="5_438b2"]
+[ext_resource type="PackedScene" uid="uid://bdustjrq7vtln" path="res://Map/Domains/PlanetarySystem.tscn" id="4_hdweb"]
+[ext_resource type="PackedScene" uid="uid://cf5ty6my7thnc" path="res://Map/Domains/SatelliteSystem.tscn" id="5_438b2"]
 
 [node name="Global" type="Node"]
 script = ExtResource("1_1b3uo")

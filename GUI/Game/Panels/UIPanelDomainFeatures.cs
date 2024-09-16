@@ -5,7 +5,7 @@ using System.Linq;
 /// <summary>
 /// Displays the ist of features in a location.
 /// </summary>
-public partial class UIPanelPoolFeatures : UIPanel, UIInterfaces.IEFrameUpdatable
+public partial class UIPanelDomainFeatures : UIPanel, UIInterfaces.IEFrameUpdatable
 {
 
     public Domain resourcePool;
@@ -31,7 +31,7 @@ public partial class UIPanelPoolFeatures : UIPanel, UIInterfaces.IEFrameUpdatabl
         display = GetNode<ScrollContainer>("VBoxContainer/HSplitContainer/Display");
         displayEmpty = GetNode<ScrollContainer>("VBoxContainer/HSplitContainer/DisplayEmpty");
 
-        GetNode<UIWindowPoolFeaturePlan>("WindowPoolFeaturePlan").resourcePool = resourcePool;
+        GetNode<UIWindowDomainFeaturePlan>("WindowPoolFeaturePlan").resourcePool = resourcePool;
 
         list.Connect("item_selected", new Callable(this, "OnItemListItemSelected"));
     }

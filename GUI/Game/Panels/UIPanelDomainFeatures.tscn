@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://bejhglo4krc63"]
 
-[ext_resource type="Script" path="res://GUI/Game/Panels/UIPanelPoolFeatures.cs" id="1_tk57f"]
+[ext_resource type="Script" path="res://GUI/Game/Panels/UIPanelDomainFeatures.cs" id="1_tk57f"]
 [ext_resource type="PackedScene" uid="uid://rwliij8aoq6r" path="res://GUI/Elements/UIButtonToggleWindow.tscn" id="2_3dkul"]
-[ext_resource type="PackedScene" uid="uid://c2xbjx0sqmnma" path="res://GUI/Game/Windows/UIWindowPoolFeaturePlan.tscn" id="3_xph2i"]
+[ext_resource type="PackedScene" uid="uid://c2xbjx0sqmnma" path="res://GUI/Game/Windows/UIWindowDomainFeaturePlan.tscn" id="3_xph2i"]
 
 [node name="Features" type="PanelContainer"]
 anchors_preset = 15

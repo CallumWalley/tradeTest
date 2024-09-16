@@ -5,7 +5,7 @@ public partial class UISatelliteSystemNav : Button
 {
 	public SatelliteSystem satelliteSystem;
 	public CanvasLayer canvasLayer;
-	static readonly PackedScene prefab_UITabContainerPool = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/TabContainers/UITabContainerPool.tscn");
+	static readonly PackedScene prefab_UITabContainerDomain = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/TabContainers/UITabContainerDomain.tscn");
 	static readonly PackedScene prefab_UIWindow = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/UIWindow.tscn");
 
 	public override void _Ready()
@@ -21,14 +21,13 @@ public partial class UISatelliteSystemNav : Button
 		UIWindow existingWindow = canvasLayer.GetNodeOrNull<UIWindow>($"UIWindow-{satelliteSystem.Name}");
 		if (existingWindow != null)
 		{
-			GD.Print($"UIWindow-{satelliteSystem.Name}");
-			existingWindow.PopupCentered();
+			existingWindow.Popup();
 		}
 		else
 		{
 			UIWindow uiw = prefab_UIWindow.Instantiate<UIWindow>();
 			uiw.Name = $"UIWindow-{satelliteSystem.Name}";
-			UITabContainerPool uit = prefab_UITabContainerPool.Instantiate<UITabContainerPool>();
+			UITabContainerDomain uit = prefab_UITabContainerDomain.Instantiate<UITabContainerDomain>();
 
 			uit.Init(satelliteSystem);
 			uiw.AddChild(uit);

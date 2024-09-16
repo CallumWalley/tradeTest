@@ -2,13 +2,13 @@ using Godot;
 using System;
 using System.Linq;
 
-public partial class UIWindowPoolFeaturePlan : UIWindow
+public partial class UIWindowDomainFeaturePlan : UIWindow
 {
 	[Export]
 	public Domain resourcePool;
 
 	[Export]
-	public UIPanelFeatureFactoryList templateList;
+	public UIPanelPlayerFeatureTemplateList templateList;
 
 	[Export]
 	public Button addButton;
@@ -56,7 +56,8 @@ public partial class UIWindowPoolFeaturePlan : UIWindow
 
 	public void OnButtonPressed()
 	{
-		FeatureBase newFeature = new(); //= templateList.selected.Instantiate();
+		FeatureBase newFeature = templateList.selected.Instantiate();
+		newFeature.Template = templateList.selected;
 		resourcePool.AddFeature(newFeature);
 
 		newFeature.Name = nameLineEdit.Text;

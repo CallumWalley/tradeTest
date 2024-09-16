@@ -33,10 +33,12 @@ public partial class FeatureBase : Entity
 
     public List<Conditions.IConditionable> Conditions { get { return GetChildren().Cast<Conditions.IConditionable>().ToList(); } }
 
-    public FeatureBase Template { get; set; } = null;
+    [Export]
+    public PlayerFeatureTemplate Template { get; set; } = null;
     public Texture2D iconMedium;
 
-    [Export(PropertyHint.Enum, "unset,f_dockyard,orbit_storage_fuel,orbit_storage_h2o,planet_mine_minerals,planet_mine_h2o,reclaim,cfuel_water")]
+    // [Export(PropertyHint.Enum, "unset,f_dockyard,orbit_storage_fuel,orbit_storage_h2o,planet_mine_minerals,planet_mine_h2o,reclaim,cfuel_water")]
+    [Export]
     public string TypeSlug { get; set; } = "unset";
     // public string TypeName { get { return ttype.Name; } }
     [Export(PropertyHint.Enum, "planetary")]

@@ -8,23 +8,26 @@ using System.Linq;
 /// List of all buildable structures.
 /// Used in template menu and build menu.
 /// </summary>
-public partial class UIPanelFeatureFactoryList : UIPanel, UIInterfaces.IEFrameUpdatable
+public partial class UIPanelPlayerFeatureTemplateList : UIPanel, UIInterfaces.IEFrameUpdatable
 {
     Label nameLabel;
     Label adjLabel;
     Label altNameLabel;
     ItemList list;
     ScrollContainer display;
-    List<Features.BasicFactory> featureList = new();
-    static readonly PackedScene prefab_UIPanelFeatureFactoryFull = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Panels/UIPanelFeatureFactoryFull.tscn");
+    List<PlayerFeatureTemplate> featureList = new();
+    static readonly PackedScene prefab_UIPanelFeatureFactoryFull = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Panels/UIPanelPlayerFeatureTemplateFull.tscn");
+    Player player;
 
-    public Features.BasicFactory selected;
+    public PlayerFeatureTemplate selected;
     int selectedIndex = 0;
     UIList<FeatureBase> vbox;
 
     public override void _Ready()
     {
         base._Ready();
+        player = GetNode<Player>("/root/Global/Player");
+
         list = GetNode<ItemList>("VBoxContainer/HSplitContainer/ScrollContainer/VBoxContainer/ItemList");
         display = GetNode<ScrollContainer>("VBoxContainer/HSplitContainer/Display");
 
@@ -36,7 +39,7 @@ public partial class UIPanelFeatureFactoryList : UIPanel, UIInterfaces.IEFrameUp
     {
         selectedIndex = i;
         if (selectedIndex >= featureList.Count) { return; }
-        selected = (Features.BasicFactory)featureList[selectedIndex];
+        selected = (PlayerFeatureTemplate)featureList[selectedIndex];
         DrawDisplay();
     }
 
@@ -46,7 +49,7 @@ public partial class UIPanelFeatureFactoryList : UIPanel, UIInterfaces.IEFrameUp
         if (featureList.Count < 1) { return; }
 
         // If selected feature changed, or none.
-        if ((display.GetChildCount() < 1) || display.GetChild<UIPanelFeatureFactoryFull>(0).feature != selected)
+        if ((display.GetChildCount() < 1) || display.GetChild<UIPanelPlayerFeatureTemplateFull>(0).template != selected)
         {
             foreach (Control c in display.GetChildren().Cast<Control>())
             {
@@ -54,12 +57,12 @@ public partial class UIPanelFeatureFactoryList : UIPanel, UIInterfaces.IEFrameUp
                 c.QueueFree();
                 display.RemoveChild(c);
             }
-            selected ??= (Features.BasicFactory)featureList[0];
-            UIPanelFeatureFactoryFull uipff = prefab_UIPanelFeatureFactoryFull.Instantiate<UIPanelFeatureFactoryFull>();
-            uipff.feature = selected;
+            selected ??= (PlayerFeatureTemplate)featureList[0];
+            UIPanelPlayerFeatureTemplateFull uipff = prefab_UIPanelFeatureFactoryFull.Instantiate<UIPanelPlayerFeatureTemplateFull>();
+            uipff.template = selected;
             display.AddChild(uipff);
         }
-        display.GetChild<UIPanelFeatureFactoryFull>(0).OnEFrameUpdate();
+        display.GetChild<UIPanelPlayerFeatureTemplateFull>(0).OnEFrameUpdate();
 
     }
     public void UpdateElements()
@@ -70,7 +73,7 @@ public partial class UIPanelFeatureFactoryList : UIPanel, UIInterfaces.IEFrameUp
         list.Clear();
         foreach (Node f in featureList)
         {
-            list.AddItem(((Features.BasicFactory)f).Name, ((Features.BasicFactory)f).iconMedium);
+            list.AddItem(((PlayerFeatureTemplate)f).Name, ((PlayerFeatureTemplate)f).Feature.iconMedium);
         }
         list.Select(selectedIndex);
 
@@ -80,7 +83,7 @@ public partial class UIPanelFeatureFactoryList : UIPanel, UIInterfaces.IEFrameUp
         // If visible, and there are features, update the list to reflect reality.
         base.OnEFrameUpdate();
         string location = "planetary";
-        featureList = GetNode<Features>("/root/Features").ToList().Where(x => x.NeedsTags.Contains(location)).ToList();
+        featureList = player.featureTemplates.ToList().Where(x => x.Feature.NeedsTags.Contains(location)).ToList();
         if (IsVisibleInTree() && featureList.Count > 0)
         {
             UpdateElements();

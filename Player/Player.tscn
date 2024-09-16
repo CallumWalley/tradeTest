@@ -1,8 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://con3ea5txcdnn"]
+[gd_scene load_steps=7 format=3 uid="uid://con3ea5txcdnn"]
 
 [ext_resource type="Script" path="res://Player/Player.cs" id="1_ee032"]
 [ext_resource type="Script" path="res://Player/PlayerTrade.cs" id="3_3mavi"]
 [ext_resource type="Script" path="res://Player/PlayerTech.cs" id="4_3oxjp"]
+[ext_resource type="Script" path="res://Map/Features/PlayerFeatureTemplate.cs" id="4_opta7"]
+[ext_resource type="Script" path="res://Player/PlayerFeatureTemplates.cs" id="4_x4tam"]
+[ext_resource type="Script" path="res://Map/Features/FeatureBase.cs" id="6_g7q3k"]
 
 [node name="Player" type="Node"]
 process_priority = -100
@@ -17,3 +20,14 @@ process_priority = -99
 script = ExtResource("3_3mavi")
 
 [node name="PlayerSocial" type="Node" parent="."]
+
+[node name="PlayerFeatureTemplates" type="Node" parent="."]
+script = ExtResource("4_x4tam")
+
+[node name="Moon Mine" type="Node" parent="PlayerFeatureTemplates"]
+script = ExtResource("4_opta7")
+Feature = NodePath("Moon Mine")
+
+[node name="Moon Mine" type="Node" parent="PlayerFeatureTemplates/Moon Mine"]
+script = ExtResource("6_g7q3k")
+NeedsTags = ["planetary"]

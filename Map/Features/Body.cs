@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public partial class Body : FeatureBase
 {
 
-    UITabContainerPool uiBody;
+    UITabContainerDomain uiBody;
     bool focus = false;
 
     [ExportGroup("Orbital")]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bdustjrq7vtln"]
 
-[ext_resource type="Script" path="res://Map/PlanetarySystem.cs" id="1_q0h8p"]
+[ext_resource type="Script" path="res://Map/Domains/PlanetarySystem.cs" id="1_q0h8p"]
 
 [node name="PlanetarySystem" type="Node"]
 script = ExtResource("1_q0h8p")

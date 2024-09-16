@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://hayfw1l6yk1x" path="res://GUI/Elements/UIWindow.tscn" id="4_ibjw3"]
 [ext_resource type="PackedScene" uid="uid://hryxon3gub4" path="res://GUI/Game/Panels/UIPanelTradeAll.tscn" id="6_neq83"]
 [ext_resource type="Script" path="res://GUI/Elements/UIWindow.cs" id="6_qkjht"]
-[ext_resource type="PackedScene" uid="uid://b5mtlqpxrceqn" path="res://GUI/Game/Panels/UIPanelFeatureFactoryList.tscn" id="7_13nsc"]
+[ext_resource type="PackedScene" uid="uid://bwaowp0cjw1f2" path="res://GUI/Game/Panels/UIPanelPlayerFeatureTemplateList.tscn" id="7_13nsc"]
 
 [node name="Screen" type="CanvasLayer"]
 

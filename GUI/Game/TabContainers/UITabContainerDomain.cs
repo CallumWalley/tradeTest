@@ -2,12 +2,12 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class UITabContainerPool : TabContainer
+public partial class UITabContainerDomain : TabContainer
 {
     [Export]
     public Domain rp;
     UIPanelPoolGeneral panelGeneral;
-    UIPanelPoolFeatures panelFeatures;
+    UIPanelDomainFeatures panelFeatures;
     UIPanelPoolSupply panelSupply;
     UIPanelPoolTrade panelTrade;
 
@@ -18,7 +18,7 @@ public partial class UITabContainerPool : TabContainer
         Name = $"UIWindow-{rp.Name}";
 
         panelGeneral = GetNode<UIPanelPoolGeneral>("General");
-        panelFeatures = GetNode<UIPanelPoolFeatures>("Features");
+        panelFeatures = GetNode<UIPanelDomainFeatures>("Features");
         panelSupply = GetNode<UIPanelPoolSupply>("Supply");
         panelTrade = GetNode<UIPanelPoolTrade>("Trade");
 

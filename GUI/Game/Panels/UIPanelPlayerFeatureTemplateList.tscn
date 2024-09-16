@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://b5mtlqpxrceqn"]
+[gd_scene load_steps=2 format=3 uid="uid://bwaowp0cjw1f2"]
 
-[ext_resource type="Script" path="res://GUI/Game/Panels/UIPanelFeatureFactoryList.cs" id="1_wlotd"]
+[ext_resource type="Script" path="res://GUI/Game/Panels/UIPanelPlayerFeatureTemplateList.cs" id="1_wlotd"]
 
 [node name="Industry Templates" type="PanelContainer"]
 anchors_preset = 15

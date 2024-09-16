@@ -3,9 +3,9 @@ using System;
 
 /// summary
 /// UI element for possible build options.
-public partial class UIPanelFeatureFactoryFull : UIPanel
+public partial class UIPanelPlayerFeatureTemplateFull : UIPanel
 {
-	public Features.BasicFactory feature;
+	public PlayerFeatureTemplate template;
 	UIRename name;
 	Label type;
 	RichTextLabel description;
@@ -23,7 +23,7 @@ public partial class UIPanelFeatureFactoryFull : UIPanel
 		tags = GetNode<HFlowContainer>("PanelContainer/Details/Tags");
 
 
-		foreach (string tag in feature.NeedsTags)
+		foreach (string tag in template.Feature.NeedsTags)
 		{
 			UIPill pill = prefab_pill.Instantiate<UIPill>();
 			pill.tag = tag;
@@ -37,7 +37,7 @@ public partial class UIPanelFeatureFactoryFull : UIPanel
 	public override void _Draw()
 	{
 		base._Draw();
-		description.Text = feature.Description;
-		name.node = feature;
+		description.Text = template.Feature.Description;
+		name.node = template.Feature;
 	}
 }
