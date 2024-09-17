@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.IO;
 
 public partial class Global : Node
 {
@@ -28,12 +29,13 @@ public partial class Global : Node
 	public double timePerEframe = 1;
 	public double timePerSFrame = 2;
 
-	double deltaEFrame;
+	public double deltaEFrame;
 	double deltaSFrame;
 
 
 	public int eframeCount = 0;
 	public int SFrameCount = 0;
+
 
 
 	// Called when the node enters the scene tree for the first time.

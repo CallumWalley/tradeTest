@@ -42,7 +42,11 @@ public partial class UIPanelPlayerFeatureTemplateList : UIPanel, UIInterfaces.IE
         selected = (PlayerFeatureTemplate)featureList[selectedIndex];
         DrawDisplay();
     }
-
+    public override void _Process(double delta)
+    {
+        base._Process(delta);
+        QueueRedraw();
+    }
     void DrawDisplay()
     {
         // Draws the UI. Does not refresh elements.
@@ -63,7 +67,6 @@ public partial class UIPanelPlayerFeatureTemplateList : UIPanel, UIInterfaces.IE
             display.AddChild(uipff);
         }
         display.GetChild<UIPanelPlayerFeatureTemplateFull>(0).OnEFrameUpdate();
-
     }
     public void UpdateElements()
     {

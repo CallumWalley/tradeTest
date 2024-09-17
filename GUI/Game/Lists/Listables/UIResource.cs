@@ -8,11 +8,20 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
 {
     public Resource.IResource resource;
     public Resource.IResource GameElement { get { return resource; } }
+
+    Global global;
     public bool Destroy { get; set; } = false;
     public bool ShowName { get; set; } = false;
     public bool ShowDetails { get; set; } = false;
     public bool ShowBreakdown { get; set; } = false;
 
+    // For interpolation
+    public double resourceSumLast = 0;
+    public double resourceSumThis = 0;
+    public double resourceRequestThis = 0;
+    public int resourceStateThis = 0;
+
+    double displayValue;
     Color colorBad = new(1, 0, 0);
 
     // For use in editor only.
@@ -37,14 +46,13 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
         value = GetNode<Label>("Value");
         name = GetNode<Label>("Name");
         details = GetNode<Label>("Details");
+        global = GetNode<Global>("/root/Global");
         ((TextureRect)GetNode("Icon")).Texture = Resource.Icon((resource != null) ? resource.Type : 0);
+        Update();
     }
-
 
     public override void _Draw()
     {
-        Update();
-
         if (Destroy)
         {
             Visible = false;
@@ -52,39 +60,51 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
         }
         else
         {
+            // Note to self. interpolation is harder than first seems.
+
+
+            // bool interpolate = (bool)PlayerConfig.config.GetValue("interface", "stepNumericalInterpolation");
+            // if (interpolate)
+            // {
+            //     double t = (global.deltaEFrame / global.timePerEframe);
+            //     displayValue = (t * (resourceSumLast - resourceSumThis)) + resourceSumLast;
+            // }
+            // else
+            // {
+            //     displayValue = resourceSumThis;
+            // }
+            displayValue = resourceSumThis;
             // hide if null.
             //Visible = !(resource.Count < 1 && Mathf.Abs(resource.Sum) < 0.1);
             details.Visible = ShowDetails;
             name.Visible = ShowName;
             TooltipText = resource.Name;
+            name.Text = $"{resource.Name}";
+
+            if (resourceStateThis > 0)
+            {
+                value.Text = string.Format("{0:G}/{1:G}", displayValue, resourceRequestThis);
+
+                value.AddThemeColorOverride("font_color", colorBad);
+                name.AddThemeColorOverride("font_color", colorBad);
+            }
+            else
+            {
+                value.RemoveThemeColorOverride("font_color");
+                name.RemoveThemeColorOverride("font_color");
+                value.Text = string.Format(resource.ValueFormat, displayValue);
+            }
         }
     }
 
     public void Update()
     {
-        if (resource is not Resource.IResource) { return; }
-        // 
-        name.Text = $"{resource.Name}";
-        if (((Resource.IResource)resource).State > 0)
-        {
-            value.Text = string.Format("{0:G}/{1:G}", resource.Sum, ((Resource.IResource)resource).Request);
-
-            value.AddThemeColorOverride("font_color", colorBad);
-            name.AddThemeColorOverride("font_color", colorBad);
-        }
-        // else if (resource.Sum == 0)
-        // {
-        //     value.RemoveThemeColorOverride("font_color");
-        //     name.RemoveThemeColorOverride("font_color");
-        //     value.Text = "-";
-        //     name.Text = $"{resource.Name} : ";
-        // }
-        else
-        {
-            value.RemoveThemeColorOverride("font_color");
-            name.RemoveThemeColorOverride("font_color");
-            value.Text = string.Format(resource.ValueFormat, resource.Sum);
-        }
+        // if (resource is not Resource.IResource) { return; }
+        resourceSumLast = resourceSumThis;
+        resourceSumThis = resource.Sum;
+        resourceRequestThis = resource.Request;
+        resourceStateThis = resource.State;
+        QueueRedraw();
     }
 
 

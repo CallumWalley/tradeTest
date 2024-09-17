@@ -17,7 +17,7 @@ config/icon="res://icon.png"
 
 [autoload]
 
-Features="*res://Map/Features/Features.cs"
+PlayerConfig="*res://PlayerConfig.cs"
 
 [dotnet]
 

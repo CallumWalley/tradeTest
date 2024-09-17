@@ -125,7 +125,7 @@ public partial class SimpleIndustry : ConditionScale
         base.OnEFrame();
         foreach (KeyValuePair<Resource.RGroup<Resource.RStatic>, Resource.RStatic> kvp in inputFullfillments)
         {
-            kvp.Value.Set(kvp.Key.Fraction());
+            kvp.Value.Set((kvp.Key.Fraction() + kvp.Value.Sum) / 2);
         }
     }
 }

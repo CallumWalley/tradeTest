@@ -6,8 +6,12 @@ public partial class UIResourceStorage : Control
 {
     public Resource.RStatic resource;
     public Resource.Ledger.EntryAccrul entry;
+
+    Global global;
     public bool Destroy { get; set; } = false;
 
+    double resourceSumLast = 0;
+    double resourceStoreThis;
     Color colorBad = new(1, 0, 0);
     protected Control details;
     public Label value;
@@ -28,20 +32,25 @@ public partial class UIResourceStorage : Control
         value = GetNode<Label>("Value");
         name = GetNode<Label>("Name");
         details = GetNode<Label>("Details");
+        global = GetNode<Global>("/root/Global");
     }
 
-    public void Update()
+    public override void _Process(double _delta)
     {
+
         //value.Text = string.Format("{0:P0}", entry.Stored.Sum / entry.Capacity.Sum);
-        value.Text = string.Format("{0:N2}", entry.Stored.Sum);
+        double displayValue = ((global.deltaEFrame / global.timePerEframe) * (resourceSumLast - resourceStoreThis)) + resourceSumLast;
+
+        value.Text = string.Format("{0:F0}", displayValue);
         name.Text = $": Storage";
         // Storage is in deficit.
-        if (0 <= entry.Stored.Sum)
+        if (0 <= resourceStoreThis)
         {
             value.AddThemeColorOverride("font_color", new Color(1, 0, 0));
             // detailLabel.Text = string.Format("{0} reserves empty!", storage.Name().ToUpper());
             // Storage is overcapacity.
         }
+        QueueRedraw();
         // else if (remainder > storage.Sum)
         // {
         //     value.AddColorOverride("font_color", new Color(1, 0, 0));
@@ -78,16 +87,18 @@ public partial class UIResourceStorage : Control
         // }
     }
 
+    public void Update()
+    {
+        resourceSumLast = resourceStoreThis;
+        resourceStoreThis = entry.Stored.Sum;
+    }
+
     public override void _Draw()
     {
         if (Destroy)
         {
             Visible = false;
             QueueFree();
-        }
-        else
-        {
-            Update();
         }
     }
 
