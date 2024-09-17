@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://spry3x7tpnw"
-path="res://.godot/imported/h2o.png-a90f8583e403c4d61f2dd7888ef26d70.ctex"
+uid="uid://ruj5qloraj58"
+path="res://.godot/imported/fulfillment.svg-3c0a87013e83f435427255237412054c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/icons/resources/h2o.png"
-dest_files=["res://.godot/imported/h2o.png-a90f8583e403c4d61f2dd7888ef26d70.ctex"]
+source_file="res://assets/icons/18x18/fulfillment.svg"
+dest_files=["res://.godot/imported/fulfillment.svg-3c0a87013e83f435427255237412054c.ctex"]
 
 [params]
 
@@ -32,3 +32,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false

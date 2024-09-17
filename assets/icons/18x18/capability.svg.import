@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dssccajo2oiby"
-path="res://.godot/imported/minerals.png-b17d300b513059df4a7195c25567c4c8.ctex"
+uid="uid://cxogipbol3s8b"
+path="res://.godot/imported/capability.svg-80b0fe218501e5d987638e47abc9a6d1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/icons/resources/minerals.png"
-dest_files=["res://.godot/imported/minerals.png-b17d300b513059df4a7195c25567c4c8.ctex"]
+source_file="res://assets/icons/18x18/capability.svg"
+dest_files=["res://.godot/imported/capability.svg-80b0fe218501e5d987638e47abc9a6d1.ctex"]
 
 [params]
 
@@ -32,3 +32,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false

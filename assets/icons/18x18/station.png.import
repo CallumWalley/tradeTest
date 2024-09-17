@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cmkj45u5r75gg"
-path="res://.godot/imported/freighter_disabled.png-d31d1333a21e83f4febd1c67faa783ce.ctex"
+uid="uid://bldp6t818g7jb"
+path="res://.godot/imported/station.png-bad2ea88598e294468f7e9313eb9fb3d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/icons/freighter_disabled.png"
-dest_files=["res://.godot/imported/freighter_disabled.png-d31d1333a21e83f4febd1c67faa783ce.ctex"]
+source_file="res://assets/icons/18x18/station.png"
+dest_files=["res://.godot/imported/station.png-bad2ea88598e294468f7e9313eb9fb3d.ctex"]
 
 [params]
 

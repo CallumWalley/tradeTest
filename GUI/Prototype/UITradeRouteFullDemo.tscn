@@ -3,10 +3,10 @@
 [ext_resource type="Script" path="res://GUI/Game/Lists/Listables/TradeRoute/UITradeRouteFull.cs" id="1_tiksk"]
 [ext_resource type="PackedScene" uid="uid://fiabywy3cj4i" path="res://GUI/Game/Lists/Listables/Domain/UIDomainTiny.tscn" id="2_jqcgi"]
 [ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="3_06pva"]
-[ext_resource type="PackedScene" path="res://GUI/Game/Lists/Listables/UIResource.tscn" id="4_ndr0k"]
-[ext_resource type="Texture2D" uid="uid://dssccajo2oiby" path="res://assets/icons/resources/minerals.png" id="5_nlv7l"]
+[ext_resource type="PackedScene" uid="uid://dui8s5f2ql5qm" path="res://GUI/Game/Lists/Listables/UIResource.tscn" id="4_ndr0k"]
+[ext_resource type="Texture2D" uid="uid://dssccajo2oiby" path="res://assets/icons/18x18/minerals.png" id="5_nlv7l"]
 [ext_resource type="PackedScene" uid="uid://chy6hnvyi7yb7" path="res://GUI/Game/Buttons/UIButtonPause.tscn" id="5_owfud"]
-[ext_resource type="Texture2D" path="res://assets/icons/resources/energy.dds" id="6_eo5k1"]
+[ext_resource type="Texture2D" path="res://assets/icons/18x18/energy.dds" id="6_eo5k1"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ygrda"]
 font_size = 10

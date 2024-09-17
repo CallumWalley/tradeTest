@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://bl0j2u53o3wm6"]
 
 [ext_resource type="Texture2D" path="res://assets/Buttons/button_settings.dds" id="1"]
-[ext_resource type="Texture2D" uid="uid://mfg7vrx3pu0n" path="res://assets/icons/alert.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://mfg7vrx3pu0n" path="res://assets/icons/18x18/alert.png" id="2"]
 
 [sub_resource type="AtlasTexture" id="2"]
 atlas = ExtResource("1")

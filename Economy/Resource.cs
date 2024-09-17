@@ -418,20 +418,20 @@ public partial class Resource
     ///  This could be JSONified
     /// </summary>
     static Dictionary<int, ResourceType> _index = new Dictionary<int, ResourceType>(){
-            {0, new ResourceType("Unset", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.dds"), false)},
-            {1, new ResourceType("Minerals", GD.Load<Texture2D>("res://assets/icons/resources/minerals.dds"), true)},
-            {2, new ResourceType("Fuel", GD.Load<Texture2D>("res://assets/icons/resources/energy.dds"), true)},
-            {3, new ResourceType("Food", GD.Load<Texture2D>("res://assets/icons/resources/food.dds"),  true)},
-            {4, new ResourceType("H2O", GD.Load<Texture2D>("res://assets/icons/resources/h2o.png"),  true)},
-            {801, new ResourceType("Fulfillment", GD.Load<Texture2D>("res://assets/icons/resources/fulfillment.svg"), false)},
-            {802, new ResourceType("Capability", GD.Load<Texture2D>("res://assets/icons/resources/capability.svg"), false)},
-            {811, new ResourceType("Freighter", GD.Load<Texture2D>("res://assets/icons/freighter.png"), false)},
-            {812, new ResourceType("Payload", GD.Load<Texture2D>("res://assets/icons/resources/payload.svg"), false)},
+            {0, new ResourceType("Unset", GD.Load<Texture2D>("res://assets/icons/18x18/unity_grey.dds"), false)},
+            {1, new ResourceType("Minerals", GD.Load<Texture2D>("res://assets/icons/18x18/minerals.dds"), true)},
+            {2, new ResourceType("Fuel", GD.Load<Texture2D>("res://assets/icons/18x18/energy.dds"), true)},
+            {3, new ResourceType("Food", GD.Load<Texture2D>("res://assets/icons/18x18/food.dds"),  true)},
+            {4, new ResourceType("H2O", GD.Load<Texture2D>("res://assets/icons/18x18/h2o.png"),  true)},
+            {801, new ResourceType("Fulfillment", GD.Load<Texture2D>("res://assets/icons/18x18/fulfillment.svg"), false)},
+            {802, new ResourceType("Capability", GD.Load<Texture2D>("res://assets/icons/18x18/capability.svg"), false)},
+            {811, new ResourceType("Freighter", GD.Load<Texture2D>("res://assets/icons/18x18/freighter.png"), false)},
+            {812, new ResourceType("Payload", GD.Load<Texture2D>("res://assets/icons/18x18/payload.svg"), false)},
 
             // {801, new ResourceType("Operational Capacity", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.dds"), false)},
             // {802, new ResourceType("Capacity Utilisation", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.dds"), false)},
             // {803, new ResourceType("Efficiency", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.dds"), false)},
-            {901, new ResourceType("Scale", GD.Load<Texture2D>("res://assets/icons/resources/scale.svg"), false)},
+            {901, new ResourceType("Scale", GD.Load<Texture2D>("res://assets/icons/18x18/scale.svg"), false)},
 
         };
 

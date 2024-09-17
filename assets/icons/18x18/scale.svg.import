@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dwwese1sj41fa"
-path="res://.godot/imported/freighter.png-42fa01b56945193ed46c2ac3d4d3cf56.ctex"
+uid="uid://cnpahdtxuvkem"
+path="res://.godot/imported/scale.svg-cf9a0c4bfa0fba96d58b5c20e59f492c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/icons/freighter.png"
-dest_files=["res://.godot/imported/freighter.png-42fa01b56945193ed46c2ac3d4d3cf56.ctex"]
+source_file="res://assets/icons/18x18/scale.svg"
+dest_files=["res://.godot/imported/scale.svg-cf9a0c4bfa0fba96d58b5c20e59f492c.ctex"]
 
 [params]
 
@@ -32,3 +32,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false
