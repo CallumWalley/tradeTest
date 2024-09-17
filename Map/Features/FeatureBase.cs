@@ -35,7 +35,13 @@ public partial class FeatureBase : Entity
 
     [Export]
     public PlayerFeatureTemplate Template { get; set; } = null;
+
+    [Export]
     public Texture2D iconMedium;
+
+
+    [Export(PropertyHint.File, "*.png")]
+    public string SplashScreenPath;
 
     // [Export(PropertyHint.Enum, "unset,f_dockyard,orbit_storage_fuel,orbit_storage_h2o,planet_mine_minerals,planet_mine_h2o,reclaim,cfuel_water")]
     [Export]

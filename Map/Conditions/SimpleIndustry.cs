@@ -8,6 +8,7 @@ using System.Linq;
 
 public partial class SimpleIndustry : ConditionScale
 {
+
     [Export]
     public Godot.Collections.Dictionary Factors;
     //public Resource.RDict<Resource.RStatic> factors = new Resource.RDict<Resource.RStatic>();

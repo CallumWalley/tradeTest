@@ -7,6 +7,8 @@ public partial class UIPanelPlayerFeatureTemplateFull : UIPanel
 {
 	public PlayerFeatureTemplate template;
 	UIRename name;
+	TextureRect splashScreen;
+
 	Label type;
 	RichTextLabel description;
 	HFlowContainer tags;
@@ -22,6 +24,12 @@ public partial class UIPanelPlayerFeatureTemplateFull : UIPanel
 		description = GetNode<RichTextLabel>("PanelContainer/Details/Description");
 		tags = GetNode<HFlowContainer>("PanelContainer/Details/Tags");
 
+		splashScreen = GetNode<TextureRect>("PanelContainer/Details/SplashScreen");
+
+		if (ResourceLoader.Exists(template.Feature.SplashScreenPath, "*.png"))
+		{
+			splashScreen.Texture = GD.Load<Texture2D>(template.Feature.SplashScreenPath);
+		}
 
 		foreach (string tag in template.Feature.NeedsTags)
 		{
@@ -38,6 +46,6 @@ public partial class UIPanelPlayerFeatureTemplateFull : UIPanel
 	{
 		base._Draw();
 		description.Text = template.Feature.Description;
-		name.node = template.Feature;
+		name.entity = template.Feature;
 	}
 }

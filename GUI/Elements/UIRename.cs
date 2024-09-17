@@ -3,7 +3,7 @@ using System;
 
 public partial class UIRename : LineEdit
 {
-	public Node node;
+	public Entity entity;
 	public override void _Ready()
 	{
 		base._Ready();
@@ -15,13 +15,13 @@ public partial class UIRename : LineEdit
 		base._Draw();
 		if (!HasFocus())
 		{
-			Text = node.Name ?? "Unknown";
+			Text = entity.Name ?? "Unknown";
 		}
 	}
 
 	public void OnTextSubmitted(string s)
 	{
-		node.Name = s;
+		entity.Name = s;
 		ReleaseFocus();
 	}
 

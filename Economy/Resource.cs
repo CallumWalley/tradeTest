@@ -66,7 +66,7 @@ public partial class Resource
         public virtual string Name { get; set; } = "Unknown";
         public virtual double Request { get; set; }
         public bool IsHidden { get; set; } = false;
-        public string ValueFormat { get; set; } = "{0:G}";
+        public string ValueFormat { get; set; } = "{0:F1}";
 
 
         // Request is actual amount given
@@ -169,7 +169,7 @@ public partial class Resource
         public string Name { get; set; } = "Sum";
 
         public bool IsHidden { get; set; } = false;
-        public string ValueFormat { get; set; } = "{0:G}";
+        public string ValueFormat { get; set; } = "{0:G2}";
         protected List<T> _adders { get; set; }
         protected List<T> _muxxers { get; set; }
 
@@ -426,6 +426,7 @@ public partial class Resource
             {801, new ResourceType("Fulfillment", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.dds"), false)},
             {802, new ResourceType("Capability", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.dds"), false)},
             {811, new ResourceType("Freighter", GD.Load<Texture2D>("res://assets/icons/freighter.png"), false)},
+            {812, new ResourceType("Payload", GD.Load<Texture2D>("res://assets/icons/resources/payload.svg"), false)},
 
             // {801, new ResourceType("Operational Capacity", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.dds"), false)},
             // {802, new ResourceType("Capacity Utilisation", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.dds"), false)},

@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Text;
 
 public partial class UIConditionTiny : HBoxContainer, Lists.IListable<ConditionBase>
 {
@@ -7,9 +8,16 @@ public partial class UIConditionTiny : HBoxContainer, Lists.IListable<ConditionB
     public ConditionBase GameElement { get { return Condition; } }
     public bool Destroy { get; set; } = false;
 
+    public Label nameLabel;
     public void Init(ConditionBase _condition)
     {
         Condition = _condition;
+    }
+
+    public override void _Ready()
+    {
+        base._Ready();
+        nameLabel = GetNode<Label>("Name");
     }
 
     public override void _Draw()
@@ -21,6 +29,9 @@ public partial class UIConditionTiny : HBoxContainer, Lists.IListable<ConditionB
 
     public void Update()
     {
-        GetNode<Label>("Name").Text = Condition.Name;
+        if (Destroy || !IsInstanceValid(Condition)) { QueueFree(); return; }
+        nameLabel.Text = Condition.Name;
+        nameLabel.TooltipText = Condition.Description;
+
     }
 }

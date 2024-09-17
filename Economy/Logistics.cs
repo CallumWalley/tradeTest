@@ -166,9 +166,9 @@ public partial class Logistics
 
                 // whether store resourses are needed.
 
-                if (kvp.Value is Resource.Ledger.EntryAccrul && kvp.Value.Net.Sum < 0)
+                if (kvp.Value is Resource.Ledger.EntryAccrul && kvp.Value.Net.Request < 0)
                 {
-                    tally += ((Resource.Ledger.EntryAccrul)kvp.Value).Withdraw(kvp.Value.Net.Sum);
+                    tally += ((Resource.Ledger.EntryAccrul)kvp.Value).Withdraw(kvp.Value.Net.Request);
                 }
                 //  ...
                 // recalculate shortfall.

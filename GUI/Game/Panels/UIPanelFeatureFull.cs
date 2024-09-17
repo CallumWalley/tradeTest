@@ -6,6 +6,11 @@ public partial class UIPanelFeatureFull : UIPanel
 	// Called when the node enters the scene tree for the first time.
 	public FeatureBase feature;
 	UIRename name;
+
+	Player player;
+	private CanvasLayer screen;
+
+	TextureRect splashScreen;
 	Label type;
 	RichTextLabel description;
 	HFlowContainer tags;
@@ -17,6 +22,7 @@ public partial class UIPanelFeatureFull : UIPanel
 
 	UIList<ConditionBase> conditions = new();
 
+	TextureButton templateButton;
 
 	static readonly PackedScene prefab_pill = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/UIPill.tscn");
 	static readonly PackedScene prefab_conditionTiny = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/Condition/UIConditionTiny.tscn");
@@ -25,12 +31,22 @@ public partial class UIPanelFeatureFull : UIPanel
 	public override void _Ready()
 	{
 		base._Ready();
+		player = GetNode<Player>("/root/Global/Player");
+		screen = GetNode<CanvasLayer>("/root/Global/Screen");
 		name = GetNode<UIRename>("PanelContainer/Details/MarginContainer/HBoxContainer/Name");
-		type = GetNode<Label>("PanelContainer/Details/MarginContainer/HBoxContainer/Type");
 		description = GetNode<RichTextLabel>("PanelContainer/Details/Description");
 		tags = GetNode<HFlowContainer>("PanelContainer/Details/Tags");
+		splashScreen = GetNode<TextureRect>("PanelContainer/Details/SplashScreen");
+		templateButton = GetNode<TextureButton>("PanelContainer/Details/MarginContainer/HBoxContainer/Type");
 
 
+		templateButton.Connect("pressed", new Callable(this, "OnTemplateButtonPressed"));
+
+
+		if (ResourceLoader.Exists(feature.SplashScreenPath, "*.png"))
+		{
+			splashScreen.Texture = GD.Load<Texture2D>(feature.SplashScreenPath);
+		}
 		foreach (string tag in feature.NeedsTags)
 		{
 			UIPill pill = prefab_pill.Instantiate<UIPill>();
@@ -54,6 +70,9 @@ public partial class UIPanelFeatureFull : UIPanel
 		globalFactorsOutput.Init(feature.FactorsGlobalOutput);
 		conditions.Init(feature.Conditions, prefab_conditionTiny);
 
+
+		name.entity = feature;
+
 		GetNode<VBoxContainer>("PanelContainer/Details/Factors/VBoxContainer").AddChild(singularFactors);
 		GetNode<VBoxContainer>("PanelContainer/Details/Factors/VBoxContainer").AddChild(localFactors);
 		GetNode<VBoxContainer>("PanelContainer/Details/Factors/VBoxContainer").AddChild(globalFactorsInput);
@@ -62,18 +81,21 @@ public partial class UIPanelFeatureFull : UIPanel
 		GetNode<VBoxContainer>("PanelContainer/Details/Conditions/VBoxContainer").AddChild(conditions);
 
 		OnEFrameUpdate();
-
-
 	}
 
 	public override void _Draw()
 	{
 		base._Draw();
 		description.Text = feature.Description;
-		name.node = feature;
 	}
 
-
+	public void OnTemplateButtonPressed()
+	{
+		UIWindow templateWindow = screen.GetNode<UIWindow>("UIIndustriesWindow");
+		templateWindow.Popup();
+		UIPanelPlayerFeatureTemplateList templateList = templateWindow.GetNode<UIPanelPlayerFeatureTemplateList>("Industry Templates");
+		templateList.OnItemListItemSelected(templateList.featureList.IndexOf(feature.Template));
+	}
 
 	public override void OnEFrameUpdate()
 	{
@@ -83,5 +105,7 @@ public partial class UIPanelFeatureFull : UIPanel
 		globalFactorsOutput.Update();
 		localFactors.Update();
 		conditions.Update();
+
+		templateButton.TooltipText = $"Template: {feature.Template.Name}";
 	}
 }

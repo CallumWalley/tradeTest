@@ -13,7 +13,7 @@ public partial class ConditionScale : ConditionBase
 {
     // For things that have their primary properties modified by their size.
     [Export]
-    public static double InitialScale { get; set; }
+    public double InitialScale { get; set; } = 1;
     // public ConditionScale(double _initialScale = 1)
     // {
     //     InitialScale = _initialScale;

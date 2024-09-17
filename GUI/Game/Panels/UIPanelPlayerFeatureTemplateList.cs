@@ -15,7 +15,7 @@ public partial class UIPanelPlayerFeatureTemplateList : UIPanel, UIInterfaces.IE
     Label altNameLabel;
     ItemList list;
     ScrollContainer display;
-    List<PlayerFeatureTemplate> featureList = new();
+    public List<PlayerFeatureTemplate> featureList = new();
     static readonly PackedScene prefab_UIPanelFeatureFactoryFull = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Panels/UIPanelPlayerFeatureTemplateFull.tscn");
     Player player;
 

@@ -26,8 +26,8 @@ public partial class SlowStart : ConditionBase
     public override void OnEFrame()
     {
         base.OnEFrame();
-        slowStart.Set((0.1 * Feature.FactorsLocal[801].Sum) + slowStart.Sum);
-        if (slowStart.Sum > 0.9)
+        slowStart.Set((Mathf.Max(((1f - slowStart.Sum) * (GD.Randf() - 0.1f)) * Feature.FactorsLocal[801].Sum, 0)) + slowStart.Sum);
+        if (slowStart.Sum > 0.95)
         {
             OnRemove();
         }

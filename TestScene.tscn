@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bqwjnbtt5kf3p"]
+[gd_scene load_steps=11 format=3 uid="uid://bqwjnbtt5kf3p"]
 
 [ext_resource type="Script" path="res://Global.cs" id="1_1b3uo"]
 [ext_resource type="PackedScene" uid="uid://con3ea5txcdnn" path="res://Player/Player.tscn" id="1_w03ia"]
@@ -7,6 +7,9 @@
 [ext_resource type="PackedScene" uid="uid://bs11ngj4r7eb4" path="res://Map/Galaxy.tscn" id="3_x7akn"]
 [ext_resource type="PackedScene" uid="uid://bdustjrq7vtln" path="res://Map/Domains/PlanetarySystem.tscn" id="4_hdweb"]
 [ext_resource type="PackedScene" uid="uid://cf5ty6my7thnc" path="res://Map/Domains/SatelliteSystem.tscn" id="5_438b2"]
+[ext_resource type="Script" path="res://Map/Features/FeatureBase.cs" id="7_0xlau"]
+[ext_resource type="PackedScene" uid="uid://b81a02d1keo5i" path="res://Map/Conditions/SimpleIndustry.tscn" id="8_j7vpr"]
+[ext_resource type="PackedScene" uid="uid://e4cfn5gaacki" path="res://Map/Conditions/SlowStart.tscn" id="9_4wos0"]
 
 [node name="Global" type="Node"]
 script = ExtResource("1_1b3uo")
@@ -24,6 +27,23 @@ _validTradeReceiver = true
 StartingResources = {
 "2": "1000"
 }
+
+[node name="Desalination Site" type="Node" parent="Map/Galaxy/Sol/Earth" node_paths=PackedStringArray("Template")]
+script = ExtResource("7_0xlau")
+Template = NodePath("../../../../../Player/PlayerFeatureTemplates/DMHO Purification")
+SplashScreenPath = "res://assets/splash/chemical.png"
+NeedsTags = ["planetary"]
+Description = "Removing impurities from surface liquid DHMO through reverse osmosis."
+
+[node name="Nominal Operation" parent="Map/Galaxy/Sol/Earth/Desalination Site" instance=ExtResource("8_j7vpr")]
+Factors = {
+2: -2.0,
+4: 3.0
+}
+Description = "Everything working as expected"
+
+[node name="Start Up" parent="Map/Galaxy/Sol/Earth/Desalination Site" instance=ExtResource("9_4wos0")]
+Description = "This is a new facility, not yet operating at full capacity."
 
 [node name="Moon" parent="Map/Galaxy/Sol" instance=ExtResource("5_438b2")]
 
