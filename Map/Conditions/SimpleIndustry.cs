@@ -97,6 +97,10 @@ public partial class SimpleIndustry : ConditionScale
                     }
                     break;
                 case < 900:
+                    Feature.FactorsGlobalOutput[(int)r.Key].Add(new Resource.RStatic((int)r.Key, (double)r.Value, (double)r.Value, "Base", "Expected Yield"));
+                    Feature.FactorsGlobalOutput[(int)r.Key].Mux(Feature.FactorsLocal[801]); // Input fulfillment
+                    Feature.FactorsGlobalOutput[(int)r.Key].Mux(Feature.FactorsSingle[901]); // Scale
+                    Feature.FactorsGlobalOutput[(int)r.Key].Mux(Feature.FactorsLocal[802]); // Efficacy
                     break;
                 case < 999:
                     break;
