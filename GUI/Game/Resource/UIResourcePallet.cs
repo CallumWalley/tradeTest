@@ -66,12 +66,10 @@ public partial class UIResourcePallet : HBoxContainer
 
         if (toggled)
         {
-            GD.Print("adding");
             rdict[selected] = new Resource.RStatic(selected, 0, 1);
         }
         else
         {
-            GD.Print("removing");
             rdict.Remove(selected);
         }
 
