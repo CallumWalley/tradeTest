@@ -224,7 +224,6 @@ public partial class Logistics
         }
     }
 
-
     public static void UpdateLedger(Domain Domain)
     {
         // Zero Ledger

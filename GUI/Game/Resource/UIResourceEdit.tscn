@@ -1,0 +1,41 @@
+[gd_scene load_steps=4 format=3 uid="uid://defk13obmm8fd"]
+
+[ext_resource type="Script" path="res://GUI/Game/Resource/UIResourceEdit.cs" id="1_1jw1y"]
+[ext_resource type="Texture2D" path="res://assets/icons/18x18/unity_grey.dds" id="2_5vnq6"]
+[ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="3_fpqyh"]
+
+[node name="UIResourceEdit" type="HBoxContainer"]
+offset_right = 30.0
+offset_bottom = 18.0
+size_flags_horizontal = 5
+size_flags_vertical = 5
+tooltip_text = "test"
+script = ExtResource("1_1jw1y")
+
+[node name="Name" type="Label" parent="."]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+text = "UNAMED"
+
+[node name="Icon" type="TextureRect" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("2_5vnq6")
+
+[node name="LineEdit" type="LineEdit" parent="."]
+layout_mode = 2
+size_flags_horizontal = 0
+theme = ExtResource("3_fpqyh")
+text = "0"
+
+[node name="Details" type="Label" parent="."]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+text = ": UNSET"
+
+[node name="Value" type="Label" parent="."]
+visible = false
+layout_mode = 2

@@ -9,7 +9,7 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
     public Resource.IResource resource;
     public Resource.IResource GameElement { get { return resource; } }
 
-    Global global;
+    protected Global global;
     public bool Destroy { get; set; } = false;
     public bool ShowName { get; set; } = false;
     public bool ShowDetails { get; set; } = false;
@@ -21,7 +21,7 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
     public double resourceRequestThis = 0;
     public int resourceStateThis = 0;
 
-    double displayValue;
+    protected double displayValue;
     Color colorBad = new(1, 0, 0);
 
     // For use in editor only.
@@ -31,7 +31,7 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
     // Child components
     public Label value;
     public Label name;
-    private Label details;
+    protected Label details;
 
     protected static readonly PackedScene p_resourceIcon = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/UIResource.tscn");
 
@@ -47,7 +47,6 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
         name = GetNode<Label>("Name");
         details = GetNode<Label>("Details");
         global = GetNode<Global>("/root/Global");
-        ((TextureRect)GetNode("Icon")).Texture = Resource.Icon((resource != null) ? resource.Type : 0);
         Update();
     }
 
@@ -57,49 +56,47 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
         {
             Visible = false;
             QueueFree();
+            return;
+        }
+
+        // Note to self. interpolation is harder than first seems.
+        // bool interpolate = (bool)PlayerConfig.config.GetValue("interface", "stepNumericalInterpolation");
+        // if (interpolate)
+        // {
+        //     double t = (global.deltaEFrame / global.timePerEframe);
+        //     displayValue = (t * (resourceSumLast - resourceSumThis)) + resourceSumLast;
+        // }
+        // else
+        // {
+        //     displayValue = resourceSumThis;
+        // }
+        displayValue = resourceSumThis;
+        // hide if null.
+        //Visible = !(resource.Count < 1 && Mathf.Abs(resource.Sum) < 0.1);
+        details.Visible = ShowDetails;
+        name.Visible = ShowName;
+        TooltipText = resource.Name;
+        name.Text = $"{resource.Name}";
+        ((TextureRect)GetNode("Icon")).Texture = Resource.Icon((resource != null) ? resource.Type : 0);
+
+        if (resourceStateThis > 0)
+        {
+            value.Text = string.Format("{0:G}/{1:G}", displayValue, resourceRequestThis);
+
+            value.AddThemeColorOverride("font_color", colorBad);
+            name.AddThemeColorOverride("font_color", colorBad);
         }
         else
         {
-            // Note to self. interpolation is harder than first seems.
-
-
-            // bool interpolate = (bool)PlayerConfig.config.GetValue("interface", "stepNumericalInterpolation");
-            // if (interpolate)
-            // {
-            //     double t = (global.deltaEFrame / global.timePerEframe);
-            //     displayValue = (t * (resourceSumLast - resourceSumThis)) + resourceSumLast;
-            // }
-            // else
-            // {
-            //     displayValue = resourceSumThis;
-            // }
-            displayValue = resourceSumThis;
-            // hide if null.
-            //Visible = !(resource.Count < 1 && Mathf.Abs(resource.Sum) < 0.1);
-            details.Visible = ShowDetails;
-            name.Visible = ShowName;
-            TooltipText = resource.Name;
-            name.Text = $"{resource.Name}";
-
-            if (resourceStateThis > 0)
-            {
-                value.Text = string.Format("{0:G}/{1:G}", displayValue, resourceRequestThis);
-
-                value.AddThemeColorOverride("font_color", colorBad);
-                name.AddThemeColorOverride("font_color", colorBad);
-            }
-            else
-            {
-                value.RemoveThemeColorOverride("font_color");
-                name.RemoveThemeColorOverride("font_color");
-                value.Text = string.Format(resource.ValueFormat, displayValue);
-            }
+            value.RemoveThemeColorOverride("font_color");
+            name.RemoveThemeColorOverride("font_color");
+            value.Text = string.Format(resource.ValueFormat, displayValue);
         }
     }
 
     public void Update()
     {
-        // if (resource is not Resource.IResource) { return; }
+
         resourceSumLast = resourceSumThis;
         resourceSumThis = resource.Sum;
         resourceRequestThis = resource.Request;

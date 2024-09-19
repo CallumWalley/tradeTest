@@ -4,7 +4,7 @@
 [ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="1_xowkr"]
 [ext_resource type="Texture2D" uid="uid://dfihyt16212ay" path="res://assets/splash/test.png" id="2_6p7vk"]
 [ext_resource type="PackedScene" uid="uid://b8m1ub13xosju" path="res://GUI/Elements/UIRename.tscn" id="4_8k85m"]
-[ext_resource type="PackedScene" uid="uid://bmwberlk1bdl3" path="res://GUI/Game/Buttons/UITemplate.tscn" id="5_avhne"]
+[ext_resource type="PackedScene" uid="uid://bmwberlk1bdl3" path="res://GUI/Elements/Buttons/UITemplate.tscn" id="5_avhne"]
 
 [node name="Feature" type="PanelContainer"]
 anchors_preset = 15

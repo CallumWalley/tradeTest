@@ -44,6 +44,11 @@ public partial class UIList<T> : BoxContainer
         {
             UpdateElement(r);
         }
+        QueueRedraw();
+        // eww
+        // force child redraw.
+        // Visible = !Visible;
+        // Visible = !Visible;
     }
 
     public override void _Draw()
@@ -77,7 +82,7 @@ public partial class UIList<T> : BoxContainer
     /// <returns></returns>
     protected virtual Lists.IListable<T> CreateNewElement(T r)
     {
-        Lists.IListable<T> newui = (Lists.IListable<T>)prefab.Instantiate();
+        var newui = (Lists.IListable<T>)prefab.Instantiate<Lists.IListable<T>>();
         newui.Init(r);
         return newui;
     }

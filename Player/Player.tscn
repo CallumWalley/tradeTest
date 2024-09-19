@@ -105,3 +105,22 @@ Description = "Everything working as expected"
 
 [node name="Start Up" parent="PlayerFeatureTemplates/Launch Complex/Launch Complex" instance=ExtResource("8_rx0td")]
 Description = "This is a new facility, not yet operating at full capacity."
+
+[node name="Spaceport" type="Node" parent="PlayerFeatureTemplates" node_paths=PackedStringArray("Feature")]
+script = ExtResource("4_opta7")
+Feature = NodePath("Spaceport")
+
+[node name="Spaceport" type="Node" parent="PlayerFeatureTemplates/Spaceport"]
+script = ExtResource("6_g7q3k")
+SplashScreenPath = "res://assets/splash/shuttle.png"
+NeedsTags = ["planetary"]
+
+[node name="Nominal Operation" parent="PlayerFeatureTemplates/Spaceport/Spaceport" instance=ExtResource("7_f7g6h")]
+Factors = {
+2: -3.0,
+811: 2.0
+}
+Description = "Everything working as expected"
+
+[node name="Start Up" parent="PlayerFeatureTemplates/Spaceport/Spaceport" instance=ExtResource("8_rx0td")]
+Description = "This is a new facility, not yet operating at full capacity."

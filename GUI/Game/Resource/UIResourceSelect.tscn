@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://6cjsu3x858at"]
+
+[ext_resource type="Script" path="res://GUI/Game/Resource/UIResourceSelect.cs" id="1_jqe0f"]
+
+[node name="UiResourceSelect" type="GridContainer"]
+size_flags_horizontal = 2
+size_flags_vertical = 2
+columns = 6
+script = ExtResource("1_jqe0f")

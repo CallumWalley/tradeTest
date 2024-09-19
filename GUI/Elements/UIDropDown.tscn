@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bavs2y7iv74ef"]
 
 [ext_resource type="Script" path="res://GUI/Elements/UIDropDown.cs" id="1_mbij0"]
-[ext_resource type="PackedScene" uid="uid://bl0j2u53o3wm6" path="res://GUI/Game/Buttons/UISettings.tscn" id="2_2ys5m"]
+[ext_resource type="PackedScene" uid="uid://bl0j2u53o3wm6" path="res://GUI/Elements/Buttons/UISettings.tscn" id="2_2ys5m"]
 
 [node name="DropDown" type="VBoxContainer"]
 anchors_preset = 10
@@ -38,12 +38,11 @@ stretch_mode = 3
 
 [node name="Popup" type="Popup" parent="."]
 transparent_bg = true
-size = Vector2i(100, 0)
+size = Vector2i(100, 1)
 transparent = true
 content_scale_mode = 1
 
 [node name="Panel" type="PanelContainer" parent="Popup"]
-visible = false
 anchors_preset = 10
 anchor_right = 1.0
 grow_horizontal = 2

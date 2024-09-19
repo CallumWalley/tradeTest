@@ -16,7 +16,7 @@ public partial class Lists
     public interface IListable<T>
     {
         public T GameElement { get; }
-        public void Init(T @object);
+        public void Init(T thing);
         public void Update();
         public void _Draw();
 

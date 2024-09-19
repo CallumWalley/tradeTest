@@ -1,17 +1,17 @@
 [gd_scene load_steps=5 format=3 uid="uid://dug2mtbjwyc37"]
 
-[ext_resource type="Texture2D" path="res://assets/Buttons/button_focus.dds" id="1"]
+[ext_resource type="Texture2D" path="res://assets/Buttons/button_focus.dds" id="1_igd4h"]
 
 [sub_resource type="AtlasTexture" id="1"]
-atlas = ExtResource("1")
+atlas = ExtResource("1_igd4h")
 region = Rect2(0, 0, 38, 38)
 
 [sub_resource type="AtlasTexture" id="3"]
-atlas = ExtResource("1")
+atlas = ExtResource("1_igd4h")
 region = Rect2(76, 0, 38, 38)
 
 [sub_resource type="AtlasTexture" id="2"]
-atlas = ExtResource("1")
+atlas = ExtResource("1_igd4h")
 region = Rect2(38, 0, 38, 38)
 
 [node name="Cancel" type="TextureButton"]

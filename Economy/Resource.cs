@@ -2,10 +2,8 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-public partial class Resource
+public static partial class Resource
 {
-    public Logger logger;
-
     // Interfaces
     /// <summary>
     /// Basic type representing a resource.
@@ -417,7 +415,7 @@ public partial class Resource
     /// <summary>
     ///  This could be JSONified
     /// </summary>
-    static Dictionary<int, ResourceType> _index = new Dictionary<int, ResourceType>(){
+    public static Dictionary<int, ResourceType> _index = new Dictionary<int, ResourceType>(){
             {0, new ResourceType("Unset", GD.Load<Texture2D>("res://assets/icons/18x18/unity_grey.dds"), false)},
             {1, new ResourceType("Minerals", GD.Load<Texture2D>("res://assets/icons/18x18/minerals.dds"), true)},
             {2, new ResourceType("Fuel", GD.Load<Texture2D>("res://assets/icons/18x18/energy.dds"), true)},
@@ -467,7 +465,10 @@ public partial class Resource
     //     return _index[resourceCode].shipWeight;
     // }
 
-
+    public static IEnumerable<KeyValuePair<int, ResourceType>> GetRegular()
+    {
+        return _index.Where(x => x.Key < 800);
+    }
 
     /// <summary>
     /// Dictionary of resources, keyed by resource id
@@ -577,6 +578,10 @@ public partial class Resource
                 }
             }
         }
+        public void Remove(int id)
+        {
+            members.Remove(id);
+        }
         public override string ToString()
         {
             string returnString = "";
@@ -585,6 +590,14 @@ public partial class Resource
                 returnString += r.ToString() + ", ";
             }
             return returnString;
+        }
+
+        public IEnumerable<int> Keys()
+        {
+            foreach (KeyValuePair<int, TResource> kvp in members)
+            {
+                yield return kvp.Key;
+            }
         }
 
         public RDict<TResource> Clone()
