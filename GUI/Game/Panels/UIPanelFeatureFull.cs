@@ -106,6 +106,17 @@ public partial class UIPanelFeatureFull : UIPanel
 		localFactors.Update();
 		conditions.Update();
 
-		templateButton.TooltipText = $"Template: {feature.Template.Name}";
+		if (feature.Template != null)
+		{
+			templateButton.TooltipText = $"Template: {feature.Template.Name}";
+			templateButton.Disabled = false;
+		}
+		else
+		{
+			templateButton.TooltipText = $"No template";
+			templateButton.Disabled = true;
+
+		}
+
 	}
 }

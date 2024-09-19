@@ -10,7 +10,7 @@ public partial class UIPanelPoolSupply : UIPanel
         base._Ready();
         panelLedger = new();
         panelLedger.Ledger = resourcePool.Ledger;
-        GetNode<HBoxContainer>("HBoxContainer").AddChild(panelLedger);
+        GetNode<HBoxContainer>("MarginContainer/HBoxContainer").AddChild(panelLedger);
     }
 
     public override void OnEFrameUpdate()

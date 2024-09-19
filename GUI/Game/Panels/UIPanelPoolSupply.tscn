@@ -6,25 +6,27 @@
 size_flags_horizontal = 0
 script = ExtResource("1_30phl")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
 layout_mode = 2
 
-[node name="Local" type="Label" parent="HBoxContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Local" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Local"
 
-[node name="Trade" type="Label" parent="HBoxContainer/VBoxContainer"]
-visible = false
+[node name="Trade" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Trade"
 
-[node name="Net" type="Label" parent="HBoxContainer/VBoxContainer"]
+[node name="Net" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Net"
 
-[node name="Storage" type="Label" parent="HBoxContainer/VBoxContainer"]
+[node name="Storage" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Storage"

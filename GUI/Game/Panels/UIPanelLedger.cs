@@ -19,7 +19,7 @@ public partial class UIPanelLedger : HBoxContainer
 			return nui;
 		}
 	}
-	public bool ShowTrade { get; set; } = false;
+	public bool ShowTrade { get; set; } = true;
 	public bool HideZeroCol { get; set; } = false;
 
 	public override void _Ready()

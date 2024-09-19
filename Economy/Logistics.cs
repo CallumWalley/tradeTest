@@ -81,40 +81,25 @@ public partial class Logistics
                 // call this funtion on child.
                 CalculateRequests(downline.Tail);
                 // Add ship demand to head.
-                Domain.Ledger[811].LocalLoss.Add(downline.ShipDemand);
+                Domain.Ledger[811].LocalNet.Add(downline.ShipDemand);
             }
 
-            // If no upline, end here.
-            if (Domain.Trade.UplineTraderoute == null)
-            {
-                return;
-            }
+            // // If no upline, end here.
+            // if (Domain.Trade.UplineTraderoute == null)
+            // {
+            //     return;
+            // }
+
+            // UpdateTradeDownline(Domain);
 
             // For each element in ledger calculate net resource and set ImportDemand / Export appropriately.
             foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in Domain.Ledger)
             {
-                double tally = kvp.Value.LocalGain.Sum;
-
-                if (kvp.Value.UplineGain != null)
-                {
-                    tally += kvp.Value.UplineGain.Sum;
-                }
-
-                // Special rules for trade.
-                // if (kvp.Key == 811)
-                // {
-                //     continue;
-                // }
-
-                // This could be made more efficient. Duplicating count.
-
-                double def = Domain.Trade.DownlineTraderoutes.Where(x => x.ListHeadGain.ContainsKey(kvp.Key)).Sum(x => x.ListHeadGain[kvp.Key].Sum) +
-                Domain.Trade.DownlineTraderoutes.Where(x => x.ListHeadGain.ContainsKey(kvp.Key)).Sum(x => x.ListHeadGain[kvp.Key].Request) +
-                kvp.Value.LocalLoss.Request + kvp.Value.LocalGain.Sum;
-
-                // Request the difference from parent.
-                Domain.Trade.UplineTraderoute.SetValue(kvp.Key, def);
+                kvp.Value.Upline = -(
+                    kvp.Value.LocalNet.Request +
+                    Domain.Trade.DownlineTraderoutes.Sum(x => x.ListHead[kvp.Key].Sum));
             }
+            Domain.Trade.DownlineTraderoutes.ForEach(x => x.SetRequest());
         }
         /// <summary>
         ///  Once all elements have 'CalculateRequests' this is run.
@@ -125,50 +110,61 @@ public partial class Logistics
             /// <summary>
             /// Fraction inbound trade can be fulfilled.
             /// </summary>
+
+            // tranch0
+            // Resolve all uplines
+            // tranch1
+            // Resolve all local positive values
+            // tranch2
+            // Resolve all downlines
+
             double freightFraction = 0;
 
-            // If has upline requesting ships, I Should always resolve as I set the request.
-            if (Domain.Ledger.ContainsKey(811) && Domain.Ledger[811].UplineLoss != null)
-            {
-                Domain.Ledger[811].UplineLoss.Respond();
-            }
+
+            // // If has upline requesting ships, I Should always resolve as I set the request.
+            // if (Domain.Ledger.ContainsKey(811) && Domain.Ledger[811].Upline != null)
+            // {
+            //     Domain.Ledger[811].UplineLoss.Respond();
+            // }
 
             // If has downline.
-            if (Domain.Trade.DownlineTraderoutes.Count > 0)
-            {
-                freightFraction = Math.Min(Domain.Ledger[811].TradeNet.Fraction(), 1);
-            }
+            // if (Domain.Trade.DownlineTraderoutes.Count > 0)
+            // {
+            //     freightFraction = Math.Min(Domain.Ledger[811].TradeNet.Fraction(), 1);
+            // }
+
             // First resolve ship balance.
             // if importing ships that always resolved.
 
             // enumerate through elements in ledger 
-            foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in Domain.Ledger)
+            foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in Domain.Ledger.Reverse())
             {
                 // Start tally with parent exports as they always get thru.
-                double tally = kvp.Value.LocalGain.Sum;
+                double tally = kvp.Value.LocalNet.Sum;
 
-                if (kvp.Value.UplineGain != null)
+                if (Domain.Trade.UplineTraderoute != null)
                 {
-                    tally += kvp.Value.UplineGain.Sum;
+                    tally += Domain.Trade.UplineTraderoute.ListTail[kvp.Key].Sum;
                 }
-                // Step One. Approve imports from children. (equal to available ships)
-                foreach (var r in kvp.Value.DownlineGain)
-                {
-                    double alloc = r.Request * freightFraction;
-                    tally += alloc;
-                    r.Respond(alloc);
-                }
+
+                // // Step One. Approve imports from children. (equal to available ships)
+                // foreach (var r in kvp.Value.DownlineGain)
+                // {
+                //     double alloc = r.Request * freightFraction;
+                //     tally += alloc;
+                //     r.Respond(alloc);
+                // }
 
                 // Step Two. Calculate storage withdrawl for local use.
 
                 // Shortfall is how much extra resource required to fulfill.
                 // Set storage element to cover difference. (if allowed)
 
-                // whether store resourses are needed.
+                // whether store resourses are needed for tranch2
 
-                if (kvp.Value is Resource.Ledger.EntryAccrul && kvp.Value.Net.Request < 0)
+                if (kvp.Value is Resource.Ledger.EntryAccrul && tally < 0)
                 {
-                    tally += ((Resource.Ledger.EntryAccrul)kvp.Value).Withdraw(kvp.Value.Net.Request);
+                    tally += ((Resource.Ledger.EntryAccrul)kvp.Value).Withdraw(tally);
                 }
                 //  ...
                 // recalculate shortfall.
@@ -176,9 +172,9 @@ public partial class Logistics
                 // Step Three. Allocate resources locally.
 
                 // How much of this request can be filled.
-                double resourceSupplyFraction = Math.Max(Math.Min(-tally / kvp.Value.LocalLoss.Request, 1), 0);
+                double resourceSupplyFraction = Math.Max(Math.Min(-tally / kvp.Value.LocalNet.Request, 1), 0);
 
-                foreach (Resource.IResource r in kvp.Value.LocalLoss)
+                foreach (Resource.IResource r in kvp.Value.LocalNet)
                 {
                     if (r.Request >= 0) { continue; }
                     double alloc = r.Request * resourceSupplyFraction;
@@ -188,7 +184,10 @@ public partial class Logistics
 
 
                 // Step Four. Calculate storage withdrawl.
-
+                if (kvp.Value is Resource.Ledger.EntryAccrul && tally < 0)
+                {
+                    tally += ((Resource.Ledger.EntryAccrul)kvp.Value).Withdraw(tally);
+                }
 
 
                 // Recaclculate resourceSupplyFractionfor trade.
@@ -203,15 +202,14 @@ public partial class Logistics
                 //  ...
                 // recalculate shortfall.
 
-                foreach (Resource.IResource r in kvp.Value.DownlineLoss)
+                foreach (TradeRoute tr in Domain.Trade.DownlineTraderoutes)
                 {
-                    double alloc = r.Request * resourceSupplyFraction;
-                    r.Respond(r.Request * resourceSupplyFraction);
+                    double alloc = tr.ListHead[kvp.Key].Request * resourceSupplyFraction;
+                    tr.ListHead[kvp.Key].Respond(tr.ListHead[kvp.Key].Request * resourceSupplyFraction);
                     tally += alloc;
-
                 }
 
-                if (kvp.Value is Resource.Ledger.EntryAccrul && kvp.Value.Net.Sum > 0)
+                if (kvp.Value is Resource.Ledger.EntryAccrul && tally > 0)
                 {
                     ((Resource.Ledger.EntryAccrul)kvp.Value).Withdraw(tally);
                 }
@@ -233,13 +231,32 @@ public partial class Logistics
         {
             foreach (Resource.IResource f in rp.FactorsGlobalOutput)
             {
-                Domain.Ledger[f.Type].LocalGain.Add(f);
+                Domain.Ledger[f.Type].LocalNet.Add(f);
             }
             foreach (Resource.IResource f in rp.FactorsGlobalInput)
             {
-                Domain.Ledger[f.Type].LocalLoss.Add(f);
+                Domain.Ledger[f.Type].LocalNet.Add(f);
             }
-
         }
     }
+
+    // public static void UpdateTradeDownline(Domain Domain)
+    // {
+    //     foreach (KeyValuePair<int, Resource.Ledger.Entry> entry in Domain.Ledger)
+    //     {
+    //         entry.Value.DownlineGain.Clear();
+    //         entry.Value.DownlineLoss.Clear();
+    //     }
+    //     foreach (TradeRoute tradeRoute in Domain.Trade.DownlineTraderoutes)
+    //     {
+    //         foreach (Resource.IResource r in tradeRoute.ListHeadLoss)
+    //         {
+    //             Domain.Ledger[r.Type].DownlineLoss.Add(r);
+    //         }
+    //         foreach (Resource.IResource r in tradeRoute.ListHeadGain)
+    //         {
+    //             Domain.Ledger[r.Type].DownlineGain.Add(r);
+    //         }
+    //     }
+    // }
 }

@@ -11,29 +11,23 @@ public partial class TradeRoute : Entity
 
     [Export]
     public Domain Tail { get; set; }
-    Resource.RDict<RStaticTail> listTailLoss;
-    Resource.RDict<RStaticTail> listTailGain;
-    Resource.RDict<RStaticHead> listHeadLoss;
-    Resource.RDict<RStaticHead> listHeadGain;
 
-    public Resource.RDict<RStaticTail> ListTailLoss { get { return listTailLoss; } }
-    public Resource.RDict<RStaticTail> ListTailGain { get { return listTailGain; } }
-    public Resource.RDict<RStaticHead> ListHeadLoss { get { return listHeadLoss; } }
-    public Resource.RDict<RStaticHead> ListHeadGain { get { return listHeadGain; } }
+    public Resource.RDict<RStaticTail> ListTail { get; protected set; }
+    public Resource.RDict<RStaticHead> ListHead { get; protected set; }
     Resource.RStatic shipDemand = new Resource.RStatic(811, 0);
     double InboundShipDemand
     {
         get
         {
             // Do null check as this is called before init for some reason
-            return (ListHeadGain == null) ? 0 : -ListHeadGain.Sum(x => x.Request);
+            return (ListHead == null) ? 0 : -ListHead.Where(x => x.Request > 0).Sum(x => x.Request);
         }
     }
     double OutboundShipDemand
     {
         get
         {
-            return (ListHeadLoss == null) ? 0 : ListHeadLoss.Sum(x => x.Request);
+            return (ListHead == null) ? 0 : ListHead.Where(x => x.Request < 0).Sum(x => x.Request); ;
         }
     }
     public Resource.IResource ShipDemand
@@ -89,12 +83,6 @@ public partial class TradeRoute : Entity
         distance = 10; // Tail.GetParent<Body>().Position.DistanceTo(Head.GetParent<Body>().Position);
         Name = $"Trade route from {Head.Name} to {Tail.Name}";
 
-        listHeadGain = new Resource.RDict<RStaticHead>();
-        listHeadLoss = new Resource.RDict<RStaticHead>();
-
-        listTailGain = new Resource.RDict<RStaticTail>();
-        listTailLoss = new Resource.RDict<RStaticTail>();
-
         shipDemand.Name = Name;
     }
     public void Init(Domain _head, Domain _tail)
@@ -114,45 +102,24 @@ public partial class TradeRoute : Entity
         Name = newName;
     }
 
+    /// <summary>
+    /// Place where trade route gets to run it's logic.
+    /// </summary>
+    public void SetRequest()
+    {
+
+        // If set to automatic
+        foreach (KeyValuePair<int, Resource.Ledger.Entry> item in Tail.Ledger)
+        {
+            SetValue(item.Key, item.Value.Upline);
+        }
+    }
     public void SetValue(int key, double value)
     {
         // so messy.
-        if (listHeadGain.ContainsKey(key))
+        if (ListHead.ContainsKey(key))
         {
-            if (value >= 0)
-            {
-                listHeadGain[key].Request = value;
-
-            }
-            // IF NEEDS TO CHANGE LIST.
-            else
-            {
-                listHeadLoss[key] = listHeadGain[key];
-                listHeadGain.Remove(listHeadGain[key]);
-
-                listTailGain[key] = listTailLoss[key];
-                listTailLoss.Remove(listTailLoss[key]);
-
-                listHeadLoss[key].Request = value;
-            }
-
-        }
-        else if (listHeadLoss.ContainsKey(key))
-        {
-            if (value >= 0)
-            {
-                listHeadGain[key] = listHeadLoss[key];
-                listHeadLoss.Remove(listHeadLoss[key]);
-
-                listTailLoss[key] = listTailGain[key];
-                listTailGain.Remove(listTailGain[key]);
-
-                listHeadGain[key].Request = value;
-            }
-            else
-            {
-                listHeadLoss[key].Request = value;
-            }
+            ListHead[key].Request = value;
         }
         else
         {
@@ -162,16 +129,8 @@ public partial class TradeRoute : Entity
             head.twin = tail;
             head.Request = value;
 
-            if (value >= 0)
-            {
-                listHeadGain.Add(head);
-                listTailLoss.Add(tail);
-            }
-            else
-            {
-                listHeadLoss.Add(head);
-                listTailGain.Add(tail);
-            }
+            ListHead.Add(head);
+            ListTail.Add(tail);
         }
     }
 

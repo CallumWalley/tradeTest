@@ -736,124 +736,78 @@ public static partial class Resource
             public Ledger ledger;
 
             // Net is combo of Resource and Request.
-            public RGroup<IResource> LocalGain; // How much is produced here.
-            public RGroup<IResource> LocalLoss;
+            public RGroup<IResource> LocalNet = new RGroup<IResource>("Local Net", "Sum Produced"); // How much is produced here.
+            // public RGroup<IResource> LocalLoss = new RGroup<IResource>("Local Consumption", "Sum Requested"); // How much is used here.
+            //public RGroup<IResource> LocalNet;
+
+            // public RGroup<IResource> Downline = new RGroup<IResource>("Imported", "Imported Downline");
+            // public RGroup<IResource> DownlineLoss = new RGroup<IResource>("Exported", "Exported Downline");
+            public double Upline;
 
             // These are only collections of 'real' elements.
-            RGroup<IResource> localNet;
-            RGroup<IResource> tradeNet;
-            RGroup<IResource> net;
+            public RGroup<IResource> TradeNet = new RGroup<IResource>("Trade", "Net Trade");
 
-            public IResource UplineLoss
-            {
-                get { return ledger.Domain.Trade.UplineTraderoute == null ? null : ledger.Domain.Trade.UplineTraderoute.ListTailLoss.ContainsKey(Type) ? ledger.Domain.Trade.UplineTraderoute.ListTailLoss[Type] : null; }
-            }
-            public IResource UplineGain
-            {
-                get { return ledger.Domain.Trade.UplineTraderoute == null ? null : ledger.Domain.Trade.UplineTraderoute.ListTailGain.ContainsKey(Type) ? ledger.Domain.Trade.UplineTraderoute.ListTailGain[Type] : null; }
-            }
-            public IEnumerable<IResource> DownlineGain
-            {
-                get
-                {
-                    foreach (TradeRoute tradeRoute in ledger.Domain.Trade.DownlineTraderoutes)
-                    {
-                        if (tradeRoute.ListHeadGain.ContainsKey(Type))
-                        {
-                            yield return tradeRoute.ListHeadGain[Type];
-                        }
-                    }
-                }
-            }
-            public IEnumerable<IResource> DownlineLoss
-            {
-                get
-                {
-                    foreach (TradeRoute tradeRoute in ledger.Domain.Trade.DownlineTraderoutes)
-                    {
-                        if (tradeRoute.ListHeadLoss.ContainsKey(Type))
-                        {
-                            yield return tradeRoute.ListHeadLoss[Type];
-                        }
-                    }
-                }
-            }
-            public RGroup<IResource> TradeNet
-            {
-                get
-                {
-                    tradeNet.Clear();
-                    foreach (IResource item in DownlineGain)
-                    {
-                        tradeNet.Add(item);
-                    }
-                    if (UplineLoss != null)
-                    {
-                        tradeNet.Add(UplineLoss);
-                    }
-                    foreach (IResource item in DownlineLoss)
-                    {
-                        tradeNet.Add(item);
-                    }
-                    if (UplineGain != null)
-                    {
-                        tradeNet.Add(UplineGain);
-                    }
-                    return tradeNet;
-                }
-            }
-            public RGroup<IResource> LocalNet
-            {
-                get
-                {
-                    localNet.Clear();
-                    foreach (IResource item in LocalLoss)
-                    {
-                        localNet.Add(item);
-                    }
-                    foreach (IResource item in LocalGain)
-                    {
-                        localNet.Add(item);
-                    }
-                    return localNet;
-                }
-            }
-            public RGroup<IResource> Net
-            {
-                get
-                {
-                    net.Clear();
-                    net.Add(LocalNet);
-                    net.Add(TradeNet);
-                    return net;
-                }
-            }
+            // public IResource UplineLoss
+            // {
+            //     get { return ledger.Domain.Trade.UplineTraderoute == null ? null : ledger.Domain.Trade.UplineTraderoute.ListTailLoss.ContainsKey(Type) ? ledger.Domain.Trade.UplineTraderoute.ListTailLoss[Type] : null; }
+            // }
+            // public IResource UplineGain
+            // {
+            //     get { return ledger.Domain.Trade.UplineTraderoute == null ? null : ledger.Domain.Trade.UplineTraderoute.ListTailGain.ContainsKey(Type) ? ledger.Domain.Trade.UplineTraderoute.ListTailGain[Type] : null; }
+            // }
+
+            /// <summary>
+            /// How much trade routes cumulativly request.
+            /// </summary>
+
+            // public RGroup<IResource> TradeNet
+            // {
+            //     get
+            //     {
+            //         tradeNet.Clear();
+            //         foreach (IResource item in DownlineGain)
+            //         {
+            //             tradeNet.Add(item);
+            //         }
+            //         if (UplineLoss != null)
+            //         {
+            //             tradeNet.Add(UplineLoss);
+            //         }
+            //         foreach (IResource item in DownlineLoss)
+            //         {
+            //             tradeNet.Add(item);
+            //         }
+            //         if (UplineGain != null)
+            //         {
+            //             tradeNet.Add(UplineGain);
+            //         }
+            //         return tradeNet;
+            //     }
+            // }
+
+            // public RGroup<IResource> Net
+            // {
+            //     get
+            //     {
+            //         net.Clear();
+            //         net.Add(LocalNet);
+            //         net.Add(TradeNet);
+            //         return net;
+            //     }
+            // }
 
 
             public int Type { get; set; }
             public Entry(int _type)
             {
-                localNet = new("Local", "All production and consumption occuring at this Domain.");
-                net = new("Total", "All resources produced or traded");
-                tradeNet = new("Trade", "All Exports and Imports to this Domain");
-
                 //Local = 
-                LocalGain = new RGroup<IResource>("Local Production", "Sum Produced");
-                LocalLoss = new RGroup<IResource>("Local Consumption", "Sum Requested");
-
                 Type = _type;
             }
 
             public void Clear()
             {
-                LocalGain.Clear();
-                LocalLoss.Clear();
-                // RequestLocal.Clear();
-                // ResourceParent.Set(0);
-                // RequestParent.Request = 0;
-                // RequestChildren.Clear();
-                // ResourceChildren.Clear();
-                // NetLocal.Clear();
+                LocalNet.Clear();
+                // LocalLoss.Clear();
             }
             /// <summary>
             /// Return flat requested and actual, for buffer.
@@ -866,7 +820,7 @@ public static partial class Resource
 
             public override string ToString()
             {
-                return $"{Resource.Name(Type)}: {LocalNet.Sum} {TradeNet.Sum} {Net.Sum}";
+                return $"{Resource.Name(Type)}: {LocalNet.Sum} {TradeNet.Sum}";
             }
         }
 

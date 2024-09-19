@@ -14,7 +14,8 @@ public partial class UIPanel : PanelContainer
 	{
 		// Impliment any updates here that need be called less frequently than 'Draw';
 		// e.g. game data updates.
-		if (Visible){
+		if (Visible)
+		{
 			OnEFrameUpdate();
 		}
 	}
@@ -23,7 +24,8 @@ public partial class UIPanel : PanelContainer
 	{
 		// Called once, before the first EFrame, but after ready
 	}
-	public virtual void OnEFrameUpdate(){
-		
+	public virtual void OnEFrameUpdate()
+	{
+
 	}
 }

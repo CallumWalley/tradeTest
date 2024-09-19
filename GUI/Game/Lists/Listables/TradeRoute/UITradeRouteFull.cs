@@ -92,8 +92,8 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
 
         toHead = GetNode<UIListResources>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/toHead");
         toTail = GetNode<UIListResources>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/toTail");
-        toHead.Init(tradeRoute.ListHeadGain);
-        toTail.Init(tradeRoute.ListTailGain);
+        toHead.Init(tradeRoute.ListHead);
+        toTail.Init(tradeRoute.ListTail);
 
         // toHead.ShowDetails = true;
         // toTail.ShowDetails = true;

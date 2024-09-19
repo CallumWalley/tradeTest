@@ -81,7 +81,11 @@ public partial class Domain : Entity, IEnumerable<FeatureBase>
     // RProducedTrade + RConsumedTrade = RDeltaTrade
     // RDeltaLocal + RDeltaTrade = RDeltaTotal
 
+    // public Resource.RDict<Resource.RGroup<Resource.IResource>> resources = new Resource.RDict<Resource.RGroup<Resource.IResource>>();
+    // public Resource.RDict<Resource.RGroup<Resource.IResource>> ResourcesLocal { get { return resources[]} set; }
     public Resource.Ledger Ledger = new();
+    public _Trade Trade = new _Trade();
+
     // // Used to carry through numbers to next step.
     // protected Dictionary<int, double> productionBuffer = new();
     // protected Dictionary<int, double> consumptionBuffer = new();
@@ -93,7 +97,6 @@ public partial class Domain : Entity, IEnumerable<FeatureBase>
     // BODY IS PARENT
     public Body Body { get { return GetParent<Body>(); } }
 
-    public _Trade Trade;
     public double shipWeight;
 
     Player player;
@@ -116,6 +119,7 @@ public partial class Domain : Entity, IEnumerable<FeatureBase>
         // Name = $"{Body.Name} station";
 
         Ledger.Domain = this;
+        Trade.Domain = this;
         // Initial storage count.
         foreach (KeyValuePair<int, double> kvp in StartingResources)
         {
@@ -123,7 +127,6 @@ public partial class Domain : Entity, IEnumerable<FeatureBase>
             var _ = Ledger[kvp.Key];
             Ledger.Storage[kvp.Key].Set(kvp.Value);
         }
-        Trade = new _Trade(this);
     }
 
 
@@ -155,18 +158,18 @@ public partial class Domain : Entity, IEnumerable<FeatureBase>
     // Class for orgasnisng
     public class _Trade
     {
-        Domain Domain;
+        public Domain Domain;
         public Resource.RGroup<Resource.IResource> shipDemand = new Resource.RGroup<Resource.IResource>("Trade vessels in use.");
         // needs custom ui element
         public Resource.RGroup<Resource.IResource> ShipDemand
         {
             get
             {
-                return Domain.Ledger[811].LocalLoss;
+                return Domain.Ledger[811].LocalNet;
             }
         }
 
-        public _Trade(Domain _Domain) { Domain = _Domain; }
+        public _Trade() { }
         public TradeRoute UplineTraderoute = null;
         public List<TradeRoute> DownlineTraderoutes = new List<TradeRoute>();
         public void RegisterUpline(TradeRoute i)

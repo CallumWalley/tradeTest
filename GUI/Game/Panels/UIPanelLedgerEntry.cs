@@ -16,14 +16,14 @@ public partial class UIPanelLedgerEntry : VBoxContainer, Lists.IListable<Resourc
 		ledgerEntry = _ledgerEntry;
 		netLocal = GetNode<UIResource>("NetLocal");
 		netRemote = GetNode<UIResource>("NetRemote");
-		net = GetNode<UIResource>("Net");
+		// net = GetNode<UIResource>("Net");
 		// UIResource importDemand = GetNode<UIResource>("ImportDemand");
 		// UIResource exportDemand = GetNode<UIResource>("ExportDemand");
 
 
 		netLocal.Init(ledgerEntry.LocalNet);
 		netRemote.Init(ledgerEntry.TradeNet);
-		net.Init(ledgerEntry.Net);
+		// net.Init(ledgerEntry.Net);
 
 		// IF accruable also make storage.
 		if (ledgerEntry.Type < 500)
@@ -37,7 +37,7 @@ public partial class UIPanelLedgerEntry : VBoxContainer, Lists.IListable<Resourc
 
 		netLocal.ShowBreakdown = true;
 		netRemote.ShowBreakdown = true;
-		net.ShowBreakdown = true;
+		// net.ShowBreakdown = true;
 
 		// importDemand.Init(ledgerEntry.ImportDemand);
 	}
@@ -64,11 +64,11 @@ public partial class UIPanelLedgerEntry : VBoxContainer, Lists.IListable<Resourc
 		{
 			isZero = false;
 		}
-		net.Update();
-		if (net.value.Text != "-")
-		{
-			isZero = false;
-		}
+		// net.Update();
+		// if (net.value.Text != "-")
+		// {
+		// 	isZero = false;
+		// }
 		if (ledgerEntry.Type < 500)
 		{
 			storage.Update();
@@ -77,14 +77,7 @@ public partial class UIPanelLedgerEntry : VBoxContainer, Lists.IListable<Resourc
 				isZero = false;
 			}
 		}
-		if (parent.HideZeroCol && isZero)
-		{
-			Visible = false;
-		}
-		else
-		{
-			Visible = true;
-		}
+		Visible = !(parent.HideZeroCol && isZero);
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Draw()

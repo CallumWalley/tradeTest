@@ -81,7 +81,7 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
 
         if (resourceStateThis > 0)
         {
-            value.Text = string.Format("{0:G}/{1:G}", displayValue, resourceRequestThis);
+            value.Text = string.Format("{0:F1}/{1:F1}", displayValue, resourceRequestThis);
 
             value.AddThemeColorOverride("font_color", colorBad);
             name.AddThemeColorOverride("font_color", colorBad);
