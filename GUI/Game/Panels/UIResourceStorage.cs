@@ -39,8 +39,8 @@ public partial class UIResourceStorage : Control
     {
 
         //value.Text = string.Format("{0:P0}", entry.Stored.Sum / entry.Capacity.Sum);
-        double displayValue = ((global.deltaEFrame / global.timePerEframe) * (resourceSumLast - resourceStoreThis)) + resourceSumLast;
-
+        //double displayValue = ((global.deltaEFrame / global.timePerEframe) * (resourceSumLast - resourceStoreThis)) + resourceSumLast;
+        double displayValue = resourceStoreThis;
         value.Text = string.Format("{0:F0}", displayValue);
         name.Text = $": Storage";
         // Storage is in deficit.
@@ -110,7 +110,7 @@ public partial class UIResourceStorage : Control
         Label text = new();
 
         icon.Texture = Resource.Icon(entry.Type);
-        text.Text = $"{entry.Stored.Sum}/{entry.Capacity.Sum}";
+        text.Text = $"{entry.Stored.Sum}/{entry.Stored.Request}";
 
         hbc1.AddChild(icon);
         hbc1.AddChild(text);

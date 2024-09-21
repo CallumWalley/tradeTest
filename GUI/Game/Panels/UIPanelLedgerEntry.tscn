@@ -5,14 +5,9 @@
 [ext_resource type="PackedScene" uid="uid://0m22s117jkqe" path="res://GUI/Game/Panels/UIResourceStorage.tscn" id="3_ksktb"]
 
 [node name="Domain" type="VBoxContainer"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = -710.0
-offset_bottom = -281.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 3
+custom_minimum_size = Vector2(80, 0)
+offset_right = 200.0
+offset_bottom = 50.0
 size_flags_vertical = 3
 script = ExtResource("1_rr1wj")
 
@@ -20,9 +15,6 @@ script = ExtResource("1_rr1wj")
 layout_mode = 2
 
 [node name="NetRemote" parent="." instance=ExtResource("1_rh2jm")]
-layout_mode = 2
-
-[node name="Net" parent="." instance=ExtResource("1_rh2jm")]
 layout_mode = 2
 
 [node name="Storage" parent="." instance=ExtResource("3_ksktb")]

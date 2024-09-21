@@ -12,8 +12,8 @@ public partial class TradeRoute : Entity
     [Export]
     public Domain Tail { get; set; }
 
-    public Resource.RDict<RStaticTail> ListTail { get; protected set; }
-    public Resource.RDict<RStaticHead> ListHead { get; protected set; }
+    public Resource.RDict<RStaticTail> ListTail { get; protected set; } = new();
+    public Resource.RDict<RStaticHead> ListHead { get; protected set; } = new();
     Resource.RStatic shipDemand = new Resource.RStatic(811, 0);
     double InboundShipDemand
     {
@@ -119,7 +119,7 @@ public partial class TradeRoute : Entity
         // so messy.
         if (ListHead.ContainsKey(key))
         {
-            ListHead[key].Request = value;
+            ListHead[key].Request = -value;
         }
         else
         {
@@ -127,10 +127,12 @@ public partial class TradeRoute : Entity
             RStaticTail tail = new RStaticTail(key, this);
             tail.twin = head;
             head.twin = tail;
-            head.Request = value;
+            head.Request = -value;
 
             ListHead.Add(head);
             ListTail.Add(tail);
+            GD.Print(Head.Ledger[2]);
+
         }
     }
 
@@ -202,11 +204,12 @@ public partial class TradeRoute : Entity
 
         public override void Respond()
         {
-            base.Respond();
+            Respond(Request);
         }
         public override void Respond(double value)
         {
-            base.Respond(value);
+            Set(value);
+            State = (value == Request) ? 0 : 1;
         }
         /// <summary>
         /// Drives state of twin.
@@ -236,7 +239,7 @@ public partial class TradeRoute : Entity
         {
             tradeRoute = _tradeRoute;
             // Touch leder if non existant.
-            tradeRoute.Head.Ledger.InitType(_type);
+            //tradeRoute.Head.Ledger.InitType(_type);
         }
 
         /// <summary>
@@ -244,15 +247,9 @@ public partial class TradeRoute : Entity
         /// </summary>
         public override double Request
         {
-            get { return base.Request; }
-            set
-            {
-                if (twin == null) { return; }// to avoid error when being set. Maybe better way.
-                twin.Request = -value;
-                base.Request = value;
-            }
+            get { return -twin.Request; }
         }
-        public override string Name { get { return string.Format("{0} {1}", (Request > 0) ? "Import from" : "Export to", tradeRoute.Tail.Name); } }
+        public override string Name { get { return string.Format("{0} {1}", (Request < 0) ? "Import from" : "Export to", tradeRoute.Tail.Name); } }
         public override string Details { get { return string.Format("{0} {1} {2}", Resource.Name(Type), (Request > 0) ? "Import from" : "Export to", tradeRoute.Head.Name); } }
 
     }

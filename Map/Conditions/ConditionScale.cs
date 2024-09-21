@@ -23,6 +23,6 @@ public partial class ConditionScale : ConditionBase
     public override void OnAdd()
     {
         base.OnAdd();
-        Feature.FactorsSingle.Add(new Resource.RStatic(901, InitialScale, 0, "Size", "Size"));
+        Feature.FactorsSingle.Add(new Resource.RStatic(901, InitialScale, InitialScale, "Size", "Size"));
     }
 }

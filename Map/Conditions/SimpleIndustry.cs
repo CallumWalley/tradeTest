@@ -69,13 +69,14 @@ public partial class SimpleIndustry : ConditionScale
     {
         base.OnAdd();
         Feature.FactorsLocal[801].Name = "Input Fulfillment";
-        Feature.FactorsLocal[801].Add(new Resource.RStatic(801, 1, 0, "Base", "Expected Fulfillment"));
+        Feature.FactorsLocal[801].Add(new Resource.RStatic(801, 1, 1, "Base", "Expected Fulfillment"));
         Feature.FactorsLocal[802].Name = "Capability";
-        Feature.FactorsLocal[802].Add(new Resource.RStatic(802, 1, 0, "Base", "Cabability"));
+        Feature.FactorsLocal[802].Add(new Resource.RStatic(802, 1, 1, "Base", "Cabability"));
         foreach (KeyValuePair<Variant, Variant> r in Factors)
         {
             switch ((int)r.Key)
             {
+                // Accruable
                 case < 800:
                     if ((double)r.Value > 0)
                     {
@@ -86,7 +87,6 @@ public partial class SimpleIndustry : ConditionScale
                     }
                     else
                     {
-
                         Resource.RGroup<Resource.RStatic> input = new(new Resource.RStatic((int)r.Key, 0, (double)r.Value, "Base", "Base input"));
                         inputFullfillments[input] = new Resource.RStatic(801, 0, 1, $"{Resource.Name((int)r.Key)} fullfillment.", $"{Resource.Name((int)r.Key)} fullfillment.");
                         Feature.FactorsLocal[801].Mux(inputFullfillments[input]);
@@ -96,6 +96,7 @@ public partial class SimpleIndustry : ConditionScale
                         Feature.FactorsGlobalInput[(int)r.Key].Mux(Feature.FactorsLocal[802]); // Cabability
                     }
                     break;
+                // Non Accuable
                 case < 900:
                     Feature.FactorsGlobalOutput[(int)r.Key].Add(new Resource.RStatic((int)r.Key, (double)r.Value, (double)r.Value, "Base", "Expected Yield"));
                     Feature.FactorsGlobalOutput[(int)r.Key].Mux(Feature.FactorsLocal[801]); // Input fulfillment
@@ -125,7 +126,8 @@ public partial class SimpleIndustry : ConditionScale
         base.OnEFrame();
         foreach (KeyValuePair<Resource.RGroup<Resource.RStatic>, Resource.RStatic> kvp in inputFullfillments)
         {
-            kvp.Value.Set((kvp.Key.Fraction() + kvp.Value.Sum) / 2);
+            double rolling = ((kvp.Key.Fraction() + kvp.Value.Sum) / 2);
+            kvp.Value.Set(double.IsNaN(rolling) ? 0 : rolling);
         }
     }
 }

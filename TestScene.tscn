@@ -1,20 +1,26 @@
-[gd_scene load_steps=11 format=3 uid="uid://bqwjnbtt5kf3p"]
+[gd_scene load_steps=13 format=3 uid="uid://bqwjnbtt5kf3p"]
 
 [ext_resource type="Script" path="res://Global.cs" id="1_1b3uo"]
 [ext_resource type="PackedScene" uid="uid://con3ea5txcdnn" path="res://Player/Player.tscn" id="1_w03ia"]
 [ext_resource type="PackedScene" uid="uid://c8uihqqtni6cg" path="res://Map/Map.tscn" id="2_b0thp"]
 [ext_resource type="PackedScene" uid="uid://r5ytkwljq7nb" path="res://GUI/Screen.tscn" id="2_ohuhm"]
+[ext_resource type="PackedScene" uid="uid://bo1hgnmlheekb" path="res://Economy/TradeRoute.tscn" id="3_7is4n"]
 [ext_resource type="PackedScene" uid="uid://bs11ngj4r7eb4" path="res://Map/Galaxy.tscn" id="3_x7akn"]
 [ext_resource type="PackedScene" uid="uid://bdustjrq7vtln" path="res://Map/Domains/PlanetarySystem.tscn" id="4_hdweb"]
 [ext_resource type="PackedScene" uid="uid://cf5ty6my7thnc" path="res://Map/Domains/SatelliteSystem.tscn" id="5_438b2"]
 [ext_resource type="Script" path="res://Map/Features/FeatureBase.cs" id="7_0xlau"]
 [ext_resource type="PackedScene" uid="uid://b81a02d1keo5i" path="res://Map/Conditions/SimpleIndustry.tscn" id="8_j7vpr"]
+[ext_resource type="PackedScene" uid="uid://e4cfn5gaacki" path="res://Map/Conditions/SlowStart.tscn" id="9_o4b21"]
 [ext_resource type="PackedScene" uid="uid://doo8jyuwb0s84" path="res://GUI/Game/Resource/UIResourcePallet.tscn" id="11_jnpvl"]
 
 [node name="Global" type="Node"]
 script = ExtResource("1_1b3uo")
 
 [node name="Player" parent="." instance=ExtResource("1_w03ia")]
+
+[node name="TradeRoute" parent="Player/PlayerTrade" index="0" node_paths=PackedStringArray("Head", "Tail") instance=ExtResource("3_7is4n")]
+Head = NodePath("../../../Map/Galaxy/Sol/Earth")
+Tail = NodePath("../../../Map/Galaxy/Sol/Moon")
 
 [node name="Map" parent="." instance=ExtResource("2_b0thp")]
 
@@ -43,7 +49,58 @@ Factors = {
 InitialScale = 1.5
 Description = "Everything working as expected"
 
+[node name="Fuel Refining" type="Node" parent="Map/Galaxy/Sol/Earth" node_paths=PackedStringArray("Template")]
+script = ExtResource("7_0xlau")
+Template = NodePath("../../../../../Player/PlayerFeatureTemplates/Fuel Refining")
+SplashScreenPath = "res://assets/splash/chemical.png"
+NeedsTags = ["planetary"]
+Description = "Facilities for converting H2O into chemical fuel."
+
+[node name="Nominal Operation" parent="Map/Galaxy/Sol/Earth/Fuel Refining" instance=ExtResource("8_j7vpr")]
+Factors = {
+2: 3.0,
+4: -2.0
+}
+InitialScale = 0.5
+Description = "Everything working as expected"
+
+[node name="Start Up" parent="Map/Galaxy/Sol/Earth/Fuel Refining" instance=ExtResource("9_o4b21")]
+Description = "This is a new facility, not yet operating at full capacity."
+
+[node name="Spaceport" type="Node" parent="Map/Galaxy/Sol/Earth" node_paths=PackedStringArray("Template")]
+script = ExtResource("7_0xlau")
+Template = NodePath("../../../../../Player/PlayerFeatureTemplates/Spaceport")
+SplashScreenPath = "res://assets/splash/shuttle.png"
+NeedsTags = ["planetary"]
+
+[node name="Nominal Operation" parent="Map/Galaxy/Sol/Earth/Spaceport" instance=ExtResource("8_j7vpr")]
+Factors = {
+2: -3.0,
+811: 2.0
+}
+Description = "Everything working as expected"
+
+[node name="Start Up" parent="Map/Galaxy/Sol/Earth/Spaceport" instance=ExtResource("9_o4b21")]
+Description = "This is a new facility, not yet operating at full capacity."
+
 [node name="Moon" parent="Map/Galaxy/Sol" instance=ExtResource("5_438b2")]
+
+[node name="Surface Mining" type="Node" parent="Map/Galaxy/Sol/Moon" node_paths=PackedStringArray("Template")]
+script = ExtResource("7_0xlau")
+Template = NodePath("../../../../../Player/PlayerFeatureTemplates/Surface Mining")
+SplashScreenPath = "res://assets/splash/surface_mine.png"
+NeedsTags = ["planetary"]
+Description = "Usefull minerals found near the surface where the overburden is thin, is extracted via the digging of a large hole."
+
+[node name="Nominal Operation" parent="Map/Galaxy/Sol/Moon/Surface Mining" instance=ExtResource("8_j7vpr")]
+Factors = {
+1: 3.0,
+2: -2.0
+}
+Description = "Everything working as expected"
+
+[node name="Start Up" parent="Map/Galaxy/Sol/Moon/Surface Mining" instance=ExtResource("9_o4b21")]
+Description = "This is a new facility, not yet operating at full capacity."
 
 [node name="Screen" parent="." instance=ExtResource("2_ohuhm")]
 

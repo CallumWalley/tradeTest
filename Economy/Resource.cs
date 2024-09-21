@@ -96,6 +96,10 @@ public static partial class Resource
         }
         public virtual void Set(double newValue)
         {
+            if (double.IsNaN(newValue))
+            {
+                throw new ArgumentException("Attempt to set NAN!!!");
+            }
             Sum = Math.Round(newValue, 2);
         }
 
@@ -137,31 +141,34 @@ public static partial class Resource
     /// </summary>
     public partial class RGroup<T> : IResourceGroup<IResource> where T : IResource
     {
-
+        int type;
         public RGroup()
         {
             _adders = new();
             _muxxers = new();
         }
 
-        public RGroup(string _name = "Sum", string _details = "Sum") : this()
+        public RGroup(int _type = 0, string _name = "Sum", string _details = "Sum") : this()
         {
+            type = _type;
             Name = _name;
             Details = _details;
         }
 
-        public RGroup(IEnumerable<T> _add, string _name = "Sum", string _details = "Sum") : this(_name, _details)
+        public RGroup(IEnumerable<T> _add, string _name = "Sum", string _details = "Sum") : this(0, _name, _details)
         {
             _adders = (List<T>)_add;
         }
-        public RGroup(T _add, string _name = "Sum", string _details = "Sum") : this(_name, _details)
+        public RGroup(T _add, string _name = "Sum", string _details = "Sum") : this(0, _name, _details)
         {
             _adders = new();
             _adders.Add(_add);
         }
         public int Type
         {
-            get { return (_adders.Count > 0) ? _adders.First<T>().Type : 0; }
+            // infer type if not set.
+            get { if (type < 1 && Count > 0) { type = _adders.First().Type; } return type; }
+            set { type = value; }
         }
         public string Details { get; set; } = "Sum";
         public string Name { get; set; } = "Sum";
@@ -207,6 +214,16 @@ public static partial class Resource
             foreach (T muxxer in _muxxers) { agg *= muxxer.Sum; }
             return agg;
         }
+        // double _AdderSubtotalRequest()
+        // {
+        //     return (_adders.Count > 0) ? _adders.Sum(x => x.Request) : 0;
+        // }
+        // double _MuxxerSubtotalRequest()
+        // {
+        //     double agg = 1;
+        //     foreach (T muxxer in _muxxers) { agg *= muxxer.Request; }
+        //     return agg;
+        // }
         public void Add(T ra)
         {
             _adders.Add(ra);
@@ -245,15 +262,7 @@ public static partial class Resource
         // Request is a second
         public double Request
         {
-            get
-            {
-                double requestCum = 0;
-                foreach (IResource i in _adders)
-                {
-                    requestCum += i.Request;
-                }
-                return requestCum;
-            }
+            get { return (_adders.Count > 0) ? _adders.Sum(x => x.Request) : 0 * _MuxxerSubtotal(); }
             set
             {
                 { throw new InvalidOperationException("Set method is not valid for groups"); }
@@ -715,18 +724,18 @@ public static partial class Resource
         public Domain Domain;
         /// Dummy method to make sure resource exists.
 
-        public Dictionary<int, RStatic> Storage
-        {
-            get
-            {
-                Dictionary<int, RStatic> d = new Dictionary<int, RStatic>();
-                foreach (KeyValuePair<int, Entry> kvp in this.Where(x => x.Key < 500))
-                {
-                    d[kvp.Key] = ((EntryAccrul)kvp.Value).Stored;
-                }
-                return d;
-            }
-        }
+        // public Dictionary<int, RStatic> Storage
+        // {
+        //     get
+        //     {
+        //         Dictionary<int, RStatic> d = new Dictionary<int, RStatic>();
+        //         foreach (KeyValuePair<int, Entry> kvp in this.Where(x => x.Key < 500))
+        //         {
+        //             d[kvp.Key] = ((EntryAccrul)kvp.Value).Stored;
+        //         }
+        //         return d;
+        //     }
+        // }
 
         public class Entry
         {
@@ -736,16 +745,17 @@ public static partial class Resource
             public Ledger ledger;
 
             // Net is combo of Resource and Request.
-            public RGroup<IResource> LocalNet = new RGroup<IResource>("Local Net", "Sum Produced"); // How much is produced here.
-            // public RGroup<IResource> LocalLoss = new RGroup<IResource>("Local Consumption", "Sum Requested"); // How much is used here.
-            //public RGroup<IResource> LocalNet;
+            public RGroup<IResource> LocalLoss;
+            public RGroup<IResource> LocalGain;
+            public RGroup<IResource> LocalNet { get; protected set; }
+
 
             // public RGroup<IResource> Downline = new RGroup<IResource>("Imported", "Imported Downline");
             // public RGroup<IResource> DownlineLoss = new RGroup<IResource>("Exported", "Exported Downline");
             public double Upline;
 
             // These are only collections of 'real' elements.
-            public RGroup<IResource> TradeNet = new RGroup<IResource>("Trade", "Net Trade");
+            public RGroup<IResource> TradeNet;
 
             // public IResource UplineLoss
             // {
@@ -802,11 +812,19 @@ public static partial class Resource
             {
                 //Local = 
                 Type = _type;
+                LocalGain = new RGroup<IResource>(Type, "Local gain", "Sum Produced");
+                LocalLoss = new RGroup<IResource>(Type, "Local loss", "Sum Produced");
+                LocalNet = new RGroup<IResource>(Type, "Local Net", "Sum Produced");
+
+                TradeNet = new RGroup<IResource>(Type, "Trade", "Net Trade");
             }
 
             public void Clear()
             {
+                LocalLoss.Clear();
+                LocalGain.Clear();
                 LocalNet.Clear();
+                TradeNet.Clear();
                 // LocalLoss.Clear();
             }
             /// <summary>
@@ -820,21 +838,20 @@ public static partial class Resource
 
             public override string ToString()
             {
-                return $"{Resource.Name(Type)}: {LocalNet.Sum} {TradeNet.Sum}";
+                return $"{Resource.Name(Type)}: {LocalGain}-{LocalLoss} {TradeNet}";
             }
         }
 
         public class EntryAccrul : Entry
         {
-            public Resource.RStatic Stored;
-            public Resource.RStatic Capacity;
-            public Resource.RStatic Delta;
+            // Reusing 'request' as capacity.
+            public Resource.RStatic _Stored;
+            public Resource.RStatic Stored { get { return _Stored; } protected set { _Stored = value; } }
+            public double Delta;
 
             public EntryAccrul(int _type) : base(_type)
             {
-                Stored = new Resource.RStatic(_type, 0, 0, "Stored", string.Format("{0} stored here.", Name(_type)));
-                Capacity = new Resource.RStatic(_type, 1000, 1000, "Capacity", string.Format("{0} capacity.", Name(_type)));
-                Delta = new Resource.RStatic(_type, 1000, 1000, "Change", string.Format("{0} change.", Name(_type)));
+                _Stored = new Resource.RStatic(_type, 0, 1000, "Stored", string.Format("{0} stored here.", Name(_type)));
             }
 
             // Attempt to withdraw amount, return actual.
@@ -842,10 +859,14 @@ public static partial class Resource
             {
                 // Max withdrawl is stored, 
                 // Max deposit is available storage.
-                Delta.Set(Mathf.Min((Mathf.Max(amount, -Stored.Sum)), Capacity - Stored));
-                Stored.Add(Delta.Sum);
+                Delta = (Mathf.Min((Mathf.Max(amount, -_Stored.Sum)), _Stored.Request - _Stored.Sum));
+                _Stored.Add(Delta);
 
-                return -Delta.Sum;
+                return -Delta;
+            }
+            public override string ToString()
+            {
+                return $"{Resource.Name(Type)}: {LocalGain}-{LocalLoss} {TradeNet} ({_Stored})";
             }
         }
 
@@ -894,7 +915,7 @@ public static partial class Resource
         }
 
         // create new resource type in ledger.
-        public Entry InitType(int type)
+        protected Entry InitType(int type)
         {
             Entry nre;
             // If type less than 500, it is accrul.

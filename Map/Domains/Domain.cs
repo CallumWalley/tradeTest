@@ -124,8 +124,8 @@ public partial class Domain : Entity, IEnumerable<FeatureBase>
         foreach (KeyValuePair<int, double> kvp in StartingResources)
         {
             // Dummy call to make sure resource exists.
-            var _ = Ledger[kvp.Key];
-            Ledger.Storage[kvp.Key].Set(kvp.Value);
+            // var _ = Ledger[kvp.Key];
+            ((Resource.Ledger.EntryAccrul)Ledger[kvp.Key]).Stored.Set(kvp.Value + ((Resource.Ledger.EntryAccrul)Ledger[kvp.Key]).Stored.Sum);
         }
     }
 
@@ -159,7 +159,7 @@ public partial class Domain : Entity, IEnumerable<FeatureBase>
     public class _Trade
     {
         public Domain Domain;
-        public Resource.RGroup<Resource.IResource> shipDemand = new Resource.RGroup<Resource.IResource>("Trade vessels in use.");
+        public Resource.RGroup<Resource.IResource> shipDemand = new Resource.RGroup<Resource.IResource>(802, "Trade vessels in use.");
         // needs custom ui element
         public Resource.RGroup<Resource.IResource> ShipDemand
         {
