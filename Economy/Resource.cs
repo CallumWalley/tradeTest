@@ -16,6 +16,8 @@ public static partial class Resource
         string Name { get; }
         double Sum { get; }
 
+        // FixedSizedQueue<double> History { get; set; }
+
         /// <summary> How much is being requested DOES NOT REPRESENT ACTUAL RESOURCE </summary>
         public double Request { get; set; }
         // No inputs if request fulfilled.
@@ -56,16 +58,45 @@ public static partial class Resource
     /// <summary>
     ///  A static resource is the most simple resource. It will be a number and stay that way until changed.
     /// </summary>
+
     public partial class RStatic : IResource
     {
-        public virtual double Sum { get; protected set; }
+        // int lastEframe = -1;
+        protected double sum;
+        public virtual double Sum
+        {
+            get
+            {
+                return sum;
+                // if (lastEframe != Global.Instance.eframeCount)
+                // {
+                //     lastEframe = Global.Instance.eframeCount;
+                //     History.Enqueue(sum);
+                //     return sum;
+                // }
+                // else
+                // {
+                //     return History.Peek();
+                // }
+            }
+            set
+            {
+                if (double.IsNaN(value))
+                {
+                    throw new ArgumentException("Attempt to set NAN!!!");
+                }
+                sum = value;
+            }
+        }
         public int Type { get; }
         public virtual string Details { get; set; } = "Base value";
         public virtual string Name { get; set; } = "Unknown";
         public virtual double Request { get; set; }
         public bool IsHidden { get; set; } = false;
         public string ValueFormat { get; set; } = "{0:F1}";
+        public FixedSizedQueue<double> History { get; set; } = new();
 
+        protected static Global global { get; set; }
 
         // Request is actual amount given
         public virtual int State { get; set; } = 0;
@@ -88,20 +119,16 @@ public static partial class Resource
             Type = _type;
             Request = _request;
         }
-        public RStatic() { }
+        public RStatic()
+        {
+            global = Global.Instance;
+        }
 
         public static double operator -(RStatic a, RStatic b)
         {
             return a.Sum - b.Sum;
         }
-        public virtual void Set(double newValue)
-        {
-            if (double.IsNaN(newValue))
-            {
-                throw new ArgumentException("Attempt to set NAN!!!");
-            }
-            Sum = Math.Round(newValue, 2);
-        }
+
 
         public virtual void Add(double adder)
         {
@@ -116,7 +143,7 @@ public static partial class Resource
         // No fulfilled value returned if not fulfilled.
         public virtual void Respond(double value)
         {
-            Set(value);
+            Sum = value;
             State = (value == Request) ? 0 : 1;
         }
         public virtual double Fraction()
@@ -142,6 +169,8 @@ public static partial class Resource
     public partial class RGroup<T> : IResourceGroup<IResource> where T : IResource
     {
         int type;
+
+        protected int lastEframe = -1;
         public RGroup()
         {
             _adders = new();
@@ -167,7 +196,11 @@ public static partial class Resource
         public int Type
         {
             // infer type if not set.
-            get { if (type < 1 && Count > 0) { type = _adders.First().Type; } return type; }
+            get
+            {
+                if (type < 1) { if (_adders.Count > 0) { type = _adders.First().Type; } else if (_muxxers.Count > 0) { type = _muxxers.First().Type; } }
+                return type;
+            }
             set { type = value; }
         }
         public string Details { get; set; } = "Sum";
@@ -175,6 +208,8 @@ public static partial class Resource
 
         public bool IsHidden { get; set; } = false;
         public string ValueFormat { get; set; } = "{0:G2}";
+
+        public FixedSizedQueue<double> History = new();
         protected List<T> _adders { get; set; }
         protected List<T> _muxxers { get; set; }
 
@@ -201,12 +236,26 @@ public static partial class Resource
         }
         public double Sum
         {
-            get { return _AdderSubtotal() * _MuxxerSubtotal(); }
+            get
+            {
+                // if (lastEframe != Global.Instance.eframeCount)
+                // {
+                //     lastEframe = Global.Instance.eframeCount;
+                //     History.Enqueue(_AdderSubtotal() * _MuxxerSubtotal());
+                //     return History.Last(); ;
+                // }
+                // else
+                // {
+                //     return History.Last();
+                // }
+                return _AdderSubtotal() * _MuxxerSubtotal();
+            }
+            set { throw new InvalidOperationException("Set method is not valid for groups"); }
         }
 
         double _AdderSubtotal()
         {
-            return (_adders.Count > 0) ? _adders.Sum(x => x.Sum) : 0;
+            return (_adders.Count > 0) ? _adders.Sum(x => x.Sum) : 1;
         }
         double _MuxxerSubtotal()
         {
@@ -961,6 +1010,20 @@ public static partial class Resource
         public bool ContainsKey(int key)
         {
             return _all.ContainsKey(key);
+        }
+    }
+    public class FixedSizedQueue<T> : Queue<T>
+    {
+
+        public new void Enqueue(T obj)
+        {
+            base.Enqueue(obj);
+
+            while (Count > 10)
+            {
+                T outObj;
+                base.TryDequeue(out outObj);
+            }
         }
     }
 }

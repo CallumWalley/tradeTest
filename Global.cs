@@ -1,7 +1,6 @@
 using Godot;
 using System;
 using System.IO;
-
 public partial class Global : Node
 {
 	[Signal]
@@ -49,8 +48,24 @@ public partial class Global : Node
 		Eframe();
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	private static Global instance = null;
 
+	private Global()
+	{
+	}
+
+	public static Global Instance
+	{
+		get
+		{
+			if (instance == null)
+			{
+				instance = new Global();
+			}
+			return instance;
+		}
+	}
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
 		if (!paused)

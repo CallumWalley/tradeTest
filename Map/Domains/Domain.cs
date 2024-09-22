@@ -44,6 +44,11 @@ public partial class Domain : Entity, IEnumerable<FeatureBase>
     // public List<Resource.IResourceTransformers> Transformers { get; } = new();
 
     private int _order = 0;
+
+    /// <summary>
+    /// 0 : no connections.
+    /// 1 : head of network.
+    /// </summary>
     public int Order
     {
         get { return _order; }
@@ -52,12 +57,16 @@ public partial class Domain : Entity, IEnumerable<FeatureBase>
             _order = value;
             if (value == 0)
             {
-                this.Network = "No market";
+                this.Network = null;
                 return;
             }
             else if (value == 1)
             {
-                NameNetwork();
+                Network = this;
+                if (NetworkName == null)
+                {
+                    NetworkName = $"{Name} Trade Network";
+                }
             }
 
             // If this has downline trade routes, they need to be updated.
@@ -70,7 +79,9 @@ public partial class Domain : Entity, IEnumerable<FeatureBase>
         }
     }
 
-    public string Network { get; set; }
+    public Domain Network { get; set; }
+    public string NetworkName { get; set; }
+
 
     public List<string> Tags { get; set; } = new List<string> { };
     // These are SECONDRY characteristics. Recomputed at every EFrame.
@@ -102,10 +113,19 @@ public partial class Domain : Entity, IEnumerable<FeatureBase>
     Player player;
     Global global;
 
+    public override void _EnterTree()
+    {
+        base._EnterTree();
+
+        Ledger.Domain = this;
+        Trade.Domain = this;
+    }
+
     // Convenience function. Makes children at start of scene into members.
     public override void _Ready()
     {
         base._Ready();
+
 
         global = GetNode<Global>("/root/Global");
         global.Connect("Setup", new Callable(this, "Setup"));
@@ -117,15 +137,12 @@ public partial class Domain : Entity, IEnumerable<FeatureBase>
         ValidTradeReceiver = _validTradeReceiver;
 
         // Name = $"{Body.Name} station";
-
-        Ledger.Domain = this;
-        Trade.Domain = this;
         // Initial storage count.
         foreach (KeyValuePair<int, double> kvp in StartingResources)
         {
             // Dummy call to make sure resource exists.
             // var _ = Ledger[kvp.Key];
-            ((Resource.Ledger.EntryAccrul)Ledger[kvp.Key]).Stored.Set(kvp.Value + ((Resource.Ledger.EntryAccrul)Ledger[kvp.Key]).Stored.Sum);
+            ((Resource.Ledger.EntryAccrul)Ledger[kvp.Key]).Stored.Sum = (kvp.Value + ((Resource.Ledger.EntryAccrul)Ledger[kvp.Key]).Stored.Sum);
         }
     }
 
@@ -190,12 +207,7 @@ public partial class Domain : Entity, IEnumerable<FeatureBase>
         {
             // If made head of trade network, set order to 1;
             DownlineTraderoutes.Add(i);
-            Domain.Order = 1;
-            if (Domain.Order < 2)
-            {
-
-                GD.Print(string.Format("{0} is the head of the new '{1}' network.", Domain.Name, Domain.Network));
-            }
+            if (Domain.Order == 0) { Domain.Order = 1; GD.Print(string.Format("{0} is the head of the new '{1}' network.", Domain.Name, Domain.Network)); }
 
             GD.Print("Downline registered");
         }
@@ -208,15 +220,10 @@ public partial class Domain : Entity, IEnumerable<FeatureBase>
             {
                 GD.Print(string.Format("{0} is not longer part of a network, so order is set to '0'", Domain.Name));
                 Domain.Order = 0;
+                Domain.Network = null;
             }
         }
     }
-    private void NameNetwork()
-    //Gnerates name for this trade network.
-    {
-        this.Network = Name + " Market";
-    }
-
     public override string ToString() { return Name; }
 
     public void AddFeature(FeatureBase feature)

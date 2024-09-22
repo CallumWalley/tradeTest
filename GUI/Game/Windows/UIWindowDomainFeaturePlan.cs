@@ -64,7 +64,7 @@ public partial class UIWindowDomainFeaturePlan : UIWindow
 		// If has scale
 		if (newFeature.FactorsSingle.ContainsKey(901))
 		{
-			newFeature.FactorsSingle[901].Set(scaleSpinbox.Value);
+			newFeature.FactorsSingle[901].Sum = (scaleSpinbox.Value);
 		}
 
 		//templateList.OnItemListItemSelected(newFeature.GetIndex());

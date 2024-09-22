@@ -32,13 +32,14 @@ public partial class PlayerTrade : Node
 	{
 		foreach (TradeRoute t in GetChildren())
 		{
-			t.Init();
+			// t.Init();
 		}
 	}
 	public void RegisterTradeRoute(Domain head, Domain tail)
 	{
 		TradeRoute newTradeRoute = ps_TradeRoute.Instantiate<TradeRoute>();
-		newTradeRoute.Init(head, tail);
+		newTradeRoute.Head = head;
+		newTradeRoute.Tail = tail;
 		AddChild(newTradeRoute);
 		GD.Print("Registered trade route.");
 	}

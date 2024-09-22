@@ -11,8 +11,11 @@ public partial class SimpleIndustry : ConditionScale
 
     [Export]
     public Godot.Collections.Dictionary Factors;
-    //public Resource.RDict<Resource.RStatic> factors = new Resource.RDict<Resource.RStatic>();
 
+    [Export]
+    public double StartingCapability = 0.1;
+    //public Resource.RDict<Resource.RStatic> factors = new Resource.RDict<Resource.RStatic>();
+    Resource.RStatic capabilityMain;
     Dictionary<Resource.RGroup<Resource.RStatic>, Resource.RStatic> inputFullfillments = new();
     protected JsonSerializer serializer = new();
 
@@ -69,15 +72,20 @@ public partial class SimpleIndustry : ConditionScale
     {
         base.OnAdd();
         Feature.FactorsLocal[801].Name = "Input Fulfillment";
-        Feature.FactorsLocal[801].Add(new Resource.RStatic(801, 1, 1, "Base", "Expected Fulfillment"));
+        Feature.FactorsLocal[801].Add(new Resource.RStatic(801, 1, 0, "Base", "Expected Fulfillment"));
         Feature.FactorsLocal[802].Name = "Capability";
-        Feature.FactorsLocal[802].Add(new Resource.RStatic(802, 1, 1, "Base", "Cabability"));
+        //Feature.FactorsLocal[802].Add(new Resource.RStatic(802, 1, 1, "Cabability", "Cabability"));
+        capabilityMain = new Resource.RStatic(802, StartingCapability, 0, "Consistancy", "Slow Start Size");
+        Feature.FactorsLocal[802].Mux(capabilityMain);
+
+
         foreach (KeyValuePair<Variant, Variant> r in Factors)
         {
             switch ((int)r.Key)
             {
                 // Accruable
                 case < 800:
+                    // If output
                     if ((double)r.Value > 0)
                     {
                         Feature.FactorsGlobalOutput[(int)r.Key].Add(new Resource.RStatic((int)r.Key, (double)r.Value, (double)r.Value, "Base", "Expected Yield"));
@@ -85,6 +93,7 @@ public partial class SimpleIndustry : ConditionScale
                         Feature.FactorsGlobalOutput[(int)r.Key].Mux(Feature.FactorsSingle[901]); // Scale
                         Feature.FactorsGlobalOutput[(int)r.Key].Mux(Feature.FactorsLocal[802]); // Efficacy
                     }
+                    // If input
                     else
                     {
                         Resource.RGroup<Resource.RStatic> input = new(new Resource.RStatic((int)r.Key, 0, (double)r.Value, "Base", "Base input"));
@@ -126,8 +135,10 @@ public partial class SimpleIndustry : ConditionScale
         base.OnEFrame();
         foreach (KeyValuePair<Resource.RGroup<Resource.RStatic>, Resource.RStatic> kvp in inputFullfillments)
         {
-            double rolling = ((kvp.Key.Fraction() + kvp.Value.Sum) / 2);
-            kvp.Value.Set(double.IsNaN(rolling) ? 0 : rolling);
+            //double rolling = ((kvp.Key.Fraction() + kvp.Value.Sum) / 2);
+            kvp.Value.Sum = kvp.Key.Fraction();
         }
+        double dif =
+        capabilityMain.Sum += ((Feature.FactorsLocal[801].Sum - capabilityMain.Sum + ((GD.Randf() - 0.6) / (Feature.FactorsSingle[901].Sum * 5))) / 10);
     }
 }

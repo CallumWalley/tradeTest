@@ -10,6 +10,8 @@ public partial class UIPanelPoolTrade : UIPanel
 	{
 		uIDropDownSetHead = GetNode<UIDropDownSetHead>("VBoxContainer/DropDown");
 		uIDropDownSetHead.Init(resourcePool);
+		GetNode<UINetworkInfo>("VBoxContainer/NetworkInfo").domain = resourcePool;
+
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

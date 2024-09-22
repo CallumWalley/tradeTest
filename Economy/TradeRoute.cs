@@ -11,7 +11,6 @@ public partial class TradeRoute : Entity
 
     [Export]
     public Domain Tail { get; set; }
-
     public Resource.RDict<RStaticTail> ListTail { get; protected set; } = new();
     public Resource.RDict<RStaticHead> ListHead { get; protected set; } = new();
     Resource.RStatic shipDemand = new Resource.RStatic(811, 0);
@@ -47,7 +46,7 @@ public partial class TradeRoute : Entity
             return Head.Order;
         }
     }
-    public string Network
+    public Domain Network
     {
         get
         {
@@ -65,16 +64,7 @@ public partial class TradeRoute : Entity
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        // UpdateFreighterWeight();
-        DrawLine();
-        // GetNode<Global>("/root/Global").Connect("EFrameEarly", callable: new Callable(this, "EFrameEarly"));
-    }
-
-    // TODO: Move parts that are shared with PlayerTrade.ValidTradeHead there.
-    public void Init()
-    {
         GetNode<Line2D>("Line2D").Width = 1;
-
 
         // Downline must be resistered first else upline doesn't know it is a trade netwrowk
         Head.Trade.RegisterDownline(this);
@@ -84,12 +74,25 @@ public partial class TradeRoute : Entity
         Name = $"Trade route from {Head.Name} to {Tail.Name}";
 
         shipDemand.Name = Name;
+        DrawLine();
     }
-    public void Init(Domain _head, Domain _tail)
+
+
+    public new string Description
     {
-        (Head, Tail) = (_head, _tail);
-        Init();
+        get { return $"Trade route from {Head.Name} to {Tail.Name}"; }
     }
+
+    // TODO: Move parts that are shared with PlayerTrade.ValidTradeHead there.
+    // public void Init()
+    // {
+
+    // }
+    // public void Init(Domain _head, Domain _tail)
+    // {
+    //     (Head, Tail) = (_head, _tail);
+    //     Init();
+    // }
     public void DrawLine()
     {
         if (Tail != null && Head != null)
@@ -107,7 +110,6 @@ public partial class TradeRoute : Entity
     /// </summary>
     public void SetRequest()
     {
-
         // If set to automatic
         foreach (KeyValuePair<int, Resource.Ledger.Entry> item in Tail.Ledger)
         {
@@ -131,10 +133,10 @@ public partial class TradeRoute : Entity
 
             ListHead.Add(head);
             ListTail.Add(tail);
-            GD.Print(Head.Ledger[2]);
-
         }
     }
+
+
 
     // public void SetHeadExport(int key, double value)
     // {
@@ -184,8 +186,11 @@ public partial class TradeRoute : Entity
         public TradeRoute tradeRoute;
         public RStaticTail twin;
 
-        public RStaticHead() { }
-        public RStaticHead(int _type = 0, TradeRoute _tradeRoute = null) : base(_type, 0)
+        public RStaticHead() : base()
+        {
+            throw new InvalidOperationException("Default constructor not valid for this type.");
+        }
+        public RStaticHead(int _type = 0, TradeRoute _tradeRoute = null) : base(_type)
         {
             tradeRoute = _tradeRoute;
         }
@@ -198,7 +203,17 @@ public partial class TradeRoute : Entity
             set
             {
                 base.State = value;
-                twin.State = value;
+                if (twin != null) { twin.State = value; }
+
+            }
+        }
+        public override double Sum
+        {
+            get { return base.Sum; }
+            set
+            {
+                base.Sum = value;
+                if (twin != null) { twin.Sum = value; }
             }
         }
 
@@ -208,19 +223,14 @@ public partial class TradeRoute : Entity
         }
         public override void Respond(double value)
         {
-            Set(value);
+            Sum = value;
             State = (value == Request) ? 0 : 1;
         }
         /// <summary>
         /// Drives state of twin.
         /// </summary>
         /// <param name="value"></param>
-        public override void Set(double value)
-        {
-            base.Set(Math.Round(value, 2));
 
-            twin.Set(Math.Round(-value, 2));
-        }
         public override string Name { get { return string.Format("{0} {1}", (Request > 0) ? "Import from" : "Export to", tradeRoute.Tail.Name); } }
         public override string Details { get { return string.Format("{0} {1} {2}", Resource.Name(Type), (Request > 0) ? "Import from" : "Export to", tradeRoute.Tail.Name); } }
 
@@ -233,13 +243,14 @@ public partial class TradeRoute : Entity
         TradeRoute tradeRoute;
         public RStaticHead twin;
 
-        public RStaticTail() : base() { }
+        public RStaticTail() : base()
+        {
+            throw new InvalidOperationException("Default constructor not valid for this type.");
+        }
 
         public RStaticTail(int _type = 0, TradeRoute _tradeRoute = null) : base(_type, 0)
         {
             tradeRoute = _tradeRoute;
-            // Touch leder if non existant.
-            //tradeRoute.Head.Ledger.InitType(_type);
         }
 
         /// <summary>
@@ -249,7 +260,7 @@ public partial class TradeRoute : Entity
         {
             get { return -twin.Request; }
         }
-        public override string Name { get { return string.Format("{0} {1}", (Request < 0) ? "Import from" : "Export to", tradeRoute.Tail.Name); } }
+        public override string Name { get { return string.Format("{0} {1}", (Request < 0) ? "Import from" : "Export to", tradeRoute.Head.Name); } }
         public override string Details { get { return string.Format("{0} {1} {2}", Resource.Name(Type), (Request > 0) ? "Import from" : "Export to", tradeRoute.Head.Name); } }
 
     }

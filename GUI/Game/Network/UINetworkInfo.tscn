@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://dal1khopu4euf"]
+
+[ext_resource type="Script" path="res://GUI/Game/Network/UINetworkInfo.cs" id="1_goivx"]
+
+[node name="Network" type="HBoxContainer"]
+script = ExtResource("1_goivx")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer"]
+layout_mode = 2
+text = "No Market Available"
