@@ -5,6 +5,7 @@
 [ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="3_gxwfa"]
 
 [node name="UIResource" type="HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
 offset_right = 30.0
 offset_bottom = 18.0
 size_flags_horizontal = 5

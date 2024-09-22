@@ -26,7 +26,7 @@ public partial class UITabContainerDomain : TabContainer
         panelFeatures.resourcePool = rp;
         panelGeneral.resourcePool = rp;
         panelSupply.resourcePool = rp;
-        panelTrade.resourcePool = rp;
+        panelTrade.domain = rp;
 
         // Position = (Vector2I)rp.Position;
     }

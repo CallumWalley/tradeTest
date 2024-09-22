@@ -11,17 +11,17 @@ public partial class UIDropDownSetHead : UIDropDown
 	static readonly PackedScene prefab_UIValidTradeRoute = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/TradeRoute/UIValidTradeRoute.tscn");
 	static readonly PackedScene prefab_UITradeRouteFull = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/TradeRoute/UITradeRouteFull.tscn");
 	IEnumerable<PlayerTrade.ValidTradeHead> validTradeHeads;
-
+	UITradeRouteFull uitrf;
 	public void Init(Domain _Domain)
 	{
 		Domain = _Domain;
+		SetButtonContent();
 	}
 	public override void _Ready()
 	{
 		base._Ready();
 		player = GetNode<Player>("/root/Global/Player");
 
-		SetButtonContent();
 	}
 	public override void _AboutToPopup()
 	{
@@ -88,14 +88,19 @@ public partial class UIDropDownSetHead : UIDropDown
 		{
 			child.QueueFree();
 		}
-		if (Domain != null && Domain.Trade.UplineTraderoute != null)
+		if (Domain.Trade.UplineTraderoute != null)
 		{
-			UITradeRouteFull uitrf = prefab_UITradeRouteFull.Instantiate<UITradeRouteFull>();
+			uitrf = prefab_UITradeRouteFull.Instantiate<UITradeRouteFull>();
 			uitrf.Init(Domain.Trade.UplineTraderoute);
 			buttonContent.AddChild(uitrf);
 			// TODO make less messy.
 			uitrf.cancelButton.Connect("pressed", callable: new Callable(this, "SetButtonContent"));
 		}
 		QueueRedraw();
+	}
+
+	public void Update()
+	{
+		if (uitrf != null) { uitrf.Update(); }
 	}
 }

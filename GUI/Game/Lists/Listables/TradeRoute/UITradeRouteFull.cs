@@ -27,11 +27,8 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
 
     public void Init(TradeRoute _tradeRoute)
     {
-        tradeRoute = _tradeRoute;
 
-        friegherRequirement = GetNode<UIResource>("VBoxContainer/HBoxContainer/HSplitContainer/UIResource");
-        friegherRequirement.Init(tradeRoute.ShipDemand);
-        friegherRequirement.ShowBreakdown = true;
+        tradeRoute = _tradeRoute;
         //callback = _callback;
 
 
@@ -80,21 +77,23 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
 
         player = GetNode<Player>("/root/Global/Player");
 
-
         labelName = GetNode<LineEdit>("VBoxContainer/Panel/LineEdit");
-        labelName.Text = tradeRoute.Name;
 
         DomainHead = GetNode<UIDomainTiny>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Head/DomainSummary");
         DomainTail = GetNode<UIDomainTiny>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Tail/DomainSummary");
+        friegherRequirement = GetNode<UIResource>("VBoxContainer/HBoxContainer/HSplitContainer/UIResource");
+        toHead = GetNode<UIListResources>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/toHead");
+        toTail = GetNode<UIListResources>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/toTail");
+
+
         DomainHead.Init(tradeRoute.Head);
         DomainTail.Init(tradeRoute.Tail);
 
-
-        toHead = GetNode<UIListResources>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/toHead");
-        toTail = GetNode<UIListResources>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/toTail");
         toHead.Init(tradeRoute.ListHead);
         toTail.Init(tradeRoute.ListTail);
 
+        friegherRequirement.Init(tradeRoute.ShipDemand);
+        friegherRequirement.ShowBreakdown = true;
         // toHead.ShowDetails = true;
         // toTail.ShowDetails = true;
 

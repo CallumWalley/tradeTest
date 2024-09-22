@@ -19,4 +19,5 @@ layout_mode = 2
 
 [node name="Storage" parent="." instance=ExtResource("3_ksktb")]
 visible = false
+custom_minimum_size = Vector2(0, 0)
 layout_mode = 2

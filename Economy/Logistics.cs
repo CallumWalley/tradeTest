@@ -53,9 +53,21 @@ public partial class Logistics
             //  
             // 
             // Add 
+            Domain.Ledger.Clear();
 
-            UpdateLedger(Domain);
-
+            foreach (FeatureBase rp in Domain.GetChildren().Cast<FeatureBase>())
+            {
+                foreach (Resource.IResource f in rp.FactorsGlobalOutput)
+                {
+                    Domain.Ledger[f.Type].LocalGain.Add(f);
+                    Domain.Ledger[f.Type].LocalNet.Add(f);
+                }
+                foreach (Resource.IResource f in rp.FactorsGlobalInput)
+                {
+                    Domain.Ledger[f.Type].LocalLoss.Add(f);
+                    Domain.Ledger[f.Type].LocalNet.Add(f);
+                }
+            }
             if (Domain.Order > 1) { return; }
 
             CalculateRequests(Domain);
@@ -75,6 +87,8 @@ public partial class Logistics
         /// <param name="Domain"></param>
         static void CalculateRequests(Domain Domain)
         {
+
+
             // For each child trade route
             foreach (TradeRoute downline in Domain.Trade.DownlineTraderoutes)
             {
@@ -90,6 +104,14 @@ public partial class Logistics
             //     return;
             // }
 
+            // Change trade request according to own logic.
+            Domain.Trade.DownlineTraderoutes.ForEach(x => x.SetRequest());
+
+            foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in Domain.Ledger)
+            {
+                // Need to zero out upline from previous upline.
+                kvp.Value.TradeNet.Clear();
+            }
             // Update trade list.
             foreach (var tr in Domain.Trade.DownlineTraderoutes)
             {
@@ -108,7 +130,6 @@ public partial class Logistics
                     kvp.Value.TradeNet.Request);
             }
 
-            Domain.Trade.DownlineTraderoutes.ForEach(x => x.SetRequest());
 
         }
         /// <summary>
@@ -150,7 +171,7 @@ public partial class Logistics
             foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in Domain.Ledger.Reverse())
             {
                 // Start tally with parent exports as they always get thru.
-                double tally = kvp.Value.LocalGain.Request;
+                double tally = kvp.Value.LocalGain.Sum;
                 double def = kvp.Value.LocalLoss.Request;
 
 
@@ -244,27 +265,6 @@ public partial class Logistics
                 ResolveRequests(child.Tail);
             }
         }
-    }
-
-    public static void UpdateLedger(Domain Domain)
-    {
-        // Zero Ledger
-        Domain.Ledger.Clear();
-
-        foreach (FeatureBase rp in Domain.GetChildren().Cast<FeatureBase>())
-        {
-            foreach (Resource.IResource f in rp.FactorsGlobalOutput)
-            {
-                Domain.Ledger[f.Type].LocalGain.Add(f);
-                Domain.Ledger[f.Type].LocalNet.Add(f);
-            }
-            foreach (Resource.IResource f in rp.FactorsGlobalInput)
-            {
-                Domain.Ledger[f.Type].LocalLoss.Add(f);
-                Domain.Ledger[f.Type].LocalNet.Add(f);
-            }
-        }
-
     }
 
     // public static void UpdateTradeDownline(Domain Domain)

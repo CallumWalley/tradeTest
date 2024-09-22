@@ -54,7 +54,7 @@ text = "<-"
 [node name="toHead" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer" instance=ExtResource("3_7vo1k")]
 layout_mode = 2
 
-[node name="Container" type="MarginContainer" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer"]
+[node name="SpaceHold" type="MarginContainer" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer"]
 layout_mode = 2
 
 [node name="Container2" type="MarginContainer" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer"]

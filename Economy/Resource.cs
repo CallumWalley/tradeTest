@@ -1,4 +1,5 @@
 using Godot;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -248,7 +249,7 @@ public static partial class Resource
                 // {
                 //     return History.Last();
                 // }
-                return _AdderSubtotal() * _MuxxerSubtotal();
+                return (_muxxers.Count + _adders.Count > 0) ? _AdderSubtotal() * _MuxxerSubtotal() : 0;
             }
             set { throw new InvalidOperationException("Set method is not valid for groups"); }
         }
@@ -259,9 +260,9 @@ public static partial class Resource
         }
         double _MuxxerSubtotal()
         {
-            double agg = 1;
-            foreach (T muxxer in _muxxers) { agg *= muxxer.Sum; }
-            return agg;
+            double a = 1;
+            foreach (var x in _muxxers) { a *= x.Sum; }
+            return (_muxxers.Count > 0) ? a : 1;
         }
         // double _AdderSubtotalRequest()
         // {
@@ -873,7 +874,7 @@ public static partial class Resource
                 LocalLoss.Clear();
                 LocalGain.Clear();
                 LocalNet.Clear();
-                TradeNet.Clear();
+                //TradeNet.Clear();
                 // LocalLoss.Clear();
             }
             /// <summary>

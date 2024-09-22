@@ -12,7 +12,7 @@ public partial class SimpleIndustry : ConditionScale
     [Export]
     public Godot.Collections.Dictionary Factors;
 
-    [Export]
+    [Export(PropertyHint.Range, "0,1,0.01")]
     public double StartingCapability = 0.1;
     //public Resource.RDict<Resource.RStatic> factors = new Resource.RDict<Resource.RStatic>();
     Resource.RStatic capabilityMain;
