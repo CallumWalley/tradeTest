@@ -75,6 +75,20 @@ public partial class FeatureBase : Entity
         RemoveChild(s);
         s.OnRemove();
     }
+    /// <summary>
+    /// Called when setting requests, if custom logic required.
+    /// </summary>
+    public virtual void OnRequestSet()
+    {
+        foreach (ConditionBase c in Conditions)
+        {
+            c.OnRequestSet();
+        }
+    }
+
+    /// <summary>
+    /// OnResolve
+    /// </summary>
     public void OnEFrame()
     {
         foreach (ConditionBase c in Conditions)

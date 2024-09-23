@@ -96,11 +96,12 @@ public partial class UIDropDownSetHead : UIDropDown
 			// TODO make less messy.
 			uitrf.cancelButton.Connect("pressed", callable: new Callable(this, "SetButtonContent"));
 		}
-		QueueRedraw();
+		Update();
 	}
 
 	public void Update()
 	{
 		if (uitrf != null) { uitrf.Update(); }
+		QueueRedraw();
 	}
 }

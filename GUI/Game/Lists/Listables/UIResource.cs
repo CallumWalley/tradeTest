@@ -107,10 +107,7 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
 
     public override Control _MakeCustomTooltip(string forText)
     {
-        if (!ShowBreakdown)
-        {
-            return null;
-        }
+        if (!ShowBreakdown) { return null; }
         VBoxContainer vbc1 = new();
         ExpandDetails(resource, vbc1);
         return vbc1;
@@ -144,7 +141,7 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
         uir.Init(r1);
         uir.ShowName = true;
         vbc1.AddChild(uir);
-        if (r1 is Resource.IResourceGroup<Resource.IResource> && ((Resource.IResourceGroup<Resource.IResource>)r1).Count > 0)
+        if (r1 is Resource.IResourceGroup<Resource.IResource>)
         {
             HBoxContainer hbc = new();
             VBoxContainer vbc2 = new();

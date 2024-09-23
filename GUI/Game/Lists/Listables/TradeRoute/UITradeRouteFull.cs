@@ -12,7 +12,11 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
     LineEdit labelName;
     UIDomainTiny DomainHead;
     UIDomainTiny DomainTail;
-    UIResource friegherRequirement;
+    VBoxContainer freighterRequirements;
+    HBoxContainer freighterRequirementsInbound;
+    Label freighterRequirementsInboundLabel;
+    HBoxContainer freighterRequirementsOutbound;
+    Label freighterRequirementsOutboundLabel;
     public TextureButton cancelButton;
     ScrollContainer details;
     UIListResources toHead;
@@ -81,7 +85,13 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
 
         DomainHead = GetNode<UIDomainTiny>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Head/DomainSummary");
         DomainTail = GetNode<UIDomainTiny>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Tail/DomainSummary");
-        friegherRequirement = GetNode<UIResource>("VBoxContainer/HBoxContainer/HSplitContainer/UIResource");
+        freighterRequirements = GetNode<VBoxContainer>("VBoxContainer/HBoxContainer/HSplitContainer/FreighterRequirements");
+
+        freighterRequirementsInbound = freighterRequirements.GetNode<HBoxContainer>("Inbound");
+        freighterRequirementsOutbound = freighterRequirements.GetNode<HBoxContainer>("Outbound");
+        freighterRequirementsInboundLabel = freighterRequirementsInbound.GetNode<Label>("Value");
+        freighterRequirementsOutboundLabel = freighterRequirementsOutbound.GetNode<Label>("Value");
+
         toHead = GetNode<UIListResources>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/toHead");
         toTail = GetNode<UIListResources>("VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/toTail");
 
@@ -92,8 +102,6 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
         toHead.Init(tradeRoute.ListHead);
         toTail.Init(tradeRoute.ListTail);
 
-        friegherRequirement.Init(tradeRoute.ShipDemand);
-        friegherRequirement.ShowBreakdown = true;
         // toHead.ShowDetails = true;
         // toTail.ShowDetails = true;
 
@@ -128,17 +136,41 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
         }
         // details.GetNode<Label>("VBoxContainer/Distance").Text = String.Format("Distance {0:N2}", tradeRoute.distance);
         // details.GetNode<Label>("VBoxContainer/Time").Text = String.Format("Distance {0:N2}", tradeRoute.distance);
+
         labelName.Text = tradeRoute.Name;
     }
 
     public void Update()
     {
-        if (!Destroy || tradeRoute != null)
+        if (Destroy || tradeRoute == null) { return; }
+
+        Color dim = new Color(1, 1, 1, 0.5f);
+        Color undim = new Color(1, 1, 1, 1);
+        double ibsd = 0 - tradeRoute.InboundShipDemand;
+        double obsd = 0 - tradeRoute.OutboundShipDemand;
+
+        freighterRequirementsInboundLabel.Text = string.Format("{0:F2}", ibsd);
+        freighterRequirementsOutboundLabel.Text = string.Format("{0:F2}", obsd);
+        if (ibsd > obsd)
         {
-            toHead.Update();
-            toTail.Update();
-            _Draw();
+            freighterRequirementsInbound.Modulate = undim;
+            freighterRequirementsOutbound.Modulate = dim;
+            freighterRequirementsInbound.TooltipText = string.Format("Incoming freighters will be 100% loaded.", ibsd);
+            freighterRequirementsOutbound.TooltipText = string.Format("Outgoing freighters will be {0:P0} loaded.", obsd / ibsd);
         }
+        else
+        {
+            freighterRequirementsInbound.Modulate = dim;
+            freighterRequirementsOutbound.Modulate = undim;
+            freighterRequirementsInbound.TooltipText = string.Format("Incoming freighters will be {0:P0} loaded.", ibsd / obsd);
+            freighterRequirementsOutbound.TooltipText = string.Format("Outgoing freighters will be 100% loaded.", obsd);
+        }
+
+        toHead.Update();
+        toTail.Update();
+        QueueRedraw();
+
+
     }
     public void Remove()
     {

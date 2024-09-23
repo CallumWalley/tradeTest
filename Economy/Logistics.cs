@@ -96,6 +96,7 @@ public partial class Logistics
                 CalculateRequests(downline.Tail);
                 // Add ship demand to head.
                 Domain.Ledger[811].LocalLoss.Add(downline.ShipDemand);
+                Domain.Ledger[811].LocalNet.Add(downline.ShipDemand);
             }
 
             // // If no upline, end here.
@@ -129,8 +130,6 @@ public partial class Logistics
                     kvp.Value.LocalGain.Request +
                     kvp.Value.TradeNet.Request);
             }
-
-
         }
         /// <summary>
         ///  Once all elements have 'CalculateRequests' this is run.
@@ -159,10 +158,10 @@ public partial class Logistics
             // }
 
             // If has downline.
-            // if (Domain.Trade.DownlineTraderoutes.Count > 0)
-            // {
-            //     freightFraction = Math.Min(Domain.Ledger[811].TradeNet.Fraction(), 1);
-            // }
+            if (Domain.Trade.DownlineTraderoutes.Count > 0)
+            {
+                freightFraction = Math.Min(Domain.Ledger[811].LocalNet.Fraction(), 1);
+            }
 
             // First resolve ship balance.
             // if importing ships that always resolved.
@@ -175,6 +174,7 @@ public partial class Logistics
                 double def = kvp.Value.LocalLoss.Request;
 
 
+                // Get approved materials from upline.
                 if (Domain.Trade.UplineTraderoute != null && Domain.Trade.UplineTraderoute.ListTail.ContainsKey(kvp.Key))
                 {
                     tally += Domain.Trade.UplineTraderoute.ListTail[kvp.Key].Sum;
@@ -213,7 +213,6 @@ public partial class Logistics
                     r.Respond(alloc);
                     tally += alloc;
                     def -= alloc;
-
                 }
 
                 def += Domain.Trade.DownlineTraderoutes.Where(x => x.ListHead.ContainsKey(kvp.Key)).Sum(x => x.ListHead[kvp.Key].Request);
@@ -229,8 +228,6 @@ public partial class Logistics
                 // Recaclculate resourceSupplyFractionfor trade.
                 // Step three trade
                 resourceSupplyFraction = (def < 0) ? Math.Max(Math.Min(-tally / def, 1), 0) : 1;
-
-
                 resourceSupplyFraction = Math.Min(resourceSupplyFraction, freightFraction);
 
                 // Set storage element to cover difference. (if allowed)

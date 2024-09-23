@@ -23,6 +23,7 @@ public partial class Conditions
         public virtual void OnAdd() { } //Called when added to feature.
         public virtual void OnRemove() { } //Called when removed
         public virtual void OnEFrame() { } //Called every eframe.
+        public virtual void OnRequestSet() { } // Called when requests are calculated.
 
     }
 

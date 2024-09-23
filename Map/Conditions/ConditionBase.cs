@@ -17,5 +17,6 @@ public partial class ConditionBase : Entity, Conditions.IConditionable
     } //Called when removed
 
     public virtual void OnEFrame() { } //Called every eframe.
+    public virtual void OnRequestSet() { }
 
 }

@@ -89,7 +89,7 @@ public static partial class Resource
                 sum = value;
             }
         }
-        public int Type { get; }
+        public virtual int Type { get; }
         public virtual string Details { get; set; } = "Base value";
         public virtual string Name { get; set; } = "Unknown";
         public virtual double Request { get; set; }

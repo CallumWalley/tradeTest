@@ -1,4 +1,5 @@
 using Godot;
+using Microsoft.CodeAnalysis.CSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,30 +15,34 @@ public partial class TradeRoute : Entity
     public Resource.RDict<RStaticTail> ListTail { get; protected set; } = new();
     public Resource.RDict<RStaticHead> ListHead { get; protected set; } = new();
     Resource.RStatic shipDemand = new Resource.RStatic(811, 0);
-    double InboundShipDemand
+
+    public double conversion;
+
+    public double InboundShipDemand
     {
         get
         {
             // Do null check as this is called before init for some reason
-            return (ListHead == null) ? 0 : -ListHead.Where(x => x.Request > 0).Sum(x => x.Request);
+            return (ListHead == null) ? 0 : -ListHead.Where(x => x.Request > 0).Sum(x => x.Request) * conversion;
         }
     }
-    double OutboundShipDemand
+    public double OutboundShipDemand
     {
         get
         {
-            return (ListHead == null) ? 0 : ListHead.Where(x => x.Request < 0).Sum(x => x.Request); ;
+            return (ListHead == null) ? 0 : ListHead.Where(x => x.Request < 0).Sum(x => x.Request) * conversion;
         }
     }
     public Resource.IResource ShipDemand
     {
         get
         {
-            shipDemand.Request = Math.Round(Math.Max(InboundShipDemand, OutboundShipDemand) * distance * 0.005, 2);
-            shipDemand.Name = string.Format("Ships required.");
+            shipDemand.Request = Math.Min(Math.Min(InboundShipDemand, OutboundShipDemand), 0);
+            shipDemand.Name = string.Format("Trade route to {0}", Tail.Name);
             shipDemand.Details = string.Format("{0:N1} required for indbound cargo, {1:N1} for outbound.", InboundShipDemand, OutboundShipDemand);
             return shipDemand;
         }
+
     }
     public int Order
     {
@@ -70,8 +75,13 @@ public partial class TradeRoute : Entity
         Head.Trade.RegisterDownline(this);
         Tail.Trade.RegisterUpline(this);
 
-        distance = 10; // Tail.GetParent<Body>().Position.DistanceTo(Head.GetParent<Body>().Position);
+        distance = 0.3; // positive factor. Equal to about 1 MM  Tail.GetParent<Body>().Position.DistanceTo(Head.GetParent<Body>().Position);
+        double acceleration = 20; // positive factor.  Equal to about 2 x acceleration.
+        conversion = Mathf.Sqrt(distance / acceleration);// unit is s^2 / m 
         Name = $"Trade route from {Head.Name} to {Tail.Name}";
+
+        // 0.3 = 1.8
+        // 7300 = 
 
         shipDemand.Name = Name;
         DrawLine();
@@ -113,7 +123,7 @@ public partial class TradeRoute : Entity
         // If set to automatic
         foreach (KeyValuePair<int, Resource.Ledger.Entry> item in Tail.Ledger)
         {
-            SetValue(item.Key, item.Value.Upline);
+            SetValue(item.Key, -item.Value.Upline);
         }
     }
     public void SetValue(int key, double value)
@@ -121,15 +131,15 @@ public partial class TradeRoute : Entity
         // so messy.
         if (ListHead.ContainsKey(key))
         {
-            ListHead[key].Request = -value;
+            ListHead[key].Request = value;
         }
         else
         {
             RStaticHead head = new RStaticHead(key, this);
-            RStaticTail tail = new RStaticTail(key, this);
+            RStaticTail tail = new RStaticTail(this);
             tail.twin = head;
             head.twin = tail;
-            head.Request = -value;
+            head.Request = value;
 
             ListHead.Add(head);
             ListTail.Add(tail);
@@ -197,25 +207,6 @@ public partial class TradeRoute : Entity
         /// <summary>
         /// Drives state of twin.
         /// </summary>
-        public override int State
-        {
-            get { return base.State; }
-            set
-            {
-                base.State = value;
-                if (twin != null) { twin.State = value; }
-
-            }
-        }
-        public override double Sum
-        {
-            get { return base.Sum; }
-            set
-            {
-                base.Sum = value;
-                if (twin != null) { twin.Sum = value; }
-            }
-        }
 
         public override void Respond()
         {
@@ -248,19 +239,45 @@ public partial class TradeRoute : Entity
             throw new InvalidOperationException("Default constructor not valid for this type.");
         }
 
-        public RStaticTail(int _type = 0, TradeRoute _tradeRoute = null) : base(_type, 0)
+        public RStaticTail(TradeRoute _tradeRoute = null)
         {
             tradeRoute = _tradeRoute;
+        }
+
+        public override int Type
+        {
+            get { return twin.Type; }
         }
 
         /// <summary>
         /// Tail controls requeust of twin.
         /// </summary>
+
+        public override int State
+        {
+            get { return (twin != null) ? twin.State : 0; }
+            set
+            {
+                throw new InvalidOperationException("This value must be set by modifying head.");
+            }
+        }
+        public override double Sum
+        {
+            get { return (twin != null) ? -twin.Sum : 0; }
+            set
+            {
+                throw new InvalidOperationException("This value must be set by modifying head.");
+            }
+        }
         public override double Request
         {
-            get { return -twin.Request; }
+            get { return (twin != null) ? -twin.Request : 0; }
+            set
+            {
+                throw new InvalidOperationException("This value must be set by modifying head.");
+            }
         }
-        public override string Name { get { return string.Format("{0} {1}", (Request < 0) ? "Import from" : "Export to", tradeRoute.Head.Name); } }
+        public override string Name { get { return string.Format("{0} {1}", (Request > 0) ? "Import from" : "Export to", tradeRoute.Head.Name); } }
         public override string Details { get { return string.Format("{0} {1} {2}", Resource.Name(Type), (Request > 0) ? "Import from" : "Export to", tradeRoute.Head.Name); } }
 
     }

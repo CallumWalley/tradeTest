@@ -12,11 +12,24 @@ public partial class SimpleIndustry : ConditionScale
     [Export]
     public Godot.Collections.Dictionary Factors;
 
+    /// <summary>
+    /// Capability value this starts at.
+    /// </summary>
     [Export(PropertyHint.Range, "0,1,0.01")]
     public double StartingCapability = 0.1;
-    //public Resource.RDict<Resource.RStatic> factors = new Resource.RDict<Resource.RStatic>();
+    /// <summary>
+    /// Represents a generic operating capability. Used to ramp up and down input/output values.
+    /// </summary>
     Resource.RStatic capabilityMain;
+    /// <summary>
+    /// List of values needing to be proccessed during fulfillment stage.
+    /// </summary>
     Dictionary<Resource.RGroup<Resource.RStatic>, Resource.RStatic> inputFullfillments = new();
+
+    /// <summary>
+    /// For non accruable resources, output is scaled to fit demand.
+    /// </summary>
+    Resource.RDictStatic outputDemand = new();
     protected JsonSerializer serializer = new();
 
     // Sets 'output' in proportion to fulfillment.
@@ -78,6 +91,8 @@ public partial class SimpleIndustry : ConditionScale
         capabilityMain = new Resource.RStatic(802, StartingCapability, 0, "Consistancy", "Slow Start Size");
         Feature.FactorsLocal[802].Mux(capabilityMain);
 
+        Resource.RStatic demand = new Resource.RStatic((int)802, 1, 1, "Demand", "Demand");
+        Feature.FactorsLocal[802].Mux(demand);
 
         foreach (KeyValuePair<Variant, Variant> r in Factors)
         {
