@@ -6,8 +6,8 @@
 
 [node name="UIResource" type="HBoxContainer"]
 custom_minimum_size = Vector2(80, 0)
-offset_right = 30.0
-offset_bottom = 18.0
+offset_right = 107.0
+offset_bottom = 23.0
 size_flags_horizontal = 5
 size_flags_vertical = 5
 tooltip_text = "test"
@@ -19,6 +19,10 @@ layout_mode = 2
 size_flags_horizontal = 4
 text = "UNAMED"
 
+[node name="Container" type="Control" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="Icon" type="TextureRect" parent="."]
 layout_mode = 2
 size_flags_horizontal = 4
@@ -26,13 +30,8 @@ size_flags_vertical = 4
 texture = ExtResource("2")
 
 [node name="Value" type="Label" parent="."]
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme = ExtResource("3_gxwfa")
 text = "0"
-
-[node name="Details" type="Label" parent="."]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 4
-text = ": UNSET"

@@ -95,6 +95,15 @@ public partial class FeatureBase : Entity
         {
             c.OnEFrame();
         }
+        // Give thigns a nice name.
+        foreach (Resource.RGroup<Resource.IResource> rgroup in FactorsGlobalOutput)
+        {
+            rgroup.Name = Name;
+        }
+        foreach (Resource.RGroup<Resource.IResource> rgroup in FactorsGlobalInput)
+        {
+            rgroup.Name = Name;
+        }
     }
     // public Basic NewFeatureFromTemplate()
     // {

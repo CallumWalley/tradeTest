@@ -31,7 +31,7 @@ public partial class UIResourceStorage : Control
         // Assign children
         value = GetNode<Label>("Value");
         name = GetNode<Label>("Name");
-        details = GetNode<Label>("Details");
+        //details = GetNode<Label>("Details");
         global = GetNode<Global>("/root/Global");
     }
 

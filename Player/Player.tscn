@@ -7,7 +7,6 @@
 [ext_resource type="Script" path="res://Player/PlayerFeatureTemplates.cs" id="4_x4tam"]
 [ext_resource type="Script" path="res://Map/Features/FeatureBase.cs" id="6_g7q3k"]
 [ext_resource type="PackedScene" uid="uid://b81a02d1keo5i" path="res://Map/Conditions/SimpleIndustry.tscn" id="7_f7g6h"]
-[ext_resource type="PackedScene" uid="uid://e4cfn5gaacki" path="res://Map/Conditions/SlowStart.tscn" id="8_rx0td"]
 
 [node name="Player" type="Node"]
 process_priority = -100
@@ -43,9 +42,6 @@ Factors = {
 }
 Description = "Everything working as expected"
 
-[node name="Start Up" parent="PlayerFeatureTemplates/DMHO Purification/DMHO Purification" instance=ExtResource("8_rx0td")]
-Description = "This is a new facility, not yet operating at full capacity."
-
 [node name="Surface Mining" type="Node" parent="PlayerFeatureTemplates" node_paths=PackedStringArray("Feature")]
 script = ExtResource("4_opta7")
 Feature = NodePath("Surface Mining")
@@ -62,9 +58,6 @@ Factors = {
 2: -2.0
 }
 Description = "Everything working as expected"
-
-[node name="Start Up" parent="PlayerFeatureTemplates/Surface Mining/Surface Mining" instance=ExtResource("8_rx0td")]
-Description = "This is a new facility, not yet operating at full capacity."
 
 [node name="Fuel Refining" type="Node" parent="PlayerFeatureTemplates" node_paths=PackedStringArray("Feature")]
 script = ExtResource("4_opta7")
@@ -83,9 +76,6 @@ Factors = {
 }
 Description = "Everything working as expected"
 
-[node name="Start Up" parent="PlayerFeatureTemplates/Fuel Refining/Fuel Refining" instance=ExtResource("8_rx0td")]
-Description = "This is a new facility, not yet operating at full capacity."
-
 [node name="Launch Complex" type="Node" parent="PlayerFeatureTemplates" node_paths=PackedStringArray("Feature")]
 script = ExtResource("4_opta7")
 Feature = NodePath("Launch Complex")
@@ -103,9 +93,6 @@ Factors = {
 }
 Description = "Everything working as expected"
 
-[node name="Start Up" parent="PlayerFeatureTemplates/Launch Complex/Launch Complex" instance=ExtResource("8_rx0td")]
-Description = "This is a new facility, not yet operating at full capacity."
-
 [node name="Spaceport" type="Node" parent="PlayerFeatureTemplates" node_paths=PackedStringArray("Feature")]
 script = ExtResource("4_opta7")
 Feature = NodePath("Spaceport")
@@ -121,6 +108,3 @@ Factors = {
 811: 2.0
 }
 Description = "Everything working as expected"
-
-[node name="Start Up" parent="PlayerFeatureTemplates/Spaceport/Spaceport" instance=ExtResource("8_rx0td")]
-Description = "This is a new facility, not yet operating at full capacity."

@@ -35,7 +35,6 @@ public partial class Features : Node
                 Conditions.IConditionable target = typeName switch
                 {
                     "simpleIndustry" => new SimpleIndustry(),
-                    "slowStart" => new SlowStart(),
                     _ => throw new NotSupportedException($"Unknown class type : {typeName}")
                 };
 

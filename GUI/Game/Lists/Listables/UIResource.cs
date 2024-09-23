@@ -11,8 +11,13 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
 
     protected Global global;
     public bool Destroy { get; set; } = false;
+    [Export]
     public bool ShowName { get; set; } = false;
+    [Export]
+
     public bool ShowDetails { get; set; } = false;
+    [Export]
+
     public bool ShowBreakdown { get; set; } = false;
 
     // For interpolation
@@ -33,7 +38,9 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
     public Label name;
     protected Label details;
 
-    protected static readonly PackedScene p_resourceIcon = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/UIResource.tscn");
+    protected static readonly PackedScene prefab_resourceIcon = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/UIResource.tscn");
+    //protected static readonly PackedScene prefab_resourceTooltip = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Resource.tscn");
+
 
     public void Init(Resource.IResource _resource)
     {
@@ -45,7 +52,7 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
         base._Ready();
         value = GetNode<Label>("Value");
         name = GetNode<Label>("Name");
-        details = GetNode<Label>("Details");
+        // details = GetNode<Label>("Details");
         global = GetNode<Global>("/root/Global");
         Update();
     }
@@ -73,7 +80,7 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
         displayValue = resourceSumThis;
         // hide if null.
         //Visible = !(resource.Count < 1 && Mathf.Abs(resource.Sum) < 0.1);
-        details.Visible = ShowDetails;
+        // details.Visible = ShowDetails;
         name.Visible = ShowName;
         TooltipText = resource.Name;
         name.Text = $"{resource.Name}";
@@ -109,39 +116,22 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
     {
         if (!ShowBreakdown) { return null; }
         VBoxContainer vbc1 = new();
+        vbc1.Alignment = BoxContainer.AlignmentMode.End;
         ExpandDetails(resource, vbc1);
         return vbc1;
     }
-    // private void ExpandDetails(Resource.IResourceGroup<Resource.IResource> r1, VBoxContainer vbc1)
-    // {
-    //     // Don't know why, but this is called before ready.
-    //     // Create element representing this.
-    //     UIResource uir = new UIResource();
-    //     uir.Init(r1);
-    //     uir.ShowName = true;
-    //     vbc1.AddChild(uir);
 
-    //     // If has children, create element to nest inside.
-    //     if (r1.Count > 0)
-    //     {
-    //         HBoxContainer hbc = new();
-    //         VBoxContainer vbc2 = new();
-    //         hbc.AddChild(new VSeparator());
-    //         hbc.AddChild(vbc2);
-    //         foreach (Resource.IResource r2 in r1)
-    //         {
-    //             ExpandDetails(r2, vbc2);
-    //         }
-    //         vbc1.AddChild(hbc);
-    //     }
-    // }
-    private void ExpandDetails(Resource.IResource r1, VBoxContainer vbc1)
+    // Recursivly iterate over elements.
+    private void ExpandDetails(Resource.IResource r1, VBoxContainer vbc1, int level = 0)
     {
-        UIResource uir = p_resourceIcon.Instantiate<UIResource>();
+        int maxDescend = 1;
+
+        UIResource uir = prefab_resourceIcon.Instantiate<UIResource>();
         uir.Init(r1);
         uir.ShowName = true;
+        uir.SizeFlagsHorizontal = SizeFlags.ShrinkEnd;
         vbc1.AddChild(uir);
-        if (r1 is Resource.IResourceGroup<Resource.IResource>)
+        if (r1 is Resource.IResourceGroup<Resource.IResource> && level < maxDescend)
         {
             HBoxContainer hbc = new();
             VBoxContainer vbc2 = new();
@@ -149,7 +139,7 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
             hbc.AddChild(vbc2);
             foreach (Resource.IResource r2 in (Resource.IResourceGroup<Resource.IResource>)r1)
             {
-                ExpandDetails(r2, vbc2);
+                ExpandDetails(r2, vbc2, level + 1);
             }
             vbc1.AddChild(hbc);
         }
