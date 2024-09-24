@@ -3,7 +3,7 @@ using System;
 
 public partial class UIRename : LineEdit
 {
-	public Entity entity;
+	public Entities.IEntityable entity;
 	public override void _Ready()
 	{
 		base._Ready();

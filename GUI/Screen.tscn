@@ -99,9 +99,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 0
 script = ExtResource("3_a3qo3")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Nav"]
-layout_mode = 2
-
 [node name="UIIndustriesWindow" parent="." instance=ExtResource("4_ibjw3")]
 visible = false
 

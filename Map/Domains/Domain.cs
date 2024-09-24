@@ -3,19 +3,64 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public partial class Domain : Entity, IEnumerable<FeatureBase>
+public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<FeatureBase>
 {
     [Export]
     public bool Active;
 
-    public Vector2 Position
-    {
-        get { return new Vector2(0, 0); }
-    }
     // Can receive trade. Should be determined 
     [Export]
     // Can receive trade. Should be determined by port.
     bool _validTradeReceiver = false;     // Can receive trade. Should 
+
+    [Export]
+    new public string Name { get { return base.Name; } set { base.Name = value; } }
+
+    [Export]
+    public string Description { get; set; }
+
+    // Radius of UI element.
+    float UIRadius = 30;
+    float UIRotate;
+
+    // is mouse over this element.
+    bool focus;
+
+    Node features;
+    CollisionShape2D collisionShape2D;
+
+    // public override void _Process(double _delta)
+    // {
+    //     if (Input.IsActionPressed("ui_select"))
+    //     {
+    //         if (focus)
+    //         {
+    //             if (uiZone == null)
+    //             {
+    //                 uiZone = p_uiZone.Instantiate<UIWindowZone>();
+    //                 uiZone.Init(this);
+    //                 AddChild(uiZone);
+    //             }
+    //             uiZone.Visible = true;
+    //             uiZone.MoveToForeground();
+    //         }
+    //     }
+    //     //  && focus)
+    //     // {
+    //     // 	uiBody.Visible = true;
+    //     // }
+    // }
+
+    public void Focus()
+    {
+        focus = true;
+        GD.Print("mouse entered");
+    }
+
+    public void UnFocus()
+    {
+        focus = false;
+    }
 
     public bool ValidTradeReceiver
 
@@ -101,7 +146,6 @@ public partial class Domain : Entity, IEnumerable<FeatureBase>
     // protected Dictionary<int, double> productionBuffer = new();
     // protected Dictionary<int, double> consumptionBuffer = new();
     // Helper methods
-    public Godot.Collections.Array<Node> Children { get { return GetChildren(true); } }
 
     // public Vector2 Position { get { return GetParent<Body>().Position; } }
 
@@ -126,8 +170,14 @@ public partial class Domain : Entity, IEnumerable<FeatureBase>
     {
         base._Ready();
 
-
+        // Get nodes;
         global = GetNode<Global>("/root/Global");
+
+        features = GetNodeOrNull<Node>("Features");
+        if (features == null) { features = new Node(); AddChild(features); };
+
+
+        // Connect Signals
         global.Connect("Setup", new Callable(this, "Setup"));
         global.Connect("EFrameEarly", new Callable(this, "EFrameEarly"));
         global.Connect("EFrameLate", new Callable(this, "EFrameLate"));
@@ -144,10 +194,40 @@ public partial class Domain : Entity, IEnumerable<FeatureBase>
             // var _ = Ledger[kvp.Key];
             ((Resource.Ledger.EntryAccrul)Ledger[kvp.Key]).Stored.Sum = (kvp.Value + ((Resource.Ledger.EntryAccrul)Ledger[kvp.Key]).Stored.Sum);
         }
+
+
+        // UI Stuff
+        CircleShape2D circleShape2D = new CircleShape2D();
+        circleShape2D.Radius = UIRadius;
+        collisionShape2D = new();
+        collisionShape2D.Shape = circleShape2D;
+        // Add interactive 
+        Area2D area2D = new();
+        area2D.AddChild(collisionShape2D);
+
+        area2D.Connect("mouse_entered", new Callable(this, "Focus"));
+        area2D.Connect("mouse_exited", new Callable(this, "UnFocus"));
+        AddChild(area2D);
     }
 
 
+    public override void _Draw()
+    {
+        base._Draw();
+        DrawCircle(this.Position, 5, new Color(1, 1, 1));
+        DrawArc(this.Position, UIRadius, UIRotate, UIRotate + 4f, 64, new Color(1, 1, 1), 0.5f, true);
 
+    }
+
+    public override void _Process(double delta)
+    {
+        base._Process(delta);
+        if (IsVisibleInTree())
+        {
+            UIRotate += focus ? 0.05f : 0.005f;
+        }
+        QueueRedraw();
+    }
     // this is so messy, i hate it. aaaaaaaaaaah
     public void EFrameEarly()
     {
@@ -162,7 +242,7 @@ public partial class Domain : Entity, IEnumerable<FeatureBase>
 
     public IEnumerator<FeatureBase> GetEnumerator()
     {
-        foreach (FeatureBase f in GetChildren())
+        foreach (FeatureBase f in features.GetChildren())
         {
             yield return f;
         }
@@ -228,7 +308,7 @@ public partial class Domain : Entity, IEnumerable<FeatureBase>
 
     public void AddFeature(FeatureBase feature)
     {
-        AddChild(feature);
+        features.AddChild(feature);
     }
 
 }

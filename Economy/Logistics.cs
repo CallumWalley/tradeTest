@@ -55,7 +55,7 @@ public partial class Logistics
             // Add 
             Domain.Ledger.Clear();
 
-            foreach (FeatureBase rp in Domain.GetChildren().Cast<FeatureBase>())
+            foreach (FeatureBase rp in Domain)
             {
                 foreach (Resource.IResource f in rp.FactorsGlobalOutput)
                 {
@@ -157,7 +157,7 @@ public partial class Logistics
             //     Domain.Ledger[811].UplineLoss.Respond();
             // }
 
-            // If has downline.
+            // Calculate all ships required to fulfil downlines.
             if (Domain.Trade.DownlineTraderoutes.Count > 0)
             {
                 freightFraction = Math.Min(Domain.Ledger[811].LocalNet.Fraction(), 1);

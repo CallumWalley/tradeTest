@@ -6,9 +6,13 @@ using System.Linq;
 /// <summary>
 /// A thing. Subtype of node. Should be used instead of node for game objects.
 /// </summary>
-public partial class Entity : Node
+public partial class Entities
 {
-    [Export]
-    public string Description { get; set; }
+    public interface IEntityable
+    {
+        string Name { get; set; }
+        string Description { get; set; }
+    }
+
 
 }

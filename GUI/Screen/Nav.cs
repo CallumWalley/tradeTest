@@ -14,25 +14,24 @@ public partial class Nav : VBoxContainer
 		map = GetNode<Map>("/root/Global/Map");
 		foreach (Galaxy g in map.GetChildren())
 		{
-			GetNode<VBoxContainer>("VBoxContainer").AddChild(DrawGalaxy(g));
+			AddChild(DrawGalaxy(g));
 		}
 	}
 
-	public UIAccordian DrawGalaxy(Galaxy g)
+	public HBoxContainer DrawGalaxy(Galaxy g)
 	{
-		UIAccordian ui_g = prefab_UIAccordian.Instantiate<UIAccordian>();
-		ui_g.GetNode<Button>("Button").Text = g.Name;
-		ui_g.GetNode<Button>("Button").Flat = true;
-		ui_g.GetNode<Button>("Button").ButtonPressed = true;
-		ui_g.GetNode<Container>("Container").Visible = true;
+		HBoxContainer a = new HBoxContainer();
 		VBoxContainer vb = new VBoxContainer();
-
-		foreach (PlanetarySystem ps in g.GetChildren())
+		foreach (PlanetarySystem ps in g)
 		{
 			vb.AddChild(DrawPlanetarySystem(ps));
 		}
-		ui_g.GetNode<Container>("Container").AddChild(vb);
-		return ui_g;
+		HBoxContainer hb = new HBoxContainer();
+		hb.AddChild(new HSeparator());
+		hb.AddChild(vb);
+
+		a.AddChild(hb);
+		return a;
 	}
 	public UIAccordian DrawPlanetarySystem(PlanetarySystem ps)
 	{
@@ -42,18 +41,40 @@ public partial class Nav : VBoxContainer
 		ui_ps.GetNode<Button>("Button").ButtonPressed = false;
 		ui_ps.GetNode<Container>("Container").Visible = false;
 		VBoxContainer vb = new VBoxContainer();
-		foreach (SatelliteSystem ss in ps.GetChildren())
+		foreach (SatelliteSystem ss in ps)
 		{
 			vb.AddChild(DrawSatelliteSystem(ss));
 		}
-		ui_ps.GetNode<Container>("Container").AddChild(vb);
+		HBoxContainer hb = new HBoxContainer();
+		HSeparator hs = new HSeparator();
+		hs.SizeFlagsVertical = SizeFlags.ShrinkBegin;
+		hb.AddChild(hs);
+		hb.AddChild(vb);
+		ui_ps.GetNode<Container>("Container").AddChild(hb);
 		return ui_ps;
 	}
-	public Button DrawSatelliteSystem(SatelliteSystem ss)
+	public UIAccordian DrawSatelliteSystem(SatelliteSystem ss)
 	{
-		UISatelliteSystemNav uiw = new UISatelliteSystemNav();
-		uiw.satelliteSystem = (ss);
-		uiw.canvasLayer = GetParent<CanvasLayer>();
-		return uiw;
+		UIAccordian ui_d = prefab_UIAccordian.Instantiate<UIAccordian>();
+		ui_d.GetNode<Button>("Button").Text = ss.Name;
+		ui_d.GetNode<Button>("Button").Flat = true;
+		ui_d.GetNode<Button>("Button").ButtonPressed = false;
+		ui_d.GetNode<Container>("Container").Visible = false;
+		VBoxContainer vb = new VBoxContainer();
+		foreach (Domain domain in ss.GetChildren())
+		{
+			UIDomainNav uiw = new UIDomainNav();
+			uiw.domain = (domain);
+			uiw.Flat = true;
+			uiw.canvasLayer = GetParent<CanvasLayer>();
+			vb.AddChild(uiw);
+		}
+		HBoxContainer hb = new HBoxContainer();
+		HSeparator hs = new HSeparator();
+		hs.SizeFlagsVertical = SizeFlags.ShrinkBegin;
+		hb.AddChild(hs);
+		hb.AddChild(vb);
+		ui_d.GetNode<Container>("Container").AddChild(hb);
+		return ui_d;
 	}
 }

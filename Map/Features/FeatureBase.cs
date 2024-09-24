@@ -10,7 +10,7 @@ using System.Linq;
 /// Base class for features.
 /// </summary>
 
-public partial class FeatureBase : Entity
+public partial class FeatureBase : Node, Entities.IEntityable
 {
     /// <summary>
     ///  Contains factors pooled with parent rp.
@@ -18,7 +18,8 @@ public partial class FeatureBase : Entity
     /// </summary>
     public Resource.RDict<Resource.RGroup<Resource.IResource>> FactorsGlobalOutput { get; set; } = new();
     public Resource.RDict<Resource.RGroup<Resource.IResource>> FactorsGlobalInput { get; set; } = new();
-
+    new public string Name { get { return base.Name; } set { base.Name = value; } }
+    public string Description { get; set; }
     /// <summary>
     ///  Contains factors not pooled with parent rp.
     ///  Currently 801-900

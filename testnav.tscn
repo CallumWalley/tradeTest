@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://GUI/Screen/Nav.cs" id="1_mkhhe"]
+[ext_resource type="PackedScene" path="res://GUI/Elements/UIAccordian.tscn" id="2_t21yf"]
+
+[node name="Nav" type="VBoxContainer"]
+anchors_preset = -1
+anchor_top = 0.2
+anchor_bottom = 1.0
+offset_top = 0.399994
+offset_right = 116.0
+size_flags_horizontal = 3
+size_flags_vertical = 0
+script = ExtResource("1_mkhhe")
+
+[node name="_HBoxContainer_30" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="_HBoxContainer_29" type="HBoxContainer" parent="_HBoxContainer_30"]
+layout_mode = 2
+
+[node name="_HSeparator_27" type="HSeparator" parent="_HBoxContainer_30/_HBoxContainer_29"]
+layout_mode = 2
+
+[node name="_VBoxContainer_28" type="VBoxContainer" parent="_HBoxContainer_30/_HBoxContainer_29"]
+layout_mode = 2
+
+[node name="Accordian" parent="_HBoxContainer_30/_HBoxContainer_29/_VBoxContainer_28" instance=ExtResource("2_t21yf")]
+layout_mode = 2

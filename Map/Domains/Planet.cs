@@ -1,15 +1,19 @@
 using Godot;
 using System;
 
-public partial class Planet : Domain//, FeatureRegister.IFeatureable
+public partial class Planet : Domain
 {
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
-	{
-	}
+	[ExportGroup("Orbital")]
+	[Export]
+	double aphelion;
+	[Export]
+	double perihelion;
+	[Export]
+	double semiMajorAxis;
+	[Export]
+	double eccentricity;
+	[Export]
+	double period;
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-	}
 }

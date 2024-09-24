@@ -14,7 +14,7 @@ public partial class Events
         public string Description { get; set; }
         public int Time { get; set; }
 
-        public List<Entity> entities;
+        public List<Entities.IEntityable> entities;
 
         public string level; // unimplimented. Idea is to have a DEBUG/INFO/WARN system.
         public string scope; // unimplimented. Idea is to allow moving camera to location.
@@ -28,7 +28,7 @@ public partial class Events
         // WARN    |    show      |    show      |    show      |    hide      |
         // ERROR   |    show      |    show      |    show      |    show      |
         //
-        Event(List<Entity> _entities, int _time, string _name = "Unknown", string _description = "Nothing else is known at this time.")
+        Event(List<Entities.IEntityable> _entities, int _time, string _name = "Unknown", string _description = "Nothing else is known at this time.")
         {
             Name = _name;
             Description = _description;

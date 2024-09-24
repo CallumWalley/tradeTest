@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public partial class TradeRoute : Entity
+public partial class TradeRoute : Node, Entities.IEntityable
 {
 
     [Export]
@@ -15,6 +15,8 @@ public partial class TradeRoute : Entity
     public Resource.RDict<RStaticTail> ListTail { get; protected set; } = new();
     public Resource.RDict<RStaticHead> ListHead { get; protected set; } = new();
     Resource.RStatic shipDemand = new Resource.RStatic(811, 0);
+
+    new public string Name { get { return base.Name; } set { base.Name = value; } }
 
     public double conversion;
 
@@ -88,9 +90,10 @@ public partial class TradeRoute : Entity
     }
 
 
-    public new string Description
+    public string Description
     {
         get { return $"Trade route from {Head.Name} to {Tail.Name}"; }
+        set { throw new NotImplementedException("cant do that"); }
     }
 
     // TODO: Move parts that are shared with PlayerTrade.ValidTradeHead there.

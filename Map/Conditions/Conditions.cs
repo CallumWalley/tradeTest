@@ -15,9 +15,8 @@ public partial class Conditions
         return defaultValue;
     }
     // Condition is some logic affecting a feature, evaluated every EFrame
-    public interface IConditionable
+    public interface IConditionable : Entities.IEntityable
     {
-        public string Description { get; set; }
         public FeatureBase Feature { get; } // parent reference.
 
         public virtual void OnAdd() { } //Called when added to feature.

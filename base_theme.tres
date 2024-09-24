@@ -27,7 +27,7 @@ shadow_offset = Vector2(3, 3)
 
 [resource]
 default_font = ExtResource("1_2e4sy")
-default_font_size = 16
+default_font_size = 12
 Button/styles/focus = null
 LabelContext/base_type = &"RichTextLabel"
 LabelContext/font_sizes/bold_font_size = 12
