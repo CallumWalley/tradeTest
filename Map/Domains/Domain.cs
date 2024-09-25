@@ -225,6 +225,16 @@ public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<FeatureB
         if (IsVisibleInTree())
         {
             UIRotate += focus ? 0.05f : 0.005f;
+
+            if (Input.IsActionPressed("ui_select"))
+            {
+                if (focus)
+                {
+                    float z = 5 * GD.Randf();
+                    GetNode<Godot.Camera2D>("/root/Global/Map/Galaxy/Sol/Camera2D").Position = GlobalPosition;
+                    //GetNode<Godot.Camera2D>("/root/Global/Map/Galaxy/Sol/Camera2D").Zoom = new Vector2(2, 2);
+                }
+            }
         }
         QueueRedraw();
     }

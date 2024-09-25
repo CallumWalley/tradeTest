@@ -39,6 +39,7 @@ public partial class Nav : VBoxContainer
 		ui_ps.GetNode<Button>("Button").Text = ps.Name;
 		ui_ps.GetNode<Button>("Button").Flat = true;
 		ui_ps.GetNode<Button>("Button").ButtonPressed = false;
+		ui_ps.GetNode<Button>("Button").Alignment = HorizontalAlignment.Left;
 		ui_ps.GetNode<Container>("Container").Visible = false;
 		VBoxContainer vb = new VBoxContainer();
 		foreach (SatelliteSystem ss in ps)
@@ -47,10 +48,12 @@ public partial class Nav : VBoxContainer
 		}
 		HBoxContainer hb = new HBoxContainer();
 		HSeparator hs = new HSeparator();
-		hs.SizeFlagsVertical = SizeFlags.ShrinkBegin;
 		hb.AddChild(hs);
+		hs.SizeFlagsVertical = SizeFlags.ShrinkBegin;
 		hb.AddChild(vb);
-		ui_ps.GetNode<Container>("Container").AddChild(hb);
+		Container ac = ui_ps.GetNode<Container>("Container");
+		ac.ThemeTypeVariation = "PanelContainerTransparent";
+		ac.AddChild(hb);
 		return ui_ps;
 	}
 	public UIAccordian DrawSatelliteSystem(SatelliteSystem ss)
@@ -59,8 +62,10 @@ public partial class Nav : VBoxContainer
 		ui_d.GetNode<Button>("Button").Text = ss.Name;
 		ui_d.GetNode<Button>("Button").Flat = true;
 		ui_d.GetNode<Button>("Button").ButtonPressed = false;
+		ui_d.GetNode<Button>("Button").Alignment = HorizontalAlignment.Left;
 		ui_d.GetNode<Container>("Container").Visible = false;
 		VBoxContainer vb = new VBoxContainer();
+
 		foreach (Domain domain in ss.GetChildren())
 		{
 			UIDomainNav uiw = new UIDomainNav();
@@ -71,10 +76,12 @@ public partial class Nav : VBoxContainer
 		}
 		HBoxContainer hb = new HBoxContainer();
 		HSeparator hs = new HSeparator();
-		hs.SizeFlagsVertical = SizeFlags.ShrinkBegin;
 		hb.AddChild(hs);
+		hs.SizeFlagsVertical = SizeFlags.ShrinkBegin;
 		hb.AddChild(vb);
-		ui_d.GetNode<Container>("Container").AddChild(hb);
+		Container ac = ui_d.GetNode<Container>("Container");
+		ac.ThemeTypeVariation = "PanelContainerTransparent";
+		ac.AddChild(hb);
 		return ui_d;
 	}
 }

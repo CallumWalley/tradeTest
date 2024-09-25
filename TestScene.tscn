@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bqwjnbtt5kf3p"]
+[gd_scene load_steps=12 format=3 uid="uid://bqwjnbtt5kf3p"]
 
 [ext_resource type="Script" path="res://Global.cs" id="1_1b3uo"]
 [ext_resource type="PackedScene" uid="uid://con3ea5txcdnn" path="res://Player/Player.tscn" id="1_w03ia"]
@@ -11,8 +11,6 @@
 [ext_resource type="Script" path="res://Map/SatelliteSystem.cs" id="7_k6jcv"]
 [ext_resource type="Script" path="res://Map/Domains/Planet.cs" id="8_hr0l1"]
 [ext_resource type="PackedScene" uid="uid://b81a02d1keo5i" path="res://Map/Conditions/SimpleIndustry.tscn" id="8_j7vpr"]
-[ext_resource type="PackedScene" uid="uid://doo8jyuwb0s84" path="res://GUI/Game/Resource/UIResourcePallet.tscn" id="11_jnpvl"]
-[ext_resource type="PackedScene" path="res://testnav.tscn" id="13_c6sfq"]
 
 [node name="Global" type="Node"]
 script = ExtResource("1_1b3uo")
@@ -33,12 +31,15 @@ position = Vector2(3, 0)
 script = ExtResource("6_yqk1w")
 
 [node name="Camera2D" type="Camera2D" parent="Map/Galaxy/Sol"]
-zoom = Vector2(2, 2)
 limit_smoothed = true
 position_smoothing_enabled = true
-rotation_smoothing_enabled = true
+rotation_smoothing_speed = 1.0
 drag_horizontal_enabled = true
 drag_vertical_enabled = true
+drag_left_margin = 0.02
+drag_top_margin = 0.02
+drag_right_margin = 0.02
+drag_bottom_margin = 0.02
 editor_draw_limits = true
 editor_draw_drag_margin = true
 
@@ -118,17 +119,5 @@ Zoom = 2.0
 script = ExtResource("8_hr0l1")
 
 [node name="Screen" parent="." instance=ExtResource("2_ohuhm")]
-
-[node name="UiResourcePallet" parent="Screen" instance=ExtResource("11_jnpvl")]
-offset_left = 77.0
-offset_top = 24.0
-offset_right = 195.0
-offset_bottom = 74.0
-
-[node name="Nav2" parent="Screen" instance=ExtResource("13_c6sfq")]
-offset_left = 98.0
-offset_top = -49.6
-offset_right = 214.0
-offset_bottom = -50.0
 
 [editable path="Player"]
