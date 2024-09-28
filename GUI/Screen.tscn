@@ -1,5 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://r5ytkwljq7nb"]
+[gd_scene load_steps=10 format=3 uid="uid://r5ytkwljq7nb"]
 
+[ext_resource type="Script" path="res://GUI/Screen.cs" id="1_5umy1"]
 [ext_resource type="Script" path="res://GUI/Screen/Top/UITimeControl.cs" id="1_ys7u5"]
 [ext_resource type="PackedScene" uid="uid://rwliij8aoq6r" path="res://GUI/Elements/UIButtonToggleWindow.tscn" id="3_0miou"]
 [ext_resource type="Script" path="res://GUI/Screen/Nav.cs" id="3_a3qo3"]
@@ -10,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://bwaowp0cjw1f2" path="res://GUI/Game/Panels/UIPanelPlayerFeatureTemplateList.tscn" id="7_13nsc"]
 
 [node name="Screen" type="CanvasLayer"]
+script = ExtResource("1_5umy1")
 
 [node name="TopRight" type="Panel" parent="."]
 anchors_preset = 1
@@ -123,9 +125,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("4_d36to")
+current_tab = 0
 
 [node name="Shipyards" type="VBoxContainer" parent="UIWindowTradeOverview/UITradeWindow"]
 layout_mode = 2
+metadata/_tab_index = 0
 
 [node name="Label" type="Label" parent="UIWindowTradeOverview/UITradeWindow/Shipyards"]
 visible = false
@@ -135,3 +139,6 @@ text = "No Shipyards"
 [node name="Trade Routes" parent="UIWindowTradeOverview/UITradeWindow" instance=ExtResource("6_neq83")]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="PlanetOverlay" type="CanvasLayer" parent="."]
