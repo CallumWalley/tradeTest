@@ -16,7 +16,7 @@ public partial class UIAccordian : Control
 
 		button.Connect("toggled", new Callable(this, "ShowDetails"));
 	}
-	public void ShowDetails(bool toggled)
+	public virtual void ShowDetails(bool toggled)
 	{
 		Expanded = toggled;
 	}

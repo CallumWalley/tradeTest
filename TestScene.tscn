@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://bqwjnbtt5kf3p"]
+[gd_scene load_steps=13 format=3 uid="uid://bqwjnbtt5kf3p"]
 
 [ext_resource type="Script" path="res://Global.cs" id="1_1b3uo"]
 [ext_resource type="PackedScene" uid="uid://con3ea5txcdnn" path="res://Player/Player.tscn" id="1_w03ia"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://Map/PlanetarySystem.cs" id="6_yqk1w"]
 [ext_resource type="Script" path="res://Map/Features/FeatureBase.cs" id="7_0xlau"]
 [ext_resource type="Script" path="res://Map/SatelliteSystem.cs" id="7_k6jcv"]
+[ext_resource type="Script" path="res://Camera.cs" id="7_xqav8"]
 [ext_resource type="Script" path="res://Map/Domains/Planet.cs" id="8_hr0l1"]
 [ext_resource type="PackedScene" uid="uid://b81a02d1keo5i" path="res://Map/Conditions/SimpleIndustry.tscn" id="8_j7vpr"]
 
@@ -21,16 +22,14 @@ script = ExtResource("1_1b3uo")
 Head = NodePath("../../../Map/Galaxy/Sol/Earth/Earth")
 Tail = NodePath("../../../Map/Galaxy/Sol/Earth/Moon")
 
-[node name="Map" parent="." instance=ExtResource("2_b0thp")]
+[node name="Map" parent="." node_paths=PackedStringArray("startView") instance=ExtResource("2_b0thp")]
+startView = NodePath("Galaxy/Sol")
 
 [node name="Galaxy" type="Node" parent="Map"]
 script = ExtResource("5_frh8s")
 
-[node name="Sol" type="Node2D" parent="Map/Galaxy"]
+[node name="Camera2D" type="Camera2D" parent="Map/Galaxy"]
 position = Vector2(3, 0)
-script = ExtResource("6_yqk1w")
-
-[node name="Camera2D" type="Camera2D" parent="Map/Galaxy/Sol"]
 limit_smoothed = true
 position_smoothing_enabled = true
 rotation_smoothing_speed = 1.0
@@ -42,41 +41,36 @@ drag_right_margin = 0.02
 drag_bottom_margin = 0.02
 editor_draw_limits = true
 editor_draw_drag_margin = true
+script = ExtResource("7_xqav8")
+
+[node name="Sol" type="Node2D" parent="Map/Galaxy"]
+position = Vector2(3, 0)
+script = ExtResource("6_yqk1w")
+
+[node name="Sol" type="Node2D" parent="Map/Galaxy/Sol"]
+script = ExtResource("7_k6jcv")
+
+[node name="Sol" type="Node2D" parent="Map/Galaxy/Sol/Sol"]
+script = ExtResource("8_hr0l1")
+albedo = Color(0.956863, 0.937255, 0, 1)
+equatorialRadius = 700.0
 
 [node name="Earth" type="Node2D" parent="Map/Galaxy/Sol"]
 position = Vector2(149, 0)
 script = ExtResource("7_k6jcv")
-Zoom = 5.0
-
-[node name="Moon" type="Node2D" parent="Map/Galaxy/Sol/Earth"]
-position = Vector2(1, 0)
-script = ExtResource("8_hr0l1")
-
-[node name="Features" type="Node" parent="Map/Galaxy/Sol/Earth/Moon"]
-
-[node name="Surface Mining" type="Node" parent="Map/Galaxy/Sol/Earth/Moon/Features" node_paths=PackedStringArray("Template")]
-script = ExtResource("7_0xlau")
-Template = NodePath("../../../../../../../Player/PlayerFeatureTemplates/Surface Mining")
-SplashScreenPath = "res://assets/splash/surface_mine.png"
-NeedsTags = ["planetary"]
-
-[node name="Nominal Operation" parent="Map/Galaxy/Sol/Earth/Moon/Features/Surface Mining" instance=ExtResource("8_j7vpr")]
-Factors = {
-1: 3.0,
-2: -2.0
-}
-StartingCapability = 0.8
 
 [node name="Earth" type="Node2D" parent="Map/Galaxy/Sol/Earth"]
 script = ExtResource("8_hr0l1")
+albedo = Color(0.380392, 0.572549, 1, 1)
+equatorialRadius = 6.3
 
 [node name="Features" type="Node" parent="Map/Galaxy/Sol/Earth/Earth"]
 
 [node name="Desalination Site" type="Node" parent="Map/Galaxy/Sol/Earth/Earth/Features" node_paths=PackedStringArray("Template")]
 script = ExtResource("7_0xlau")
-Template = NodePath("../../../../../../../Player/PlayerFeatureTemplates/DMHO Purification")
 SplashScreenPath = "res://assets/splash/chemical.png"
 NeedsTags = ["planetary"]
+Template = NodePath("../../../../../../../Player/PlayerFeatureTemplates/DMHO Purification")
 
 [node name="Nominal Operation" parent="Map/Galaxy/Sol/Earth/Earth/Features/Desalination Site" instance=ExtResource("8_j7vpr")]
 Factors = {
@@ -87,9 +81,9 @@ InitialScale = 1.5
 
 [node name="Fuel Refining" type="Node" parent="Map/Galaxy/Sol/Earth/Earth/Features" node_paths=PackedStringArray("Template")]
 script = ExtResource("7_0xlau")
-Template = NodePath("../../../../../../../Player/PlayerFeatureTemplates/Fuel Refining")
 SplashScreenPath = "res://assets/splash/chemical.png"
 NeedsTags = ["planetary"]
+Template = NodePath("../../../../../../../Player/PlayerFeatureTemplates/Fuel Refining")
 
 [node name="Nominal Operation" parent="Map/Galaxy/Sol/Earth/Earth/Features/Fuel Refining" instance=ExtResource("8_j7vpr")]
 Factors = {
@@ -101,9 +95,9 @@ InitialScale = 0.5
 
 [node name="Spaceport" type="Node" parent="Map/Galaxy/Sol/Earth/Earth/Features" node_paths=PackedStringArray("Template")]
 script = ExtResource("7_0xlau")
-Template = NodePath("../../../../../../../Player/PlayerFeatureTemplates/Spaceport")
 SplashScreenPath = "res://assets/splash/shuttle.png"
 NeedsTags = ["planetary"]
+Template = NodePath("../../../../../../../Player/PlayerFeatureTemplates/Spaceport")
 
 [node name="Nominal Operation" parent="Map/Galaxy/Sol/Earth/Earth/Features/Spaceport" instance=ExtResource("8_j7vpr")]
 Factors = {
@@ -111,12 +105,26 @@ Factors = {
 811: 2.0
 }
 
-[node name="Sol" type="Node2D" parent="Map/Galaxy/Sol"]
-script = ExtResource("7_k6jcv")
-Zoom = 2.0
-
-[node name="Sol" type="Node2D" parent="Map/Galaxy/Sol/Sol"]
+[node name="Moon" type="Node2D" parent="Map/Galaxy/Sol/Earth"]
+position = Vector2(1, 0)
 script = ExtResource("8_hr0l1")
+albedo = Color(0.341176, 0.341176, 0.341176, 1)
+equatorialRadius = 1.5
+
+[node name="Features" type="Node" parent="Map/Galaxy/Sol/Earth/Moon"]
+
+[node name="Surface Mining" type="Node" parent="Map/Galaxy/Sol/Earth/Moon/Features" node_paths=PackedStringArray("Template")]
+script = ExtResource("7_0xlau")
+SplashScreenPath = "res://assets/splash/surface_mine.png"
+NeedsTags = ["planetary"]
+Template = NodePath("../../../../../../../Player/PlayerFeatureTemplates/Surface Mining")
+
+[node name="Nominal Operation" parent="Map/Galaxy/Sol/Earth/Moon/Features/Surface Mining" instance=ExtResource("8_j7vpr")]
+Factors = {
+1: 3.0,
+2: -2.0
+}
+StartingCapability = 0.8
 
 [node name="Screen" parent="." instance=ExtResource("2_ohuhm")]
 

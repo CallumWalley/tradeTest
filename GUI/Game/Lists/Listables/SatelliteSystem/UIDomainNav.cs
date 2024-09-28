@@ -33,6 +33,6 @@ public partial class UIDomainNav : Button
 			uiw.AddChild(uit);
 			canvasLayer.AddChild(uiw);
 		}
-		GetNode<Godot.Camera2D>("/root/Global/Map/Galaxy/Sol/Camera2D").Position = domain.Position;
+		GetNode<Camera>("/root/Global/Map/Galaxy/Camera2D").Position = domain.Position;
 	}
 }

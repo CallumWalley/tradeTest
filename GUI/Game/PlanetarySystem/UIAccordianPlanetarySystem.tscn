@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://buwjppcc3ffc7"]
+
+[ext_resource type="PackedScene" uid="uid://blr2onphs1wpv" path="res://GUI/Elements/UIAccordian.tscn" id="1_2rfff"]
+[ext_resource type="Script" path="res://GUI/Game/PlanetarySystem/UIAccordianPlanetarySystem.cs" id="2_yvrq2"]
+
+[node name="Accordian" instance=ExtResource("1_2rfff")]
+script = ExtResource("2_yvrq2")

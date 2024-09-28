@@ -9,7 +9,7 @@ public partial class UIResourceStorage : Control
 
     Global global;
     public bool Destroy { get; set; } = false;
-
+    bool stepNumbericalInterpolation;
     double resourceSumLast = 0;
     double resourceStoreThis;
     Color colorBad = new(1, 0, 0);
@@ -17,6 +17,9 @@ public partial class UIResourceStorage : Control
     public Label value;
     public Label name;
     public Resource.RStatic GameElement { get { return resource; } }
+
+    ConfigFile playerConfig;
+    
     static readonly PackedScene p_resourceIcon = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/UIResource.tscn");
 
     public void Init(Resource.Ledger.EntryAccrul _entry)
@@ -33,14 +36,22 @@ public partial class UIResourceStorage : Control
         name = GetNode<Label>("Name");
         //details = GetNode<Label>("Details");
         global = GetNode<Global>("/root/Global");
+        playerConfig = PlayerConfig.config;
+        stepNumbericalInterpolation = (bool)playerConfig.GetValue("interface", "stepNumbericalInterpolation");
     }
 
     public override void _Process(double _delta)
     {
 
         //value.Text = string.Format("{0:P0}", entry.Stored.Sum / entry.Capacity.Sum);
-        //double displayValue = ((global.deltaEFrame / global.timePerEframe) * (resourceSumLast - resourceStoreThis)) + resourceSumLast;
-        double displayValue = resourceStoreThis;
+
+        // If numerical interpolation is turned on.
+        double displayValue;
+        if (stepNumbericalInterpolation){
+             displayValue = ((global.deltaEFrame / global.timePerEframe) * (resourceSumLast - resourceStoreThis)) + resourceSumLast;
+        }else{
+            displayValue = resourceStoreThis;
+        }
         value.Text = string.Format("{0:F0}", displayValue);
         name.Text = $": Storage";
         // Storage is in deficit.
