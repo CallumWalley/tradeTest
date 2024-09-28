@@ -24,7 +24,7 @@ public partial class Body : FeatureBase
     double inclination;
     [ExportGroup("Physical")]
     [Export]
-    double equatorialRadius = 6.378; //MM
+    double equatorialRadius; //MM
 
 
     // Dictionary<string, double> surfaceArea;
