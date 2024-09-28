@@ -6,6 +6,7 @@ public partial class PlanetarySystem : Node2D, Entities.IEntityable, IEnumerable
 {
 	new public string Name { get { return base.Name; } set { base.Name = value; } }
 	public string Description { get; set; }
+    public SatelliteSystem Eldest {get{ return GetChildOrNull<SatelliteSystem>(0);}}
 
 	System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
 	{
@@ -21,6 +22,11 @@ public partial class PlanetarySystem : Node2D, Entities.IEntityable, IEnumerable
 			}
 		}
 	}
+
+
+	public override void _Draw(){
+        base._Draw();
+        Eldest._Draw();	}
 }
 
 

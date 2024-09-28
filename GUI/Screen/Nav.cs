@@ -5,13 +5,16 @@ using System.Numerics;
 
 public partial class Nav : VBoxContainer
 {
-	static readonly PackedScene prefab_UIAccordian = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/UIAccordian.tscn");
-
+	static readonly PackedScene prefab_UIAccordian = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/PlanetarySystem/UIAccordianPlanetarySystem.tscn");
 
 	Map map;
+
+	CanvasLayer canvasLayer;
+	
 	public override void _Ready()
 	{
 		map = GetNode<Map>("/root/Global/Map");
+		canvasLayer = GetNode<CanvasLayer>("../");
 		foreach (Galaxy g in map.GetChildren())
 		{
 			AddChild(DrawGalaxy(g));
@@ -24,64 +27,15 @@ public partial class Nav : VBoxContainer
 		VBoxContainer vb = new VBoxContainer();
 		foreach (PlanetarySystem ps in g)
 		{
-			vb.AddChild(DrawPlanetarySystem(ps));
+			UIAccordianPlanetarySystem ui_ps = (UIAccordianPlanetarySystem)prefab_UIAccordian.Instantiate<UIAccordianPlanetarySystem>();
+			ui_ps.planetarySystem = ps;
+			ui_ps.canvasLayer = canvasLayer;
+			vb.AddChild(ui_ps);
 		}
 		HBoxContainer hb = new HBoxContainer();
 		hb.AddChild(new HSeparator());
 		hb.AddChild(vb);
-
 		a.AddChild(hb);
 		return a;
-	}
-	public UIAccordian DrawPlanetarySystem(PlanetarySystem ps)
-	{
-		UIAccordian ui_ps = prefab_UIAccordian.Instantiate<UIAccordian>();
-		ui_ps.GetNode<Button>("Button").Text = ps.Name;
-		ui_ps.GetNode<Button>("Button").Flat = true;
-		ui_ps.GetNode<Button>("Button").ButtonPressed = false;
-		ui_ps.GetNode<Button>("Button").Alignment = HorizontalAlignment.Left;
-		ui_ps.GetNode<Container>("Container").Visible = false;
-		VBoxContainer vb = new VBoxContainer();
-		foreach (SatelliteSystem ss in ps)
-		{
-			vb.AddChild(DrawSatelliteSystem(ss));
-		}
-		HBoxContainer hb = new HBoxContainer();
-		HSeparator hs = new HSeparator();
-		hb.AddChild(hs);
-		hs.SizeFlagsVertical = SizeFlags.ShrinkBegin;
-		hb.AddChild(vb);
-		Container ac = ui_ps.GetNode<Container>("Container");
-		ac.ThemeTypeVariation = "PanelContainerTransparent";
-		ac.AddChild(hb);
-		return ui_ps;
-	}
-	public UIAccordian DrawSatelliteSystem(SatelliteSystem ss)
-	{
-		UIAccordian ui_d = prefab_UIAccordian.Instantiate<UIAccordian>();
-		ui_d.GetNode<Button>("Button").Text = ss.Name;
-		ui_d.GetNode<Button>("Button").Flat = true;
-		ui_d.GetNode<Button>("Button").ButtonPressed = false;
-		ui_d.GetNode<Button>("Button").Alignment = HorizontalAlignment.Left;
-		ui_d.GetNode<Container>("Container").Visible = false;
-		VBoxContainer vb = new VBoxContainer();
-
-		foreach (Domain domain in ss.GetChildren())
-		{
-			UIDomainNav uiw = new UIDomainNav();
-			uiw.domain = (domain);
-			uiw.Flat = true;
-			uiw.canvasLayer = GetParent<CanvasLayer>();
-			vb.AddChild(uiw);
-		}
-		HBoxContainer hb = new HBoxContainer();
-		HSeparator hs = new HSeparator();
-		hb.AddChild(hs);
-		hs.SizeFlagsVertical = SizeFlags.ShrinkBegin;
-		hb.AddChild(vb);
-		Container ac = ui_d.GetNode<Container>("Container");
-		ac.ThemeTypeVariation = "PanelContainerTransparent";
-		ac.AddChild(hb);
-		return ui_d;
 	}
 }
