@@ -9,7 +9,7 @@ public partial class UIResourceStorage : Control
 
     Global global;
     public bool Destroy { get; set; } = false;
-    bool stepNumbericalInterpolation;
+    bool stepNumericalInterpolation;
     double resourceSumLast = 0;
     double resourceStoreThis;
     Color colorBad = new(1, 0, 0);
@@ -37,7 +37,7 @@ public partial class UIResourceStorage : Control
         //details = GetNode<Label>("Details");
         global = GetNode<Global>("/root/Global");
         playerConfig = PlayerConfig.config;
-        stepNumbericalInterpolation = (bool)playerConfig.GetValue("interface", "stepNumbericalInterpolation");
+        stepNumericalInterpolation = (bool)playerConfig.GetValue("interface", "stepNumericalInterpolation");
     }
 
     public override void _Process(double _delta)
@@ -47,7 +47,7 @@ public partial class UIResourceStorage : Control
 
         // If numerical interpolation is turned on.
         double displayValue;
-        if (stepNumbericalInterpolation){
+        if (stepNumericalInterpolation){
              displayValue = ((global.deltaEFrame / global.timePerEframe) * (resourceSumLast - resourceStoreThis)) + resourceSumLast;
         }else{
             displayValue = resourceStoreThis;

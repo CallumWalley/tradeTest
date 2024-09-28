@@ -42,9 +42,6 @@ public partial class UIAccordianSatelliteSystem : UIAccordian
 	public override void ShowDetails(bool toggled)
 	{	
 		base.ShowDetails(toggled);
-
-		
-		camera.Position = satelliteSystem.GlobalPosition;
-		camera.SetZoom(satelliteSystem.ZoomLevel);
+		camera.Center(satelliteSystem);
 	}	
 }

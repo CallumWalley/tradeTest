@@ -1,3 +1,5 @@
+using System.Numerics;
+
 public partial class UIInterfaces
 {
     // Indicates can receive signal to update game elements.
@@ -5,4 +7,5 @@ public partial class UIInterfaces
     {
         void OnEFrameUpdate();
     }
+
 }

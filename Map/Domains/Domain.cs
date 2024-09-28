@@ -19,15 +19,19 @@ public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<FeatureB
     [Export]
     public string Description { get; set; }
 
-    // Radius of UI element.
-    float UIRadius = 30;
-    float UIRotate;
-
-    // is mouse over this element.
-    bool focus;
-
+    public virtual float CameraZoom {get {return 1;}}
+    public virtual Godot.Vector2 CameraPosition {get {return GlobalPosition;}}
     Node features;
     CollisionShape2D collisionShape2D;
+    // UIMapOverlayElement overlayElement;
+    // public UIMapOverlayElement OverlayElement {
+    //     get{
+    //     if (overlayElement == null){
+    //         overlayElement = new UIMapOverlayElement();
+    //         overlayElement.element = this;
+    //     }
+    //     return overlayElement;
+    //     }}
 
     // public override void _Process(double _delta)
     // {
@@ -50,18 +54,6 @@ public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<FeatureB
     //     // 	uiBody.Visible = true;
     //     // }
     // }
-
-    public void Focus()
-    {
-        focus = true;
-        GD.Print("mouse entered");
-    }
-
-    public void UnFocus()
-    {
-        focus = false;
-    }
-
     public bool ValidTradeReceiver
 
     {
@@ -194,49 +186,16 @@ public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<FeatureB
             // var _ = Ledger[kvp.Key];
             ((Resource.Ledger.EntryAccrul)Ledger[kvp.Key]).Stored.Sum = (kvp.Value + ((Resource.Ledger.EntryAccrul)Ledger[kvp.Key]).Stored.Sum);
         }
-
-
-        // UI Stuff
-        CircleShape2D circleShape2D = new CircleShape2D();
-        circleShape2D.Radius = UIRadius;
-        collisionShape2D = new();
-        collisionShape2D.Shape = circleShape2D;
-        // Add interactive 
-        Area2D area2D = new();
-        area2D.AddChild(collisionShape2D);
-
-        area2D.Connect("mouse_entered", new Callable(this, "Focus"));
-        area2D.Connect("mouse_exited", new Callable(this, "UnFocus"));
-        AddChild(area2D);
     }
 
 
     public override void _Draw()
     {
         base._Draw();
-        DrawCircle(this.Position, 5, new Color(1, 1, 1));
-        DrawArc(this.Position, UIRadius, UIRotate, UIRotate + 4f, 64, new Color(1, 1, 1), 0.5f, true);
-
     }
 
     public override void _Process(double delta)
     {
-        base._Process(delta);
-        if (IsVisibleInTree())
-        {
-            UIRotate += focus ? 0.05f : 0.005f;
-
-            if (Input.IsActionPressed("ui_select"))
-            {
-                if (focus)
-                {
-                    float z = 5 * GD.Randf();
-                    GetNode<Godot.Camera2D>("/root/Global/Map/Galaxy/Sol/Camera2D").Position = GlobalPosition;
-                    //GetNode<Godot.Camera2D>("/root/Global/Map/Galaxy/Sol/Camera2D").Zoom = new Vector2(2, 2);
-                }
-            }
-        }
-        QueueRedraw();
     }
     // this is so messy, i hate it. aaaaaaaaaaah
     public void EFrameEarly()

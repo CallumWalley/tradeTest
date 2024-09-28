@@ -17,9 +17,25 @@ public partial class Camera : Godot.Camera2D
 		PositionSmoothingSpeed = (float)PlayerConfig.config.GetValue("interface", "cameraPanSpeed");
 	}	
 
-	public void SetZoom(float zoom){
+	void SetCameraZoom(float zoom){
 		previousZoom = nextZoom;
 		nextZoom = zoom;
+	}
+
+	void SetCameraPosition(Godot.Vector2 position){
+		GlobalPosition = position;
+	}
+
+	public void Center(Entities.IEntityable target){
+
+		SetCameraZoom(target.CameraZoom);
+		SetCameraPosition(target.CameraPosition);
+
+		// GD.Print(GetViewportTransform());
+
+		GD.Print(GetViewportRect());
+		GD.Print($"{target.Name} Camera Position: {target.CameraPosition}, Camera Zoom: {target.CameraZoom}"); 
+
 	}
 
     public override void _Process(double delta)

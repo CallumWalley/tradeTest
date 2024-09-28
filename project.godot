@@ -15,6 +15,10 @@ run/main_scene="res://TestScene.tscn"
 config/features=PackedStringArray("4.3", "C#")
 config/icon="res://icon.png"
 
+[autoload]
+
+PlayerConfig="*res://PlayerConfig.cs"
+
 [dotnet]
 
 project/assembly_name="tradeTest"

@@ -1,32 +1,61 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
-public partial class PlanetarySystem : Node2D, Entities.IEntityable, IEnumerable<SatelliteSystem>
+public partial class PlanetarySystem : Node2D, Entities.IEntityable, IEnumerable<Entities.IOrbital>
 {
 	new public string Name { get { return base.Name; } set { base.Name = value; } }
 	public string Description { get; set; }
-    public SatelliteSystem Eldest {get{ return GetChildOrNull<SatelliteSystem>(0);}}
 
-	System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+
+		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
 	{
 		return GetEnumerator();
 	}
-	public IEnumerator<SatelliteSystem> GetEnumerator()
+	public IEnumerator<Entities.IOrbital> GetEnumerator()
 	{
 		foreach (Node c in GetChildren())
 		{
-			if (c.GetType() == typeof(SatelliteSystem))
+			if (typeof(Entities.IOrbital).IsAssignableFrom(c.GetType()))
 			{
-				yield return (SatelliteSystem)c;
+				yield return (Entities.IOrbital)c;
 			}
 		}
 	}
 
+    public Entities.IOrbital Eldest {get{ return GetChildOrNull<Entities.IOrbital>(0);}}
+    public float CameraZoom {get{
+        float viewport = GetViewportRect().Size[0];
+        float size;
+        float zl;
+        // If has less than two children raw width is size of thing itself.
+        if (GetChildCount() < 2){
+            zl = this.First<Entities.IOrbital>().CameraZoom;
+        }
+        else
+        {
+            size = this.Max<Entities.IOrbital>(x=> { return x.Aphelion;} );
+            GD.Print("Composite");
+            zl = (viewport / ((float)Math.Log(size * 1000000, (int)PlayerConfig.config.GetValue("interface", "logBase"))))/10;
+        }
+        return zl;
+    }}
+
+
+    public Vector2 CameraPosition {
+        get{
+            return GlobalPosition;
+        }
+    }
+
+
+
+
 
 	public override void _Draw(){
         base._Draw();
-        Eldest._Draw();	}
+	}
 }
 
 

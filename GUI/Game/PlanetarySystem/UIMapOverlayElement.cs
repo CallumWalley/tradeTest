@@ -7,12 +7,11 @@ public partial class UIMapOverlayElement : Control
 
     float UIRotate;
 	float UIRadius = 30;
-	public Domain element;
+	public Entities.IOrbital element;
 
     // is mouse over this element.
     bool focus;
 	Vector2 positionOnMap;
-
 	Camera camera;
 	public bool visible = false;
 	public override void _Ready()
@@ -37,8 +36,7 @@ public partial class UIMapOverlayElement : Control
             {
                 if (focus)
                 {
-                    camera.Position = element.GlobalPosition;
-                    camera.SetZoom(element.ZoomLevel);
+                    camera.Center(element);
                 }
             }
         }

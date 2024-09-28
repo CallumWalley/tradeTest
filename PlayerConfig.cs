@@ -9,10 +9,16 @@ public partial class PlayerConfig : Node
 
     public static ConfigFile config = new ConfigFile();
 
+
+    public override void _EnterTree()
+    {
+        base._EnterTree();
+        LoadConfigFile();
+
+    }
     public override void _Ready()
     {
         base._Ready();
-        LoadConfigFile();
     }
 
     public void LoadConfigFile()
@@ -31,5 +37,7 @@ public partial class PlayerConfig : Node
         }else{
             GD.Print($"Loading existing config from {localpath}");
         }
+        GD.Print(config.EncodeToText());
     }
+
 }

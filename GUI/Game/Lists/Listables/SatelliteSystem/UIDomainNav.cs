@@ -22,6 +22,7 @@ public partial class UIDomainNav : Button
 		if (existingWindow != null)
 		{
 			existingWindow.Popup();
+			existingWindow.Position += new Vector2I(0, 100);
 		}
 		else
 		{
@@ -33,6 +34,6 @@ public partial class UIDomainNav : Button
 			uiw.AddChild(uit);
 			canvasLayer.AddChild(uiw);
 		}
-		GetNode<Camera>("/root/Global/Map/Galaxy/Camera2D").Position = domain.Position;
+		GetNode<Camera>("/root/Global/Map/Galaxy/Camera2D").Center(domain);
 	}
 }
