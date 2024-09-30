@@ -22,9 +22,8 @@ mono_crash*
 addons/*
 
 # Assets
-assets/Buttons/*
+assets/Buttons/
 assets/icons/computersa
 assets/splash/slash_presize/*
-assets/fonts/*
 
 *~
