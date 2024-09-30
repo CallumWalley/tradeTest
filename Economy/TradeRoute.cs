@@ -19,7 +19,7 @@ public partial class TradeRoute : Node, Entities.IEntityable
     public Godot.Vector2 CameraPosition{ get{ throw new NotImplementedException(); }}
 
     public float CameraZoom{ get{ throw new NotImplementedException(); }}
-
+    
 
     new public string Name { get { return base.Name; } set { base.Name = value; } }
 
@@ -89,9 +89,7 @@ public partial class TradeRoute : Node, Entities.IEntityable
 
         // 0.3 = 1.8
         // 7300 = 
-
         shipDemand.Name = Name;
-        DrawLine();
     }
 
 
@@ -111,13 +109,6 @@ public partial class TradeRoute : Node, Entities.IEntityable
     //     (Head, Tail) = (_head, _tail);
     //     Init();
     // }
-    public void DrawLine()
-    {
-        if (Tail != null && Head != null)
-        {
-            GetNode<Line2D>("Line2D").Points = new Vector2[] { Tail.Position, Head.Position };
-        }
-    }
     public void ChangeName(string newName)
     {
         Name = newName;
@@ -154,7 +145,10 @@ public partial class TradeRoute : Node, Entities.IEntityable
         }
     }
 
-
+    public override void _Process(double delta)
+    {
+        base._Process(delta);
+    }
 
     // public void SetHeadExport(int key, double value)
     // {

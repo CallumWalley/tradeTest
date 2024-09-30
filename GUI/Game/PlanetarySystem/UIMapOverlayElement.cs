@@ -7,7 +7,7 @@ public partial class UIMapOverlayElement : Control
 
     float UIRotate;
 	float UIRadius = 30;
-	public Entities.IOrbital element;
+    public Entities.IEntityable element;
 
     // is mouse over this element.
     bool focus;
@@ -22,24 +22,25 @@ public partial class UIMapOverlayElement : Control
 
 	public override void _Draw(){
 		base._Draw();
-		DrawArc(this.Position, UIRadius, UIRotate, UIRotate + 4f, 64, new Color(1, 1, 1), 0.5f, true);
+		DrawArc(new Vector2(0,0), UIRadius, UIRotate, UIRotate + 4f, 64, new Color(1, 1, 1), 10, true);
 	}
 
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
-        if (IsVisibleInTree())
-        {
-            UIRotate += focus ? 0.05f : 0.005f;
+        // if (IsVisibleInTree())
+        // {
+        //     UIRotate += focus ? 0.05f : 0.005f;
 
-            if (Input.IsActionPressed("ui_select"))
-            {
-                if (focus)
-                {
-                    camera.Center(element);
-                }
-            }
-        }
+        //     if (Input.IsActionPressed("ui_select"))
+        //     {
+        //         if (focus)
+        //         {
+        //             camera.Center((Entities.IOrbital)element);
+        //         }
+        //     }
+        // }
+        GlobalPosition=((Node2D)element).GetViewportTransform() * ((Node2D)element).GlobalPosition;
         QueueRedraw();
 	}
 

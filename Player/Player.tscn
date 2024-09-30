@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://con3ea5txcdnn"]
+[gd_scene load_steps=8 format=3 uid="uid://con3ea5txcdnn"]
 
 [ext_resource type="Script" path="res://Player/Player.cs" id="1_ee032"]
 [ext_resource type="Script" path="res://Player/PlayerTrade.cs" id="3_3mavi"]
@@ -33,14 +33,12 @@ Feature = NodePath("DMHO Purification")
 script = ExtResource("6_g7q3k")
 SplashScreenPath = "res://assets/splash/chemical.png"
 NeedsTags = ["planetary"]
-Description = "Removing impurities from surface liquid DHMO through reverse osmosis."
 
 [node name="Nominal Operation" parent="PlayerFeatureTemplates/DMHO Purification/DMHO Purification" instance=ExtResource("7_f7g6h")]
 Factors = {
 2: -2.0,
 4: 3.0
 }
-Description = "Everything working as expected"
 
 [node name="Surface Mining" type="Node" parent="PlayerFeatureTemplates" node_paths=PackedStringArray("Feature")]
 script = ExtResource("4_opta7")
@@ -50,14 +48,12 @@ Feature = NodePath("Surface Mining")
 script = ExtResource("6_g7q3k")
 SplashScreenPath = "res://assets/splash/surface_mine.png"
 NeedsTags = ["planetary"]
-Description = "Usefull minerals found near the surface where the overburden is thin, is extracted via the digging of a large hole."
 
 [node name="Nominal Operation" parent="PlayerFeatureTemplates/Surface Mining/Surface Mining" instance=ExtResource("7_f7g6h")]
 Factors = {
 1: 3.0,
 2: -2.0
 }
-Description = "Everything working as expected"
 
 [node name="Fuel Refining" type="Node" parent="PlayerFeatureTemplates" node_paths=PackedStringArray("Feature")]
 script = ExtResource("4_opta7")
@@ -67,14 +63,12 @@ Feature = NodePath("Fuel Refining")
 script = ExtResource("6_g7q3k")
 SplashScreenPath = "res://assets/splash/chemical.png"
 NeedsTags = ["planetary"]
-Description = "Facilities for converting H2O into chemical fuel."
 
 [node name="Nominal Operation" parent="PlayerFeatureTemplates/Fuel Refining/Fuel Refining" instance=ExtResource("7_f7g6h")]
 Factors = {
 2: 3.0,
 4: -2.0
 }
-Description = "Everything working as expected"
 
 [node name="Launch Complex" type="Node" parent="PlayerFeatureTemplates" node_paths=PackedStringArray("Feature")]
 script = ExtResource("4_opta7")
@@ -84,14 +78,12 @@ Feature = NodePath("Launch Complex")
 script = ExtResource("6_g7q3k")
 SplashScreenPath = "res://assets/splash/shuttle.png"
 NeedsTags = ["planetary"]
-Description = "Facilities for converting H2O into chemical fuel."
 
 [node name="Nominal Operation" parent="PlayerFeatureTemplates/Launch Complex/Launch Complex" instance=ExtResource("7_f7g6h")]
 Factors = {
 2: -4.0,
 812: 2.0
 }
-Description = "Everything working as expected"
 
 [node name="Spaceport" type="Node" parent="PlayerFeatureTemplates" node_paths=PackedStringArray("Feature")]
 script = ExtResource("4_opta7")
@@ -107,4 +99,3 @@ Factors = {
 2: -3.0,
 811: 2.0
 }
-Description = "Everything working as expected"

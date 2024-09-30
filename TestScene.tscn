@@ -16,6 +16,8 @@
 [node name="Global" type="Node"]
 script = ExtResource("1_1b3uo")
 
+[node name="Screen" parent="." instance=ExtResource("2_ohuhm")]
+
 [node name="Player" parent="." instance=ExtResource("1_w03ia")]
 
 [node name="TradeRoute" parent="Player/PlayerTrade" index="0" node_paths=PackedStringArray("Head", "Tail") instance=ExtResource("3_7is4n")]
@@ -62,6 +64,7 @@ Perihelion = 149.0
 script = ExtResource("8_hr0l1")
 albedo = Color(0.380392, 0.572549, 1, 1)
 equatorialRadius = 6.3
+_validTradeReceiver = true
 
 [node name="Features" type="Node" parent="Map/Galaxy/Sol/Earth/Earth"]
 
@@ -126,7 +129,5 @@ Factors = {
 2: -2.0
 }
 StartingCapability = 0.8
-
-[node name="Screen" parent="." instance=ExtResource("2_ohuhm")]
 
 [editable path="Player"]

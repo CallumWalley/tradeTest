@@ -207,7 +207,6 @@ public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<FeatureB
         Logistics.ExportToParent.EFrameLate(this);
     }
 
-    public void Setup() { }
 
     public IEnumerator<FeatureBase> GetEnumerator()
     {

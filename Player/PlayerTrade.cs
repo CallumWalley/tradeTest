@@ -3,24 +3,25 @@ using System;
 using System.Collections.Generic;
 using System.Dynamic;
 
-public partial class PlayerTrade : Node
+public partial class PlayerTrade : Node,  IEnumerable<TradeRoute>
 {
 	// Parent to trade routes.
 
 	static readonly PackedScene ps_TradeRoute = (PackedScene)GD.Load<PackedScene>("res://Map/TradeRoute.tscn");
 
 	public List<Domain> Heads { get; set; } = new List<Domain>();
-	public IEnumerable<TradeRoute> Routes
-	{
-		get
-		{
-			foreach (TradeRoute tradeRoute in GetChildren())
-			{
-				yield return tradeRoute;
-			}
-		}
-	}
 
+    public IEnumerator<TradeRoute> GetEnumerator()
+    {
+        foreach (TradeRoute f in GetChildren())
+        {
+            yield return f;
+        }
+    }
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 	// Initialise trade routes added in editor.
 
 	public override void _Ready()
