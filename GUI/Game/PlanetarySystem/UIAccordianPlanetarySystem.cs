@@ -3,14 +3,14 @@ using System;
 
 public partial class UIAccordianPlanetarySystem : UIAccordian
 {
-	public PlanetarySystem planetarySystem {get;set;}
-	public CanvasLayer canvasLayer {get; set;}
-	public Camera camera {get; set;}
+	public PlanetarySystem planetarySystem { get; set; }
+	public CanvasLayer canvasLayer { get; set; }
+	public Camera camera { get; set; }
 	static readonly PackedScene prefab_UIAccordian = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/SatelliteSystem/UIAccordianSatelliteSystem.tscn");
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
-	{	
+	{
 		base._Ready();
 		Button button = GetNode<Button>("Button");
 		Container container = GetNode<Container>("Container");
@@ -21,12 +21,24 @@ public partial class UIAccordianPlanetarySystem : UIAccordian
 		button.Alignment = HorizontalAlignment.Left;
 		container.Visible = false;
 		VBoxContainer vb = new VBoxContainer();
-		foreach (SatelliteSystem ss in planetarySystem)
-		{	
-			UIAccordianSatelliteSystem ui_ss = (UIAccordianSatelliteSystem)prefab_UIAccordian.Instantiate<UIAccordian>();
-			ui_ss.satelliteSystem = ss;
-			ui_ss.canvasLayer=canvasLayer;
-			vb.AddChild(ui_ss);
+		foreach (Entities.IOrbital ss in planetarySystem)
+		{
+			if (typeof(SatelliteSystem).IsAssignableFrom(ss.GetType()))
+			{
+				UIAccordianSatelliteSystem ui_ss = (UIAccordianSatelliteSystem)prefab_UIAccordian.Instantiate<UIAccordian>();
+				ui_ss.satelliteSystem = (SatelliteSystem)ss;
+				ui_ss.canvasLayer = canvasLayer;
+				vb.AddChild(ui_ss);
+			}
+			else if (typeof(Domain).IsAssignableFrom(ss.GetType()))
+			{
+				UIDomainNav uiw = new UIDomainNav();
+				uiw.domain = (Domain)ss;
+				uiw.Flat = true;
+				uiw.canvasLayer = canvasLayer;
+				vb.AddChild(uiw);
+			}
+
 		}
 		HBoxContainer hb = new HBoxContainer();
 		HSeparator hs = new HSeparator();
@@ -36,9 +48,9 @@ public partial class UIAccordianPlanetarySystem : UIAccordian
 		container.ThemeTypeVariation = "PanelContainerTransparent";
 		container.AddChild(hb);
 	}
-		public override void ShowDetails(bool toggled)
-	{	
+	public override void ShowDetails(bool toggled)
+	{
 		base.ShowDetails(toggled);
 		camera.Center(planetarySystem);
-	}	
+	}
 }

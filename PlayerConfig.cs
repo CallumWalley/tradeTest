@@ -31,13 +31,17 @@ public partial class PlayerConfig : Node
             config.SetValue("interface", "stepNumericalInterpolation", true);
             config.SetValue("interface", "cameraPanSpeed", 2);
             config.SetValue("interface", "cameraZoomSpeed", 2);
-            config.SetValue("interface", "logBase", 10);
+            config.SetValue("interface", "logBase", 2); // 0 for none.
+            config.SetValue("interface", "radialScale", 10);
+
 
             config.Save(confFilePath);
-        }else{
+        }
+        else
+        {
             GD.Print($"Loading existing config from {localpath}");
         }
-        GD.Print(config.EncodeToText());
+        GD.Print(what: config.EncodeToText());
     }
 
 }

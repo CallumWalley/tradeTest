@@ -7,16 +7,19 @@ public partial class Screen : CanvasLayer
 	Control tradeRoutes;
 	Control overlay;
 
-    public override void _Ready()
-    {
-        base._Ready();
+	public override void _Ready()
+	{
+		base._Ready();
 		overlay = GetNode<Control>("PlanetOverlay");
-    }
+	}
 
-    
 
-	public void DrawSystem(PlanetarySystem ps){
-		foreach (Entities.IOrbital ss in ps){
+
+	public void DrawSystem(PlanetarySystem ps)
+	{
+
+		foreach (Entities.IOrbital ss in ps)
+		{
 			UIMapOverlayElement nuimoe = new UIMapOverlayElement();
 			nuimoe.element = ss;
 			overlay.AddChild(nuimoe);

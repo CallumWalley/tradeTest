@@ -10,7 +10,7 @@ public partial class Nav : VBoxContainer
 	Map map;
 
 	CanvasLayer canvasLayer;
-	
+
 	public override void _Ready()
 	{
 		map = GetNode<Map>("/root/Global/Map");

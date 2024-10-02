@@ -14,6 +14,16 @@
 [node name="Screen" type="CanvasLayer"]
 script = ExtResource("1_5umy1")
 
+[node name="TradeRoutes" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("10_2rbum")
+
+[node name="PlanetOverlay" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+size_flags_horizontal = 3
+
 [node name="TopRight" type="Panel" parent="."]
 anchors_preset = 1
 anchor_left = 1.0
@@ -126,7 +136,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("4_d36to")
-current_tab = 0
 
 [node name="Shipyards" type="VBoxContainer" parent="UIWindowTradeOverview/UITradeWindow"]
 layout_mode = 2
@@ -141,13 +150,3 @@ text = "No Shipyards"
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
-
-[node name="PlanetOverlay" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-size_flags_horizontal = 3
-
-[node name="TradeRoutes" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-script = ExtResource("10_2rbum")
