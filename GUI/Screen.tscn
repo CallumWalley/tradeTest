@@ -136,6 +136,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("4_d36to")
+current_tab = 0
 
 [node name="Shipyards" type="VBoxContainer" parent="UIWindowTradeOverview/UITradeWindow"]
 layout_mode = 2
