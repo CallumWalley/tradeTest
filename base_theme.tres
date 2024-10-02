@@ -1,7 +1,6 @@
-[gd_resource type="Theme" load_steps=6 format=3 uid="uid://dv1dcg5y6swss"]
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://dv1dcg5y6swss"]
 
 [ext_resource type="FontFile" uid="uid://dssr2dxpuiv0e" path="res://assets/fonts/static/OpenSans-Light.ttf" id="1_2e4sy"]
-[ext_resource type="FontFile" uid="uid://hduc4gveq0i4" path="res://assets/fonts/static/OpenSans_Condensed-LightItalic.ttf" id="1_vr80t"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_25l4a"]
 content_margin_left = 2.0
@@ -52,5 +51,5 @@ PanelContainerTransparent/base_type = &"PanelContainer"
 PanelContainerTransparent/styles/panel = SubResource("StyleBoxFlat_1f4ht")
 TextSecondry/base_type = &"Label"
 TextSecondry/colors/font_color = Color(0.878431, 0.878431, 0.878431, 1)
-TextSecondry/fonts/font = ExtResource("1_vr80t")
+TextSecondry/fonts/font = ExtResource("1_2e4sy")
 VBoxContainer/constants/separation = 4
