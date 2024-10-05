@@ -35,14 +35,16 @@ public partial class PlanetarySystem : Node2D, Entities.IEntityable, IEnumerable
             // If has less than two children raw width is size of thing itself.
             if (GetChildCount() < 2)
             {
-                zl = this.First<Entities.IOrbital>().CameraZoom;
+                return this.First<Entities.IOrbital>().CameraZoom;
             }
             else
             {
                 size = this.Max<Entities.IOrbital>(x => { return x.Aphelion; });
-                zl = (viewport / size);
+
+                zl = (((float)PlayerConfig.config.GetValue("interface", "linearLogBase")) < 2) ? size : (float)Math.Log(size, (float)PlayerConfig.config.GetValue("interface", "linearLogBase"));
+                return (viewport) / (zl * 0.1f * 4);
             }
-            return zl;
+
         }
     }
 

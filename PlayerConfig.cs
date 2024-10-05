@@ -32,7 +32,7 @@ public partial class PlayerConfig : Node
             config.SetValue("interface", "cameraPanSpeed", 2);
             config.SetValue("interface", "cameraZoomSpeed", 2);
             config.SetValue("interface", "linearLogBase", 2); // 0 for none.
-            config.SetValue("interface", "radialScale", 1000);
+            config.SetValue("interface", "radialScale", 1);
             config.SetValue("interface", "radialLogBase", 2); // 0 for none.
 
             config.Save(confFilePath);

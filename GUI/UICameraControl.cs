@@ -56,6 +56,6 @@ public partial class UICameraControl : VBoxContainer
     {
         labelFocus.Text = $"Focus: {camera.focus.Name}";
         labelZoom.Text = string.Format("Zoom: {0:N1}", camera.Zoom.X);
-        labelPosition.Text = string.Format("Position: {0:F2},{1:F2}", camera.GlobalPosition.X, camera.GlobalPosition.Y);
+        labelPosition.Text = string.Format("Position: {0:G2},\n        : {1:G2}", camera.GlobalPosition.X, camera.GlobalPosition.Y);
     }
 }

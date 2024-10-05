@@ -28,20 +28,19 @@ public partial class SatelliteSystem : Node2D, Entities.IEntityable, Entities.IO
         {
             float viewport = GetViewportRect().Size[0];
             float size;
-            float zl;
             // If has less than two children raw width is size of thing itself.
             if (GetChildCount() < 2)
             {
-                zl = this.First<Entities.IOrbital>().CameraZoom;
+                return this.First<Entities.IOrbital>().CameraZoom;
             }
             else
             {
                 size = this.Max<Entities.IOrbital>(x => { return x.Aphelion; });
 
-                zl = (((float)PlayerConfig.config.GetValue("interface", "linearLogBase")) < 2) ? size : (float)Math.Log(Mathf.Max(size, 1.1), (float)PlayerConfig.config.GetValue("interface", "linearLogBase"));
-                // zl *= (float)PlayerConfig.config.GetValue("interface", "linearScale");
+                float zl = (((float)PlayerConfig.config.GetValue("interface", "linearLogBase")) < 2) ? size : (float)Math.Log(size, (float)PlayerConfig.config.GetValue("interface", "linearLogBase"));
+                return (viewport) / (zl * 4 * 0.1f);// Make moons fit on screen. //(float)PlayerConfig.config.GetValue("interface", "linearScale");
             }
-            return (viewport) / (zl * 4);
+
         }
     }
 

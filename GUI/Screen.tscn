@@ -1,8 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://r5ytkwljq7nb"]
+[gd_scene load_steps=13 format=3 uid="uid://r5ytkwljq7nb"]
 
 [ext_resource type="Script" path="res://GUI/Screen.cs" id="1_5umy1"]
 [ext_resource type="Script" path="res://GUI/Screen/Top/UITimeControl.cs" id="1_ys7u5"]
 [ext_resource type="PackedScene" uid="uid://rwliij8aoq6r" path="res://GUI/Elements/UIButtonToggleWindow.tscn" id="3_0miou"]
+[ext_resource type="Script" path="res://GUI/ScreenOrbitLines.cs" id="3_32cg4"]
 [ext_resource type="Script" path="res://GUI/Screen/Nav.cs" id="3_a3qo3"]
 [ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="4_d36to"]
 [ext_resource type="PackedScene" uid="uid://hayfw1l6yk1x" path="res://GUI/Elements/UIWindow.tscn" id="4_ibjw3"]
@@ -25,6 +26,17 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("10_2rbum")
+
+[node name="OrbitLines" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("3_32cg4")
 
 [node name="PlanetOverlay" type="Control" parent="."]
 layout_mode = 3
