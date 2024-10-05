@@ -40,19 +40,7 @@ public partial class PlanetarySystem : Node2D, Entities.IEntityable, IEnumerable
             else
             {
                 size = this.Max<Entities.IOrbital>(x => { return x.Aphelion; });
-                if ((float)PlayerConfig.config.GetValue("interface", "logBase") <= 1)
-                {
-                    zl = (viewport / size * 1000000) / 10;
-
-                }
-                else
-                {
-                    zl = (viewport / ((float)Math.Log(size * 1000000, (float)PlayerConfig.config.GetValue("interface", "logBase")))) / 10;
-
-                }
-
-                GD.Print("Composite");
-
+                zl = (viewport / size);
             }
             return zl;
         }

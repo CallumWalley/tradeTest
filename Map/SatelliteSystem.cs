@@ -37,19 +37,11 @@ public partial class SatelliteSystem : Node2D, Entities.IEntityable, Entities.IO
             else
             {
                 size = this.Max<Entities.IOrbital>(x => { return x.Aphelion; });
-                GD.Print("Composite");
-                if ((float)PlayerConfig.config.GetValue("interface", "logBase") <= 1)
-                {
-                    zl = (viewport / size * 1000000) / 10;
 
-                }
-                else
-                {
-                    zl = (viewport / ((float)Math.Log(size * 1000000, (float)PlayerConfig.config.GetValue("interface", "logBase")))) / 10;
-
-                }
+                zl = (((float)PlayerConfig.config.GetValue("interface", "linearLogBase")) < 2) ? size : (float)Math.Log(Mathf.Max(size, 1.1), (float)PlayerConfig.config.GetValue("interface", "linearLogBase"));
+                // zl *= (float)PlayerConfig.config.GetValue("interface", "linearScale");
             }
-            return zl;
+            return (viewport) / (zl * 4);
         }
     }
 
@@ -83,17 +75,9 @@ public partial class SatelliteSystem : Node2D, Entities.IEntityable, Entities.IO
     public override void _Process(double delta)
     {
         base._Process(delta);
-        if (Aphelion > 0)
-        {
-            if ((int)PlayerConfig.config.GetValue("interface", "logBase") <= 1)
-            {
-                Position = new Vector2(Aphelion * 1000000, 0);
-            }
-            else
-            {
-                Position = new Vector2((float)Math.Log(Aphelion * 1000000, (float)PlayerConfig.config.GetValue("interface", "logBase")), 0);
-            }
-        }
+        float place = (((float)PlayerConfig.config.GetValue("interface", "linearLogBase")) < 2) ? Aphelion : (float)Math.Log(Aphelion, (float)PlayerConfig.config.GetValue("interface", "linearLogBase"));
+        place *= 1; //(float)PlayerConfig.config.GetValue("interface", "linearScale");
+        Position = new Vector2(place, 0);
     }
 
     UIMapOverlayElement overlayElement;

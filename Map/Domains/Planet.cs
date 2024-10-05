@@ -22,39 +22,28 @@ public partial class Planet : Domain, Entities.IOrbital
     public float Eccentricity { get; set; }
     [Export]
     public float Period { get; set; }
+
+    public float drawRadius = 100;
     public override float CameraZoom
     {
         get
         {
-            GD.Print("Single");
-            if ((int)PlayerConfig.config.GetValue("interface", "logBase") <= 1)
-            {
-                return GetViewportRect().Size[0] / (4 * (equatorialRadius));
-            }
-            else
-            {
-                return GetViewportRect().Size[0] / (4 * ((float)Math.Log(equatorialRadius, (int)PlayerConfig.config.GetValue("interface", "logBase"))));
-            }
+            return GetViewportRect().Size[0] / (4 * drawRadius);
         }
     }
 
     public override void _Ready()
     {
         base._Ready();
-
     }
 
     public override void _Draw()
     {
-        if ((int)PlayerConfig.config.GetValue("interface", "logBase") <= 1)
-        {
-            DrawCircle(Vector2.Zero, equatorialRadius / (float)PlayerConfig.config.GetValue("interface", "radialScale"), albedo);
-        }
-        else
-        {
-            DrawCircle(Vector2.Zero, (float)Math.Log(equatorialRadius, (float)PlayerConfig.config.GetValue("interface", "logBase")) / (float)PlayerConfig.config.GetValue("interface", "radialScale"), albedo);
-        }
-        GD.Print((float)Math.Log(equatorialRadius, (float)PlayerConfig.config.GetValue("interface", "logBase")));
+
+        drawRadius = (((float)PlayerConfig.config.GetValue("interface", "radialLogBase")) < 2) ? equatorialRadius :
+        (float)Math.Log(equatorialRadius, (float)PlayerConfig.config.GetValue("interface", "radialLogBase"));
+        drawRadius *= (float)PlayerConfig.config.GetValue("interface", "radialScale");
+        DrawCircle(Vector2.Zero, drawRadius, albedo);
     }
 
     public override void _Process(double delta)
@@ -62,15 +51,13 @@ public partial class Planet : Domain, Entities.IOrbital
         base._Process(delta);
         if (Aphelion > 0)
         {
-            if ((int)PlayerConfig.config.GetValue("interface", "logBase") <= 1)
-            {
-                Position = new Vector2(0, Aphelion * 1000000);
-            }
-            else
-            {
-                Position = new Vector2(0, (float)Math.Log(Aphelion * 1000000, (float)PlayerConfig.config.GetValue("interface", "logBase")));
-            }
+
+            float place = (((float)PlayerConfig.config.GetValue("interface", "linearLogBase")) < 2) ? Aphelion :
+            (float)Math.Log(Aphelion, (float)PlayerConfig.config.GetValue("interface", "linearLogBase"));
+            place *= 1;// (float)PlayerConfig.config.GetValue("interface", "linearScale");
+            Position = new Vector2(0, place);
         }
+        QueueRedraw();
     }
     // Called every frame. 'delta' is the elapsed time since the previous frame.
 }
