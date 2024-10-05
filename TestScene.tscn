@@ -79,7 +79,7 @@ Perihelion = 149000.0
 [node name="Earth" type="Node2D" parent="Map/Galaxy/Sol System/Earth System"]
 script = ExtResource("8_hr0l1")
 albedo = Color(0.380392, 0.572549, 1, 1)
-equatorialRadius = 6300
+equatorialRadius = 6300.0
 _validTradeReceiver = true
 StartingResources = {
 2: 1000.0
@@ -130,7 +130,7 @@ Factors = {
 position = Vector2(0.3, 0)
 script = ExtResource("8_hr0l1")
 albedo = Color(0.776471, 0.776471, 0.776471, 1)
-equatorialRadius = 1500
+equatorialRadius = 1500.0
 Aphelion = 300.0
 Perihelion = 300.0
 
