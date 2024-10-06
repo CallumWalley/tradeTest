@@ -164,6 +164,7 @@ public static partial class Resource
 
 
     }
+
     /// <summary>
     /// Group of multiple resources added/summed together.
     /// </summary>
@@ -348,6 +349,29 @@ public static partial class Resource
             return Sum / Request;
         }
     }
+
+    /// <summary>
+    ///  Returns min, or max of children.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public partial class RLim<T> : IResourceGroup<IResource> where T : IResource
+    {
+        int type;
+        List<T> _members { get; set; }
+        public int Type
+        {
+            // infer type if not set.
+            get
+            {
+                if (type < 1) { if (_adders.Count > 0) { type = _adders.First().Type; } else if (_muxxers.Count > 0) { type = _muxxers.First().Type; } }
+                return type;
+            }
+            set { type = value; }
+        }
+        public string Details { get; set; } = "Sum";
+        public string Name { get; set; } = "Sum";
+    }
+
 
     public struct ResourceType
     {
