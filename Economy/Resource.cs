@@ -349,113 +349,6 @@ public static partial class Resource
         }
     }
 
-
-    // public partial class RStorage : RGroup, IResource
-    // {
-    //     double stockpile; //Amount in this storage.
-    //     public RStorage(int type) : base(type) { stockpile = 0; }
-    //     public RStorage(int _type, List<IResource> _add, double initValue = 0) : base(_type, _add)
-    //     {
-    //         stockpile = initValue;
-    //     }
-
-    //     public double Deposit(double value)
-    //     {
-    //         // returns amount space free.
-    //         // if negative, this is resource that didn't fit.
-    //         double leftover = Free() - value;
-    //         stockpile = Mathf.Min(Sum, value + stockpile);
-    //         return leftover;
-    //     }
-    //     public double Withdraw(double value)
-    //     {
-    //         // returns amount space free.
-    //         // if negative, this is resource that didn't fit.
-    //         stockpile = Mathf.Min(Sum, value + stockpile);
-    //         return Deposit(-value);
-    //     }
-    //     public double Free()
-    //     {
-    //         return Sum - stockpile;
-    //     }
-    //     public double Stock()
-    //     {
-    //         return stockpile;
-    //     }
-    //     public void Fill()
-    //     {
-    //         stockpile = Sum;
-    //     }
-    //     public override string ToString()
-    //     {
-    //         return $"{Name}:{Stock()}/{Sum}";
-    //     }
-
-
-    // public partial class RStaticLinear : RStatic
-    // {
-    //     // Linear Request.  Modifies outputs to be same as fraction of inputs received.
-    //     Resource.RStatic multiplier;
-    //     Industry industry;
-
-    //     public RStaticLinear(Industry _industry, Resource.RStatic _request) : base(_request)
-    //     {
-    //         multiplier = new Resource.RStatic(Type, 0);
-    //         // ((Resource.RGroup<IResource>)_industry.Production[Type]).Multiply(multiplier);
-    //         _industry.AddSituation(new Situations.OutputModifier(this, multiplier, _industry));
-    //     }
-    //     public override void Respond()
-    //     {
-    //         base.Respond();
-    //         multiplier.Set(1f);
-    //     }
-    //     public override void Respond(double value)
-    //     {
-    //         base.Respond(value);
-    //         multiplier.Set((value - Request.Sum) / Request.Sum);
-    //     }
-    // }
-    // public partial class RGroup<TResource> : RGroup<TResource> where TResource : IResource
-    // {
-    //     public RGroup(int _type, IEnumerable<TResource> _add, string _name = "Sum", string _details = "Sum") : base(_type, _add, _name, _details) { }
-    //     public double SumRequest { get { return _SumRequests()[1]; } }
-    //     double[] _SumRequests()
-    //     // Do not net to call cum seperately.
-    //     {
-    //         double addCum = 0;
-    //         double multiCum = 1;
-    //         double requestCum = 0;
-    //         foreach (TResource i in Adders)
-    //         {
-    //             addCum += i.Sum;
-    //             requestCum += i.Request;
-    //         }
-    //         foreach (TResource i in Muxxers)
-    //         {
-    //             multiCum += i.Sum;
-    //         }
-    //         return new double[] { addCum * multiCum, requestCum * multiCum };
-    //     }
-    // }
-    // // Small class to handle 'request, vs receive'
-    // public class Requester
-    // {
-
-    //     public Resource.IResource.RStatic request;
-    //     public int Type { get { return request .Type; } }
-    //     public double Sum { get { return request.Sum; } }
-    //     public Resource.IResource.RStatic Response { get; set; }
-    //     public Requester(Resource.RStatic _request)
-    //     {
-    //         request = _request;
-    //     }
-    //     public void Respond(Resource.RStatic _response, int _status)
-    //     {
-    //         Response = _response;
-    //     }
-    // }
-
-
     public struct ResourceType
     {
         public string name;
@@ -672,81 +565,7 @@ public static partial class Resource
         }
 
     }
-    // A list but the top level elements must be groups.
 
-    // /// <summary>
-    // /// Child class of resource list with that constructs resources with correct descriptions.
-    // /// </summary>
-    // public class TradeRouteResourceList : RStaticList
-    // {
-    //     string name;
-    //     string description;
-    //     public TradeRouteResourceList(string _name, string _description)
-    //     {
-    //         name = _name; description = _description;
-    //     }
-    //     protected override RStatic CreateNewMember(int index)
-    //     {
-    //         return new RStatic(index, 0, string.Format(name, Name(index)), string.Format(description, Name(index)));
-    //     }
-    // }
-    // public partial class RGroupList<TResource> : RList<RGroup<TResource>> where TResource : IResource, new()
-    // {
-    //     // Same as RList, except all elements are groups.
-    //     public RGroupList() : base() { }
-    //     public RGroupList(RGroup<TResource> rGroup) : base(rGroup) { }
-
-    //     // Currently if is inited with only groups, they will become the members.
-    //     public RGroupList(TResource resource) : base((new RGroup<TResource>(resource))) { }
-    //     public RGroupList(IEnumerable<TResource> _members) : base()
-    //     {
-    //         foreach (TResource m in _members)
-    //         {
-    //             members.Add(m.Type, new RGroup<TResource>(m));
-    //         }
-    //     }
-
-    //     // override default clear behavior.
-    //     // keep top level groups.
-    //     public override void Clear()
-    //     {
-    //         foreach (KeyValuePair<int, RGroup<TResource>> member in members)
-    //         {
-    //             (member.Value).Clear();
-    //         }
-    //     }
-    //     public void Insert(TResource r)
-    //     {
-    //         if (!members.ContainsKey(r.Type))
-    //         {
-    //             members[r.Type] = new RGroup<TResource>("Sum", "Sum");
-    //         }
-    //         else
-    //         {
-    //             this[r.Type].Add(r);
-    //         }
-    //     }
-    // }
-
-
-    // public partial class RStorageList<TResource> : RList<TResource> where TResource : RStorage
-    // {
-    //     protected override TResource _Get(int index)
-    //     {
-    //         if (!members.ContainsKey(index))
-    //         {
-    //             members[index] = (TResource)new RStorage(index);
-    //         }
-    //         return members[index];
-    //     }
-    //     public override void Clear()
-    //     {
-    //         foreach (KeyValuePair<int, TResource> member in members)
-    //         {
-    //             (member.Value).Clear();
-    //         }
-    //     }
-    // }
     public partial class RDictStatic : RDict<RStatic>
     {
         protected override RStatic _Get(int index)
@@ -774,19 +593,6 @@ public static partial class Resource
         public Domain Domain;
         /// Dummy method to make sure resource exists.
 
-        // public Dictionary<int, RStatic> Storage
-        // {
-        //     get
-        //     {
-        //         Dictionary<int, RStatic> d = new Dictionary<int, RStatic>();
-        //         foreach (KeyValuePair<int, Entry> kvp in this.Where(x => x.Key < 500))
-        //         {
-        //             d[kvp.Key] = ((EntryAccrul)kvp.Value).Stored;
-        //         }
-        //         return d;
-        //     }
-        // }
-
         public class Entry
         {
             /// <summary>
@@ -807,55 +613,6 @@ public static partial class Resource
             // These are only collections of 'real' elements.
             public RGroup<IResource> TradeNet;
 
-            // public IResource UplineLoss
-            // {
-            //     get { return ledger.Domain.Trade.UplineTraderoute == null ? null : ledger.Domain.Trade.UplineTraderoute.ListTailLoss.ContainsKey(Type) ? ledger.Domain.Trade.UplineTraderoute.ListTailLoss[Type] : null; }
-            // }
-            // public IResource UplineGain
-            // {
-            //     get { return ledger.Domain.Trade.UplineTraderoute == null ? null : ledger.Domain.Trade.UplineTraderoute.ListTailGain.ContainsKey(Type) ? ledger.Domain.Trade.UplineTraderoute.ListTailGain[Type] : null; }
-            // }
-
-            /// <summary>
-            /// How much trade routes cumulativly request.
-            /// </summary>
-
-            // public RGroup<IResource> TradeNet
-            // {
-            //     get
-            //     {
-            //         tradeNet.Clear();
-            //         foreach (IResource item in DownlineGain)
-            //         {
-            //             tradeNet.Add(item);
-            //         }
-            //         if (UplineLoss != null)
-            //         {
-            //             tradeNet.Add(UplineLoss);
-            //         }
-            //         foreach (IResource item in DownlineLoss)
-            //         {
-            //             tradeNet.Add(item);
-            //         }
-            //         if (UplineGain != null)
-            //         {
-            //             tradeNet.Add(UplineGain);
-            //         }
-            //         return tradeNet;
-            //     }
-            // }
-
-            // public RGroup<IResource> Net
-            // {
-            //     get
-            //     {
-            //         net.Clear();
-            //         net.Add(LocalNet);
-            //         net.Add(TradeNet);
-            //         return net;
-            //     }
-            // }
-
 
             public int Type { get; set; }
             public Entry(int _type)
@@ -874,8 +631,6 @@ public static partial class Resource
                 LocalLoss.Clear();
                 LocalGain.Clear();
                 LocalNet.Clear();
-                //TradeNet.Clear();
-                // LocalLoss.Clear();
             }
             /// <summary>
             /// Return flat requested and actual, for buffer.
@@ -920,20 +675,10 @@ public static partial class Resource
             }
         }
 
-
-        // public IEnumerable<KeyValuePair<int, EntryAccrul>> Acrul()
-        // {
-        //     foreach (KeyValuePair<int, EntryAccrul> e in _acrul)
-        //     {
-        //         yield return e;
-        //     }
-        // }
-
         Dictionary<int, Entry> _all = new();
         /// <summary>
         ///  Dict containting only acrulable;
         /// </summary>
-        // Dictionary<int, EntryAccrul> _acrul = new();
 
 
         public void Clear()
