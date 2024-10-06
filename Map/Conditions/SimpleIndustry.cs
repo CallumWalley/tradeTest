@@ -14,18 +14,18 @@ public partial class SimpleIndustry : ConditionScale
 
     /// <summary>
     /// Capability value this starts at.
-    /// </summary>
+    // /// </summary>
     [Export(PropertyHint.Range, "0,1,0.01")]
     public double StartingCapability = 0.1;
     /// <summary>
     /// Represents a generic operating capability. Used to ramp up and down input/output values.
     /// </summary>
-    Resource.RStatic capabilityMain;
+    // Resource.RStatic capabilityMain;
     /// <summary>
     /// List of values needing to be proccessed during fulfillment stage.
     /// </summary>
     Dictionary<Resource.RGroup<Resource.RStatic>, Resource.RStatic> inputFullfillments = new();
-
+    public Resource.RStatic inputSecurity;
     /// <summary>
     /// For non accruable resources, output is scaled to fit demand.
     /// </summary>
@@ -79,17 +79,18 @@ public partial class SimpleIndustry : ConditionScale
     //             outputs.Add(new Resource.RStatic(kvp.Key, kvp.Value, kvp.Value, "Base", "Expected Yield"));
     //         }
     //     }
-    // }
+    // }inputSecurity
 
     public override void OnAdd()
     {
         base.OnAdd();
         Feature.FactorsLocal[801].Name = "Input Fulfillment";
         Feature.FactorsLocal[801].Add(new Resource.RStatic(801, 1, 0, "Base", "Expected Fulfillment"));
-        Feature.FactorsLocal[802].Name = "Capability";
-        //Feature.FactorsLocal[802].Add(new Resource.RStatic(802, 1, 1, "Cabability", "Cabability"));
-        capabilityMain = new Resource.RStatic(802, StartingCapability, 0, "Consistancy", "Slow Start Size");
-        Feature.FactorsLocal[802].Mux(capabilityMain);
+        Feature.FactorsLocal[802] = new Resource.RLim<Resource.IResource>(802, "Capability", "Capability");
+        inputSecurity = new Resource.RStatic(802, StartingCapability, 1, "Input Security", "Local Resource insecurity is affecting output.");
+        Feature.FactorsLocal[802].Add(inputSecurity);
+        //
+        Feature.FactorsLocal[802].Mux(Feature.FactorsLocal[802]);
 
         Resource.RStatic demand = new Resource.RStatic((int)802, 1, 1, "Demand", "Demand");
         Feature.FactorsLocal[802].Mux(demand);
@@ -153,7 +154,8 @@ public partial class SimpleIndustry : ConditionScale
             //double rolling = ((kvp.Key.Fraction() + kvp.Value.Sum) / 2);
             kvp.Value.Sum = kvp.Key.Fraction();
         }
-        double dif =
-        capabilityMain.Sum += ((Feature.FactorsLocal[801].Sum - capabilityMain.Sum + ((GD.Randf() - 0.6) / (Feature.FactorsSingle[901].Sum * 5))) / 10);
+        // Why so complicated?
+        if (inputSecurity is null) { return; }
+        inputSecurity.Sum += ((Feature.FactorsLocal[801].Sum - inputSecurity.Sum + ((GD.Randf() - 0.6))) / 10);
     }
 }

@@ -25,9 +25,9 @@ public partial class FeatureBase : Node, Entities.IEntityable
     ///  Currently 801-900
     /// </summary>
     public Resource.RDict<Resource.RGroup<Resource.IResource>> FactorsLocal { get; set; } = new();
-    public Godot.Vector2 CameraPosition{ get{ throw new NotImplementedException(); }}
+    public Godot.Vector2 CameraPosition { get { throw new NotImplementedException(); } }
 
-    public float CameraZoom{ get{ throw new NotImplementedException(); }}
+    public float CameraZoom { get { throw new NotImplementedException(); } }
     /// <summary>
     ///  Contains factors that are a single value.
     ///  Currently 900+

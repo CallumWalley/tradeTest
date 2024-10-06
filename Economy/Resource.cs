@@ -195,7 +195,7 @@ public static partial class Resource
             _adders = new();
             _adders.Add(_add);
         }
-        public int Type
+        public virtual int Type
         {
             // infer type if not set.
             get
@@ -205,8 +205,8 @@ public static partial class Resource
             }
             set { type = value; }
         }
-        public string Details { get; set; } = "Sum";
-        public string Name { get; set; } = "Sum";
+        public virtual string Details { get; set; } = "Sum";
+        public virtual string Name { get; set; } = "Sum";
 
         public bool IsHidden { get; set; } = false;
         public string ValueFormat { get; set; } = "{0:G2}";
@@ -215,7 +215,7 @@ public static partial class Resource
         protected List<T> _adders { get; set; }
         protected List<T> _muxxers { get; set; }
 
-        public IEnumerator<IResource> GetEnumerator()
+        public virtual IEnumerator<IResource> GetEnumerator()
         {
             foreach (T element in _adders)
             {
@@ -232,11 +232,11 @@ public static partial class Resource
         }
 
         // Does not consider grandchild members.
-        public int Count
+        public virtual int Count
         {
             get { return (_adders.Count + _muxxers.Count); }
         }
-        public double Sum
+        public virtual double Sum
         {
             get
             {
@@ -275,7 +275,7 @@ public static partial class Resource
         //     foreach (T muxxer in _muxxers) { agg *= muxxer.Request; }
         //     return agg;
         // }
-        public void Add(T ra)
+        public virtual void Add(T ra)
         {
             _adders.Add(ra);
         }
@@ -283,7 +283,7 @@ public static partial class Resource
         {
             _muxxers.Add(ra);
         }
-        public void UnAdd(T ra)
+        public virtual void UnAdd(T ra)
         {
             _adders.Remove(ra);
         }
@@ -311,7 +311,7 @@ public static partial class Resource
 
 
         // Request is a second
-        public double Request
+        public virtual double Request
         {
             get { return (_adders.Count > 0) ? _adders.Sum(x => x.Request) : 0 * _MuxxerSubtotal(); }
             set
@@ -320,11 +320,11 @@ public static partial class Resource
             }
         }
 
-        public void Respond()
+        public virtual void Respond()
         {
             Respond(Request);
         }
-        public void Respond(double value)
+        public virtual void Respond(double value)
 
         {
             double fraction = value / Request;
@@ -335,7 +335,7 @@ public static partial class Resource
         }
 
         // Request is actual amount given
-        public int State
+        public virtual int State
         {
             get { return _adders.Sum(x => ((IResource)x).State); }
             set
@@ -344,7 +344,7 @@ public static partial class Resource
             }
         }
 
-        public double Fraction()
+        public virtual double Fraction()
         {
             return Sum / Request;
         }
@@ -354,22 +354,106 @@ public static partial class Resource
     ///  Returns min, or max of children.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public partial class RLim<T> : IResourceGroup<IResource> where T : IResource
+    public partial class RLim<T> : RGroup<T>, IResourceGroup<IResource> where T : IResource
     {
         int type;
+        public bool Max { get; set; } = false;
         List<T> _members { get; set; }
-        public int Type
+        public override int Count
+        {
+            get { return (_members.Count); }
+        }
+        public override int Type
         {
             // infer type if not set.
             get
             {
-                if (type < 1) { if (_adders.Count > 0) { type = _adders.First().Type; } else if (_muxxers.Count > 0) { type = _muxxers.First().Type; } }
+                if (type < 1) { if (_members.Count > 0) { type = _members.First().Type; } }
                 return type;
             }
             set { type = value; }
         }
-        public string Details { get; set; } = "Sum";
-        public string Name { get; set; } = "Sum";
+        public override int State
+        {
+            get
+            {
+                { return 0; }
+
+            }
+            set
+            {
+                { throw new InvalidOperationException("Set State method is not valid for RLim"); }
+            }
+        }
+        public override double Request
+        {
+            get { return Max ? _members.Max(x => x.Request) : _members.Min(x => x.Request); }
+            set
+            {
+                { throw new InvalidOperationException("Set method is not valid for groups"); }
+            }
+        }
+        public override double Sum
+        {
+            get { return Max ? _members.Max(x => x.Sum) : _members.Min(x => x.Sum); }
+            set
+            {
+                { throw new InvalidOperationException("Set method is not valid for groups"); }
+            }
+        }
+        public override IEnumerator<IResource> GetEnumerator()
+        {
+            foreach (T element in _members)
+            {
+                yield return element;
+            }
+        }
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+        public override double Fraction()
+        {
+            { throw new InvalidOperationException("Fraction Method not Valid for RLim"); }
+        }
+        public override void Respond()
+        {
+            { throw new InvalidOperationException("Respond Method not Valid for RLim"); }
+        }
+        public override void Respond(double value)
+
+        {
+            Respond();
+        }
+        public override void Add(T ra)
+        {
+            _members.Add(ra);
+        }
+        public override void UnAdd(T ra)
+        {
+            _members.Remove(ra);
+        }
+        public RLim()
+        {
+            _members = new();
+        }
+
+        public RLim(int _type = 0, string _name = "Limit", string _details = "Limit") : this()
+        {
+            type = _type;
+            Name = _name;
+            Details = _details;
+        }
+
+        public RLim(IEnumerable<T> _add, string _name = "Limit", string _details = "Limit") : this(0, _name, _details)
+        {
+            _members = (List<T>)_add;
+        }
+        public RLim(T _add, string _name = "Limit", string _details = "Limit") : this(0, _name, _details)
+        {
+            _members = new();
+            _members.Add(_add);
+        }
     }
 
 

@@ -58,14 +58,24 @@ public partial class UIWindowDomainFeaturePlan : UIWindow
 	{
 		FeatureBase newFeature = templateList.selected.Instantiate();
 		newFeature.Template = templateList.selected;
-		resourcePool.AddFeature(newFeature);
-
 		newFeature.Name = nameLineEdit.Text;
-		// If has scale
+		resourcePool.AddFeature(newFeature);
 		if (newFeature.FactorsSingle.ContainsKey(901))
 		{
-			newFeature.FactorsSingle[901].Sum = (scaleSpinbox.Value);
+			newFeature.FactorsSingle[901].Sum = 0;
+			newFeature.FactorsSingle[901].Request = (scaleSpinbox.Value);
 		}
+		ConditionConstruction underConstruction = new ConditionConstruction();
+		underConstruction.Name = "Under Construction";
+		underConstruction.Description = "Opening Soon...";
+		underConstruction.OldSize = 0;
+		underConstruction.NewSize = scaleSpinbox.Value;
+		newFeature.AddCondition(underConstruction);
+		// If has scale
+
+
+
+
 
 		//templateList.OnItemListItemSelected(newFeature.GetIndex());
 		OnCloseRequested();
