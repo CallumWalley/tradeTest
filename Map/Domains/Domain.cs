@@ -5,8 +5,6 @@ using System.Linq;
 
 public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<FeatureBase>
 {
-    [Export]
-    public bool Active;
 
     // Can receive trade. Should be determined 
     [Export]
@@ -19,8 +17,8 @@ public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<FeatureB
     [Export]
     public string Description { get; set; }
 
-    public virtual float CameraZoom {get {return 1;}}
-    public virtual Godot.Vector2 CameraPosition {get {return GlobalPosition;}}
+    public virtual float CameraZoom { get { return 1; } }
+    public virtual Godot.Vector2 CameraPosition { get { return GlobalPosition; } }
     Node features;
     CollisionShape2D collisionShape2D;
     // UIMapOverlayElement overlayElement;
@@ -270,6 +268,21 @@ public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<FeatureB
                 Domain.Order = 0;
                 Domain.Network = null;
             }
+        }
+    }
+
+    public FeatureBase this[int index]
+    {
+        get
+        {
+            Node features = GetNodeOrNull("Features");
+            if (features == null)
+            {
+                Node f = new Node();
+                f.Name = "Features";
+                AddChild(f);
+            }
+            return (FeatureBase)GetNode("Features").GetChild(index);
         }
     }
     public override string ToString() { return Name; }

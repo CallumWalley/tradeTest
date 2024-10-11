@@ -1,11 +1,13 @@
-[gd_scene load_steps=11 format=3 uid="uid://r5ytkwljq7nb"]
+[gd_scene load_steps=13 format=3 uid="uid://r5ytkwljq7nb"]
 
 [ext_resource type="Script" path="res://GUI/Screen.cs" id="1_5umy1"]
 [ext_resource type="Script" path="res://GUI/Screen/Top/UITimeControl.cs" id="1_ys7u5"]
 [ext_resource type="PackedScene" uid="uid://rwliij8aoq6r" path="res://GUI/Elements/UIButtonToggleWindow.tscn" id="3_0miou"]
+[ext_resource type="Script" path="res://GUI/ScreenOrbitLines.cs" id="3_32cg4"]
 [ext_resource type="Script" path="res://GUI/Screen/Nav.cs" id="3_a3qo3"]
 [ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="4_d36to"]
 [ext_resource type="PackedScene" uid="uid://hayfw1l6yk1x" path="res://GUI/Elements/UIWindow.tscn" id="4_ibjw3"]
+[ext_resource type="Script" path="res://GUI/UICameraControl.cs" id="5_svcbq"]
 [ext_resource type="PackedScene" uid="uid://hryxon3gub4" path="res://GUI/Game/Panels/UIPanelTradeAll.tscn" id="6_neq83"]
 [ext_resource type="Script" path="res://GUI/Elements/UIWindow.cs" id="6_qkjht"]
 [ext_resource type="PackedScene" uid="uid://bwaowp0cjw1f2" path="res://GUI/Game/Panels/UIPanelPlayerFeatureTemplateList.tscn" id="7_13nsc"]
@@ -16,55 +18,105 @@ script = ExtResource("1_5umy1")
 
 [node name="TradeRoutes" type="Control" parent="."]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("10_2rbum")
+
+[node name="OrbitLines" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("3_32cg4")
 
 [node name="PlanetOverlay" type="Control" parent="."]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Top" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 210.0
+grow_horizontal = 2
 size_flags_horizontal = 3
 
-[node name="TopRight" type="Panel" parent="."]
+[node name="Left" type="PanelContainer" parent="Top"]
+layout_mode = 0
+offset_right = 106.0
+offset_bottom = 25.0
+
+[node name="DropDowns" type="HBoxContainer" parent="Top/Left"]
+layout_mode = 2
+
+[node name="UiButtonTrade" parent="Top/Left/DropDowns" node_paths=PackedStringArray("window") instance=ExtResource("3_0miou")]
+layout_mode = 2
+text = "Trade"
+window = NodePath("../../../../UIWindowTradeOverview")
+
+[node name="UiButtonIndustries" parent="Top/Left/DropDowns" node_paths=PackedStringArray("window") instance=ExtResource("3_0miou")]
+layout_mode = 2
+text = "Industries"
+window = NodePath("../../../../UIIndustriesWindow")
+
+[node name="Right" type="PanelContainer" parent="Top"]
+layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -339.0
-offset_bottom = 159.0
+offset_left = -324.0
+offset_bottom = 109.0
 grow_horizontal = 0
 
-[node name="TimeControl" type="VBoxContainer" parent="TopRight"]
-layout_mode = 0
-offset_right = 1152.0
-offset_bottom = 648.0
+[node name="MarginContainer" type="MarginContainer" parent="Top/Right"]
+layout_mode = 2
+
+[node name="TimeControl" type="VBoxContainer" parent="Top/Right/MarginContainer"]
+layout_mode = 2
 script = ExtResource("1_ys7u5")
 
-[node name="Count" type="VBoxContainer" parent="TopRight/TimeControl"]
+[node name="Count" type="VBoxContainer" parent="Top/Right/MarginContainer/TimeControl"]
 custom_minimum_size = Vector2(100, 20)
 layout_mode = 2
 
-[node name="eframePeriod" type="Label" parent="TopRight/TimeControl/Count"]
+[node name="eframePeriod" type="Label" parent="Top/Right/MarginContainer/TimeControl/Count"]
 layout_mode = 2
 text = "safafaaaaaaaaaa"
 
-[node name="eframes" type="Label" parent="TopRight/TimeControl/Count"]
+[node name="eframes" type="Label" parent="Top/Right/MarginContainer/TimeControl/Count"]
 layout_mode = 2
 text = "safafaaaaaaaaaa"
 
-[node name="frames" type="Label" parent="TopRight/TimeControl/Count"]
+[node name="frames" type="Label" parent="Top/Right/MarginContainer/TimeControl/Count"]
 layout_mode = 2
 text = "safffffff"
 
-[node name="walltime" type="Label" parent="TopRight/TimeControl/Count"]
+[node name="walltime" type="Label" parent="Top/Right/MarginContainer/TimeControl/Count"]
 layout_mode = 2
 text = "asfffffffffffffffffffffff"
 
-[node name="Control" type="HBoxContainer" parent="TopRight/TimeControl"]
+[node name="Control" type="HBoxContainer" parent="Top/Right/MarginContainer/TimeControl"]
 layout_mode = 2
 
-[node name="Speed" type="Label" parent="TopRight/TimeControl/Control"]
+[node name="Speed" type="Label" parent="Top/Right/MarginContainer/TimeControl/Control"]
 layout_mode = 2
 
-[node name="HSlider" type="HSlider" parent="TopRight/TimeControl/Control"]
+[node name="HSlider" type="HSlider" parent="Top/Right/MarginContainer/TimeControl/Control"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 min_value = 1.0
@@ -72,35 +124,125 @@ max_value = 10.0
 value = 5.0
 tick_count = 10
 
-[node name="Pause" type="CheckButton" parent="TopRight/TimeControl/Control"]
+[node name="Pause" type="CheckButton" parent="Top/Right/MarginContainer/TimeControl/Control"]
 layout_mode = 2
 text = "Pause"
 
-[node name="AdvanceOne" type="Button" parent="TopRight/TimeControl/Control"]
+[node name="AdvanceOne" type="Button" parent="Top/Right/MarginContainer/TimeControl/Control"]
 layout_mode = 2
 text = ">"
 
-[node name="TopLeft" type="Panel" parent="."]
-anchors_preset = 10
+[node name="Bottom" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 12
+anchor_top = 1.0
 anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -286.0
 grow_horizontal = 2
+grow_vertical = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="TopLeft"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="BottomRight" type="PanelContainer" parent="Bottom"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -277.0
+offset_top = -100.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 8
+size_flags_vertical = 8
 
-[node name="UiButtonTrade" parent="TopLeft/HBoxContainer" node_paths=PackedStringArray("window") instance=ExtResource("3_0miou")]
+[node name="MarginContainer" type="MarginContainer" parent="Bottom/BottomRight"]
 layout_mode = 2
-text = "Trade"
-window = NodePath("../../../UIWindowTradeOverview")
 
-[node name="UiButtonIndustries" parent="TopLeft/HBoxContainer" node_paths=PackedStringArray("window") instance=ExtResource("3_0miou")]
+[node name="CameraControl" type="VBoxContainer" parent="Bottom/BottomRight/MarginContainer"]
 layout_mode = 2
-text = "Industries"
-window = NodePath("../../../UIIndustriesWindow")
+size_flags_horizontal = 8
+script = ExtResource("5_svcbq")
+
+[node name="Count" type="HBoxContainer" parent="Bottom/BottomRight/MarginContainer/CameraControl"]
+layout_mode = 2
+
+[node name="Focus" type="Label" parent="Bottom/BottomRight/MarginContainer/CameraControl/Count"]
+layout_mode = 2
+text = "Position:"
+
+[node name="Zoom" type="Label" parent="Bottom/BottomRight/MarginContainer/CameraControl/Count"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Zoom: "
+horizontal_alignment = 2
+
+[node name="Position" type="Label" parent="Bottom/BottomRight/MarginContainer/CameraControl/Count"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "Position:"
+
+[node name="Control" type="GridContainer" parent="Bottom/BottomRight/MarginContainer/CameraControl"]
+layout_mode = 2
+columns = 3
+
+[node name="Empty" type="Label" parent="Bottom/BottomRight/MarginContainer/CameraControl/Control"]
+layout_mode = 2
+
+[node name="Radial" type="Label" parent="Bottom/BottomRight/MarginContainer/CameraControl/Control"]
+layout_mode = 2
+text = "Radial"
+horizontal_alignment = 1
+
+[node name="Linear" type="Label" parent="Bottom/BottomRight/MarginContainer/CameraControl/Control"]
+layout_mode = 2
+text = "Linear"
+horizontal_alignment = 1
+
+[node name="LogBase" type="Label" parent="Bottom/BottomRight/MarginContainer/CameraControl/Control"]
+layout_mode = 2
+text = "Log Base"
+
+[node name="RadialLogBase" type="HSlider" parent="Bottom/BottomRight/MarginContainer/CameraControl/Control"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+min_value = 1.0
+max_value = 10.0
+value = 1.0
+exp_edit = true
+rounded = true
+tick_count = 4
+ticks_on_borders = true
+
+[node name="LinearLogBase" type="HSlider" parent="Bottom/BottomRight/MarginContainer/CameraControl/Control"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+min_value = 1.0
+max_value = 10.0
+value = 5.0
+exp_edit = true
+rounded = true
+tick_count = 4
+ticks_on_borders = true
+
+[node name="Scale" type="Label" parent="Bottom/BottomRight/MarginContainer/CameraControl/Control"]
+layout_mode = 2
+text = "Scale"
+
+[node name="Empty2" type="Label" parent="Bottom/BottomRight/MarginContainer/CameraControl/Control"]
+layout_mode = 2
+
+[node name="RadialScale" type="HSlider" parent="Bottom/BottomRight/MarginContainer/CameraControl/Control"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+min_value = 1.0
+max_value = 1000.0
+value = 5.0
+exp_edit = true
+tick_count = 10
+ticks_on_borders = true
 
 [node name="Nav" type="VBoxContainer" parent="."]
 anchors_preset = -1

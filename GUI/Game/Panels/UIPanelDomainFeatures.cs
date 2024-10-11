@@ -40,7 +40,7 @@ public partial class UIPanelDomainFeatures : UIPanel, UIInterfaces.IEFrameUpdata
     {
         if (resourcePool.GetChildCount() > 0)
         {
-            selected = resourcePool.GetChild<FeatureBase>(0);
+            selected = resourcePool[0];
         }
         else
         {
@@ -53,14 +53,14 @@ public partial class UIPanelDomainFeatures : UIPanel, UIInterfaces.IEFrameUpdata
     public void OnItemListItemSelected(int i)
     {
         selectedIndex = i;
-        selected = resourcePool.GetChild<FeatureBase>(selectedIndex);
+        selected = resourcePool[selectedIndex];
         DrawDisplay();
     }
 
 
     void DrawDisplay()
     {
-        if (resourcePool.GetChildCount() < 1)
+        if (resourcePool.GetNodeOrNull("Features") == null)
         {
             displayEmpty.Visible = true;
             display.Visible = false;
@@ -89,7 +89,7 @@ public partial class UIPanelDomainFeatures : UIPanel, UIInterfaces.IEFrameUpdata
 
     public void UpdateElements()
     {
-        if (resourcePool.GetChildCount() < 1) { return; }
+        if (resourcePool.GetNodeOrNull("Features") == null) { return; }
         list.Clear();
         foreach (Node f in resourcePool)
         {

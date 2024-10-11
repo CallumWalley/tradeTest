@@ -8,10 +8,9 @@ public partial class ScreenTradeRoutes : Control
 	PlayerTrade playerTrade;
 	Camera camera;
 
-	Planet Earth;
 	float count;
 
-	Godot.Color lineColor = new Godot.Color(1, 1, 1, 0.5f);
+	Godot.Color lineColor = new Godot.Color(1, 1, 1, 1);
 	public override void _Ready()
 	{
 		playerTrade = GetNode<PlayerTrade>("/root/Global/Player/PlayerTrade");
@@ -24,7 +23,6 @@ public partial class ScreenTradeRoutes : Control
 		// GD.Print(playerTrade.First<TradeRoute>().Head.GetCanvasTransform());
 		//	GD.Print(GetLocalMousePosition());
 		//	GD.Print(camera.GetViewportTransform() );
-		count += 1f;
 		QueueRedraw();
 	}
 	public override void _Draw()
@@ -37,8 +35,8 @@ public partial class ScreenTradeRoutes : Control
 		{
 			//DrawLine(tr.Head.GlobalPosition * gt, tr.Tail.GlobalPosition * gt, new Color(1,1,1,1), 100, true);
 			//DrawLine(((Node2D)tr.Head).GetViewportTransform() * ((Node2D)tr.Head).GlobalPosition, ((Node2D)tr.Tail).GetViewportTransform() * ((Node2D)tr.Tail).GlobalPosition, lineColor, 1, true);
-			Vector2 apparentHead = ((Node2D)tr.Head).GetCanvasTransform() * ((Node2D)tr.Head).GlobalPosition;
-			Vector2 apparentTail = ((Node2D)tr.Tail).GetCanvasTransform() * ((Node2D)tr.Tail).GlobalPosition;
+			Vector2 apparentHead = ((Node2D)tr.Head).GetCanvasTransform() * ((Node2D)tr.Head).Position;
+			Vector2 apparentTail = ((Node2D)tr.Tail).GetCanvasTransform() * ((Node2D)tr.Tail).Position;
 
 			Godot.Color[] colors = new Godot.Color[100];
 
