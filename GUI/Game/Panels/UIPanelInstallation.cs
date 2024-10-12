@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using Godot.Collections;
+namespace Game;
 
 public partial class UIPanelDomain : Control
 {

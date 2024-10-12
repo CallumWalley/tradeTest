@@ -2,8 +2,9 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
+namespace Game;
 
-public partial class PlayerTrade : Node,  IEnumerable<TradeRoute>
+public partial class PlayerTrade : Node, IEnumerable<TradeRoute>
 {
 	// Parent to trade routes.
 
@@ -11,17 +12,17 @@ public partial class PlayerTrade : Node,  IEnumerable<TradeRoute>
 
 	public List<Domain> Heads { get; set; } = new List<Domain>();
 
-    public IEnumerator<TradeRoute> GetEnumerator()
-    {
-        foreach (TradeRoute f in GetChildren())
-        {
-            yield return f;
-        }
-    }
-    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
+	public IEnumerator<TradeRoute> GetEnumerator()
+	{
+		foreach (TradeRoute f in GetChildren())
+		{
+			yield return f;
+		}
+	}
+	System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+	{
+		return GetEnumerator();
+	}
 	// Initialise trade routes added in editor.
 
 	public override void _Ready()

@@ -2,9 +2,9 @@ using Godot;
 using System;
 using System.IO;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using System.Security.Cryptography;
 using System.Linq;
+namespace Game;
 
 public partial class Conditions
 {

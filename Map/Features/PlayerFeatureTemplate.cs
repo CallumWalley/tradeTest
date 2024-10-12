@@ -2,10 +2,10 @@ using Godot;
 using System;
 using System.IO;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using System.Security.Cryptography;
 using System.Linq;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+
+namespace Game;
 
 /// <summary>
 /// What features can be chosen to build are determined by templates designed by player.

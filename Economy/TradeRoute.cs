@@ -1,8 +1,8 @@
 using Godot;
-using Microsoft.CodeAnalysis.CSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+namespace Game;
 
 public partial class TradeRoute : Node, Entities.IEntityable
 {
@@ -16,10 +16,10 @@ public partial class TradeRoute : Node, Entities.IEntityable
     public Resource.RDict<RStaticHead> ListHead { get; protected set; } = new();
     Resource.RStatic shipDemand = new Resource.RStatic(811, 0);
 
-    public Godot.Vector2 CameraPosition{ get{ throw new NotImplementedException(); }}
+    public Godot.Vector2 CameraPosition { get { throw new NotImplementedException(); } }
 
-    public float CameraZoom{ get{ throw new NotImplementedException(); }}
-    
+    public float CameraZoom { get { throw new NotImplementedException(); } }
+
 
     new public string Name { get { return base.Name; } set { base.Name = value; } }
 

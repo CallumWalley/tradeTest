@@ -2,9 +2,9 @@ using Godot;
 using System;
 using System.IO;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using System.Security.Cryptography;
 using System.Linq;
+namespace Game;
 
 public partial class SimpleIndustry : ConditionScale
 {
@@ -30,7 +30,6 @@ public partial class SimpleIndustry : ConditionScale
     /// For non accruable resources, output is scaled to fit demand.
     /// </summary>
     Resource.RDictStatic outputDemand = new();
-    protected JsonSerializer serializer = new();
 
     // Sets 'output' in proportion to fulfillment.
 

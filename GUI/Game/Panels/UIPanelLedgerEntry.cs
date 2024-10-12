@@ -1,5 +1,6 @@
 using Godot;
 using System;
+namespace Game;
 
 public partial class UIPanelLedgerEntry : VBoxContainer, Lists.IListable<Resource.Ledger.Entry>
 {

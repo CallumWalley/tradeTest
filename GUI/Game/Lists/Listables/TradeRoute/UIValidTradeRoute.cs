@@ -1,5 +1,6 @@
 using Godot;
 using System;
+namespace Game;
 
 public partial class UIValidTradeRoute : Button, Lists.IListable<PlayerTrade.ValidTradeHead>
 {

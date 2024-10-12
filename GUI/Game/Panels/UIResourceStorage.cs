@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+namespace Game;
 
 public partial class UIResourceStorage : Control
 {
@@ -19,7 +20,7 @@ public partial class UIResourceStorage : Control
     public Resource.RStatic GameElement { get { return resource; } }
 
     ConfigFile playerConfig;
-    
+
     static readonly PackedScene p_resourceIcon = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/UIResource.tscn");
 
     public void Init(Resource.Ledger.EntryAccrul _entry)
@@ -47,9 +48,12 @@ public partial class UIResourceStorage : Control
 
         // If numerical interpolation is turned on.
         double displayValue;
-        if (stepNumericalInterpolation){
-             displayValue = ((global.deltaEFrame / global.timePerEframe) * (resourceSumLast - resourceStoreThis)) + resourceSumLast;
-        }else{
+        if (stepNumericalInterpolation)
+        {
+            displayValue = ((global.deltaEFrame / global.timePerEframe) * (resourceSumLast - resourceStoreThis)) + resourceSumLast;
+        }
+        else
+        {
             displayValue = resourceStoreThis;
         }
         value.Text = string.Format("{0:F0}", displayValue);

@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+namespace Game;
 
 public partial class SatelliteSystem : Node2D, Entities.IEntityable, Entities.IOrbital, IEnumerable<Entities.IOrbital>
 {

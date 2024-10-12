@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Linq;
+namespace Game;
 
 /// <summary>
 /// Displays the ist of features in a location.

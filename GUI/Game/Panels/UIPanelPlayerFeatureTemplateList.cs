@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+namespace Game;
+
 /// <summary>
 /// List of all buildable structures.
 /// Used in template menu and build menu.

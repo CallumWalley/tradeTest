@@ -2,16 +2,15 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Newtonsoft.Json;
 using System.Dynamic;
 
 /// <summary>
 /// Tags to identify feature types.
 /// </summary>
-public static class Tags 
-{    
+public static class Tags
+{
 
-    
+
     static Tag defaultTag = new Tag("orbital", "Orbital", "Must be built in orbit");
     public class Tag
     {
@@ -26,11 +25,13 @@ public static class Tags
             Description = _description;
         }
     }
-    
-    public static string Name(string slug){
+
+    public static string Name(string slug)
+    {
         return _tags[slug].Name;
     }
-    public static string Description(string slug){
+    public static string Description(string slug)
+    {
         return _tags[slug].Description;
     }
     /// <summary>

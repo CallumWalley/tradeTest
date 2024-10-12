@@ -1,5 +1,6 @@
 using Godot;
 using System;
+namespace Game;
 
 /// summary
 /// UI element for possible build options.

@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+namespace Game;
 
 /// <summary>
 /// A thing. Subtype of node. Should be used instead of node for game objects.

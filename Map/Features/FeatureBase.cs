@@ -2,9 +2,10 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Newtonsoft.Json;
 using System.Dynamic;
 using System.Linq;
+
+namespace Game;
 
 /// <summary>
 /// Base class for features.
