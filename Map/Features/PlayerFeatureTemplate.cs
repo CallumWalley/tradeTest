@@ -16,6 +16,11 @@ public partial class PlayerFeatureTemplate : Node
     [Export]
     public FeatureBase Feature;
 
+    public string GenerateName()
+    {
+        return $"New {Feature.Name}";
+    }
+
     public FeatureBase Instantiate()
     {
         FeatureBase newFeature = (FeatureBase)Feature.Duplicate();

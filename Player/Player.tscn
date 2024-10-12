@@ -31,6 +31,7 @@ Feature = NodePath("DMHO Purification")
 
 [node name="DMHO Purification" type="Node" parent="PlayerFeatureTemplates/DMHO Purification"]
 script = ExtResource("6_g7q3k")
+Description = "Extraction of DHMO from surface ice deposits."
 SplashScreenPath = "res://assets/splash/chemical.png"
 NeedsTags = ["planetary"]
 
@@ -46,6 +47,7 @@ Feature = NodePath("Surface Mining")
 
 [node name="Surface Mining" type="Node" parent="PlayerFeatureTemplates/Surface Mining"]
 script = ExtResource("6_g7q3k")
+Description = "Surface Mining using hand tools."
 SplashScreenPath = "res://assets/splash/surface_mine.png"
 NeedsTags = ["planetary"]
 
@@ -61,6 +63,7 @@ Feature = NodePath("Fuel Refining")
 
 [node name="Fuel Refining" type="Node" parent="PlayerFeatureTemplates/Fuel Refining"]
 script = ExtResource("6_g7q3k")
+Description = "Facilities for converting H2O into chemical fuel."
 SplashScreenPath = "res://assets/splash/chemical.png"
 NeedsTags = ["planetary"]
 
@@ -76,6 +79,7 @@ Feature = NodePath("Launch Complex")
 
 [node name="Launch Complex" type="Node" parent="PlayerFeatureTemplates/Launch Complex"]
 script = ExtResource("6_g7q3k")
+Description = "All the trade gantries, maintainance facilites and refueling shuttles required to maintain a fleet of starships frieghters."
 SplashScreenPath = "res://assets/splash/shuttle.png"
 NeedsTags = ["planetary"]
 
@@ -91,6 +95,7 @@ Feature = NodePath("Spaceport")
 
 [node name="Spaceport" type="Node" parent="PlayerFeatureTemplates/Spaceport"]
 script = ExtResource("6_g7q3k")
+Description = "All the trade gantries, maintainance facilites and refueling shuttles required to maintain a fleet of starships frieghters."
 SplashScreenPath = "res://assets/splash/shuttle.png"
 NeedsTags = ["planetary"]
 

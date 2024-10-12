@@ -19,6 +19,7 @@ public partial class FeatureBase : Node, Entities.IEntityable
     public Resource.RDict<Resource.RGroup<Resource.IResource>> FactorsGlobalOutput { get; set; } = new();
     public Resource.RDict<Resource.RGroup<Resource.IResource>> FactorsGlobalInput { get; set; } = new();
     new public string Name { get { return base.Name; } set { base.Name = value; } }
+    [Export]
     public string Description { get; set; }
     /// <summary>
     ///  Contains factors not pooled with parent rp.
