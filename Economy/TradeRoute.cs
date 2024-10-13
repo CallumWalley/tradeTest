@@ -79,8 +79,8 @@ public partial class TradeRoute : Node, Entities.IEntityable
         GetNode<Line2D>("Line2D").Width = 1;
 
         // Downline must be resistered first else upline doesn't know it is a trade netwrowk
-        Head.Trade.RegisterDownline(this);
-        Tail.Trade.RegisterUpline(this);
+        Head.RegisterDownline(this);
+        Tail.RegisterUpline(this);
 
         distance = 0.3; // positive factor. Equal to about 1 MM  Tail.GetParent<Body>().Position.DistanceTo(Head.GetParent<Body>().Position);
         double acceleration = 20; // positive factor.  Equal to about 2 x acceleration.

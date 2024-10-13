@@ -34,8 +34,8 @@ public partial class UIDropDownSetHead : UIDropDown
 		{
 			UIValidTradeRoute vtr = prefab_UIValidTradeRoute.Instantiate<UIValidTradeRoute>();
 			vtr.Init(vth);
-			vtr.Driver = this;
-			GD.Print(vtr.Name);
+			vtr.Connect("pressed", Callable.From(() => OnButtonPressed(vth)));
+
 			popupPanelList.AddChild(vtr);
 		}
 		base._AboutToPopup();
@@ -50,7 +50,7 @@ public partial class UIDropDownSetHead : UIDropDown
 	{
 		base._Draw();
 		validTradeHeads = player.trade.GetValidTradeHeads(Domain);
-		if (Domain.Trade.UplineTraderoute == null)
+		if (Domain.UplineTraderoute == null)
 		{
 			buttonDefault.Text = "No Upline Trade Route Set";
 			buttonDefaultVisible = true;
@@ -75,9 +75,9 @@ public partial class UIDropDownSetHead : UIDropDown
 
 	}
 
-	public void OnButtonPressed(Control listable)
+	public void OnButtonPressed(PlayerTrade.ValidTradeHead vth)
 	{
-		((Lists.IListable<PlayerTrade.ValidTradeHead>)listable).GameElement.Create();
+		vth.Create();
 
 		CloseRequested();
 		SetButtonContent();
@@ -89,10 +89,10 @@ public partial class UIDropDownSetHead : UIDropDown
 		{
 			child.QueueFree();
 		}
-		if (Domain.Trade.UplineTraderoute != null)
+		if (Domain.UplineTraderoute != null)
 		{
 			uitrf = prefab_UITradeRouteFull.Instantiate<UITradeRouteFull>();
-			uitrf.Init(Domain.Trade.UplineTraderoute);
+			uitrf.Init(Domain.UplineTraderoute);
 			buttonContent.AddChild(uitrf);
 			// TODO make less messy.
 			uitrf.cancelButton.Connect("pressed", callable: new Callable(this, "SetButtonContent"));

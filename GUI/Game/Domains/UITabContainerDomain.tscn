@@ -1,8 +1,8 @@
 [gd_scene load_steps=8 format=3 uid="uid://dq8wps73ct8h2"]
 
-[ext_resource type="Script" path="res://GUI/Game/TabContainers/UITabContainerDomain.cs" id="1_mkdso"]
+[ext_resource type="Script" path="res://GUI/Game/Domains/UITabContainerDomain.cs" id="1_mkdso"]
 [ext_resource type="PackedScene" uid="uid://b21lbg7v3h1t" path="res://GUI/Game/Panels/UIPanelPoolGeneral.tscn" id="2_y5m1n"]
-[ext_resource type="PackedScene" uid="uid://bejhglo4krc63" path="res://GUI/Game/Panels/UIPanelDomainFeatures.tscn" id="3_ealgp"]
+[ext_resource type="PackedScene" uid="uid://bejhglo4krc63" path="res://GUI/Game/Domains/UIPanelDomainFeatures.tscn" id="3_ealgp"]
 [ext_resource type="PackedScene" uid="uid://b3ntcmg31dscj" path="res://GUI/Game/Panels/UIPanelPoolSupply.tscn" id="4_tpttw"]
 [ext_resource type="PackedScene" uid="uid://dy1f1jbsqh1vn" path="res://GUI/Game/Panels/UIPanelPoolTrade.tscn" id="5_43wjr"]
 

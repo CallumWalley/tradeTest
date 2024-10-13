@@ -9,9 +9,6 @@ public partial class UIValidTradeRoute : Button, Lists.IListable<PlayerTrade.Val
 	public PlayerTrade.ValidTradeHead GameElement { get { return validTradeHead; } }
 	Label labelDistance;
 
-	public Node Driver;
-
-
 	public void Init(PlayerTrade.ValidTradeHead _validTradeHead)
 	{
 		validTradeHead = _validTradeHead;
@@ -20,20 +17,6 @@ public partial class UIValidTradeRoute : Button, Lists.IListable<PlayerTrade.Val
 		GetNode<UIDomainTiny>("HBoxContainer/DomainSummary").Init(validTradeHead.Head);
 		GetNode<UIResource>("HBoxContainer/UIResource").Init(validTradeHead.TradeWeight);
 		labelDistance = GetNode<Label>("HBoxContainer/Distance");
-	}
-	public override void _Ready()
-	{
-
-	}
-
-	public override void _Pressed()
-	{
-		base._Pressed();
-		if (Driver != null)
-		{
-			((UIDropDownSetHead)Driver).OnButtonPressed(this);
-		}
-		Disabled = true;
 	}
 
 	public void Update()

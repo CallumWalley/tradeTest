@@ -17,7 +17,6 @@ region = Rect2(6, 6, 40, 40)
 [node name="Template" type="TextureButton"]
 offset_right = 40.0
 offset_bottom = 40.0
-grow_vertical = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 texture_normal = SubResource("2")

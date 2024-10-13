@@ -5,11 +5,12 @@ namespace Game;
 public partial class Map : Node
 {
     [Export]
-    public PlanetarySystem startView;
+    public Game.PlanetarySystem startView;
 
     public override void _Ready()
     {
         base._Ready();
-        GetNode<Screen>("../Screen").DrawSystem(startView);
+        GetNode<Game.Screen>("../Screen").DrawSystem(startView);
+        GetNode<YAT.YAT>("/root/YAT").TerminalManager.CurrentTerminal.SelectedNode.ChangeSelectedNode(startView.GetPath());
     }
 }

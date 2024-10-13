@@ -47,8 +47,8 @@ public partial class PlayerTrade : Node, IEnumerable<TradeRoute>
 	}
 	public void DeregisterTradeRoute(TradeRoute tr)
 	{
-		tr.Head.Trade.DeregisterDownline(tr);
-		tr.Tail.Trade.DeregisterUpline(tr);
+		tr.Head.DeregisterDownline(tr);
+		tr.Tail.DeregisterUpline(tr);
 
 		RemoveChild(tr);
 		tr.QueueFree();

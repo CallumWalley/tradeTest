@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://r5ytkwljq7nb"]
+[gd_scene load_steps=14 format=3 uid="uid://r5ytkwljq7nb"]
 
 [ext_resource type="Script" path="res://GUI/Screen.cs" id="1_5umy1"]
 [ext_resource type="Script" path="res://GUI/Screen/Top/UITimeControl.cs" id="1_ys7u5"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://GUI/Elements/UIWindow.cs" id="6_qkjht"]
 [ext_resource type="PackedScene" uid="uid://bwaowp0cjw1f2" path="res://GUI/Game/Panels/UIPanelPlayerFeatureTemplateList.tscn" id="7_13nsc"]
 [ext_resource type="Script" path="res://GUI/ScreenTradeRoutes.cs" id="10_2rbum"]
+[ext_resource type="Script" path="res://GUI/ViewCommands/ViewCommands.cs" id="13_anhex"]
 
 [node name="Screen" type="CanvasLayer"]
 script = ExtResource("1_5umy1")
@@ -292,3 +293,6 @@ text = "No Shipyards"
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
+
+[node name="ViewCommands" type="Node" parent="."]
+script = ExtResource("13_anhex")
