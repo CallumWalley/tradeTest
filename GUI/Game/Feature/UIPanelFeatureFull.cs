@@ -34,11 +34,11 @@ public partial class UIPanelFeatureFull : UIPanel
 		base._Ready();
 		player = GetNode<Player>("/root/Global/Player");
 		screen = GetNode<CanvasLayer>("/root/Global/Screen");
-		name = GetNode<UIRename>("PanelContainer/Details/MarginContainer/HBoxContainer/Name");
-		description = GetNode<RichTextLabel>("PanelContainer/Details/Description");
-		tags = GetNode<HFlowContainer>("PanelContainer/Details/Tags");
+		name = GetNode<UIRename>("PanelContainer/Details/MarginContainer/VBoxContainer/Name");
+		description = GetNode<RichTextLabel>("PanelContainer/Details/MarginContainer/VBoxContainer/Description");
+		tags = GetNode<HFlowContainer>("PanelContainer/Details/MarginContainer/VBoxContainer/Tags");
 		splashScreen = GetNode<TextureRect>("PanelContainer/Details/SplashScreen");
-		templateButton = GetNode<TextureButton>("PanelContainer/Details/MarginContainer/HBoxContainer/Type");
+		templateButton = GetNode<TextureButton>("PanelContainer/Details/MarginContainer/VBoxContainer/HBoxContainer/Type");
 
 
 		templateButton.Connect("pressed", new Callable(this, "OnTemplateButtonPressed"));
@@ -73,13 +73,15 @@ public partial class UIPanelFeatureFull : UIPanel
 
 
 		name.entity = feature;
+		VBoxContainer vbcf = GetNode<VBoxContainer>("PanelContainer/Details/TabContainer/Factors/VBoxContainer");
+		VBoxContainer vbcc = GetNode<VBoxContainer>("PanelContainer/Details/TabContainer/Conditions/VBoxContainer");
 
-		GetNode<VBoxContainer>("PanelContainer/Details/Factors/VBoxContainer").AddChild(singularFactors);
-		GetNode<VBoxContainer>("PanelContainer/Details/Factors/VBoxContainer").AddChild(localFactors);
-		GetNode<VBoxContainer>("PanelContainer/Details/Factors/VBoxContainer").AddChild(globalFactorsInput);
-		GetNode<VBoxContainer>("PanelContainer/Details/Factors/VBoxContainer").AddChild(globalFactorsOutput);
+		vbcf.AddChild(singularFactors);
+		vbcf.AddChild(localFactors);
+		vbcf.AddChild(globalFactorsInput);
+		vbcf.AddChild(globalFactorsOutput);
 
-		GetNode<VBoxContainer>("PanelContainer/Details/Conditions/VBoxContainer").AddChild(conditions);
+		vbcc.AddChild(conditions);
 
 		OnEFrameUpdate();
 	}
