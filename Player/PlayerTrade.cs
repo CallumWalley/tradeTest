@@ -14,9 +14,6 @@ namespace Game;
 public partial class PlayerTrade : Node, IEnumerable<TradeRoute>
 {
 	// Parent to trade routes.
-
-	static readonly PackedScene ps_TradeRoute = (PackedScene)GD.Load<PackedScene>("res://Map/TradeRoute.tscn");
-
 	public List<Domain> Heads { get; set; } = new List<Domain>();
 
 	public IEnumerator<TradeRoute> GetEnumerator()
@@ -45,14 +42,16 @@ public partial class PlayerTrade : Node, IEnumerable<TradeRoute>
 		{
 		}
 	}
+	[GameAttributes.Command]
 	public void RegisterTradeRoute(Domain head, Domain tail)
 	{
-		TradeRoute newTradeRoute = ps_TradeRoute.Instantiate<TradeRoute>();
+		TradeRoute newTradeRoute = new TradeRoute();
 		newTradeRoute.Head = head;
 		newTradeRoute.Tail = tail;
 		AddChild(newTradeRoute);
 		GD.Print("Registered trade route.");
 	}
+	[GameAttributes.Command]
 	public void DeregisterTradeRoute(TradeRoute tr)
 	{
 		tr.Head.DeregisterDownline(tr);
@@ -94,11 +93,17 @@ public partial class PlayerTrade : Node, IEnumerable<TradeRoute>
 
 	private void RegisterCommands()
 	{
-		RegisteredCommands.AddCommand(typeof(Trade));
 		TradeList.player = this;
+		TradeRemove.player = this;
+		TradeAdd.player = this;
+
+		Extensible.RegisterExtension("trade", typeof(TradeRemove));
 		Extensible.RegisterExtension("trade", typeof(TradeList));
+		Extensible.RegisterExtension("trade", typeof(TradeAdd));
+
+		RegisteredCommands.AddCommand(typeof(Trade));
 	}
-	[Command("trade", "Trade", "trade")]
+	[Command("trade", "Trade")]
 	[Argument("subcommand", "string", "The name of the subcommand to run.")]
 	[Description("Main command for trade")]
 	public sealed partial class Trade : Extensible, ICommand
@@ -107,12 +112,10 @@ public partial class PlayerTrade : Node, IEnumerable<TradeRoute>
 		{
 			var extensions = GetCommandExtensions("trade");
 
-			if (extensions is null) return ICommand.Failure(string.Format("Subcommand [i]{0}[/i] not found.", data.Arguments["subcommand"]));
-
 			if (extensions.TryGetValue((string)data.Arguments["subcommand"], out Type extension))
 				return ExecuteExtension(extension, data with { RawData = data.RawData[1..] });
 
-			return ICommand.Failure("Variable not found.");
+			return ICommand.Failure(string.Format("Subcommand [i]{0}[/i] not found, valid options are {1}", data.Arguments["subcommand"], String.Join(",", extensions.Keys)));
 		}
 	}
 	[Extension("list", "Lists trade routes", "Lists trade routes", new string[] { "ls" })]
@@ -134,17 +137,18 @@ public partial class PlayerTrade : Node, IEnumerable<TradeRoute>
 			return ICommand.Success();
 		}
 	}
-	[Extension("remove", "Removes trade routes", "Removes trade routes", new string[] { "rm" })]
-	[Argument("trade_route", "string", "The name of the trade route to remove.")]
-	public sealed class TradeEnd : IExtension
+
+	[Extension("remove", "Removes trade routes", "Removes trade route [i]trade_route[/i]", new string[] { "rm", "r" })]
+	public sealed class TradeRemove : IExtension
 	{
 		public static PlayerTrade player;
 		public CommandResult Execute(CommandData data)
 		{
-			TradeRoute tr = (TradeRoute)(player.GetNodeOrNull((NodePath)data.Arguments["trade_route"]));
+			if (data.RawData.Length < 2) { return ICommand.Failure("Not enough arguments"); }
+			TradeRoute tr = (TradeRoute)(player.GetNodeOrNull((NodePath)data.RawData[1]));
 			if (tr == null)
 			{
-				return ICommand.Failure(string.Format("No trade route named '{0}'.", data.Arguments["trade_route"]));
+				return ICommand.Failure(string.Format("No trade route named '{0}'.", data.RawData[1]));
 			}
 			else
 			{
@@ -152,6 +156,42 @@ public partial class PlayerTrade : Node, IEnumerable<TradeRoute>
 				return ICommand.Success();
 			}
 
+		}
+	}
+
+	[Extension("add", "Add trade route", "Create a new trade route from [i]head_domain[/i] to [i]tail_domain[/i]", aliases: new string[] { "a" })]
+
+	public sealed class TradeAdd : IExtension
+	{
+		public static PlayerTrade player;
+		public CommandResult Execute(CommandData data)
+		{
+			if (data.RawData.Length < 3) { return ICommand.Failure("Not enough arguments"); }
+
+			Node head = World.SearchNode(data.Terminal.SelectedNode.Current, (string)data.RawData[1]);
+			Node tail = World.SearchNode(data.Terminal.SelectedNode.Current, (string)data.RawData[2]);
+
+			if (head == null)
+			{
+				return ICommand.Failure(string.Format("Could not find '{0}'.", data.RawData[1]));
+			}
+			else if (!(head is Domain)) // && ((Domain)head).ValidTradeReceiver)
+			{
+				return ICommand.Failure(string.Format("'{0}' is not a valid trade receiver.", data.RawData[1]));
+			}
+			if (tail == null)
+			{
+				return ICommand.Failure(string.Format("Could not find '{0}'.", data.RawData[2]));
+			}
+			else if (!(tail is Domain)) // && ((Domain)tail).ValidTradeReceiver)
+			{
+				return ICommand.Failure(string.Format("'{0}' is not a valid trade receiver.", data.RawData[2]));
+			}
+			else
+			{
+				player.RegisterTradeRoute((Domain)head, (Domain)tail);
+				return ICommand.Success();
+			}
 		}
 	}
 }
