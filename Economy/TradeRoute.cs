@@ -283,4 +283,15 @@ public partial class TradeRoute : Node, Entities.IEntityable
         public override string Details { get { return string.Format("{0} {1} {2}", Resource.Name(Type), (Request > 0) ? "Import from" : "Export to", tradeRoute.Head.Name); } }
 
     }
+
+
+    public override string ToString()
+    {
+        string outStr = string.Format("[b]{0}[/b]\n{1} ==(2:F2)=> {3}: {4:F1}/{5:F1}", Name, Head, distance, Tail, InboundShipDemand, OutboundShipDemand);
+        foreach (RStaticTail r in ListTail)
+        {
+            outStr += string.Format("\n    {0}:{1:F1}/{2:F1}", Resource.Name(r.Type), r.Sum, r.Request);
+        }
+        return outStr;
+    }
 }

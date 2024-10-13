@@ -1,7 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://cdaaip1pg2kx2"]
-
-[ext_resource type="Script" path="res://tree.cs" id="1_yg3pb"]
-
-[node name="Details" type="Popup"]
-visible = true
-script = ExtResource("1_yg3pb")
