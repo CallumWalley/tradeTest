@@ -1,16 +1,17 @@
 using Godot;
 using System;
+namespace Game;
 
 public partial class UIAccordianSatelliteSystem : UIAccordian
 {
 	static readonly PackedScene prefab_UIAccordian = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/SatelliteSystem/UIAccordianSatelliteSystem.tscn");
-	public CanvasLayer canvasLayer {get; set;}
+	public CanvasLayer canvasLayer { get; set; }
 
-	public Camera camera {get; set;}
-	public SatelliteSystem satelliteSystem {get;set;}
+	public Camera camera { get; set; }
+	public SatelliteSystem satelliteSystem { get; set; }
 
 	public override void _Ready()
-	{	
+	{
 		base._Ready();
 		Button button = GetNode<Button>("Button");
 		Container container = GetNode<Container>("Container");
@@ -40,8 +41,8 @@ public partial class UIAccordianSatelliteSystem : UIAccordian
 	}
 
 	public override void ShowDetails(bool toggled)
-	{	
+	{
 		base.ShowDetails(toggled);
 		camera.Center(satelliteSystem);
-	}	
+	}
 }

@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://dr0kmb7haf84v"]
 
-[ext_resource type="Script" path="res://GUI/Game/Windows/UIWindowDomainFeaturePlan.cs" id="1_tb0ig"]
+[ext_resource type="Script" path="res://GUI/Game/Domain/UIWindowDomainFeaturePlan.cs" id="1_tb0ig"]
 [ext_resource type="PackedScene" path="res://GUI/Game/Panels/UIPanelFeatureFactoryList.tscn" id="2_jgl2f"]
 [ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="3_bj1d3"]
 

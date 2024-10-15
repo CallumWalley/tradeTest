@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Linq;
+namespace Game;
 
 public partial class ScreenOrbitLines : Control
 {

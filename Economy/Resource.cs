@@ -1,8 +1,10 @@
 using Godot;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
+namespace Game;
+
 public static partial class Resource
 {
     // Interfaces

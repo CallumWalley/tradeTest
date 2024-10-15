@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+namespace Game;
 
 
 /// <summary>
@@ -90,7 +91,7 @@ public partial class Logistics
 
 
             // For each child trade route
-            foreach (TradeRoute downline in Domain.Trade.DownlineTraderoutes)
+            foreach (TradeRoute downline in Domain.DownlineTraderoutes)
             {
                 // call this funtion on child.
                 CalculateRequests(downline.Tail);
@@ -100,13 +101,13 @@ public partial class Logistics
             }
 
             // // If no upline, end here.
-            // if (Domain.Trade.UplineTraderoute == null)
+            // if (Domain.UplineTraderoute == null)
             // {
             //     return;
             // }
 
             // Change trade request according to own logic.
-            Domain.Trade.DownlineTraderoutes.ForEach(x => x.SetRequest());
+            Domain.DownlineTraderoutes.ForEach(x => x.SetRequest());
 
             foreach (KeyValuePair<int, Resource.Ledger.Entry> kvp in Domain.Ledger)
             {
@@ -114,7 +115,7 @@ public partial class Logistics
                 kvp.Value.TradeNet.Clear();
             }
             // Update trade list.
-            foreach (var tr in Domain.Trade.DownlineTraderoutes)
+            foreach (var tr in Domain.DownlineTraderoutes)
             {
                 foreach (var r in tr.ListHead)
                 {
@@ -158,7 +159,7 @@ public partial class Logistics
             // }
 
             // Calculate all ships required to fulfil downlines.
-            if (Domain.Trade.DownlineTraderoutes.Count > 0)
+            if (Domain.DownlineTraderoutes.Count > 0)
             {
                 freightFraction = Math.Min(Domain.Ledger[811].LocalNet.Fraction(), 1);
             }
@@ -175,9 +176,9 @@ public partial class Logistics
 
 
                 // Get approved materials from upline.
-                if (Domain.Trade.UplineTraderoute != null && Domain.Trade.UplineTraderoute.ListTail.ContainsKey(kvp.Key))
+                if (Domain.UplineTraderoute != null && Domain.UplineTraderoute.ListTail.ContainsKey(kvp.Key))
                 {
-                    tally += Domain.Trade.UplineTraderoute.ListTail[kvp.Key].Sum;
+                    tally += Domain.UplineTraderoute.ListTail[kvp.Key].Sum;
                 }
 
                 // // Step One. Approve imports from children. (equal to available ships)
@@ -215,7 +216,7 @@ public partial class Logistics
                     def -= alloc;
                 }
 
-                def += Domain.Trade.DownlineTraderoutes.Where(x => x.ListHead.ContainsKey(kvp.Key)).Sum(x => x.ListHead[kvp.Key].Request);
+                def += Domain.DownlineTraderoutes.Where(x => x.ListHead.ContainsKey(kvp.Key)).Sum(x => x.ListHead[kvp.Key].Request);
 
 
                 // Step Four. Calculate storage withdrawl.
@@ -250,14 +251,14 @@ public partial class Logistics
                     ((Resource.Ledger.EntryAccrul)kvp.Value).Withdraw(tally);
                 }
             }
-            if (Domain.Trade.UplineTraderoute != null)
+            if (Domain.UplineTraderoute != null)
             {
-                foreach (var r in Domain.Trade.UplineTraderoute.ListTail)
+                foreach (var r in Domain.UplineTraderoute.ListTail)
                 {
                     Domain.Ledger[r.Type].TradeNet.Add(r);
                 }
             }
-            foreach (TradeRoute child in Domain.Trade.DownlineTraderoutes)
+            foreach (TradeRoute child in Domain.DownlineTraderoutes)
             {
                 ResolveRequests(child.Tail);
             }
@@ -271,7 +272,7 @@ public partial class Logistics
     //         entry.Value.DownlineGain.Clear();
     //         entry.Value.DownlineLoss.Clear();
     //     }
-    //     foreach (TradeRoute tradeRoute in Domain.Trade.DownlineTraderoutes)
+    //     foreach (TradeRoute tradeRoute in Domain.DownlineTraderoutes)
     //     {
     //         foreach (Resource.IResource r in tradeRoute.ListHeadLoss)
     //         {

@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Linq;
+namespace Game;
 
 public partial class UIWindowDomainFeaturePlan : UIWindow
 {
@@ -24,7 +25,7 @@ public partial class UIWindowDomainFeaturePlan : UIWindow
 		base._Ready();
 		addButton.Connect("pressed", new Callable(this, "OnButtonPressed"));
 		nameLineEdit.Connect("text_changed", new Callable(this, "OnLineEditTextChanged"));
-
+		templateList.list.Connect("item_selected", new Callable(this, "OnTemplateListItemSelected"));
 		scaleSpinbox.Value = 1;
 	}
 
@@ -35,6 +36,10 @@ public partial class UIWindowDomainFeaturePlan : UIWindow
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 
+	public void OnTemplateListItemSelected(int i)
+	{
+		nameLineEdit.Text = templateList.selected.GenerateName();
+	}
 	public void OnLineEditTextChanged(string new_text)
 	{
 		ValidateName(new_text);
@@ -72,10 +77,6 @@ public partial class UIWindowDomainFeaturePlan : UIWindow
 		underConstruction.NewSize = scaleSpinbox.Value;
 		newFeature.AddCondition(underConstruction);
 		// If has scale
-
-
-
-
 
 		//templateList.OnItemListItemSelected(newFeature.GetIndex());
 		OnCloseRequested();

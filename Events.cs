@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+namespace Game;
 
 /// <summary>
 /// An event. Has a time, and at least 1 thing. 

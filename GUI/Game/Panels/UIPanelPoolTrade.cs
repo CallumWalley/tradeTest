@@ -1,5 +1,6 @@
 using Godot;
 using System;
+namespace Game;
 
 public partial class UIPanelPoolTrade : UIPanel
 {
@@ -16,7 +17,7 @@ public partial class UIPanelPoolTrade : UIPanel
 		GetNode<UINetworkInfo>("VBoxContainer/NetworkInfo").domain = domain;
 		downlineRoutes = new UIList<TradeRoute>();
 		downlineRoutes.Vertical = true;
-		downlineRoutes.Init(domain.Trade.DownlineTraderoutes, prefab_TradeRoute);
+		downlineRoutes.Init(domain.DownlineTraderoutes, prefab_TradeRoute);
 		GetNode<MarginContainer>("VBoxContainer/HBoxContainer/MarginContainer").AddChild(downlineRoutes);
 	}
 

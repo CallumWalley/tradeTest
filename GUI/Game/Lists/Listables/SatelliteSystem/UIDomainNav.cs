@@ -1,11 +1,12 @@
 using Godot;
 using System;
+namespace Game;
 
 public partial class UIDomainNav : Button
 {
 	public Domain domain;
 	public CanvasLayer canvasLayer;
-	static readonly PackedScene prefab_UITabContainerDomain = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/TabContainers/UITabContainerDomain.tscn");
+	static readonly PackedScene prefab_UITabContainerDomain = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Domain/UITabContainerDomain.tscn");
 	static readonly PackedScene prefab_UIWindow = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/UIWindow.tscn");
 
 	public override void _Ready()

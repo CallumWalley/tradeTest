@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+namespace Game;
 
 public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
 {

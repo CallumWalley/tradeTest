@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Text;
+namespace Game;
 
 public partial class UIConditionTiny : HBoxContainer, Lists.IListable<ConditionBase>
 {

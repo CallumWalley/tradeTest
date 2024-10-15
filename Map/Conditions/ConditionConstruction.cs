@@ -2,9 +2,9 @@ using Godot;
 using System;
 using System.IO;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using System.Security.Cryptography;
 using System.Linq;
+namespace Game;
 
 /// <summary>
 /// Represents a thing that can be larger or smaller.

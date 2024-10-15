@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Linq;
+namespace Game;
 
 /// <summary>
 /// Displays the ist of features in a location.
@@ -16,7 +17,7 @@ public partial class UIPanelDomainFeatures : UIPanel, UIInterfaces.IEFrameUpdata
     ScrollContainer display;
     ScrollContainer displayEmpty;
 
-    static readonly PackedScene prefab_UIPanelFeatureFull = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Panels/UIPanelFeatureFull.tscn");
+    static readonly PackedScene prefab_UIPanelFeatureFull = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Feature/UIPanelFeatureFull.tscn");
 
     FeatureBase selected;
     int selectedIndex = 0;

@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+namespace Game;
+
 /// <summary>
 /// List of all buildable structures.
 /// Used in template menu and build menu.
@@ -13,7 +15,7 @@ public partial class UIPanelPlayerFeatureTemplateList : UIPanel, UIInterfaces.IE
     Label nameLabel;
     Label adjLabel;
     Label altNameLabel;
-    ItemList list;
+    public ItemList list;
     ScrollContainer display;
     public List<PlayerFeatureTemplate> featureList = new();
     static readonly PackedScene prefab_UIPanelFeatureFactoryFull = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Panels/UIPanelPlayerFeatureTemplateFull.tscn");
@@ -32,7 +34,16 @@ public partial class UIPanelPlayerFeatureTemplateList : UIPanel, UIInterfaces.IE
         display = GetNode<ScrollContainer>("VBoxContainer/HSplitContainer/Display");
 
         list.Connect("item_selected", new Callable(this, "OnItemListItemSelected"));
+        list.Connect("visibility_changed", new Callable(this, "OnItemListVisibilityChanged"));
+
         UpdateElements();
+        OnItemListItemSelected(0);
+    }
+
+    public void OnItemListVisibilityChanged()
+    {
+        UpdateElements();
+        DrawDisplay();
     }
 
     public void OnItemListItemSelected(int i)
@@ -45,7 +56,7 @@ public partial class UIPanelPlayerFeatureTemplateList : UIPanel, UIInterfaces.IE
     public override void _Process(double delta)
     {
         base._Process(delta);
-        QueueRedraw();
+
     }
     void DrawDisplay()
     {
@@ -79,7 +90,6 @@ public partial class UIPanelPlayerFeatureTemplateList : UIPanel, UIInterfaces.IE
             list.AddItem(((PlayerFeatureTemplate)f).Name, ((PlayerFeatureTemplate)f).Feature.iconMedium);
         }
         list.Select(selectedIndex);
-
     }
     public override void OnEFrameUpdate()
     {

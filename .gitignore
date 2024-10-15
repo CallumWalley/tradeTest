@@ -20,6 +20,8 @@ mono_crash*
 
 # Plugins
 addons/*
+script_templates/*
+example/*
 
 # Assets
 assets/icons/computersa

@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+namespace Game;
 
 
 public partial class Galaxy : Node, Entities.IEntityable, IEnumerable<PlanetarySystem>
@@ -21,7 +22,7 @@ public partial class Galaxy : Node, Entities.IEntityable, IEnumerable<PlanetaryS
 			}
 		}
 	}
-	public Godot.Vector2 CameraPosition{ get{ throw new NotImplementedException(); }}
+	public Godot.Vector2 CameraPosition { get { throw new NotImplementedException(); } }
 
-    public float CameraZoom{ get{ throw new NotImplementedException(); }}
+	public float CameraZoom { get { throw new NotImplementedException(); } }
 }

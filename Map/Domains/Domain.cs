@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+namespace Game;
 
 public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<FeatureBase>
 {
@@ -105,7 +106,7 @@ public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<FeatureB
             }
 
             // If this has downline trade routes, they need to be updated.
-            foreach (TradeRoute tradeRoute in Trade.DownlineTraderoutes)
+            foreach (TradeRoute tradeRoute in DownlineTraderoutes)
             {
                 tradeRoute.Tail.Order = value + 1;
                 tradeRoute.Tail.Network = Network;
@@ -130,7 +131,6 @@ public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<FeatureB
     // public Resource.RDict<Resource.RGroup<Resource.IResource>> resources = new Resource.RDict<Resource.RGroup<Resource.IResource>>();
     // public Resource.RDict<Resource.RGroup<Resource.IResource>> ResourcesLocal { get { return resources[]} set; }
     public Resource.Ledger Ledger = new();
-    public _Trade Trade = new _Trade();
 
     // // Used to carry through numbers to next step.
     // protected Dictionary<int, double> productionBuffer = new();
@@ -152,7 +152,6 @@ public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<FeatureB
         base._EnterTree();
 
         Ledger.Domain = this;
-        Trade.Domain = this;
     }
 
     // Convenience function. Makes children at start of scene into members.
@@ -186,12 +185,6 @@ public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<FeatureB
         }
     }
 
-
-    public override void _Draw()
-    {
-        base._Draw();
-    }
-
     public override void _Process(double delta)
     {
     }
@@ -205,7 +198,6 @@ public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<FeatureB
         Logistics.ExportToParent.EFrameLate(this);
     }
 
-
     public IEnumerator<FeatureBase> GetEnumerator()
     {
         foreach (FeatureBase f in features.GetChildren())
@@ -218,56 +210,50 @@ public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<FeatureB
         return GetEnumerator();
     }
 
-    // Class for orgasnisng
-    public class _Trade
+    public Resource.RGroup<Resource.IResource> shipDemand = new Resource.RGroup<Resource.IResource>(802, "Trade vessels in use.");
+    // needs custom ui element
+    public Resource.RGroup<Resource.IResource> ShipDemand
     {
-        public Domain Domain;
-        public Resource.RGroup<Resource.IResource> shipDemand = new Resource.RGroup<Resource.IResource>(802, "Trade vessels in use.");
-        // needs custom ui element
-        public Resource.RGroup<Resource.IResource> ShipDemand
+        get
         {
-            get
-            {
-                return Domain.Ledger[811].LocalNet;
-            }
+            return Ledger[811].LocalNet;
         }
+    }
 
-        public _Trade() { }
-        public TradeRoute UplineTraderoute = null;
-        public List<TradeRoute> DownlineTraderoutes = new List<TradeRoute>();
-        public void RegisterUpline(TradeRoute i)
+    public TradeRoute UplineTraderoute = null;
+    public List<TradeRoute> DownlineTraderoutes = new List<TradeRoute>();
+    public void RegisterUpline(TradeRoute i)
+    {
+        UplineTraderoute = i;
+        // Order is set in setter of parent order.
+    }
+    public void DeregisterUpline(TradeRoute i, bool upline = false)
+    {
+        UplineTraderoute = null;
+
+        // 0 is not in network. 
+        Order = Math.Min(DownlineTraderoutes.Count, 1);
+
+        //DeregisterTransformer(i.TransformerHead);
+    }
+    public void RegisterDownline(TradeRoute i)
+    {
+        // If made head of trade network, set order to 1;
+        DownlineTraderoutes.Add(i);
+        if (Order == 0) { Order = 1; GD.Print(string.Format("{0} is the head of the new '{1}' network.", Name, Network)); }
+
+        GD.Print("Downline registered");
+    }
+    public void DeregisterDownline(TradeRoute i)
+    {
+        DownlineTraderoutes.Remove(i);
+
+        // If no longer part of a trade network, set order to 0;
+        if (Order == 1 && DownlineTraderoutes.Count < 1)
         {
-            UplineTraderoute = i;
-            // Order is set in setter of parent order.
-        }
-        public void DeregisterUpline(TradeRoute i, bool upline = false)
-        {
-            UplineTraderoute = null;
-
-            // 0 is not in network. 
-            Domain.Order = Math.Min(DownlineTraderoutes.Count, 1);
-
-            //DeregisterTransformer(i.TransformerHead);
-        }
-        public void RegisterDownline(TradeRoute i)
-        {
-            // If made head of trade network, set order to 1;
-            DownlineTraderoutes.Add(i);
-            if (Domain.Order == 0) { Domain.Order = 1; GD.Print(string.Format("{0} is the head of the new '{1}' network.", Domain.Name, Domain.Network)); }
-
-            GD.Print("Downline registered");
-        }
-        public void DeregisterDownline(TradeRoute i)
-        {
-            DownlineTraderoutes.Remove(i);
-
-            // If no longer part of a trade network, set order to 0;
-            if (Domain.Order == 1 && DownlineTraderoutes.Count < 1)
-            {
-                GD.Print(string.Format("{0} is not longer part of a network, so order is set to '0'", Domain.Name));
-                Domain.Order = 0;
-                Domain.Network = null;
-            }
+            GD.Print(string.Format("{0} is not longer part of a network, so order is set to '0'", Name));
+            Order = 0;
+            Network = null;
         }
     }
 

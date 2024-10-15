@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using Godot.Collections;
+namespace Game;
 
 public partial class UIPanelDomain : Control
 {
@@ -70,7 +71,7 @@ public partial class UIPanelDomain : Control
         tradeRouteList = new();
         UIDropDownSetHead setUpline = tradePanel.GetNode<UIDropDownSetHead>("DropDown");
         setUpline.Init(Domain);
-        tradeRouteList.Init(Domain.Trade.DownlineTraderoutes, prefab_TradeRoute);
+        tradeRouteList.Init(Domain.DownlineTraderoutes, prefab_TradeRoute);
         tradeRouteList.Vertical = true;
         tradePanel.AddChild(tradeRouteList);
 
@@ -92,7 +93,7 @@ public partial class UIPanelDomain : Control
             tradePanelNetwork.Text = string.Format("No trade network connected.", Domain.Order, Domain.Network);
             //tradePanelNetwork.Visible = false;
         }
-        bool showTrade = (Domain.Trade.UplineTraderoute != null || Domain.Trade.DownlineTraderoutes.Count > 0);
+        bool showTrade = (Domain.UplineTraderoute != null || Domain.DownlineTraderoutes.Count > 0);
         GetNode<Label>("VBoxContainer/TabContainer/Supply/VBoxContainer/Trade").Visible = showTrade;
         panelLedger.ShowTrade = showTrade;
         panelLedger.Update();

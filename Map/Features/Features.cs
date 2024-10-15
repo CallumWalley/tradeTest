@@ -2,8 +2,6 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Dynamic;
 using System.Linq;
 using System.Reflection;
@@ -13,41 +11,41 @@ using System.Reflection;
 /// </summary>
 public partial class Features : Node
 {
-    public class IFeatureConverter : JsonConverter
-    {
-        public override bool CanConvert(Type objectType)
-        {
-            return typeof(IFeatureConverter).IsAssignableFrom(objectType);
-        }
+    // public class IFeatureConverter : JsonConverter
+    // {
+    //     public override bool CanConvert(Type objectType)
+    // {
+    //     return typeof(IFeatureConverter).IsAssignableFrom(objectType);
+    // }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            JObject itemsJson = JObject.Load(reader);
-            // You can use a property in the JSON to determine the type, like a "type" field
-            List<Conditions.IConditionable> items = new();
+    // public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+    // {
+    //     JObject itemsJson = JObject.Load(reader);
+    //     // You can use a property in the JSON to determine the type, like a "type" field
+    //     List<Conditions.IConditionable> items = new();
 
-            foreach (var property in itemsJson.Properties())
-            {
-                string typeName = property.Name;
-                JObject itemObject = (JObject)property.Value;
+    //     foreach (var property in itemsJson.Properties())
+    //     {
+    //         string typeName = property.Name;
+    //         JObject itemObject = (JObject)property.Value;
 
 
-                Conditions.IConditionable target = typeName switch
-                {
-                    "simpleIndustry" => new SimpleIndustry(),
-                    _ => throw new NotSupportedException($"Unknown class type : {typeName}")
-                };
+    //         Conditions.IConditionable target = typeName switch
+    //         {
+    //             "simpleIndustry" => new SimpleIndustry(),
+    //             _ => throw new NotSupportedException($"Unknown class type : {typeName}")
+    //         };
 
-                items.Add(target);
-            }
-            return items;
-        }
+    //         items.Add(target);
+    //     }
+    //     return items;
+    // }
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            throw new NotImplementedException();
-        }
-    }
+    // public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+    // {
+    //     throw new NotImplementedException();
+    // }
+    //}
     public override void _Ready()
     {
         // foreach (string file in System.IO.Directory.GetFiles("Map/Features/Templates", "*.json"))

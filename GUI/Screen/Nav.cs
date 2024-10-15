@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Numerics;
 
+namespace Game;
 
 public partial class Nav : VBoxContainer
 {

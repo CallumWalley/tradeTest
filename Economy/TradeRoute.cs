@@ -1,8 +1,8 @@
 using Godot;
-using Microsoft.CodeAnalysis.CSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+namespace Game;
 
 public partial class TradeRoute : Node, Entities.IEntityable
 {
@@ -16,10 +16,10 @@ public partial class TradeRoute : Node, Entities.IEntityable
     public Resource.RDict<RStaticHead> ListHead { get; protected set; } = new();
     Resource.RStatic shipDemand = new Resource.RStatic(811, 0);
 
-    public Godot.Vector2 CameraPosition{ get{ throw new NotImplementedException(); }}
+    public Godot.Vector2 CameraPosition { get { throw new NotImplementedException(); } }
 
-    public float CameraZoom{ get{ throw new NotImplementedException(); }}
-    
+    public float CameraZoom { get { throw new NotImplementedException(); } }
+
 
     new public string Name { get { return base.Name; } set { base.Name = value; } }
 
@@ -79,8 +79,8 @@ public partial class TradeRoute : Node, Entities.IEntityable
         GetNode<Line2D>("Line2D").Width = 1;
 
         // Downline must be resistered first else upline doesn't know it is a trade netwrowk
-        Head.Trade.RegisterDownline(this);
-        Tail.Trade.RegisterUpline(this);
+        Head.RegisterDownline(this);
+        Tail.RegisterUpline(this);
 
         distance = 0.3; // positive factor. Equal to about 1 MM  Tail.GetParent<Body>().Position.DistanceTo(Head.GetParent<Body>().Position);
         double acceleration = 20; // positive factor.  Equal to about 2 x acceleration.
@@ -282,5 +282,16 @@ public partial class TradeRoute : Node, Entities.IEntityable
         public override string Name { get { return string.Format("{0} {1}", (Request > 0) ? "Import from" : "Export to", tradeRoute.Head.Name); } }
         public override string Details { get { return string.Format("{0} {1} {2}", Resource.Name(Type), (Request > 0) ? "Import from" : "Export to", tradeRoute.Head.Name); } }
 
+    }
+
+
+    public override string ToString()
+    {
+        string outStr = string.Format("[b]{0}[/b]\n{1} ==(2:F2)=> {3}: {4:F1}/{5:F1}", Name, Head, distance, Tail, InboundShipDemand, OutboundShipDemand);
+        foreach (RStaticTail r in ListTail)
+        {
+            outStr += string.Format("\n    {0}:{1:F1}/{2:F1}", Resource.Name(r.Type), r.Sum, r.Request);
+        }
+        return outStr;
     }
 }

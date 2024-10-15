@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Linq;
 using System.Collections;
+namespace Game;
 
 public partial class UIDomainSmall : Control, Lists.IListable<Domain>
 {

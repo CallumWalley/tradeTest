@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Resources;
 // [Tool]
+namespace Game;
+
 public partial class UIResource : Control, Lists.IListable<Resource.IResource>
 {
     public Resource.IResource resource;

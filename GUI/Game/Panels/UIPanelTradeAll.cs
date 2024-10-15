@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Linq;
 
+namespace Game;
 
 /// <summary>
 /// A list showing all active trade routes.
