@@ -25,8 +25,8 @@
      inkscape:document-units="mm"
      showgrid="true"
      inkscape:zoom="3.1183673"
-     inkscape:cx="61.570682"
-     inkscape:cy="117.68979"
+     inkscape:cx="43.291885"
+     inkscape:cy="83.376965"
      inkscape:window-width="1920"
      inkscape:window-height="1131"
      inkscape:window-x="0"
@@ -53,7 +53,38 @@
   <defs
      id="defs1" />
   <g
-     inkscape:label="Layer 1"
+     inkscape:label="Fulfilment"
      inkscape:groupmode="layer"
-     id="layer1" />
+     id="layer1">
+    <path
+       d="m 4e-6,4.7625002 h 0.846939 v -2.35395 a 0.0858232,0.07652203 0 0 1 0.08684,-0.07567 h 2.894938 a 0.0858232,0.07652203 0 0 1 0.08684,0.07567 v 2.35395 H 4.7625 V 1.8513362 H 0 Z"
+       id="path1"
+       style="fill:#d45500;stroke-width:0.0115903" />
+    <polygon
+       points="256,38.839 74.931,130 437.069,130 "
+       id="polygon1"
+       transform="matrix(0.01227449,0,0,0.01817245,-0.761014,-0.70579979)"
+       style="fill:#d45500" />
+    <rect
+       x="1.023772"
+       y="2.5619974"
+       width="2.7249358"
+       height="0.57394034"
+       id="rect3"
+       style="fill:#d45500;stroke-width:0.0134401" />
+    <rect
+       x="1.023772"
+       y="4.1660852"
+       width="2.7249358"
+       height="0.58865678"
+       id="rect4"
+       style="fill:#d45500;stroke-width:0.0134401" />
+    <rect
+       x="1.023772"
+       y="3.3419676"
+       width="2.7249358"
+       height="0.61808962"
+       id="rect5"
+       style="fill:#d45500;stroke-width:0.0134401" />
+  </g>
 </svg>
