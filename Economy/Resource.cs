@@ -483,9 +483,12 @@ public static partial class Resource
             {2, new ResourceType("Fuel", GD.Load<Texture2D>("res://assets/icons/18x18/energy.png"), true)},
             {3, new ResourceType("Food", GD.Load<Texture2D>("res://assets/icons/18x18/food.png"),  true)},
             {4, new ResourceType("H2O", GD.Load<Texture2D>("res://assets/icons/18x18/h2o.png"),  true)},
+            {301, new ResourceType("Labor", GD.Load<Texture2D>("res://assets/icons/18x18/labor.svg"),  false)},
+            {401, new ResourceType("Construction Engineering", GD.Load<Texture2D>("res://assets/icons/18x18/engineering_construction.svg"),  false)},
+            {403, new ResourceType("Aerospace Engineering", GD.Load<Texture2D>("res://assets/icons/18x18/engineering_aerospace.svg"),  false)},
             {801, new ResourceType("Fulfillment", GD.Load<Texture2D>("res://assets/icons/18x18/fulfillment.svg"), false)},
             {802, new ResourceType("Capability", GD.Load<Texture2D>("res://assets/icons/18x18/capability.svg"), false)},
-            {811, new ResourceType("Freighter", GD.Load<Texture2D>("res://assets/icons/18x18/freighter.png"), false)},
+            {811, new ResourceType("Freighter", GD.Load<Texture2D>("res://assets/icons/18x18/freight.svg"), false)},
             {812, new ResourceType("Payload", GD.Load<Texture2D>("res://assets/icons/18x18/payload.svg"), false)},
 
             // {801, new ResourceType("Operational Capacity", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.png"), false)},
