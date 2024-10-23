@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://c8uihqqtni6cg" path="res://Map/Map.tscn" id="2_b0thp"]
 [ext_resource type="PackedScene" uid="uid://r5ytkwljq7nb" path="res://GUI/Screen.tscn" id="2_ohuhm"]
 [ext_resource type="PackedScene" uid="uid://bo1hgnmlheekb" path="res://Economy/TradeRoute.tscn" id="3_7is4n"]
+[ext_resource type="Script" path="res://Map/Features/PlayerFeatureTemplate.cs" id="4_qu45m"]
 [ext_resource type="Script" path="res://Map/Galaxy.cs" id="5_frh8s"]
 [ext_resource type="Script" path="res://Map/PlanetarySystem.cs" id="6_yqk1w"]
 [ext_resource type="Script" path="res://Map/Features/FeatureBase.cs" id="7_0xlau"]
@@ -23,6 +24,50 @@ script = ExtResource("1_1b3uo")
 [node name="TradeRoute" parent="Player/PlayerTrade" index="0" node_paths=PackedStringArray("Head", "Tail") instance=ExtResource("3_7is4n")]
 Head = NodePath("../../../Map/Galaxy/Sol System/Earth System/Earth")
 Tail = NodePath("../../../Map/Galaxy/Sol System/Earth System/Moon")
+
+[node name="Aerospace Industry" type="Node" parent="Player/PlayerFeatureTemplates" index="4" node_paths=PackedStringArray("Feature")]
+script = ExtResource("4_qu45m")
+Feature = NodePath("Aerospace Industry")
+
+[node name="Aerospace Industry" type="Node" parent="Player/PlayerFeatureTemplates/Aerospace Industry"]
+script = ExtResource("7_0xlau")
+SplashScreenPath = "res://assets/splash/surface_mine.png"
+NeedsTags = ["planetary"]
+
+[node name="Nominal Operation" parent="Player/PlayerFeatureTemplates/Aerospace Industry/Aerospace Industry" instance=ExtResource("8_j7vpr")]
+Factors = {
+2: -3.0,
+403: 1.0
+}
+
+[node name="Construction Industry" type="Node" parent="Player/PlayerFeatureTemplates" index="5" node_paths=PackedStringArray("Feature")]
+script = ExtResource("4_qu45m")
+Feature = NodePath("Construction Industry")
+
+[node name="Construction Industry" type="Node" parent="Player/PlayerFeatureTemplates/Construction Industry"]
+script = ExtResource("7_0xlau")
+SplashScreenPath = "res://assets/splash/surface_mine.png"
+NeedsTags = ["planetary"]
+
+[node name="Nominal Operation" parent="Player/PlayerFeatureTemplates/Construction Industry/Construction Industry" instance=ExtResource("8_j7vpr")]
+Factors = {
+2: -3.0,
+401: 1.0
+}
+
+[node name="City" type="Node" parent="Player/PlayerFeatureTemplates" index="7" node_paths=PackedStringArray("Feature")]
+script = ExtResource("4_qu45m")
+Feature = NodePath("City")
+
+[node name="City" type="Node" parent="Player/PlayerFeatureTemplates/City"]
+script = ExtResource("7_0xlau")
+SplashScreenPath = "res://assets/splash/surface_mine.png"
+NeedsTags = ["planetary"]
+
+[node name="Nominal Operation" parent="Player/PlayerFeatureTemplates/City/City" instance=ExtResource("8_j7vpr")]
+Factors = {
+301: 10.0
+}
 
 [node name="Map" parent="." node_paths=PackedStringArray("startView") instance=ExtResource("2_b0thp")]
 startView = NodePath("Galaxy/Sol System")
