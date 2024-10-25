@@ -17,19 +17,19 @@ public partial class UIPanelTradeAll : UIPanel
 
 	static readonly PackedScene prefab_TradeRoute = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/TradeRoute/UITradeRouteFull.tscn");
 
-	Player player;
+	PlayerTrade player;
 
 	public override void _Ready()
 	{
 		base._Ready();
-		player = GetNode<Player>("/root/Global/Player");
+		player = GetNode<PlayerTrade>("/root/Global/Player/PlayerTrade");
 
 
 		tradeRouteScroll = GetNode<ScrollContainer>("ScrollContainer");
 		noTradeRoutes = GetNode<MarginContainer>("NoTradeRoutes");
 		tradeRouteList = new UIList<TradeRoute>();
 		tradeRouteList.Vertical = true;
-		tradeRouteList.Init(player.trade, prefab_TradeRoute);
+		tradeRouteList.Init(player, prefab_TradeRoute);
 		tradeRouteScroll.AddChild(tradeRouteList);
 	}
 
@@ -37,7 +37,7 @@ public partial class UIPanelTradeAll : UIPanel
 	public override void _Draw()
 	{
 		base._Draw();
-		if (player.trade.Count() > 0)
+		if (player.Count() > 0)
 		{
 			noTradeRoutes.Visible = false;
 			tradeRouteScroll.Visible = true;
@@ -47,6 +47,7 @@ public partial class UIPanelTradeAll : UIPanel
 			noTradeRoutes.Visible = true;
 			tradeRouteScroll.Visible = false;
 		}
+		tradeRouteList.Update();
 	}
 	public override void OnEFrameUpdate()
 	{

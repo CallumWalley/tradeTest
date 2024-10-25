@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://con3ea5txcdnn" path="res://Player/Player.tscn" id="1_w03ia"]
 [ext_resource type="PackedScene" uid="uid://c8uihqqtni6cg" path="res://Map/Map.tscn" id="2_b0thp"]
 [ext_resource type="PackedScene" uid="uid://r5ytkwljq7nb" path="res://GUI/Screen.tscn" id="2_ohuhm"]
-[ext_resource type="PackedScene" uid="uid://bo1hgnmlheekb" path="res://Economy/TradeRoute.tscn" id="3_7is4n"]
+[ext_resource type="Script" path="res://Economy/TradeRoute.cs" id="4_ri3ps"]
 [ext_resource type="Script" path="res://Map/Galaxy.cs" id="5_frh8s"]
 [ext_resource type="Script" path="res://Map/PlanetarySystem.cs" id="6_yqk1w"]
 [ext_resource type="Script" path="res://Map/Features/FeatureBase.cs" id="7_0xlau"]
@@ -20,7 +20,8 @@ script = ExtResource("1_1b3uo")
 
 [node name="Player" parent="." instance=ExtResource("1_w03ia")]
 
-[node name="TradeRoute" parent="Player/PlayerTrade" index="0" node_paths=PackedStringArray("Head", "Tail") instance=ExtResource("3_7is4n")]
+[node name="Node" type="Node" parent="Player/PlayerTrade" index="0" node_paths=PackedStringArray("Head", "Tail")]
+script = ExtResource("4_ri3ps")
 Head = NodePath("../../../Map/Galaxy/Sol System/Earth System/Earth")
 Tail = NodePath("../../../Map/Galaxy/Sol System/Earth System/Moon")
 

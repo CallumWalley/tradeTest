@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://u31llhgmuq4c"]
 
 [ext_resource type="Script" path="res://GUI/Game/Lists/Listables/SatelliteSystem/UISatelliteSystemNav.cs" id="1_g8f8b"]
-[ext_resource type="Texture2D" path="res://assets/icons/18x18/trade_value.dds" id="1_vsql4"]
+[ext_resource type="Texture2D" path="res://assets/icons/18x18/trade_value.png" id="1_vsql4"]
 
 [node name="SatelliteSystemNav" type="Button"]
 icon = ExtResource("1_vsql4")
