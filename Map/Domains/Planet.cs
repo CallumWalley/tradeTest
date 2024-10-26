@@ -25,6 +25,12 @@ public partial class Planet : Domain, Entities.IOrbital
     public float Period { get; set; }
 
     public float drawRadius = 100;
+
+
+    [ExportGroup("Economic")]
+    [Export]
+    public bool HasLaunchComplex { get; set; }
+
     public override float CameraZoom
     {
         get
@@ -36,7 +42,13 @@ public partial class Planet : Domain, Entities.IOrbital
     public override void _Ready()
     {
         base._Ready();
+        if (HasEconomy)
+        {
+            player.trade.RegisterTradeRoute(GetParent<SatelliteSystem>(), this);
+        }
     }
+
+
 
     public override void _Draw()
     {

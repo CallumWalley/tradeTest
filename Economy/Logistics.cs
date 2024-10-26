@@ -161,7 +161,14 @@ public partial class Logistics
             // Calculate all ships required to fulfil downlines.
             if (Domain.DownlineTraderoutes.Count > 0)
             {
-                freightFraction = Math.Min(Domain.Ledger[811].LocalNet.Fraction(), 1);
+                if (Domain.GetType() == typeof(Planet))
+                {
+                    freightFraction = Math.Min(Domain.Ledger[812].LocalNet.Fraction(), 1);
+                }
+                else
+                {
+                    freightFraction = Math.Min(Domain.Ledger[811].LocalNet.Fraction(), 1);
+                }
             }
 
             // First resolve ship balance.

@@ -6,14 +6,10 @@ namespace Game;
 
 public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<FeatureBase>
 {
-
-    // Can receive trade. Should be determined 
+    [ExportGroup("Economic")]
     [Export]
-    // Can receive trade. Should be determined by port.
-    bool _validTradeReceiver = false;     // Can receive trade. Should 
+    public bool HasEconomy { get; set; }
 
-    [Export]
-    new public string Name { get { return base.Name; } set { base.Name = value; } }
 
     [Export]
     public string Description { get; set; }
@@ -53,23 +49,22 @@ public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<FeatureB
     //     // 	uiBody.Visible = true;
     //     // }
     // }
-    public bool ValidTradeReceiver
 
-    {
-        get { return _validTradeReceiver; }
-        protected set
-        {
-            if (value)
-            {
-                player.trade.Heads.Add(this);
-            }
-            else
-            {
-                player.trade.Heads.Remove(this);
-            }
-            _validTradeReceiver = value;
-        }
-    }
+    // {
+    //     get { return Spaceport; }
+    //     protected set
+    //     {
+    //         if (value)
+    //         {
+    //             player.trade.Heads.Add(this);
+    //         }
+    //         else
+    //         {
+    //             player.trade.Heads.Remove(this);
+    //         }
+    //         Spaceport = value;
+    //     }
+    // }
 
     [Export]
     public Godot.Collections.Dictionary<int, double> StartingResources { get; set; } = new();
@@ -144,7 +139,7 @@ public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<FeatureB
 
     public double shipWeight;
 
-    Player player;
+    protected Player player;
     Global global;
 
     public override void _EnterTree()
@@ -173,7 +168,6 @@ public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<FeatureB
 
         player = GetNode<Player>("/root/Global/Player");
 
-        ValidTradeReceiver = _validTradeReceiver;
 
         // Name = $"{Body.Name} station";
         // Initial storage count.

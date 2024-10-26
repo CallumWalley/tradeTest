@@ -11,7 +11,7 @@ public static class Entities
 {
     public interface IEntityable
     {
-        string Name { get; set; }
+        StringName Name { get; set; }
         [Export]
         string Description { get; set; }
 

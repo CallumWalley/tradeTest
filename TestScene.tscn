@@ -8,7 +8,7 @@
 [ext_resource type="Script" path="res://Map/Galaxy.cs" id="5_frh8s"]
 [ext_resource type="Script" path="res://Map/PlanetarySystem.cs" id="6_yqk1w"]
 [ext_resource type="Script" path="res://Map/Features/FeatureBase.cs" id="7_0xlau"]
-[ext_resource type="Script" path="res://Map/SatelliteSystem.cs" id="7_k6jcv"]
+[ext_resource type="Script" path="res://Map/Domains/SatelliteSystem.cs" id="7_k6jcv"]
 [ext_resource type="Script" path="res://Camera.cs" id="7_xqav8"]
 [ext_resource type="Script" path="res://Map/Domains/Planet.cs" id="8_hr0l1"]
 [ext_resource type="PackedScene" uid="uid://b81a02d1keo5i" path="res://Map/Conditions/SimpleIndustry.tscn" id="8_j7vpr"]
@@ -76,12 +76,29 @@ equatorialRadius = 6050.0
 script = ExtResource("7_k6jcv")
 Aphelion = 152100.0
 Perihelion = 149000.0
+HasSpaceport = true
+HasEconomy = true
+
+[node name="Features" type="Node" parent="Map/Galaxy/Sol System/Earth System"]
+
+[node name="Spaceport" type="Node" parent="Map/Galaxy/Sol System/Earth System/Features" node_paths=PackedStringArray("Template")]
+script = ExtResource("7_0xlau")
+Template = NodePath("../../../../../../Player/PlayerFeatureTemplates/Spaceport")
+SplashScreenPath = "res://assets/splash/shuttle.png"
+NeedsTags = ["planetary"]
+
+[node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Features/Spaceport" instance=ExtResource("8_j7vpr")]
+Factors = {
+2: -3.0,
+811: 2.0
+}
 
 [node name="Earth" type="Node2D" parent="Map/Galaxy/Sol System/Earth System"]
 script = ExtResource("8_hr0l1")
 albedo = Color(0.380392, 0.572549, 1, 1)
 equatorialRadius = 6300.0
-_validTradeReceiver = true
+HasLaunchComplex = true
+HasEconomy = true
 StartingResources = {
 2: 1000.0
 }
@@ -115,16 +132,16 @@ Factors = {
 StartingCapability = 0.8
 InitialScale = 0.5
 
-[node name="Spaceport" type="Node" parent="Map/Galaxy/Sol System/Earth System/Earth/Features" node_paths=PackedStringArray("Template")]
+[node name="Launch Complex" type="Node" parent="Map/Galaxy/Sol System/Earth System/Earth/Features"]
 script = ExtResource("7_0xlau")
-Template = NodePath("../../../../../../../Player/PlayerFeatureTemplates/Spaceport")
+Description = "All the trade gantries, maintainance facilites and refueling shuttles required to maintain a fleet of starships frieghters."
 SplashScreenPath = "res://assets/splash/shuttle.png"
 NeedsTags = ["planetary"]
 
-[node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Earth/Features/Spaceport" instance=ExtResource("8_j7vpr")]
+[node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Earth/Features/Launch Complex" instance=ExtResource("8_j7vpr")]
 Factors = {
-2: -3.0,
-811: 2.0
+2: -4.0,
+812: 2.0
 }
 
 [node name="Moon" type="Node2D" parent="Map/Galaxy/Sol System/Earth System"]
@@ -134,6 +151,8 @@ albedo = Color(0.776471, 0.776471, 0.776471, 1)
 equatorialRadius = 1500.0
 Aphelion = 300.0
 Perihelion = 300.0
+HasLaunchComplex = true
+HasEconomy = true
 
 [node name="Features" type="Node" parent="Map/Galaxy/Sol System/Earth System/Moon"]
 
@@ -149,6 +168,18 @@ Factors = {
 2: -2.0
 }
 StartingCapability = 0.8
+
+[node name="Launch Complex" type="Node" parent="Map/Galaxy/Sol System/Earth System/Moon/Features"]
+script = ExtResource("7_0xlau")
+Description = "All the trade gantries, maintainance facilites and refueling shuttles required to maintain a fleet of starships frieghters."
+SplashScreenPath = "res://assets/splash/shuttle.png"
+NeedsTags = ["planetary"]
+
+[node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Moon/Features/Launch Complex" instance=ExtResource("8_j7vpr")]
+Factors = {
+2: -4.0,
+812: 2.0
+}
 
 [node name="Mars System" type="Node2D" parent="Map/Galaxy/Sol System"]
 script = ExtResource("7_k6jcv")

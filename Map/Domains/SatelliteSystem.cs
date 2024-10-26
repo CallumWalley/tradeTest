@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 namespace Game;
 
-public partial class SatelliteSystem : Node2D, Entities.IEntityable, Entities.IOrbital, IEnumerable<Entities.IOrbital>
+public partial class SatelliteSystem : Domain, Entities.IOrbital, IEnumerable<Entities.IOrbital>
 {
-    [ExportGroup("General")]
-    [Export]
-    new public string Name { get { return base.Name; } set { base.Name = value; } }
-    public string Description { get; set; }
+    // [ExportGroup("General")]
+    // [Export]
+    // new public string Name { get { return base.Name; } set { base.Name = value; } }
+
     [ExportGroup("Orbital")]
     [Export]
     public float Aphelion { get; set; }
@@ -23,7 +23,10 @@ public partial class SatelliteSystem : Node2D, Entities.IEntityable, Entities.IO
     public float Period { get; set; }
     public Entities.IOrbital Eldest { get { return GetChildOrNull<Entities.IOrbital>(0); } }
 
-    public float CameraZoom
+    [ExportGroup("Economic")]
+    [Export]
+    public bool HasSpaceport { get; set; }
+    new public float CameraZoom
     {
         get
         {
@@ -45,7 +48,9 @@ public partial class SatelliteSystem : Node2D, Entities.IEntityable, Entities.IO
         }
     }
 
-    public Vector2 CameraPosition
+
+
+    new public Vector2 CameraPosition
     {
         get
         {
@@ -62,7 +67,7 @@ public partial class SatelliteSystem : Node2D, Entities.IEntityable, Entities.IO
     {
         return GetEnumerator();
     }
-    public IEnumerator<Entities.IOrbital> GetEnumerator()
+    new public IEnumerator<Entities.IOrbital> GetEnumerator()
     {
         foreach (Node c in GetChildren())
         {
