@@ -24,6 +24,7 @@ public partial class Player : Node
 		tech = GetNode<PlayerTech>("PlayerTech");
 		trade = GetNode<PlayerTrade>("PlayerTrade");
 		featureTemplates = GetNode<PlayerFeatureTemplates>("PlayerFeatureTemplates");
+		RegisterCommands();
 	}
 
 	private void RegisterCommands()
@@ -129,4 +130,56 @@ public partial class Player : Node
 			}
 		}
 	}
+
+
+	[Command("build", "Build")]
+	[Argument("subcommand", "string", "The name of the subcommand to run.")]
+	[Description("Main command for building templates")]
+	public sealed partial class Build : Extensible, ICommand
+	{
+		public CommandResult Execute(CommandData data)
+		{
+			var extensions = GetCommandExtensions("build");
+
+			if (extensions.TryGetValue((string)data.Arguments["subcommand"], out Type extension))
+				return ExecuteExtension(extension, data with { RawData = data.RawData[1..] });
+
+			return ICommand.Failure(string.Format("Subcommand [i]{0}[/i] not found, valid options are {1}", data.Arguments["subcommand"], String.Join(",", extensions.Keys)));
+		}
+	}
+	[Extension("add", "Add feature", "Adds a feature", new string[] { "a" })]
+	public sealed class BuildAdd : IExtension
+	{
+		public static PlayerTrade player;
+		public CommandResult Execute(CommandData data)
+		{
+			if (data.RawData.Length < 3) { return ICommand.Failure("Not enough arguments"); }
+
+			Node head = World.SearchNode(data.Terminal.SelectedNode.Current, (string)data.RawData[1]);
+			Node tail = World.SearchNode(data.Terminal.SelectedNode.Current, (string)data.RawData[2]);
+
+			if (head == null)
+			{
+				return ICommand.Failure(string.Format("Could not find '{0}'.", data.RawData[1]));
+			}
+			else if (!(head is Domain)) // && ((Domain)head).ValidTradeReceiver)
+			{
+				return ICommand.Failure(string.Format("'{0}' is not a valid trade receiver.", data.RawData[1]));
+			}
+			if (tail == null)
+			{
+				return ICommand.Failure(string.Format("Could not find '{0}'.", data.RawData[2]));
+			}
+			else if (!(tail is Domain)) // && ((Domain)tail).ValidTradeReceiver)
+			{
+				return ICommand.Failure(string.Format("'{0}' is not a valid trade receiver.", data.RawData[2]));
+			}
+			else
+			{
+				player.RegisterTradeRoute((Domain)head, (Domain)tail);
+				return ICommand.Success();
+			}
+		}
+	}
+
 }

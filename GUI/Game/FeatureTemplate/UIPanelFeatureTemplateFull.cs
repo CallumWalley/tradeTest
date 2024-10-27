@@ -4,7 +4,7 @@ namespace Game;
 
 /// summary
 /// UI element for possible build options.
-public partial class UIPanelPlayerFeatureTemplateFull : UIPanel
+public partial class UIPanelFeatureTemplateFull : UIPanel
 {
 	public PlayerFeatureTemplate template;
 	UIRename name;
@@ -32,7 +32,7 @@ public partial class UIPanelPlayerFeatureTemplateFull : UIPanel
 			splashScreen.Texture = GD.Load<Texture2D>(template.Feature.SplashScreenPath);
 		}
 
-		foreach (string tag in template.Feature.NeedsTags)
+		foreach (string tag in template.NeedsTags)
 		{
 			UIPill pill = prefab_pill.Instantiate<UIPill>();
 			pill.tag = tag;

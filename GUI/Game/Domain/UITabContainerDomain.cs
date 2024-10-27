@@ -24,7 +24,7 @@ public partial class UITabContainerDomain : TabContainer
         panelTrade = GetNode<UIPanelPoolTrade>("Trade");
 
 
-        panelFeatures.resourcePool = rp;
+        panelFeatures.domain = rp;
         panelGeneral.resourcePool = rp;
         panelSupply.resourcePool = rp;
         panelTrade.domain = rp;

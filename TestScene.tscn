@@ -1,9 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://bqwjnbtt5kf3p"]
+[gd_scene load_steps=14 format=3 uid="uid://bqwjnbtt5kf3p"]
 
 [ext_resource type="Script" path="res://Global.cs" id="1_1b3uo"]
 [ext_resource type="PackedScene" uid="uid://con3ea5txcdnn" path="res://Player/Player.tscn" id="1_w03ia"]
 [ext_resource type="PackedScene" uid="uid://c8uihqqtni6cg" path="res://Map/Map.tscn" id="2_b0thp"]
 [ext_resource type="PackedScene" uid="uid://r5ytkwljq7nb" path="res://GUI/Screen.tscn" id="2_ohuhm"]
+[ext_resource type="Script" path="res://Map/Features/PlayerFeatureTemplate.cs" id="4_qu45m"]
 [ext_resource type="Script" path="res://Economy/TradeRoute.cs" id="4_ri3ps"]
 [ext_resource type="Script" path="res://Map/Galaxy.cs" id="5_frh8s"]
 [ext_resource type="Script" path="res://Map/PlanetarySystem.cs" id="6_yqk1w"]
@@ -32,7 +33,6 @@ Feature = NodePath("Aerospace Industry")
 [node name="Aerospace Industry" type="Node" parent="Player/PlayerFeatureTemplates/Aerospace Industry"]
 script = ExtResource("7_0xlau")
 SplashScreenPath = "res://assets/splash/surface_mine.png"
-NeedsTags = ["planetary"]
 
 [node name="Nominal Operation" parent="Player/PlayerFeatureTemplates/Aerospace Industry/Aerospace Industry" instance=ExtResource("8_j7vpr")]
 Factors = {
@@ -47,7 +47,6 @@ Feature = NodePath("Construction Industry")
 [node name="Construction Industry" type="Node" parent="Player/PlayerFeatureTemplates/Construction Industry"]
 script = ExtResource("7_0xlau")
 SplashScreenPath = "res://assets/splash/surface_mine.png"
-NeedsTags = ["planetary"]
 
 [node name="Nominal Operation" parent="Player/PlayerFeatureTemplates/Construction Industry/Construction Industry" instance=ExtResource("8_j7vpr")]
 Factors = {
@@ -62,7 +61,6 @@ Feature = NodePath("City")
 [node name="City" type="Node" parent="Player/PlayerFeatureTemplates/City"]
 script = ExtResource("7_0xlau")
 SplashScreenPath = "res://assets/splash/surface_mine.png"
-NeedsTags = ["planetary"]
 
 [node name="Nominal Operation" parent="Player/PlayerFeatureTemplates/City/City" instance=ExtResource("8_j7vpr")]
 Factors = {
@@ -129,7 +127,6 @@ HasEconomy = true
 script = ExtResource("7_0xlau")
 Template = NodePath("../../../../../../Player/PlayerFeatureTemplates/Spaceport")
 SplashScreenPath = "res://assets/splash/shuttle.png"
-NeedsTags = ["planetary"]
 
 [node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Features/Spaceport" instance=ExtResource("8_j7vpr")]
 Factors = {
@@ -153,7 +150,6 @@ StartingResources = {
 script = ExtResource("7_0xlau")
 Template = NodePath("../../../../../../../Player/PlayerFeatureTemplates/DMHO Purification")
 SplashScreenPath = "res://assets/splash/chemical.png"
-NeedsTags = ["planetary"]
 
 [node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Earth/Features/Desalination Site" instance=ExtResource("8_j7vpr")]
 Factors = {
@@ -166,7 +162,6 @@ InitialScale = 1.5
 script = ExtResource("7_0xlau")
 Template = NodePath("../../../../../../../Player/PlayerFeatureTemplates/Fuel Refining")
 SplashScreenPath = "res://assets/splash/chemical.png"
-NeedsTags = ["planetary"]
 
 [node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Earth/Features/Fuel Refining" instance=ExtResource("8_j7vpr")]
 Factors = {
@@ -180,7 +175,6 @@ InitialScale = 0.5
 script = ExtResource("7_0xlau")
 Description = "All the trade gantries, maintainance facilites and refueling shuttles required to maintain a fleet of starships frieghters."
 SplashScreenPath = "res://assets/splash/shuttle.png"
-NeedsTags = ["planetary"]
 
 [node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Earth/Features/Launch Complex" instance=ExtResource("8_j7vpr")]
 Factors = {
@@ -204,7 +198,6 @@ HasEconomy = true
 script = ExtResource("7_0xlau")
 Template = NodePath("../../../../../../../Player/PlayerFeatureTemplates/Surface Mining")
 SplashScreenPath = "res://assets/splash/surface_mine.png"
-NeedsTags = ["planetary"]
 
 [node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Moon/Features/Surface Mining" instance=ExtResource("8_j7vpr")]
 Factors = {
@@ -217,7 +210,6 @@ StartingCapability = 0.8
 script = ExtResource("7_0xlau")
 Description = "All the trade gantries, maintainance facilites and refueling shuttles required to maintain a fleet of starships frieghters."
 SplashScreenPath = "res://assets/splash/shuttle.png"
-NeedsTags = ["planetary"]
 
 [node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Moon/Features/Launch Complex" instance=ExtResource("8_j7vpr")]
 Factors = {

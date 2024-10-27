@@ -9,7 +9,7 @@ namespace Game;
 public partial class UIPanelDomainFeatures : UIPanel, UIInterfaces.IEFrameUpdatable
 {
 
-    public Domain resourcePool;
+    public Domain domain;
     Label nameLabel;
     Label adjLabel;
     Label altNameLabel;
@@ -32,16 +32,15 @@ public partial class UIPanelDomainFeatures : UIPanel, UIInterfaces.IEFrameUpdata
         display = GetNode<ScrollContainer>("VBoxContainer/HSplitContainer/Display");
         displayEmpty = GetNode<ScrollContainer>("VBoxContainer/HSplitContainer/DisplayEmpty");
 
-        GetNode<UIWindowDomainFeaturePlan>("WindowPoolFeaturePlan").domain = resourcePool;
 
         list.Connect("item_selected", new Callable(this, "OnItemListItemSelected"));
     }
 
     public void Init()
     {
-        if (resourcePool.GetChildCount() > 0)
+        if (domain.GetChildCount() > 0)
         {
-            selected = resourcePool[0];
+            selected = domain[0];
         }
         else
         {
@@ -54,14 +53,14 @@ public partial class UIPanelDomainFeatures : UIPanel, UIInterfaces.IEFrameUpdata
     public void OnItemListItemSelected(int i)
     {
         selectedIndex = i;
-        selected = resourcePool[selectedIndex];
+        selected = domain[selectedIndex];
         DrawDisplay();
     }
 
 
     void DrawDisplay()
     {
-        if (resourcePool.GetNodeOrNull("Features") == null)
+        if (domain.GetNodeOrNull("Features") == null)
         {
             displayEmpty.Visible = true;
             display.Visible = false;
@@ -79,7 +78,7 @@ public partial class UIPanelDomainFeatures : UIPanel, UIInterfaces.IEFrameUpdata
                 c.QueueFree();
                 display.RemoveChild(c);
             }
-            selected ??= resourcePool.First();
+            selected ??= domain.First();
             UIPanelFeatureFull uipff = prefab_UIPanelFeatureFull.Instantiate<UIPanelFeatureFull>();
             uipff.feature = selected;
             display.AddChild(uipff);
@@ -90,9 +89,9 @@ public partial class UIPanelDomainFeatures : UIPanel, UIInterfaces.IEFrameUpdata
 
     public void UpdateElements()
     {
-        if (resourcePool.GetNodeOrNull("Features") == null) { return; }
+        if (domain.GetNodeOrNull("Features") == null) { return; }
         list.Clear();
-        foreach (Node f in resourcePool)
+        foreach (Node f in domain)
         {
             if (f is FeatureBase)
             {

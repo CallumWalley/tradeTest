@@ -24,4 +24,21 @@ public partial class PlayerFeatureTemplates : Node, IEnumerable<PlayerFeatureTem
 	{
 		return GetEnumerator();
 	}
+
+	/// <summary>
+	/// Returns buildable templates for a domain.
+	/// </summary>
+	/// <param name="domain"></param>
+	/// <returns></returns>
+	public IEnumerable<PlayerFeatureTemplate> GetValid(Domain domain)
+	{
+		foreach (PlayerFeatureTemplate template in this)
+		{
+			foreach (string tag in template.NeedsTags)
+			{
+				if (!domain.Tags.Contains(tag)) { continue; }
+			}
+			yield return template;
+		}
+	}
 }

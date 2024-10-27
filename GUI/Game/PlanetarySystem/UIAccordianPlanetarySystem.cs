@@ -39,6 +39,11 @@ public partial class UIAccordianPlanetarySystem : UIAccordian
 				uiw.canvasLayer = canvasLayer;
 				vb.AddChild(uiw);
 			}
+			else
+			{
+
+				throw new Exception("Unrecognised type");
+			}
 
 		}
 		HBoxContainer hb = new HBoxContainer();

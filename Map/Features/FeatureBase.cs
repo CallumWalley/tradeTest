@@ -50,8 +50,7 @@ public partial class FeatureBase : Node, Entities.IEntityable
     [Export]
     public string TypeSlug { get; set; } = "unset";
     // public string TypeName { get { return ttype.Name; } }
-    [Export(PropertyHint.Enum, "planetary")]
-    public Godot.Collections.Array<string> NeedsTags { get; set; } = new Godot.Collections.Array<string>();
+
 
     public override void _Ready()
     {
@@ -61,13 +60,6 @@ public partial class FeatureBase : Node, Entities.IEntityable
             conditionBase.OnAdd();
         }
     }
-    public bool IsBuildable()
-    {
-        if (Template is null) { return true; }
-        // Hard code only buildable on planet.
-        return (NeedsTags.Contains("planetary"));
-    }
-
     public void AddCondition(ConditionBase s)
     {
         AddChild(s);

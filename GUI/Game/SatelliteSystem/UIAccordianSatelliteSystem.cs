@@ -27,16 +27,13 @@ public partial class UIAccordianSatelliteSystem : UIAccordian
 		container.Visible = false;
 		VBoxContainer vb = new VBoxContainer();
 
-		foreach (var domain in satelliteSystem.GetChildren())
+		foreach (Entities.IOrbital domain in satelliteSystem)
 		{
-			if (typeof(Domain) == domain.GetType())
-			{
-				UIDomainNav uiw = new UIDomainNav();
-				uiw.domain = ((Domain)domain);
-				uiw.Flat = true;
-				uiw.canvasLayer = canvasLayer;
-				vb.AddChild(uiw);
-			}
+			UIDomainNav uiw = new UIDomainNav();
+			uiw.domain = ((Domain)domain);
+			uiw.Flat = true;
+			uiw.canvasLayer = canvasLayer;
+			vb.AddChild(uiw);
 		}
 		HBoxContainer hb = new HBoxContainer();
 		HSeparator hs = new HSeparator();

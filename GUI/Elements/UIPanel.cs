@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class UIPanel : PanelContainer
+public partial class UIPanel : PanelContainer, UIInterfaces.IEFrameUpdatable
 {
 
 	public override void _Ready()

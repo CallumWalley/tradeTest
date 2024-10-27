@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://bdk72ykx4fnr1"]
 
-[ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="1_qngql"]
-[ext_resource type="Script" path="res://GUI/Game/Panels/UIPanelPlayerFeatureTemplateFull.cs" id="2_4fbl3"]
-[ext_resource type="Texture2D" uid="uid://dfihyt16212ay" path="res://assets/splash/test.png" id="3_eq6ne"]
-[ext_resource type="PackedScene" uid="uid://b8m1ub13xosju" path="res://GUI/Elements/UIRename.tscn" id="4_rwme0"]
+[ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="1_w10pq"]
+[ext_resource type="Script" path="res://GUI/Game/FeatureTemplate/UIPanelFeatureTemplateFull.cs" id="2_fe2ch"]
+[ext_resource type="Texture2D" uid="uid://dfihyt16212ay" path="res://assets/splash/test.png" id="3_v5k68"]
+[ext_resource type="PackedScene" uid="uid://b8m1ub13xosju" path="res://GUI/Elements/UIRename.tscn" id="4_q4hx2"]
 
 [node name="Feature" type="PanelContainer"]
 anchors_preset = 15
@@ -14,8 +14,8 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource("1_qngql")
-script = ExtResource("2_4fbl3")
+theme = ExtResource("1_w10pq")
+script = ExtResource("2_fe2ch")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 2
@@ -29,7 +29,7 @@ size_flags_vertical = 0
 
 [node name="SplashScreen" type="TextureRect" parent="PanelContainer/Details"]
 layout_mode = 2
-texture = ExtResource("3_eq6ne")
+texture = ExtResource("3_v5k68")
 stretch_mode = 3
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer/Details"]
@@ -38,7 +38,7 @@ layout_mode = 2
 [node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/Details/MarginContainer"]
 layout_mode = 2
 
-[node name="Name" parent="PanelContainer/Details/MarginContainer/HBoxContainer" instance=ExtResource("4_rwme0")]
+[node name="Name" parent="PanelContainer/Details/MarginContainer/HBoxContainer" instance=ExtResource("4_q4hx2")]
 layout_mode = 2
 
 [node name="VSeparator" type="VSeparator" parent="PanelContainer/Details/MarginContainer/HBoxContainer"]
@@ -56,7 +56,7 @@ layout_mode = 2
 [node name="Description" type="RichTextLabel" parent="PanelContainer/Details"]
 layout_mode = 2
 size_flags_vertical = 3
-theme = ExtResource("1_qngql")
+theme = ExtResource("1_w10pq")
 theme_type_variation = &"LabelContext"
 text = "Description Description Description 
 Description Description Description Description "

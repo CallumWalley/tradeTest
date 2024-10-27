@@ -9,7 +9,7 @@ public partial class UIWindowDomainFeaturePlan : UIWindow
 	public Domain domain;
 
 	[Export]
-	public UIPanelPlayerFeatureTemplateList templateList;
+	public UIPanelFeatureTemplateList templateList;
 
 	[Export]
 	public Button addButton;
@@ -20,17 +20,19 @@ public partial class UIWindowDomainFeaturePlan : UIWindow
 	[Export]
 	public LineEdit nameLineEdit;
 
+	Player player;
+
 	public override void _Ready()
 	{
 		base._Ready();
+		// This is bad. Calling up tree.
+		domain = GetParent<UIPanelDomainFeatures>().domain;
+		player = GetNode<Player>("/root/Global/Player");
 		addButton.Connect("pressed", new Callable(this, "OnButtonPressed"));
 		nameLineEdit.Connect("text_changed", new Callable(this, "OnLineEditTextChanged"));
 		templateList.list.Connect("item_selected", new Callable(this, "OnTemplateListItemSelected"));
+		templateList.baseDomain = domain;
 		scaleSpinbox.Value = 1;
-	}
-
-	public void Init()
-	{
 		ValidateName(nameLineEdit.Text);
 	}
 
@@ -47,6 +49,7 @@ public partial class UIWindowDomainFeaturePlan : UIWindow
 
 	public void ValidateName(string new_text)
 	{
+		if ((domain == null) || (domain.Count() < 1)) { return; }
 		if (domain.Any(x => x.Name == new_text))
 		{
 			addButton.Disabled = true;
@@ -62,7 +65,6 @@ public partial class UIWindowDomainFeaturePlan : UIWindow
 
 	public void OnButtonPressed()
 	{
-
 		domain.AddFeature(templateList.selected, nameLineEdit.Text, scaleSpinbox.Value);
 		//templateList.OnItemListItemSelected(newFeature.GetIndex());
 		OnCloseRequested();

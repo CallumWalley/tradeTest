@@ -48,7 +48,7 @@ public partial class UIPanelFeatureFull : UIPanel
 		{
 			splashScreen.Texture = GD.Load<Texture2D>(feature.SplashScreenPath);
 		}
-		foreach (string tag in feature.NeedsTags)
+		foreach (string tag in feature.Template.NeedsTags)
 		{
 			UIPill pill = prefab_pill.Instantiate<UIPill>();
 			pill.tag = tag;
@@ -96,7 +96,7 @@ public partial class UIPanelFeatureFull : UIPanel
 	{
 		UIWindow templateWindow = screen.GetNode<UIWindow>("UIIndustriesWindow");
 		templateWindow.Popup();
-		UIPanelPlayerFeatureTemplateList templateList = templateWindow.GetNode<UIPanelPlayerFeatureTemplateList>("Industry Templates");
+		UIPanelFeatureTemplateList templateList = templateWindow.GetNode<UIPanelFeatureTemplateList>("Industry Templates");
 		templateList.OnItemListItemSelected(templateList.featureList.IndexOf(feature.Template));
 	}
 

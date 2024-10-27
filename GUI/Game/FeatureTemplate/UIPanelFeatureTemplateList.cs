@@ -10,15 +10,20 @@ namespace Game;
 /// List of all buildable structures.
 /// Used in template menu and build menu.
 /// </summary>
-public partial class UIPanelPlayerFeatureTemplateList : UIPanel, UIInterfaces.IEFrameUpdatable
+public partial class UIPanelFeatureTemplateList : UIPanel
 {
     Label nameLabel;
     Label adjLabel;
     Label altNameLabel;
     public ItemList list;
     ScrollContainer display;
-    public List<PlayerFeatureTemplate> featureList = new();
-    static readonly PackedScene prefab_UIPanelFeatureFactoryFull = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Panels/UIPanelPlayerFeatureTemplateFull.tscn");
+
+    /// <summary>
+    /// If this is set, list will be filtered to valid options. TODO make this nicer.
+    /// </summary>
+    public Domain baseDomain;
+    public List<PlayerFeatureTemplate> featureList = new List<PlayerFeatureTemplate>();
+    static readonly PackedScene prefab_UIPanelFeatureFactoryFull = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/FeatureTemplate/UIPanelFeatureTemplateFull.tscn");
     Player player;
 
     public PlayerFeatureTemplate selected;
@@ -64,7 +69,7 @@ public partial class UIPanelPlayerFeatureTemplateList : UIPanel, UIInterfaces.IE
         if (featureList.Count < 1) { return; }
 
         // If selected feature changed, or none.
-        if ((display.GetChildCount() < 1) || display.GetChild<UIPanelPlayerFeatureTemplateFull>(0).template != selected)
+        if ((display.GetChildCount() < 1) || display.GetChild<UIPanelFeatureTemplateFull>(0).template != selected)
         {
             foreach (Control c in display.GetChildren().Cast<Control>())
             {
@@ -73,15 +78,17 @@ public partial class UIPanelPlayerFeatureTemplateList : UIPanel, UIInterfaces.IE
                 display.RemoveChild(c);
             }
             selected ??= (PlayerFeatureTemplate)featureList[0];
-            UIPanelPlayerFeatureTemplateFull uipff = prefab_UIPanelFeatureFactoryFull.Instantiate<UIPanelPlayerFeatureTemplateFull>();
+            UIPanelFeatureTemplateFull uipff = prefab_UIPanelFeatureFactoryFull.Instantiate<UIPanelFeatureTemplateFull>();
             uipff.template = selected;
             display.AddChild(uipff);
         }
-        display.GetChild<UIPanelPlayerFeatureTemplateFull>(0).OnEFrameUpdate();
+        display.GetChild<UIPanelFeatureTemplateFull>(0).OnEFrameUpdate();
     }
     public void UpdateElements()
     {
         // Updates list elements. Does not draw them.
+        featureList = GetFeatureList().ToList();
+
         if (featureList.Count < 1) { return; }
 
         list.Clear();
@@ -95,12 +102,27 @@ public partial class UIPanelPlayerFeatureTemplateList : UIPanel, UIInterfaces.IE
     {
         // If visible, and there are features, update the list to reflect reality.
         base.OnEFrameUpdate();
-        string location = "planetary";
-        featureList = player.featureTemplates.ToList().Where(x => x.Feature.NeedsTags.Contains(location)).ToList();
+
         if (IsVisibleInTree() && featureList.Count > 0)
         {
             UpdateElements();
             DrawDisplay();
+        }
+    }
+    /// <summary>
+    /// Unless overwritten, this will return all templates.
+    /// </summary>
+    /// <returns></returns>
+
+    public virtual IEnumerable<PlayerFeatureTemplate> GetFeatureList()
+    {
+        if (baseDomain != null)
+        {
+            return player.featureTemplates.GetValid(baseDomain);
+        }
+        else
+        {
+            return player.featureTemplates;
         }
     }
 }

@@ -2,7 +2,7 @@
 
 [ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="1_lkyhb"]
 [ext_resource type="Script" path="res://GUI/Game/Lists/Listables/Condition/UIConditionTiny.cs" id="2_nwilc"]
-[ext_resource type="Texture2D" path="res://assets/icons/18x18/trade_value.dds" id="2_sdgxt"]
+[ext_resource type="Texture2D" path="res://assets/icons/18x18/trade_value.png" id="2_sdgxt"]
 
 [node name="ConditionTiny" type="HBoxContainer"]
 anchors_preset = 14

@@ -27,6 +27,13 @@ public partial class PlayerFeatureTemplate : Node
     /// </summary>
     [Export]
     public float ConstructionCost;
+
+    /// <summary>
+    /// What tags a domain must have for this to be buildable.
+    /// </summary>
+
+    [Export(PropertyHint.Enum, "planetary, orbital")]
+    public Godot.Collections.Array<string> NeedsTags { get; set; } = new Godot.Collections.Array<string>();
     public string GenerateName()
     {
         return $"New {Feature.Name}";
