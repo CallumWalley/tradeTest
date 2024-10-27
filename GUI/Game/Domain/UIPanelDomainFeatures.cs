@@ -32,7 +32,7 @@ public partial class UIPanelDomainFeatures : UIPanel, UIInterfaces.IEFrameUpdata
         display = GetNode<ScrollContainer>("VBoxContainer/HSplitContainer/Display");
         displayEmpty = GetNode<ScrollContainer>("VBoxContainer/HSplitContainer/DisplayEmpty");
 
-        GetNode<UIWindowDomainFeaturePlan>("WindowPoolFeaturePlan").resourcePool = resourcePool;
+        GetNode<UIWindowDomainFeaturePlan>("WindowPoolFeaturePlan").domain = resourcePool;
 
         list.Connect("item_selected", new Callable(this, "OnItemListItemSelected"));
     }

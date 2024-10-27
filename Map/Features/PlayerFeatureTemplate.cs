@@ -16,6 +16,17 @@ public partial class PlayerFeatureTemplate : Node
     [Export]
     public FeatureBase Feature;
 
+    /// <summary>
+    /// What is required to build this.
+    /// </summary>
+    [Export]
+    public Godot.Collections.Dictionary ConstructionInputRequirements;
+
+    /// <summary>
+    /// How many times this must be paid.
+    /// </summary>
+    [Export]
+    public float ConstructionCost;
     public string GenerateName()
     {
         return $"New {Feature.Name}";

@@ -42,10 +42,10 @@ public partial class Planet : Domain, Entities.IOrbital
     public override void _Ready()
     {
         base._Ready();
-        if (HasEconomy)
-        {
-            player.trade.RegisterTradeRoute(GetParent<SatelliteSystem>(), this);
-        }
+        // if (HasEconomy)
+        // {
+        //     player.trade.RegisterTradeRoute(GetParent<SatelliteSystem>(), this);
+        // }
     }
 
 

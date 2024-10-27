@@ -6,7 +6,7 @@ namespace Game;
 public partial class UIWindowDomainFeaturePlan : UIWindow
 {
 	[Export]
-	public Domain resourcePool;
+	public Domain domain;
 
 	[Export]
 	public UIPanelPlayerFeatureTemplateList templateList;
@@ -47,7 +47,7 @@ public partial class UIWindowDomainFeaturePlan : UIWindow
 
 	public void ValidateName(string new_text)
 	{
-		if (resourcePool.Any(x => x.Name == new_text))
+		if (domain.Any(x => x.Name == new_text))
 		{
 			addButton.Disabled = true;
 			addButton.TooltipText = "Name must be unique";
@@ -59,25 +59,11 @@ public partial class UIWindowDomainFeaturePlan : UIWindow
 		}
 	}
 
+
 	public void OnButtonPressed()
 	{
-		FeatureBase newFeature = templateList.selected.Instantiate();
-		newFeature.Template = templateList.selected;
-		newFeature.Name = nameLineEdit.Text;
-		resourcePool.AddFeature(newFeature);
-		if (newFeature.FactorsSingle.ContainsKey(901))
-		{
-			newFeature.FactorsSingle[901].Sum = 0;
-			newFeature.FactorsSingle[901].Request = (scaleSpinbox.Value);
-		}
-		ConditionConstruction underConstruction = new ConditionConstruction();
-		underConstruction.Name = "Under Construction";
-		underConstruction.Description = "Opening Soon...";
-		underConstruction.OldSize = 0;
-		underConstruction.NewSize = scaleSpinbox.Value;
-		newFeature.AddCondition(underConstruction);
-		// If has scale
 
+		domain.AddFeature(templateList.selected, nameLineEdit.Text, scaleSpinbox.Value);
 		//templateList.OnItemListItemSelected(newFeature.GetIndex());
 		OnCloseRequested();
 	}

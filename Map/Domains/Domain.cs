@@ -267,9 +267,28 @@ public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<FeatureB
     }
     public override string ToString() { return Name; }
 
-    public void AddFeature(FeatureBase feature)
+    [GameAttributes.Command]
+    public void AddFeature(PlayerFeatureTemplate template, StringName name, double scale)
     {
-        features.AddChild(feature);
+        FeatureBase newFeature = template.Instantiate();
+        newFeature.Template = template;
+        newFeature.Name = name;
+        features.AddChild(newFeature);
+
+        // If has size. Set size to zero.
+        if (newFeature.FactorsSingle.ContainsKey(901))
+        {
+            newFeature.FactorsSingle[901].Sum = 0;
+        }
+        ConditionConstruction underConstruction = new ConditionConstruction();
+        underConstruction.Name = "Under Construction";
+        underConstruction.Description = "Opening Soon...";
+        underConstruction.Addition = scale;
+        underConstruction.InputRequirements = template.ConstructionInputRequirements;
+        underConstruction.Cost = template.ConstructionCost;
+
+        newFeature.AddCondition(underConstruction);
+
     }
 
 }
