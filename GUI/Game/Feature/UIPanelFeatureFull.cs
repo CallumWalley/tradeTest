@@ -96,8 +96,8 @@ public partial class UIPanelFeatureFull : UIPanel
 	{
 		UIWindow templateWindow = screen.GetNode<UIWindow>("UIIndustriesWindow");
 		templateWindow.Popup();
-		UIPanelFeatureTemplateList templateList = templateWindow.GetNode<UIPanelFeatureTemplateList>("Industry Templates");
-		templateList.OnItemListItemSelected(templateList.featureList.IndexOf(feature.Template));
+		//UIPanelFeatureTemplateList templateList = templateWindow.GetNode<UIPanelFeatureTemplateList>("Industry Templates");
+		//templateList.OnItemListItemSelected(templateList.featureList.IndexOf(feature.Template));
 	}
 
 	public override void OnEFrameUpdate()

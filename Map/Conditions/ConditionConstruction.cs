@@ -35,6 +35,7 @@ public partial class ConditionConstruction : ConditionBase
     public override void OnAdd()
     {
         base.OnAdd();
+        if (InputRequirements == null) { return; }
         foreach (KeyValuePair<Variant, Variant> r in InputRequirements)
         {
             Resource.RGroup<Resource.RStatic> input = new(new Resource.RStatic((int)r.Key, 0, (double)r.Value, "Base", "Base input"));

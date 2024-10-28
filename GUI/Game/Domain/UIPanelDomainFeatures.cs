@@ -13,27 +13,31 @@ public partial class UIPanelDomainFeatures : UIPanel, UIInterfaces.IEFrameUpdata
     Label nameLabel;
     Label adjLabel;
     Label altNameLabel;
+    [Export]
     ItemList list;
+    [Export]
     ScrollContainer display;
+    [Export]
     ScrollContainer displayEmpty;
 
+    [Export]
+    UIButton buttonAddFeature;
+
     static readonly PackedScene prefab_UIPanelFeatureFull = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Feature/UIPanelFeatureFull.tscn");
+    static readonly PackedScene prefab_UIPanelDomainFeatureTemplate = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Domain/UIWindowDomainFeaturePlan.tscn");
+
 
     FeatureBase selected;
     int selectedIndex = 0;
 
     UIList<FeatureBase> vbox;
-
     public override void _Ready()
     {
 
         base._Ready();
-        list = GetNode<ItemList>("VBoxContainer/HSplitContainer/ScrollContainer/VBoxContainer/ItemList");
-        display = GetNode<ScrollContainer>("VBoxContainer/HSplitContainer/Display");
-        displayEmpty = GetNode<ScrollContainer>("VBoxContainer/HSplitContainer/DisplayEmpty");
-
 
         list.Connect("item_selected", new Callable(this, "OnItemListItemSelected"));
+        buttonAddFeature.Connect("pressed", new Callable(this, "OnButtonAddFeaturePressed"));
     }
 
     public void Init()
@@ -57,6 +61,24 @@ public partial class UIPanelDomainFeatures : UIPanel, UIInterfaces.IEFrameUpdata
         DrawDisplay();
     }
 
+    public void OnButtonAddFeaturePressed()
+    {
+        UIWindow wdfpw = GetNodeOrNull<UIWindow>($"{domain}_build_dialouge");
+
+
+        if (wdfpw == null)
+        {
+            wdfpw = prefab_UIPanelDomainFeatureTemplate.Instantiate<UIWindow>();
+            UIPanelDomainFeatureTemplate pdft = wdfpw.GetNode<UIPanelDomainFeatureTemplate>("UIPanelDomainFeatureTemplate");
+            pdft.Name = $"{domain}_build_dialouge";
+            pdft.domain = domain;
+            AddChild(wdfpw);
+        }
+        else
+        {
+            wdfpw.Visible = !wdfpw.Visible;
+        }
+    }
 
     void DrawDisplay()
     {

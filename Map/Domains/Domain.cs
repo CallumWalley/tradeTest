@@ -288,7 +288,6 @@ public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<FeatureB
         underConstruction.Cost = template.ConstructionCost;
 
         newFeature.AddCondition(underConstruction);
-
     }
 
 }

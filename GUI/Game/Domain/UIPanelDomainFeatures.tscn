@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" path="res://GUI/Game/Domain/UIPanelDomainFeatures.cs" id="1_tk57f"]
 [ext_resource type="PackedScene" uid="uid://rwliij8aoq6r" path="res://GUI/Elements/UIButtonToggleWindow.tscn" id="2_3dkul"]
-[ext_resource type="PackedScene" uid="uid://c2xbjx0sqmnma" path="res://GUI/Game/Domain/UIWindowDomainFeaturePlan.tscn" id="3_xph2i"]
+[ext_resource type="Script" path="res://GUI/Elements/UIButton.cs" id="4_fh5l6"]
 
-[node name="Features" type="PanelContainer"]
+[node name="Features" type="PanelContainer" node_paths=PackedStringArray("list", "display", "displayEmpty", "buttonAddFeature")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -12,9 +12,10 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 script = ExtResource("1_tk57f")
-
-[node name="WindowPoolFeaturePlan" parent="." instance=ExtResource("3_xph2i")]
-visible = false
+list = NodePath("VBoxContainer/HSplitContainer/ScrollContainer/VBoxContainer/ItemList")
+display = NodePath("VBoxContainer/HSplitContainer/Display")
+displayEmpty = NodePath("VBoxContainer/HSplitContainer/DisplayEmpty")
+buttonAddFeature = NodePath("VBoxContainer/HSplitContainer/ScrollContainer/VBoxContainer/PlanNewIndustry")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
@@ -62,10 +63,10 @@ horizontal_scroll_mode = 0
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="PlanNewIndustry" parent="VBoxContainer/HSplitContainer/ScrollContainer/VBoxContainer" node_paths=PackedStringArray("window") instance=ExtResource("2_3dkul")]
+[node name="PlanNewIndustry" parent="VBoxContainer/HSplitContainer/ScrollContainer/VBoxContainer" instance=ExtResource("2_3dkul")]
 layout_mode = 2
 text = "Plan New Industry"
-window = NodePath("../../../../../WindowPoolFeaturePlan")
+script = ExtResource("4_fh5l6")
 
 [node name="ItemList" type="ItemList" parent="VBoxContainer/HSplitContainer/ScrollContainer/VBoxContainer"]
 layout_mode = 2
