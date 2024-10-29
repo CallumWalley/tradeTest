@@ -36,12 +36,12 @@ ConstructionCost = 100.0
 ConstructionCost = 10.0
 
 [node name="Launch Complex" parent="Player/PlayerFeatureTemplates" index="3"]
-ConstructionCost = 100.0
+ConstructionCost = 10.0
 
 [node name="Aerospace Industry" type="Node" parent="Player/PlayerFeatureTemplates" index="4" node_paths=PackedStringArray("Feature")]
 script = ExtResource("4_qu45m")
 Feature = NodePath("Aerospace Industry")
-ConstructionCost = 100.0
+ConstructionCost = 10.0
 
 [node name="Aerospace Industry" type="Node" parent="Player/PlayerFeatureTemplates/Aerospace Industry"]
 script = ExtResource("7_0xlau")
@@ -56,7 +56,7 @@ Factors = {
 [node name="Construction Industry" type="Node" parent="Player/PlayerFeatureTemplates" index="5" node_paths=PackedStringArray("Feature")]
 script = ExtResource("4_qu45m")
 Feature = NodePath("Construction Industry")
-ConstructionCost = 100.0
+ConstructionCost = 10.0
 
 [node name="Construction Industry" type="Node" parent="Player/PlayerFeatureTemplates/Construction Industry"]
 script = ExtResource("7_0xlau")
@@ -69,7 +69,7 @@ Factors = {
 }
 
 [node name="Spaceport" parent="Player/PlayerFeatureTemplates" index="6"]
-ConstructionCost = 100.0
+ConstructionCost = 10.0
 
 [node name="City" type="Node" parent="Player/PlayerFeatureTemplates" index="7" node_paths=PackedStringArray("Feature")]
 script = ExtResource("4_qu45m")

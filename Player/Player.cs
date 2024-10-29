@@ -8,6 +8,7 @@ using YAT.Classes;
 using YAT.Scenes;
 using YAT.Enums;
 using YAT.Helpers;
+using System.Linq;
 namespace Game;
 
 public partial class Player : Node
@@ -38,6 +39,12 @@ public partial class Player : Node
 		Extensible.RegisterExtension("trade", typeof(TradeAdd));
 
 		RegisteredCommands.AddCommand(typeof(Trade));
+
+
+		BuildAdd.player = featureTemplates;
+
+		Extensible.RegisterExtension("build", typeof(BuildAdd));
+		RegisteredCommands.AddCommand(typeof(Build));
 	}
 	[Command("trade", "Trade")]
 	[Argument("subcommand", "string", "The name of the subcommand to run.")]
@@ -131,7 +138,6 @@ public partial class Player : Node
 		}
 	}
 
-
 	[Command("build", "Build")]
 	[Argument("subcommand", "string", "The name of the subcommand to run.")]
 	[Description("Main command for building templates")]
@@ -150,33 +156,48 @@ public partial class Player : Node
 	[Extension("add", "Add feature", "Adds a feature", new string[] { "a" })]
 	public sealed class BuildAdd : IExtension
 	{
-		public static PlayerTrade player;
+		public static PlayerFeatureTemplates player;
 		public CommandResult Execute(CommandData data)
 		{
 			if (data.RawData.Length < 3) { return ICommand.Failure("Not enough arguments"); }
 
-			Node head = World.SearchNode(data.Terminal.SelectedNode.Current, (string)data.RawData[1]);
-			Node tail = World.SearchNode(data.Terminal.SelectedNode.Current, (string)data.RawData[2]);
+			Node domain = World.SearchNode(data.Terminal.SelectedNode.Current, (string)data.RawData[1]);
+			Node template = World.SearchNode(player, (string)data.RawData[2]);
 
-			if (head == null)
+			StringName name = new StringName("defaultName");
+			double size = 1;
+
+			if (data.RawData.Length > 3)
 			{
-				return ICommand.Failure(string.Format("Could not find '{0}'.", data.RawData[1]));
+				name = new StringName(data.RawData[3]);
 			}
-			else if (!(head is Domain)) // && ((Domain)head).ValidTradeReceiver)
+			else if (data.RawData.Length > 4)
 			{
-				return ICommand.Failure(string.Format("'{0}' is not a valid trade receiver.", data.RawData[1]));
+				if (!double.TryParse(data.RawData[3], out size))
+				{
+					return ICommand.InvalidArguments(string.Format("Cannot name feature {0}", data.RawData[3]));
+				}
 			}
-			if (tail == null)
+
+			if (domain == null)
 			{
-				return ICommand.Failure(string.Format("Could not find '{0}'.", data.RawData[2]));
+				return ICommand.Failure(string.Format("Could not find domain '{0}'.", data.RawData[1]));
 			}
-			else if (!(tail is Domain)) // && ((Domain)tail).ValidTradeReceiver)
+			else if (!(domain is Domain)) // && ((Domain)head).ValidTradeReceiver)
 			{
-				return ICommand.Failure(string.Format("'{0}' is not a valid trade receiver.", data.RawData[2]));
+				return ICommand.Failure(string.Format("'{0}' is not a valid domain", data.RawData[1]));
+			}
+			if (template == null)
+			{
+				return ICommand.Failure(string.Format("Could not find template '{0}'.\nValid options are {1}", data.RawData[2], String.Join(", ", player.GetChildren().Select(x => x.Name))));
+			}
+			else if (!player.GetValid((Domain)domain).Contains((PlayerFeatureTemplate)template))
+			{
+				return ICommand.Failure(string.Format("'{0}' cannot be built at {1}, does not contain tag '{2}'.", data.RawData[2], data.RawData[1], String.Join("', '", ((PlayerFeatureTemplate)template).NeedsTags.Where(x => !((Domain)domain).Tags.Contains(x)))));
 			}
 			else
 			{
-				player.RegisterTradeRoute((Domain)head, (Domain)tail);
+				((Domain)(domain)).AddFeature((PlayerFeatureTemplate)template, name, size);
 				return ICommand.Success();
 			}
 		}
