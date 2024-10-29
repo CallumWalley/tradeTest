@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://4kqj6jxin5ts"]
+
+[ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="1_lkyhb"]
+[ext_resource type="PackedScene" uid="uid://blr2onphs1wpv" path="res://GUI/Elements/UIAccordian.tscn" id="1_njoa1"]
+[ext_resource type="Script" path="res://GUI/Game/Condition/UIConditionTiny.cs" id="2_nwilc"]
+[ext_resource type="Texture2D" uid="uid://mh81xqxjijhi" path="res://assets/icons/18x18/trade_value.png" id="2_sdgxt"]
+
+[node name="Accordian" node_paths=PackedStringArray("button", "richTextLabelDetails") instance=ExtResource("1_njoa1")]
+offset_right = -1066.0
+offset_bottom = 46.0
+script = ExtResource("2_nwilc")
+button = NodePath("Button")
+richTextLabelDetails = NodePath("Container/MarginContainer/RichTextLabel")
+
+[node name="Button" parent="." index="0"]
+icon = ExtResource("2_sdgxt")
+alignment = 0
+
+[node name="Container" parent="." index="1"]
+visible = false
+
+[node name="MarginContainer" type="MarginContainer" parent="Container" index="0"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Container/MarginContainer" index="0"]
+layout_mode = 2
+theme = ExtResource("1_lkyhb")
+theme_type_variation = &"LabelContext"
+bbcode_enabled = true
+text = "Everything is fine."
+fit_content = true

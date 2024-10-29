@@ -4,3 +4,4 @@
 
 [node name="SimpleIndustry" type="Node"]
 script = ExtResource("1_5ypj2")
+Description = "Everything is operating normally."

@@ -166,13 +166,20 @@ public static partial class Resource
 
 
     }
-
+    public enum GroupMode
+    {
+        Default, // Sum will return TOTAL of adders, multiplied by PRODUCT of muxxers.
+        Max, // Will return HIGHEST adder, multiplied by PRODUCT of muxxers.
+        Min // Will return LOWEST adder, multiplied by PRODUCT of muxxers.
+    };
     /// <summary>
     /// Group of multiple resources added/summed together.
     /// </summary>
     public partial class RGroup<T> : IResourceGroup<IResource> where T : IResource
     {
         int type;
+
+        public GroupMode groupMode = GroupMode.Default;
 
         protected int lastEframe = -1;
         public RGroup()
@@ -252,14 +259,26 @@ public static partial class Resource
                 // {
                 //     return History.Last();
                 // }
+
                 return (_muxxers.Count + _adders.Count > 0) ? _AdderSubtotal() * _MuxxerSubtotal() : 0;
+
+
+
             }
             set { throw new InvalidOperationException("Set method is not valid for groups"); }
         }
 
         double _AdderSubtotal()
         {
-            return (_adders.Count > 0) ? _adders.Sum(x => x.Sum) : 1;
+            switch (groupMode)
+            {
+                case GroupMode.Min:
+                    return (_adders.Count > 0) ? _adders.Min(x => x.Sum) : 1;
+                case GroupMode.Max:
+                    return (_adders.Count > 0) ? _adders.Max(x => x.Sum) : 1;
+                default:
+                    return (_adders.Count > 0) ? _adders.Sum(x => x.Sum) : 1;
+            }
         }
         double _MuxxerSubtotal()
         {
@@ -315,7 +334,19 @@ public static partial class Resource
         // Request is a second
         public virtual double Request
         {
-            get { return (_adders.Count > 0) ? _adders.Sum(x => x.Request) : 0 * _MuxxerSubtotal(); }
+            get
+            {
+                switch (groupMode)
+                {
+                    case GroupMode.Min:
+                        return ((_adders.Count > 0) ? _adders.Min(x => x.Request) : 1) * _MuxxerSubtotal();
+                    case GroupMode.Max:
+                        return ((_adders.Count > 0) ? _adders.Max(x => x.Request) : 1) * _MuxxerSubtotal();
+                    default:
+                        return ((_adders.Count > 0) ? _adders.Sum(x => x.Request) : 1) * _MuxxerSubtotal();
+
+                }
+            }
             set
             {
                 { throw new InvalidOperationException("Set method is not valid for groups"); }
@@ -329,7 +360,7 @@ public static partial class Resource
         public virtual void Respond(double value)
 
         {
-            double fraction = value / Request;
+            double fraction = (Request != 0) ? value / Request : 1;
             foreach (IResource i in _adders)
             {
                 i.Respond(fraction * i.Request);
@@ -348,116 +379,9 @@ public static partial class Resource
 
         public virtual double Fraction()
         {
-            return Sum / Request;
+            return (Request != 0) ? Sum / Request : 1;
         }
     }
-
-    /// <summary>
-    ///  Returns min, or max of children.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public partial class RLim<T> : RGroup<T>, IResourceGroup<IResource> where T : IResource
-    {
-        int type;
-        public bool Max { get; set; } = false;
-        List<T> _members { get; set; }
-        public override int Count
-        {
-            get { return (_members.Count); }
-        }
-        public override int Type
-        {
-            // infer type if not set.
-            get
-            {
-                if (type < 1) { if (_members.Count > 0) { type = _members.First().Type; } }
-                return type;
-            }
-            set { type = value; }
-        }
-        public override int State
-        {
-            get
-            {
-                { return 0; }
-
-            }
-            set
-            {
-                { throw new InvalidOperationException("Set State method is not valid for RLim"); }
-            }
-        }
-        public override double Request
-        {
-            get { return Max ? _members.Max(x => x.Request) : _members.Min(x => x.Request); }
-            set
-            {
-                { throw new InvalidOperationException("Set method is not valid for groups"); }
-            }
-        }
-        public override double Sum
-        {
-            get { return Max ? _members.Max(x => x.Sum) : _members.Min(x => x.Sum); }
-            set
-            {
-                { throw new InvalidOperationException("Set method is not valid for groups"); }
-            }
-        }
-        public override IEnumerator<IResource> GetEnumerator()
-        {
-            foreach (T element in _members)
-            {
-                yield return element;
-            }
-        }
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-        public override double Fraction()
-        {
-            { throw new InvalidOperationException("Fraction Method not Valid for RLim"); }
-        }
-        public override void Respond()
-        {
-            { throw new InvalidOperationException("Respond Method not Valid for RLim"); }
-        }
-        public override void Respond(double value)
-
-        {
-            Respond();
-        }
-        public override void Add(T ra)
-        {
-            _members.Add(ra);
-        }
-        public override void UnAdd(T ra)
-        {
-            _members.Remove(ra);
-        }
-        public RLim()
-        {
-            _members = new();
-        }
-
-        public RLim(int _type = 0, string _name = "Limit", string _details = "Limit") : this()
-        {
-            type = _type;
-            Name = _name;
-            Details = _details;
-        }
-
-        public RLim(IEnumerable<T> _add, string _name = "Limit", string _details = "Limit") : this(0, _name, _details)
-        {
-            _members = (List<T>)_add;
-        }
-        public RLim(T _add, string _name = "Limit", string _details = "Limit") : this(0, _name, _details)
-        {
-            _members = new();
-            _members.Add(_add);
-        }
-    }
-
 
     public struct ResourceType
     {

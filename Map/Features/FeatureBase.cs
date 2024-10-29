@@ -50,7 +50,8 @@ public partial class FeatureBase : Node, Entities.IEntityable
     [Export]
     public string TypeSlug { get; set; } = "unset";
     // public string TypeName { get { return ttype.Name; } }
-
+    [Export]
+    public Godot.Collections.Array<string> Tags { get; set; } = new Godot.Collections.Array<string>();
 
     public override void _Ready()
     {

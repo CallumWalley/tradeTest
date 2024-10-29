@@ -43,6 +43,7 @@ public partial class PlayerFeatureTemplate : Node
     {
         FeatureBase newFeature = (FeatureBase)Feature.Duplicate();
         newFeature.Template = this;
+        newFeature.Tags = NeedsTags;
         return newFeature;
     }
 }

@@ -12,8 +12,8 @@ public static class Entities
     public interface IEntityable
     {
         StringName Name { get; set; }
-        [Export]
-        string Description { get; set; }
+
+        public string Description { get; set; }
 
         /// <summary>
         /// An  element that can have the camera centered on it.

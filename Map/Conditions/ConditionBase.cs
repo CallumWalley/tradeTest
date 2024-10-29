@@ -13,7 +13,8 @@ public partial class ConditionBase : Node, Conditions.IConditionable
 
     public float CameraZoom { get { throw new NotImplementedException(); } }
     new public string Name { get { return base.Name; } set { base.Name = value; } }
-    public string Description { get; set; }
+    [Export]
+    public string Description { get; set; } = "Nothing is known about this.";
     public virtual void OnAdd() { } //Called when added to feature.
     public virtual void OnRemove()
     {

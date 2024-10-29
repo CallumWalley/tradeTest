@@ -3,13 +3,17 @@ using System;
 using System.Text;
 namespace Game;
 
-public partial class UIConditionTiny : HBoxContainer, Lists.IListable<ConditionBase>
+public partial class UIConditionTiny : UIAccordian, Lists.IListable<ConditionBase>
 {
     ConditionBase Condition;
     public ConditionBase GameElement { get { return Condition; } }
     public bool Destroy { get; set; } = false;
 
-    public Label nameLabel;
+    [Export]
+    public Button button;
+    [Export]
+    public RichTextLabel richTextLabelDetails;
+
     public void Init(ConditionBase _condition)
     {
         Condition = _condition;
@@ -18,21 +22,13 @@ public partial class UIConditionTiny : HBoxContainer, Lists.IListable<ConditionB
     public override void _Ready()
     {
         base._Ready();
-        nameLabel = GetNode<Label>("Name");
-    }
-
-    public override void _Draw()
-    {
-        base._Draw();
-        // all icons currently the same.
-        //GetNode<TextureRect>("Icon").Texture;
+        button.TooltipText = "Click to expand details";
     }
 
     public void Update()
     {
         if (Destroy || !IsInstanceValid(Condition)) { QueueFree(); return; }
-        nameLabel.Text = Condition.Name;
-        nameLabel.TooltipText = Condition.Description;
-
+        button.Text = Condition.Name;
+        richTextLabelDetails.Text = Condition.Description;
     }
 }

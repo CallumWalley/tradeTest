@@ -24,9 +24,10 @@ public partial class UIPanelFeatureFull : UIPanel
 	UIList<ConditionBase> conditions = new();
 
 	TextureButton templateButton;
+	public Godot.Collections.Array<string> NeedsTags { get; set; } = new Godot.Collections.Array<string>();
 
 	static readonly PackedScene prefab_pill = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/UIPill.tscn");
-	static readonly PackedScene prefab_conditionTiny = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/Condition/UIConditionTiny.tscn");
+	static readonly PackedScene prefab_conditionTiny = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Condition/UIConditionTiny.tscn");
 
 
 	public override void _Ready()
@@ -48,7 +49,7 @@ public partial class UIPanelFeatureFull : UIPanel
 		{
 			splashScreen.Texture = GD.Load<Texture2D>(feature.SplashScreenPath);
 		}
-		foreach (string tag in feature.Template.NeedsTags)
+		foreach (string tag in feature.Tags)
 		{
 			UIPill pill = prefab_pill.Instantiate<UIPill>();
 			pill.tag = tag;

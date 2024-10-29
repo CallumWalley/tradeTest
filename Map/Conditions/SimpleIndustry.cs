@@ -25,7 +25,10 @@ public partial class SimpleIndustry : ConditionScale
     /// List of values needing to be proccessed during fulfillment stage.
     /// </summary>
     Dictionary<Resource.RGroup<Resource.RStatic>, Resource.RStatic> inputFullfillments = new();
-    public Resource.RStatic inputSecurity;
+    //public Resource.RStatic inputSecurity = new Resource.RStatic(802, 1, 1, "Input Fulfilment", "Input Fulfilment");
+    public Resource.RStatic demand = new Resource.RStatic(802, 1, 1, "Demand", "Demand");
+
+
     /// <summary>
     /// For non accruable resources, output is scaled to fit demand.
     /// </summary>
@@ -84,15 +87,18 @@ public partial class SimpleIndustry : ConditionScale
     {
         base.OnAdd();
         Feature.FactorsLocal[801].Name = "Input Fulfillment";
-        Feature.FactorsLocal[801].Add(new Resource.RStatic(801, 1, 0, "Base", "Expected Fulfillment"));
-        Feature.FactorsLocal[802] = new Resource.RLim<Resource.IResource>(802, "Capability", "Capability");
-        inputSecurity = new Resource.RStatic(802, StartingCapability, 1, "Input Security", "Local Resource insecurity is affecting output.");
-        Feature.FactorsLocal[802].Add(inputSecurity);
+        // Feature.FactorsLocal[801].Add(new Resource.RStatic(801, 1, 0, "Base", "Expected Fulfillment"));
+        Feature.FactorsLocal[802].groupMode = Resource.GroupMode.Min;
+        Feature.FactorsLocal[802].Name = "Capability";
+        Feature.FactorsLocal[802].groupMode = Resource.GroupMode.Min;
+        //inputSecurity = new Resource.RStatic(802, StartingCapability, 1, "Input Security", "Local Resource insecurity is affecting output.");
+        //Feature.FactorsLocal[802].Add(inputSecurity);
         //
-        Feature.FactorsLocal[802].Mux(Feature.FactorsLocal[802]);
-
-        Resource.RStatic demand = new Resource.RStatic((int)802, 1, 1, "Demand", "Demand");
+        //Feature.FactorsLocal[802].Mux(Feature.FactorsLocal[802]);
+        //Resource.RStatic demand = new Resource.RStatic((int)802, 1, 1, "Demand", "Demand");
         Feature.FactorsLocal[802].Mux(demand);
+        // Feature.FactorsLocal[802].Mux(inputSecurity);
+        //Feature.FactorsLocal[802].Mux(Feature.FactorsLocal[801]);
 
         foreach (KeyValuePair<Variant, Variant> r in Factors)
         {
@@ -104,17 +110,16 @@ public partial class SimpleIndustry : ConditionScale
                     if ((double)r.Value > 0)
                     {
                         Feature.FactorsGlobalOutput[(int)r.Key].Add(new Resource.RStatic((int)r.Key, (double)r.Value, (double)r.Value, "Base", "Expected Yield"));
-                        Feature.FactorsGlobalOutput[(int)r.Key].Mux(Feature.FactorsLocal[801]); // Input fulfillment
                         Feature.FactorsGlobalOutput[(int)r.Key].Mux(Feature.FactorsSingle[901]); // Scale
-                        Feature.FactorsGlobalOutput[(int)r.Key].Mux(Feature.FactorsLocal[802]); // Efficacy
+                        Feature.FactorsGlobalOutput[(int)r.Key].Mux(Feature.FactorsLocal[801]); // Fulfilment
+                        Feature.FactorsGlobalOutput[(int)r.Key].Mux(Feature.FactorsLocal[802]); // Cabability
                     }
                     // If input
                     else
                     {
-                        Resource.RGroup<Resource.RStatic> input = new(new Resource.RStatic((int)r.Key, 0, (double)r.Value, "Base", "Base input"));
-                        inputFullfillments[input] = new Resource.RStatic(801, 0, 1, $"{Resource.Name((int)r.Key)} fullfillment.", $"{Resource.Name((int)r.Key)} fullfillment.");
+                        Resource.RGroup<Resource.RStatic> input = new(new Resource.RStatic((int)r.Key, (double)r.Value, (double)r.Value, "Base", "Base input"));
+                        inputFullfillments[input] = new Resource.RStatic(801, 1, 1, $"{Resource.Name((int)r.Key)} fullfillment.", $"{Resource.Name((int)r.Key)} fullfillment.");
                         Feature.FactorsLocal[801].Mux(inputFullfillments[input]);
-
                         Feature.FactorsGlobalInput[(int)r.Key].Add(input);
                         Feature.FactorsGlobalInput[(int)r.Key].Mux(Feature.FactorsSingle[901]); // Scale
                         Feature.FactorsGlobalInput[(int)r.Key].Mux(Feature.FactorsLocal[802]); // Cabability
@@ -123,9 +128,12 @@ public partial class SimpleIndustry : ConditionScale
                 // Non Accuable
                 case < 900:
                     Feature.FactorsGlobalOutput[(int)r.Key].Add(new Resource.RStatic((int)r.Key, (double)r.Value, (double)r.Value, "Base", "Expected Yield"));
-                    Feature.FactorsGlobalOutput[(int)r.Key].Mux(Feature.FactorsLocal[801]); // Input fulfillment
                     Feature.FactorsGlobalOutput[(int)r.Key].Mux(Feature.FactorsSingle[901]); // Scale
-                    Feature.FactorsGlobalOutput[(int)r.Key].Mux(Feature.FactorsLocal[802]); // Efficacy
+                    Feature.FactorsGlobalOutput[(int)r.Key].Mux(Feature.FactorsLocal[802]); // Cabability
+                    if ((double)r.Value > 0)
+                    {
+                        Feature.FactorsGlobalOutput[(int)r.Key].Mux(Feature.FactorsLocal[801]); // Fulfilment
+                    }
                     break;
                 case < 999:
                     break;
@@ -153,8 +161,9 @@ public partial class SimpleIndustry : ConditionScale
             //double rolling = ((kvp.Key.Fraction() + kvp.Value.Sum) / 2);
             kvp.Value.Sum = kvp.Key.Fraction();
         }
-        // Why so complicated?
-        if (inputSecurity is null) { return; }
-        inputSecurity.Sum += ((Feature.FactorsLocal[801].Sum - inputSecurity.Sum + ((GD.Randf() - 0.6))) / 10);
+        // inputs
+        // // Why so complicated?
+        // if (inputSecurity is null) { return; }
+        // inputSecurity.Sum += ((Feature.FactorsLocal[801].Sum - inputSecurity.Sum + ((GD.Randf() - 0.6))) / 10);
     }
 }
