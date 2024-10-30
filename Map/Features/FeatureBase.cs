@@ -17,8 +17,12 @@ public partial class FeatureBase : Node, Entities.IEntityable
     ///  Contains factors pooled with parent rp.
     ///  Currently 000-800
     /// </summary>
+    ///     
+
     public Resource.RDict<Resource.RGroup<Resource.IResource>> FactorsGlobalOutput { get; set; } = new();
     public Resource.RDict<Resource.RGroup<Resource.IResource>> FactorsGlobalInput { get; set; } = new();
+    [Export]
+    public bool UnderConstruction { get; set; } = false;
     [Export]
     public string Description { get; set; }
     /// <summary>
@@ -101,18 +105,29 @@ public partial class FeatureBase : Node, Entities.IEntityable
             rgroup.Name = Name;
         }
     }
-    // public Basic NewFeatureFromTemplate()
-    // {
-    //     Basic newFeature = new();
-    //     newFeature.Template = this;
-    //     newFeature.Name = Name;
-    //     newFeature.Description = Description;
-    //     foreach (var c in Conditions)
-    //     {
-    //         newFeature.AddCondition(c.Instantiate());   
-    //     }
-    //     newFeature.Tags = new(Tags);
-    //     newFeature.iconMedium = iconMedium;
-    //     return newFeature;
-    // }
+
+    [GameAttributes.Command]
+    public void ChangeSize(double deltaSize)
+    {
+        if (UnderConstruction)
+        {
+            throw new Exception("Cannot start new construction, already under construction.");
+        }
+        if (deltaSize == 0)
+        {
+            throw new Exception("This does nothing");
+        }
+        // Cannot make a negative size.
+        deltaSize = Math.Max(-FactorsSingle[901].Sum, deltaSize);
+
+
+        ConditionConstruction underConstruction = new ConditionConstruction();
+        underConstruction.Name = "Under Construction";
+        underConstruction.Description = "Opening Soon...";
+        underConstruction.Addition = deltaSize;
+        underConstruction.InputRequirements = Template.ConstructionInputRequirements;
+        underConstruction.Cost = Template.ConstructionCost;
+
+        AddCondition(underConstruction);
+    }
 }

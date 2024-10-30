@@ -139,7 +139,7 @@ public partial class UIPanelDomainFeatureTemplate : UIPanel
 
 	public void OnButtonAddFeaturePressed()
 	{
-		domain.AddFeature(selected, nameLineEdit.Text, scaleSpinbox.Value);
+		((FeatureBase)domain.AddFeature(selected, nameLineEdit.Text)).ChangeSize(scaleSpinbox.Value);
 		GetWindow().Hide();
 	}
 }

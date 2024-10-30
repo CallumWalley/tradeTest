@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 namespace Game;
 
-public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<FeatureBase>
+public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<Node>
 {
     [ExportGroup("Economic")]
     [Export]
@@ -16,7 +16,6 @@ public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<FeatureB
 
     public virtual float CameraZoom { get { return 1; } }
     public virtual Godot.Vector2 CameraPosition { get { return GlobalPosition; } }
-    Node features;
     CollisionShape2D collisionShape2D;
     // UIMapOverlayElement overlayElement;
     // public UIMapOverlayElement OverlayElement {
@@ -157,10 +156,6 @@ public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<FeatureB
         // Get nodes;
         global = GetNode<Global>("/root/Global");
 
-        features = GetNodeOrNull<Node>("Features");
-        if (features == null) { features = new Node(); AddChild(features); };
-
-
         // Connect Signals
         global.Connect("Setup", new Callable(this, "Setup"));
         global.Connect("EFrameEarly", new Callable(this, "EFrameEarly"));
@@ -192,9 +187,9 @@ public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<FeatureB
         Logistics.ExportToParent.EFrameLate(this);
     }
 
-    public IEnumerator<FeatureBase> GetEnumerator()
+    public IEnumerator<Node> GetEnumerator()
     {
-        foreach (FeatureBase f in features.GetChildren())
+        foreach (Node f in GetChildren())
         {
             yield return f;
         }
@@ -255,39 +250,30 @@ public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<FeatureB
     {
         get
         {
-            Node features = GetNodeOrNull("Features");
-            if (features == null)
-            {
-                Node f = new Node();
-                f.Name = "Features";
-                AddChild(f);
-            }
-            return (FeatureBase)GetNode("Features").GetChild(index);
+            return (FeatureBase)GetChild(index);
         }
     }
     public override string ToString() { return Name; }
 
+    /// <summary>
+    /// Creates a new feature from a template. Note, feature will be size 0. To give size, call ChangeSize()
+    /// </summary>
+    /// <param name="template"></param>
+    /// <param name="name"></param>
+    /// <param name="scale"></param>
     [GameAttributes.Command]
-    public void AddFeature(PlayerFeatureTemplate template, StringName name, double scale)
+    public FeatureBase AddFeature(PlayerFeatureTemplate template, StringName name)
     {
         FeatureBase newFeature = template.Instantiate();
         newFeature.Template = template;
         newFeature.Name = name;
-        features.AddChild(newFeature);
 
         // If has size. Set size to zero.
         if (newFeature.FactorsSingle.ContainsKey(901))
         {
             newFeature.FactorsSingle[901].Sum = 0;
         }
-        ConditionConstruction underConstruction = new ConditionConstruction();
-        underConstruction.Name = "Under Construction";
-        underConstruction.Description = "Opening Soon...";
-        underConstruction.Addition = scale;
-        underConstruction.InputRequirements = template.ConstructionInputRequirements;
-        underConstruction.Cost = template.ConstructionCost;
-
-        newFeature.AddCondition(underConstruction);
+        AddChild(newFeature);
+        return newFeature;
     }
-
 }

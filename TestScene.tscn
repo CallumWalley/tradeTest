@@ -138,19 +138,6 @@ Perihelion = 149000.0
 HasSpaceport = true
 HasEconomy = true
 
-[node name="Features" type="Node" parent="Map/Galaxy/Sol System/Earth System"]
-
-[node name="Spaceport" type="Node" parent="Map/Galaxy/Sol System/Earth System/Features" node_paths=PackedStringArray("Template")]
-script = ExtResource("7_0xlau")
-Template = NodePath("../../../../../../Player/PlayerFeatureTemplates/Spaceport")
-SplashScreenPath = "res://assets/splash/shuttle.png"
-
-[node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Features/Spaceport" instance=ExtResource("8_j7vpr")]
-Factors = {
-2: -3.0,
-811: 2.0
-}
-
 [node name="Earth" type="Node2D" parent="Map/Galaxy/Sol System/Earth System"]
 script = ExtResource("8_hr0l1")
 albedo = Color(0.380392, 0.572549, 1, 1)
@@ -161,26 +148,24 @@ StartingResources = {
 2: 1000.0
 }
 
-[node name="Features" type="Node" parent="Map/Galaxy/Sol System/Earth System/Earth"]
-
-[node name="Desalination Site" type="Node" parent="Map/Galaxy/Sol System/Earth System/Earth/Features" node_paths=PackedStringArray("Template")]
+[node name="Desalination Site" type="Node" parent="Map/Galaxy/Sol System/Earth System/Earth" node_paths=PackedStringArray("Template")]
 script = ExtResource("7_0xlau")
-Template = NodePath("../../../../../../../Player/PlayerFeatureTemplates/DMHO Purification")
+Template = NodePath("../../../../../../Player/PlayerFeatureTemplates/DMHO Purification")
 SplashScreenPath = "res://assets/splash/chemical.png"
 
-[node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Earth/Features/Desalination Site" instance=ExtResource("8_j7vpr")]
+[node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Earth/Desalination Site" instance=ExtResource("8_j7vpr")]
 Factors = {
 2: -2.0,
 4: 3.0
 }
 InitialScale = 1.5
 
-[node name="Fuel Refining" type="Node" parent="Map/Galaxy/Sol System/Earth System/Earth/Features" node_paths=PackedStringArray("Template")]
+[node name="Fuel Refining" type="Node" parent="Map/Galaxy/Sol System/Earth System/Earth" node_paths=PackedStringArray("Template")]
 script = ExtResource("7_0xlau")
-Template = NodePath("../../../../../../../Player/PlayerFeatureTemplates/Fuel Refining")
+Template = NodePath("../../../../../../Player/PlayerFeatureTemplates/Fuel Refining")
 SplashScreenPath = "res://assets/splash/chemical.png"
 
-[node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Earth/Features/Fuel Refining" instance=ExtResource("8_j7vpr")]
+[node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Earth/Fuel Refining" instance=ExtResource("8_j7vpr")]
 Factors = {
 2: 3.0,
 4: -2.0
@@ -188,16 +173,17 @@ Factors = {
 StartingCapability = 0.8
 InitialScale = 0.5
 
-[node name="Launch Complex" type="Node" parent="Map/Galaxy/Sol System/Earth System/Earth/Features"]
+[node name="Launch Complex" type="Node" parent="Map/Galaxy/Sol System/Earth System/Earth"]
 script = ExtResource("7_0xlau")
 Description = "All the trade gantries, maintainance facilites and refueling shuttles required to maintain a fleet of starships frieghters."
 SplashScreenPath = "res://assets/splash/shuttle.png"
 
-[node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Earth/Features/Launch Complex" instance=ExtResource("8_j7vpr")]
+[node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Earth/Launch Complex" instance=ExtResource("8_j7vpr")]
 Factors = {
 2: -4.0,
 812: 2.0
 }
+InitialScale = 1.0
 
 [node name="Moon" type="Node2D" parent="Map/Galaxy/Sol System/Earth System"]
 position = Vector2(0.3, 0)
@@ -209,30 +195,42 @@ Perihelion = 300.0
 HasLaunchComplex = true
 HasEconomy = true
 
-[node name="Features" type="Node" parent="Map/Galaxy/Sol System/Earth System/Moon"]
-
-[node name="Surface Mining" type="Node" parent="Map/Galaxy/Sol System/Earth System/Moon/Features" node_paths=PackedStringArray("Template")]
+[node name="Surface Mining" type="Node" parent="Map/Galaxy/Sol System/Earth System/Moon" node_paths=PackedStringArray("Template")]
 script = ExtResource("7_0xlau")
-Template = NodePath("../../../../../../../Player/PlayerFeatureTemplates/Surface Mining")
+Template = NodePath("../../../../../../Player/PlayerFeatureTemplates/Surface Mining")
 SplashScreenPath = "res://assets/splash/surface_mine.png"
 
-[node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Moon/Features/Surface Mining" instance=ExtResource("8_j7vpr")]
+[node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Moon/Surface Mining" instance=ExtResource("8_j7vpr")]
 Factors = {
 1: 3.0,
 2: -2.0
 }
 StartingCapability = 0.8
+InitialScale = 1.0
 
-[node name="Launch Complex" type="Node" parent="Map/Galaxy/Sol System/Earth System/Moon/Features"]
+[node name="Launch Complex" type="Node" parent="Map/Galaxy/Sol System/Earth System/Moon"]
 script = ExtResource("7_0xlau")
 Description = "All the trade gantries, maintainance facilites and refueling shuttles required to maintain a fleet of starships frieghters."
 SplashScreenPath = "res://assets/splash/shuttle.png"
 
-[node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Moon/Features/Launch Complex" instance=ExtResource("8_j7vpr")]
+[node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Moon/Launch Complex" instance=ExtResource("8_j7vpr")]
 Factors = {
 2: -4.0,
 812: 2.0
 }
+InitialScale = 1.0
+
+[node name="Spaceport" type="Node" parent="Map/Galaxy/Sol System/Earth System" node_paths=PackedStringArray("Template")]
+script = ExtResource("7_0xlau")
+Template = NodePath("../../../../../Player/PlayerFeatureTemplates/Spaceport")
+SplashScreenPath = "res://assets/splash/shuttle.png"
+
+[node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Spaceport" instance=ExtResource("8_j7vpr")]
+Factors = {
+2: -3.0,
+811: 2.0
+}
+InitialScale = 1.0
 
 [node name="Mars System" type="Node2D" parent="Map/Galaxy/Sol System"]
 script = ExtResource("7_k6jcv")

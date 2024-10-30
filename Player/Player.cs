@@ -44,6 +44,8 @@ public partial class Player : Node
 		BuildAdd.player = featureTemplates;
 
 		Extensible.RegisterExtension("build", typeof(BuildAdd));
+		Extensible.RegisterExtension("build", typeof(BuildResize));
+
 		RegisteredCommands.AddCommand(typeof(Build));
 	}
 	[Command("trade", "Trade")]
@@ -95,7 +97,9 @@ public partial class Player : Node
 			}
 			else
 			{
+				string name = tr.Name;
 				player.DeregisterTradeRoute(tr);
+				data.Terminal.Print($"Removed trade route {name}.");
 				return ICommand.Success();
 			}
 
@@ -133,6 +137,7 @@ public partial class Player : Node
 			else
 			{
 				player.RegisterTradeRoute((Domain)head, (Domain)tail);
+				data.Terminal.Print($"Added trade route from {head.Name} to {tail.Name}");
 				return ICommand.Success();
 			}
 		}
@@ -165,19 +170,12 @@ public partial class Player : Node
 			Node template = World.SearchNode(player, (string)data.RawData[2]);
 
 			StringName name = new StringName("defaultName");
-			double size = 1;
 
 			if (data.RawData.Length > 3)
 			{
 				name = new StringName(data.RawData[3]);
 			}
-			else if (data.RawData.Length > 4)
-			{
-				if (!double.TryParse(data.RawData[3], out size))
-				{
-					return ICommand.InvalidArguments(string.Format("Cannot name feature {0}", data.RawData[3]));
-				}
-			}
+
 
 			if (domain == null)
 			{
@@ -197,10 +195,44 @@ public partial class Player : Node
 			}
 			else
 			{
-				((Domain)(domain)).AddFeature((PlayerFeatureTemplate)template, name, size);
+				((Domain)(domain)).AddFeature((PlayerFeatureTemplate)template, name);
+				data.Terminal.Print($"Added new feature '{name}' to '{domain.Name}'.");
 				return ICommand.Success();
 			}
 		}
 	}
+	[Extension("resize", "Changes the size of a feature. ", aliases: new string[] { "m" })]
 
+	public sealed class BuildResize : IExtension
+	{
+		public CommandResult Execute(CommandData data)
+		{
+			double size = 1;
+			if (data.RawData.Length < 1) { return ICommand.Failure("Not enough arguments"); }
+			if (data.RawData.Length > 1)
+			{
+				if (!double.TryParse(data.RawData[2], out size))
+				{
+					return ICommand.InvalidArguments(string.Format("{0} not a number", data.RawData[2]));
+				}
+			}
+
+			Node feature = World.SearchNode(data.Terminal.SelectedNode.Current, (string)data.RawData[1]);
+
+			if (feature == null)
+			{
+				return ICommand.Failure(string.Format("Could not find feature '{0}'.", data.RawData[1]));
+			}
+			else if (feature is FeatureBase) // && ((Domain)head).ValidTradeReceiver)
+			{
+				return ICommand.Failure(string.Format("'{0}' is not a valid feature", data.RawData[1]));
+			}
+			else
+			{
+				((FeatureBase)feature).ChangeSize(size);
+				data.Terminal.Print($"'{feature}' '{size}'.");
+				return ICommand.Success();
+			}
+		}
+	}
 }

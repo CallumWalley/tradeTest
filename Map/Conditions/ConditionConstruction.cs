@@ -35,6 +35,7 @@ public partial class ConditionConstruction : ConditionBase
     public override void OnAdd()
     {
         base.OnAdd();
+        Feature.UnderConstruction = true;
         if (Cost == 0) { OnCompletion(); }
         Feature.FactorsSingle[901].Request = Feature.FactorsSingle[901].Sum + Addition;
         if (InputRequirements == null) { return; }
@@ -56,13 +57,18 @@ public partial class ConditionConstruction : ConditionBase
         }
         double p_of_full = (inputFullfillments.Count() > 0) ? inputFullfillments.Average(x => x.Value.Sum) : 1;
         completed.Sum += (Math.Max(0, p_of_full) / (Cost * Addition));
-        if (completed.Sum > 1)
+        if (completed.Sum >= 1)
         {
             OnCompletion();
         }
         Description = string.Format("Constuction is {0:P0} complete.", completed.Sum);
     }
 
+    public override void OnRemove()
+    {
+        Feature.UnderConstruction = false;
+        base.OnRemove();
+    }
     void OnCompletion()
     {
         Feature.FactorsSingle[901].Sum += Addition;
