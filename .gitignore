@@ -19,7 +19,6 @@ mono_crash*
 .godot/*
 
 # Plugins
-addons/*
 script_templates/*
 example/*
 
