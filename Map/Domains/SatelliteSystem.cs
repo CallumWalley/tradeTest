@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 namespace Game;
 
-public partial class SatelliteSystem : Domain, Entities.IOrbital, IEnumerable<Entities.IOrbital>
+public partial class SatelliteSystem : Domain, Entities.IOrbital, IEnumerable<Entities.IPosition>
 {
     // [ExportGroup("General")]
     // [Export]
@@ -21,7 +21,7 @@ public partial class SatelliteSystem : Domain, Entities.IOrbital, IEnumerable<En
     public float Eccentricity { get; set; }
     [Export]
     public float Period { get; set; }
-    public Entities.IOrbital Eldest { get { return GetChildOrNull<Entities.IOrbital>(0); } }
+    public Entities.IPosition Eldest { get { return GetChildOrNull<Entities.IPosition>(0); } }
 
     [ExportGroup("Economic")]
     [Export]
@@ -35,11 +35,11 @@ public partial class SatelliteSystem : Domain, Entities.IOrbital, IEnumerable<En
             // If has less than two children raw width is size of thing itself.
             if (GetChildCount() < 2)
             {
-                return this.First<Entities.IOrbital>().CameraZoom;
+                return this.First<Entities.IPosition>().CameraZoom;
             }
             else
             {
-                size = this.Max<Entities.IOrbital>(x => { return x.Aphelion; });
+                size = this.Max<Entities.IPosition>(x => { return x.Aphelion; });
 
                 float zl = (((float)PlayerConfig.config.GetValue("interface", "linearLogBase")) < 2) ? size : (float)Math.Log(size, (float)PlayerConfig.config.GetValue("interface", "linearLogBase"));
                 return (viewport) / (zl * 4 * 0.1f);// Make moons fit on screen. //(float)PlayerConfig.config.GetValue("interface", "linearScale");
@@ -67,13 +67,13 @@ public partial class SatelliteSystem : Domain, Entities.IOrbital, IEnumerable<En
     {
         return GetEnumerator();
     }
-    new public IEnumerator<Entities.IOrbital> GetEnumerator()
+    public IEnumerator<Entities.IPosition> GetEnumerator()
     {
         foreach (Node c in GetChildren())
         {
-            if (typeof(Entities.IOrbital).IsAssignableFrom(c.GetType()))
+            if (typeof(Entities.IPosition).IsAssignableFrom(c.GetType()))
             {
-                yield return (Entities.IOrbital)c;
+                yield return (Entities.IPosition)c;
             }
         }
     }

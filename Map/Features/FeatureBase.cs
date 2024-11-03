@@ -11,14 +11,27 @@ namespace Game;
 /// Base class for features.
 /// </summary>
 
-public partial class FeatureBase : Node, Entities.IEntityable
+public partial class FeatureBase : Node, Entities.IFeature
 {
     /// <summary>
     ///  Contains factors pooled with parent rp.
     ///  Currently 000-800
     /// </summary>
     ///     
+    public Entities.IPosition Position { get; set; }
+    // { get { return (Entities.IPosition)GetParent(); } } // parent reference.
 
+    public IEnumerator<Entities.ICondition> GetEnumerator()
+    {
+        foreach (Entities.ICondition f in GetChildren())
+        {
+            yield return f;
+        }
+    }
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
     public Resource.RDict<Resource.RGroup<Resource.IResource>> FactorsGlobalOutput { get; set; } = new();
     public Resource.RDict<Resource.RGroup<Resource.IResource>> FactorsGlobalInput { get; set; } = new();
     [Export]
@@ -45,10 +58,10 @@ public partial class FeatureBase : Node, Entities.IEntityable
     public PlayerFeatureTemplate Template { get; set; } = null;
 
     [Export]
-    public Texture2D iconMedium;
+    public Texture2D IconMedium { get; set; }
 
     [Export(PropertyHint.File, "*.png")]
-    public string SplashScreenPath;
+    public string SplashScreenPath { get; set; }
 
     // [Export(PropertyHint.Enum, "unset,f_dockyard,orbit_storage_fuel,orbit_storage_h2o,planet_mine_minerals,planet_mine_h2o,reclaim,cfuel_water")]
     [Export]

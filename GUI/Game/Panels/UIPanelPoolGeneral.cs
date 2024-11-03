@@ -5,7 +5,7 @@ namespace Game;
 public partial class UIPanelPoolGeneral : UIPanel
 {
 
-    public Domain resourcePool;
+    public Domain domain;
     Label nameLabel;
     Label adjLabel;
     Label altNameLabel;
@@ -21,7 +21,7 @@ public partial class UIPanelPoolGeneral : UIPanel
     {
         base._Draw();
 
-        nameLabel.Text = $"Name: {resourcePool.Name}";
+        nameLabel.Text = $"Name: {domain.Name}";
 
 
         // nameLabel.Text = $"Name: {resourcePool.}";

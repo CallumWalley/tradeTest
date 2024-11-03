@@ -1,0 +1,38 @@
+[gd_scene load_steps=8 format=3 uid="uid://dq8wps73ct8h2"]
+
+[ext_resource type="Script" path="res://GUI/Game/SatelliteSystem/UITabContainerSatelliteSystem.cs" id="1_q4ucg"]
+[ext_resource type="PackedScene" uid="uid://b3ntcmg31dscj" path="res://GUI/Game/Panels/UIPanelPoolSupply.tscn" id="2_qigtd"]
+[ext_resource type="PackedScene" uid="uid://bejhglo4krc63" path="res://GUI/Game/Feature/UIPanelDomainFeatures.tscn" id="3_gfdww"]
+[ext_resource type="PackedScene" uid="uid://b21lbg7v3h1t" path="res://GUI/Game/Panels/UIPanelPoolGeneral.tscn" id="4_qqx5w"]
+[ext_resource type="PackedScene" uid="uid://dy1f1jbsqh1vn" path="res://GUI/Game/Panels/UIPanelPoolTrade.tscn" id="5_rgt6h"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aoo5e"]
+bg_color = Color(0.94902, 0.619608, 0.321569, 1)
+
+[sub_resource type="Theme" id="Theme_b56gc"]
+Panel/styles/panel = SubResource("StyleBoxFlat_aoo5e")
+
+[node name="TabContainer" type="TabContainer"]
+custom_minimum_size = Vector2(400, 200)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_b56gc")
+script = ExtResource("1_q4ucg")
+
+[node name="Supply" parent="." instance=ExtResource("2_qigtd")]
+layout_mode = 2
+
+[node name="Features" parent="." instance=ExtResource("3_gfdww")]
+visible = false
+layout_mode = 2
+
+[node name="General" parent="." instance=ExtResource("4_qqx5w")]
+visible = false
+layout_mode = 2
+
+[node name="Trade" parent="." instance=ExtResource("5_rgt6h")]
+visible = false
+layout_mode = 2

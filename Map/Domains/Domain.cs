@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 namespace Game;
 
-public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<Node>
+public partial class Domain : Node2D, Entities.IDomain
 {
     [ExportGroup("Economic")]
     [Export]
@@ -17,53 +17,6 @@ public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<Node>
     public virtual float CameraZoom { get { return 1; } }
     public virtual Godot.Vector2 CameraPosition { get { return GlobalPosition; } }
     CollisionShape2D collisionShape2D;
-    // UIMapOverlayElement overlayElement;
-    // public UIMapOverlayElement OverlayElement {
-    //     get{
-    //     if (overlayElement == null){
-    //         overlayElement = new UIMapOverlayElement();
-    //         overlayElement.element = this;
-    //     }
-    //     return overlayElement;
-    //     }}
-
-    // public override void _Process(double _delta)
-    // {
-    //     if (Input.IsActionPressed("ui_select"))
-    //     {
-    //         if (focus)
-    //         {
-    //             if (uiZone == null)
-    //             {
-    //                 uiZone = p_uiZone.Instantiate<UIWindowZone>();
-    //                 uiZone.Init(this);
-    //                 AddChild(uiZone);
-    //             }
-    //             uiZone.Visible = true;
-    //             uiZone.MoveToForeground();
-    //         }
-    //     }
-    //     //  && focus)
-    //     // {
-    //     // 	uiBody.Visible = true;
-    //     // }
-    // }
-
-    // {
-    //     get { return Spaceport; }
-    //     protected set
-    //     {
-    //         if (value)
-    //         {
-    //             player.trade.Heads.Add(this);
-    //         }
-    //         else
-    //         {
-    //             player.trade.Heads.Remove(this);
-    //         }
-    //         Spaceport = value;
-    //     }
-    // }
 
     [Export]
     public Godot.Collections.Dictionary<int, double> StartingResources { get; set; } = new();
@@ -187,17 +140,15 @@ public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<Node>
         Logistics.ExportToParent.EFrameLate(this);
     }
 
-    public IEnumerator<Node> GetEnumerator()
+    // To be implimented by inherit
+    public virtual IEnumerable<Entities.IFeature> Features
     {
-        foreach (Node f in GetChildren())
+        get
         {
-            yield return f;
+            throw new NotImplementedException();
         }
     }
-    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
+
 
     public Resource.RGroup<Resource.IResource> shipDemand = new Resource.RGroup<Resource.IResource>(802, "Trade vessels in use.");
     // needs custom ui element
@@ -209,8 +160,8 @@ public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<Node>
         }
     }
 
-    public TradeRoute UplineTraderoute = null;
-    public List<TradeRoute> DownlineTraderoutes = new List<TradeRoute>();
+    public TradeRoute UplineTraderoute { get; set; } = null;
+    public List<TradeRoute> DownlineTraderoutes { get; set; } = new List<TradeRoute>();
     public void RegisterUpline(TradeRoute i)
     {
         UplineTraderoute = i;
@@ -245,35 +196,5 @@ public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<Node>
             Network = null;
         }
     }
-
-    public FeatureBase this[int index]
-    {
-        get
-        {
-            return (FeatureBase)GetChild(index);
-        }
-    }
     public override string ToString() { return Name; }
-
-    /// <summary>
-    /// Creates a new feature from a template. Note, feature will be size 0. To give size, call ChangeSize()
-    /// </summary>
-    /// <param name="template"></param>
-    /// <param name="name"></param>
-    /// <param name="scale"></param>
-    [GameAttributes.Command]
-    public FeatureBase AddFeature(PlayerFeatureTemplate template, StringName name)
-    {
-        FeatureBase newFeature = template.Instantiate();
-        newFeature.Template = template;
-        newFeature.Name = name;
-
-        // If has size. Set size to zero.
-        if (newFeature.FactorsSingle.ContainsKey(901))
-        {
-            newFeature.FactorsSingle[901].Sum = 0;
-        }
-        AddChild(newFeature);
-        return newFeature;
-    }
 }

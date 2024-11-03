@@ -27,13 +27,16 @@ public partial class UIAccordianSatelliteSystem : UIAccordian
 		container.Visible = false;
 		VBoxContainer vb = new VBoxContainer();
 
-		foreach (Entities.IOrbital domain in satelliteSystem)
+		foreach (Node node in satelliteSystem)
 		{
-			UIDomainNav uiw = new UIDomainNav();
-			uiw.domain = ((Domain)domain);
-			uiw.Flat = true;
-			uiw.canvasLayer = canvasLayer;
-			vb.AddChild(uiw);
+			if (node is Planet)
+			{
+				UINavPlanet uiw = new UINavSatelliteSystem();
+				uiw.satelliteSystem = ((UINavSatelliteSystem)domain);
+				uiw.Flat = true;
+				uiw.canvasLayer = canvasLayer;
+				vb.AddChild(uiw);
+			}
 		}
 		HBoxContainer hb = new HBoxContainer();
 		HSeparator hs = new HSeparator();
@@ -59,7 +62,7 @@ public partial class UIAccordianSatelliteSystem : UIAccordian
 		{
 			UIWindow uiw = prefab_UIWindow.Instantiate<UIWindow>();
 			uiw.Name = $"UIWindow-{satelliteSystem.Name}";
-			UITabContainerDomain uit = prefab_UITabContainerDomain.Instantiate<UITabContainerDomain>();
+			UITabContainerSatelliteSystem uit = prefab_UITabContainerDomain.Instantiate<UITabContainerSatelliteSystem>();
 
 			uit.Init(satelliteSystem);
 			uiw.AddChild(uit);

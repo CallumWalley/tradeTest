@@ -56,7 +56,7 @@ public partial class Logistics
             // Add 
             Domain.Ledger.Clear();
 
-            foreach (FeatureBase rp in Domain)
+            foreach (Entities.IFeature rp in Domain.Features)
             {
                 foreach (Resource.IResource f in rp.FactorsGlobalOutput)
                 {
@@ -77,7 +77,7 @@ public partial class Logistics
         {
             if (Domain.Order > 1) { return; }
             ResolveRequests(Domain);
-            foreach (FeatureBase f in Domain)
+            foreach (Entities.IFeature f in Domain.Features)
             {
                 f.OnEFrame();
             }

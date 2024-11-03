@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://bejhglo4krc63"]
 
-[ext_resource type="Script" path="res://GUI/Game/Domain/UIPanelDomainFeatures.cs" id="1_tk57f"]
+[ext_resource type="Script" path="res://GUI/Game/Feature/UIPanelDomainFeatures.cs" id="1_tk57f"]
 [ext_resource type="PackedScene" uid="uid://rwliij8aoq6r" path="res://GUI/Elements/UIButtonToggleWindow.tscn" id="2_3dkul"]
 [ext_resource type="Script" path="res://GUI/Elements/UIButton.cs" id="4_fh5l6"]
 

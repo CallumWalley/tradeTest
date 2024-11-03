@@ -33,8 +33,8 @@ public partial class UIAccordianPlanetarySystem : UIAccordian
 			}
 			else if (typeof(Domain).IsAssignableFrom(ss.GetType()))
 			{
-				UIDomainNav uiw = new UIDomainNav();
-				uiw.domain = (Domain)ss;
+				UINavSatelliteSystem uiw = new UINavSatelliteSystem();
+				uiw.satelliteSystem = (SatelliteSystem)ss;
 				uiw.Flat = true;
 				uiw.canvasLayer = canvasLayer;
 				vb.AddChild(uiw);

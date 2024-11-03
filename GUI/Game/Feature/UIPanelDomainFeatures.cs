@@ -6,10 +6,10 @@ namespace Game;
 /// <summary>
 /// Displays the ist of features in a location.
 /// </summary>
-public partial class UIPanelDomainFeatures : UIPanel, UIInterfaces.IEFrameUpdatable
+public partial class UIPanelPositionFeatures : UIPanel, UIInterfaces.IEFrameUpdatable
 {
 
-    public Domain domain;
+    public Entities.IPosition domain;
     Label nameLabel;
     Label adjLabel;
     Label altNameLabel;
@@ -27,7 +27,7 @@ public partial class UIPanelDomainFeatures : UIPanel, UIInterfaces.IEFrameUpdata
     static readonly PackedScene prefab_UIPanelDomainFeatureTemplate = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Domain/UIWindowDomainFeaturePlan.tscn");
 
 
-    FeatureBase selected;
+    Entities.IFeature selected;
     int selectedIndex = 0;
 
     UIList<FeatureBase> vbox;
@@ -42,7 +42,7 @@ public partial class UIPanelDomainFeatures : UIPanel, UIInterfaces.IEFrameUpdata
 
     public void Init()
     {
-        if (domain.GetChildCount() > 0)
+        if (domain.Any())
         {
             selected = domain[0];
         }
@@ -82,7 +82,6 @@ public partial class UIPanelDomainFeatures : UIPanel, UIInterfaces.IEFrameUpdata
 
     void DrawDisplay()
     {
-        if (domain.GetNodeOrNull("Features") == null)
         {
             displayEmpty.Visible = true;
             display.Visible = false;
@@ -100,7 +99,7 @@ public partial class UIPanelDomainFeatures : UIPanel, UIInterfaces.IEFrameUpdata
                 c.QueueFree();
                 display.RemoveChild(c);
             }
-            selected ??= domain.First();
+            selected ??= (FeatureBase)domain.First();
             UIPanelFeatureFull uipff = prefab_UIPanelFeatureFull.Instantiate<UIPanelFeatureFull>();
             uipff.feature = selected;
             display.AddChild(uipff);
@@ -111,13 +110,12 @@ public partial class UIPanelDomainFeatures : UIPanel, UIInterfaces.IEFrameUpdata
 
     public void UpdateElements()
     {
-        if (domain.GetNodeOrNull("Features") == null) { return; }
         list.Clear();
         foreach (Node f in domain)
         {
             if (f is FeatureBase)
             {
-                list.AddItem(((FeatureBase)f).Name, ((FeatureBase)f).iconMedium);
+                list.AddItem(((FeatureBase)f).Name, ((FeatureBase)f).IconMedium);
             }
         }
         list.Select(selectedIndex);

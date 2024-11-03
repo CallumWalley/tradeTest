@@ -6,16 +6,15 @@ using System.Security.Cryptography;
 using System.Linq;
 namespace Game;
 
-public partial class ConditionBase : Node, Conditions.IConditionable
+public partial class ConditionBase : Node, Entities.ICondition
 {
     public FeatureBase Feature { get { return (FeatureBase)GetParent(); } } // parent reference.
     public Godot.Vector2 CameraPosition { get { throw new NotImplementedException(); } }
-
     public float CameraZoom { get { throw new NotImplementedException(); } }
     new public string Name { get { return base.Name; } set { base.Name = value; } }
     [Export]
     public string Description { get; set; } = "Nothing is known about this.";
-    public virtual void OnAdd() { } //Called when added to feature.
+    public virtual void OnAdd() { } // Called when added to feature.
     public virtual void OnRemove()
     {
         QueueFree();

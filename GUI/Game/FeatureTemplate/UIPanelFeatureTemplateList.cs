@@ -21,7 +21,7 @@ public partial class UIPanelFeatureTemplateList : UIPanel
     /// <summary>
     /// If this is set, list will be filtered to valid options. TODO make this nicer.
     /// </summary>
-    public Domain baseDomain;
+    public Entities.IPosition baseDomain;
     public List<PlayerFeatureTemplate> featureList = new List<PlayerFeatureTemplate>();
     static readonly PackedScene prefab_UIPanelFeatureFactoryFull = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/FeatureTemplate/UIPanelFeatureTemplateFull.tscn");
     Player player;
@@ -94,7 +94,7 @@ public partial class UIPanelFeatureTemplateList : UIPanel
         list.Clear();
         foreach (Node f in featureList)
         {
-            list.AddItem(((PlayerFeatureTemplate)f).Name, ((PlayerFeatureTemplate)f).Feature.iconMedium);
+            list.AddItem(((PlayerFeatureTemplate)f).Name, ((PlayerFeatureTemplate)f).Feature.IconMedium);
         }
         list.Select(selectedIndex);
     }

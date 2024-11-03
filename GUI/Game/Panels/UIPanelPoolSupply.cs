@@ -5,12 +5,12 @@ namespace Game;
 public partial class UIPanelPoolSupply : UIPanel
 {
     UIPanelLedger panelLedger;
-    public Domain resourcePool;
+    public Domain domain;
     public override void _Ready()
     {
         base._Ready();
         panelLedger = new();
-        panelLedger.Ledger = resourcePool.Ledger;
+        panelLedger.Ledger = domain.Ledger;
         GetNode<HBoxContainer>("MarginContainer/HBoxContainer").AddChild(panelLedger);
     }
 
