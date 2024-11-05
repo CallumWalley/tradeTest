@@ -27,17 +27,17 @@ public partial class UIAccordianSatelliteSystem : UIAccordian
 		container.Visible = false;
 		VBoxContainer vb = new VBoxContainer();
 
-		foreach (Node node in satelliteSystem)
-		{
-			if (node is Planet)
-			{
-				UINavPlanet uiw = new UINavSatelliteSystem();
-				uiw.satelliteSystem = ((UINavSatelliteSystem)domain);
-				uiw.Flat = true;
-				uiw.canvasLayer = canvasLayer;
-				vb.AddChild(uiw);
-			}
-		}
+		// foreach (Node node in satelliteSystem)
+		// {
+		// 	if (node is Planet)
+		// 	{
+		// 		UINavSatelliteSystem uiw = new UINavSatelliteSystem();
+		// 		uiw.satelliteSystem = ((SatelliteSystem)node);
+		// 		uiw.Flat = true;
+		// 		uiw.canvasLayer = canvasLayer;
+		// 		vb.AddChild(uiw);
+		// 	}
+		// }
 		HBoxContainer hb = new HBoxContainer();
 		HSeparator hs = new HSeparator();
 		hb.AddChild(hs);
@@ -48,9 +48,9 @@ public partial class UIAccordianSatelliteSystem : UIAccordian
 	}
 
 
-	public override void ShowDetails(bool toggled)
+	public override void OnToggled(bool toggled)
 	{
-		base.ShowDetails(toggled);
+		base.OnToggled(toggled);
 		camera.Center(satelliteSystem);
 		UIWindow existingWindow = canvasLayer.GetNodeOrNull<UIWindow>($"UIWindow-{satelliteSystem.Name}");
 		if (existingWindow != null)
@@ -64,7 +64,7 @@ public partial class UIAccordianSatelliteSystem : UIAccordian
 			uiw.Name = $"UIWindow-{satelliteSystem.Name}";
 			UITabContainerSatelliteSystem uit = prefab_UITabContainerDomain.Instantiate<UITabContainerSatelliteSystem>();
 
-			uit.Init(satelliteSystem);
+			uit.satelliteSystem = satelliteSystem;
 			uiw.AddChild(uit);
 			canvasLayer.AddChild(uiw);
 		}

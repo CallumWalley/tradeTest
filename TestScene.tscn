@@ -108,6 +108,11 @@ script = ExtResource("7_xqav8")
 script = ExtResource("6_yqk1w")
 
 [node name="Sol" type="Node2D" parent="Map/Galaxy/Sol System"]
+script = ExtResource("7_k6jcv")
+Aphelion = 69800.0
+Perihelion = 69800.0
+
+[node name="Sol" type="Node2D" parent="Map/Galaxy/Sol System/Sol"]
 script = ExtResource("8_hr0l1")
 albedo = Color(0.956863, 0.937255, 0, 1)
 equatorialRadius = 700000.0

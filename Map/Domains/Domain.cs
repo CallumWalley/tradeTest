@@ -10,7 +10,8 @@ public partial class Domain : Node2D, Entities.IDomain
     [Export]
     public bool HasEconomy { get; set; }
 
-
+    [Export]
+    public bool HasTrade { get; set; } = false;
     [Export]
     public string Description { get; set; }
 

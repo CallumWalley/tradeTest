@@ -58,11 +58,20 @@ public partial class SatelliteSystem : Domain, Entities.IOrbital, IEnumerable<En
         }
     }
 
-    public override void _Ready()
+    public override IEnumerable<Entities.IFeature> Features
     {
-        base._Ready();
-
+        get
+        {
+            foreach (Entities.IPosition p in this)
+            {
+                foreach (Entities.IFeature f in p)
+                {
+                    yield return f;
+                }
+            }
+        }
     }
+
     System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
     {
         return GetEnumerator();

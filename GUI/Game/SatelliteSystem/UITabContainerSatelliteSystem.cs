@@ -8,19 +8,19 @@ public partial class UITabContainerSatelliteSystem : TabContainer
     [Export]
     public SatelliteSystem satelliteSystem;
     [Export]
-    UIPanelPoolGeneral panelGeneral;
+    UIPanelPositionGeneral panelGeneral;
     // UIPanelPositionFeatures panelFeatures;
     [Export]
-    UIPanelPoolSupply panelSupply;
+    UIPanelDomainSupply panelSupply;
     [Export]
-    UIPanelPoolTrade panelTrade;
+    UIPanelDomainTrade panelTrade;
 
 
     public override void _Ready()
     {
         Name = $"UIWindow-{satelliteSystem.Name}";
 
-        panelGeneral.domain = satelliteSystem;
+        panelGeneral.position = satelliteSystem;
         panelSupply.domain = satelliteSystem;
         panelTrade.domain = satelliteSystem;
 

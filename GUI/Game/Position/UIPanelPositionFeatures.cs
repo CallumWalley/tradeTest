@@ -9,7 +9,7 @@ namespace Game;
 public partial class UIPanelPositionFeatures : UIPanel, UIInterfaces.IEFrameUpdatable
 {
 
-    public Entities.IPosition domain;
+    public Entities.IPosition position;
     Label nameLabel;
     Label adjLabel;
     Label altNameLabel;
@@ -42,9 +42,9 @@ public partial class UIPanelPositionFeatures : UIPanel, UIInterfaces.IEFrameUpda
 
     public void Init()
     {
-        if (domain.Any())
+        if (position.Any())
         {
-            selected = domain[0];
+            selected = position[0];
         }
         else
         {
@@ -57,21 +57,21 @@ public partial class UIPanelPositionFeatures : UIPanel, UIInterfaces.IEFrameUpda
     public void OnItemListItemSelected(int i)
     {
         selectedIndex = i;
-        selected = domain[selectedIndex];
+        selected = position[selectedIndex];
         DrawDisplay();
     }
 
     public void OnButtonAddFeaturePressed()
     {
-        UIWindow wdfpw = GetNodeOrNull<UIWindow>($"{domain}_build_dialouge");
+        UIWindow wdfpw = GetNodeOrNull<UIWindow>($"{position}_build_dialouge");
 
 
         if (wdfpw == null)
         {
             wdfpw = prefab_UIPanelDomainFeatureTemplate.Instantiate<UIWindow>();
             UIPanelDomainFeatureTemplate pdft = wdfpw.GetNode<UIPanelDomainFeatureTemplate>("UIPanelDomainFeatureTemplate");
-            pdft.Name = $"{domain}_build_dialouge";
-            pdft.domain = domain;
+            pdft.Name = $"{position}_build_dialouge";
+            pdft.domain = position;
             AddChild(wdfpw);
         }
         else
@@ -99,7 +99,7 @@ public partial class UIPanelPositionFeatures : UIPanel, UIInterfaces.IEFrameUpda
                 c.QueueFree();
                 display.RemoveChild(c);
             }
-            selected ??= (FeatureBase)domain.First();
+            selected ??= (FeatureBase)position.First();
             UIPanelFeatureFull uipff = prefab_UIPanelFeatureFull.Instantiate<UIPanelFeatureFull>();
             uipff.feature = selected;
             display.AddChild(uipff);
@@ -111,7 +111,7 @@ public partial class UIPanelPositionFeatures : UIPanel, UIInterfaces.IEFrameUpda
     public void UpdateElements()
     {
         list.Clear();
-        foreach (Node f in domain)
+        foreach (Node f in position)
         {
             if (f is FeatureBase)
             {

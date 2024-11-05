@@ -2,10 +2,10 @@ using Godot;
 using System;
 namespace Game;
 
-public partial class UIPanelPoolGeneral : UIPanel
+public partial class UIPanelPositionGeneral : UIPanel
 {
 
-    public Domain domain;
+    public Entities.IPosition position;
     Label nameLabel;
     Label adjLabel;
     Label altNameLabel;
@@ -21,9 +21,7 @@ public partial class UIPanelPoolGeneral : UIPanel
     {
         base._Draw();
 
-        nameLabel.Text = $"Name: {domain.Name}";
-
-
+        nameLabel.Text = $"Name: {position.Name}";
         // nameLabel.Text = $"Name: {resourcePool.}";
 
     }

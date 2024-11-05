@@ -2,7 +2,7 @@ using Godot;
 using System;
 namespace Game;
 
-public partial class UIPanelPoolTrade : UIPanel
+public partial class UIPanelDomainTrade : UIPanel
 {
 	public Domain domain;
 

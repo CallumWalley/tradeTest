@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://dy1f1jbsqh1vn"]
 
-[ext_resource type="Script" path="res://GUI/Game/Panels/UIPanelPoolTrade.cs" id="1_obseg"]
+[ext_resource type="Script" path="res://GUI/Game/Domain/UIPanelDomainTrade.cs" id="1_obseg"]
 [ext_resource type="PackedScene" uid="uid://dvge38wi43hpw" path="res://GUI/Game/Dropdowns/UIDropDownSetHead.tscn" id="1_t3j0p"]
 [ext_resource type="PackedScene" uid="uid://dal1khopu4euf" path="res://GUI/Game/Network/UINetworkInfo.tscn" id="2_53ldy"]
 
