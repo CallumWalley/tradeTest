@@ -17,9 +17,29 @@ public partial class FeatureBase : Node, Entities.IFeature
     ///  Contains factors pooled with parent rp.
     ///  Currently 000-800
     /// </summary>
-    ///     
+    ///
     public Entities.IPosition Position { get; set; }
-    // { get { return (Entities.IPosition)GetParent(); } } // parent reference.
+    [Export]
+    public double Scale
+    {
+        get
+        {
+            return FactorsSingle[901].Sum;
+        }
+        set
+        {
+            if (!FactorsSingle.ContainsKey(901))
+            {
+                FactorsSingle.Add(r: new Resource.RStatic(901, value, value, "Size", "Size"));
+            }
+            else
+            {
+                FactorsSingle[901].Sum = value;
+            }
+
+
+        }
+    }
 
     public IEnumerator<Entities.ICondition> GetEnumerator()
     {

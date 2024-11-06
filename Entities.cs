@@ -76,6 +76,7 @@ public static class Entities
     public interface ICondition : IEntityable
     {
         public FeatureBase Feature { get; } // parent reference.
+        public bool Visible { get; set; }
         public virtual void OnAdd() { } //Called when added to feature.
         public virtual void OnRemove() { } //Called when removed
         public virtual void OnEFrame() { } //Called every eframe.

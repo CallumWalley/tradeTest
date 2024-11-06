@@ -25,6 +25,7 @@ public partial class UIConditionTiny : UIAccordian, Lists.IListable<Entities.ICo
 
     public void Update()
     {
+        Visible = Condition.Visible;
         if (Destroy || !IsInstanceValid((Node)Condition)) { QueueFree(); return; }
         button.Text = Condition.Name;
         richTextLabelDetails.Text = Condition.Description;

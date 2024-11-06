@@ -9,6 +9,7 @@ namespace Game;
 public partial class ConditionBase : Node, Entities.ICondition
 {
     public FeatureBase Feature { get { return (FeatureBase)GetParent(); } } // parent reference.
+    public bool Visible { get; set; } = true;
     public Godot.Vector2 CameraPosition { get { throw new NotImplementedException(); } }
     public float CameraZoom { get { throw new NotImplementedException(); } }
     new public string Name { get { return base.Name; } set { base.Name = value; } }

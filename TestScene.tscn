@@ -1,11 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://bqwjnbtt5kf3p"]
+[gd_scene load_steps=13 format=3 uid="uid://bqwjnbtt5kf3p"]
 
 [ext_resource type="Script" path="res://Global.cs" id="1_1b3uo"]
 [ext_resource type="PackedScene" uid="uid://con3ea5txcdnn" path="res://Player/Player.tscn" id="1_w03ia"]
 [ext_resource type="PackedScene" uid="uid://c8uihqqtni6cg" path="res://Map/Map.tscn" id="2_b0thp"]
 [ext_resource type="PackedScene" uid="uid://r5ytkwljq7nb" path="res://GUI/Screen.tscn" id="2_ohuhm"]
 [ext_resource type="Script" path="res://Map/Features/PlayerFeatureTemplate.cs" id="4_qu45m"]
-[ext_resource type="Script" path="res://Economy/TradeRoute.cs" id="4_ri3ps"]
 [ext_resource type="Script" path="res://Map/Galaxy.cs" id="5_frh8s"]
 [ext_resource type="Script" path="res://Map/PlanetarySystem.cs" id="6_yqk1w"]
 [ext_resource type="Script" path="res://Map/Features/FeatureBase.cs" id="7_0xlau"]
@@ -21,16 +20,11 @@ script = ExtResource("1_1b3uo")
 
 [node name="Player" parent="." instance=ExtResource("1_w03ia")]
 
-[node name="Node" type="Node" parent="Player/PlayerTrade" index="0" node_paths=PackedStringArray("Head", "Tail")]
-script = ExtResource("4_ri3ps")
-Head = NodePath("../../../Map/Galaxy/Sol System/Earth System/Earth")
-Tail = NodePath("../../../Map/Galaxy/Sol System/Earth System/Moon")
-
 [node name="DMHO Purification" parent="Player/PlayerFeatureTemplates" index="0"]
-ConstructionCost = 100.0
+ConstructionCost = 10.0
 
 [node name="Surface Mining" parent="Player/PlayerFeatureTemplates" index="1"]
-ConstructionCost = 100.0
+ConstructionCost = 10.0
 
 [node name="Fuel Refining" parent="Player/PlayerFeatureTemplates" index="2"]
 ConstructionCost = 10.0
@@ -155,6 +149,7 @@ StartingResources = {
 
 [node name="Desalination Site" type="Node" parent="Map/Galaxy/Sol System/Earth System/Earth" node_paths=PackedStringArray("Template")]
 script = ExtResource("7_0xlau")
+Scale = 1.0
 Template = NodePath("../../../../../../Player/PlayerFeatureTemplates/DMHO Purification")
 SplashScreenPath = "res://assets/splash/chemical.png"
 
@@ -163,10 +158,10 @@ Factors = {
 2: -2.0,
 4: 3.0
 }
-InitialScale = 1.5
 
 [node name="Fuel Refining" type="Node" parent="Map/Galaxy/Sol System/Earth System/Earth" node_paths=PackedStringArray("Template")]
 script = ExtResource("7_0xlau")
+Scale = 1.0
 Template = NodePath("../../../../../../Player/PlayerFeatureTemplates/Fuel Refining")
 SplashScreenPath = "res://assets/splash/chemical.png"
 
@@ -176,19 +171,6 @@ Factors = {
 4: -2.0
 }
 StartingCapability = 0.8
-InitialScale = 0.5
-
-[node name="Launch Complex" type="Node" parent="Map/Galaxy/Sol System/Earth System/Earth"]
-script = ExtResource("7_0xlau")
-Description = "All the trade gantries, maintainance facilites and refueling shuttles required to maintain a fleet of starships frieghters."
-SplashScreenPath = "res://assets/splash/shuttle.png"
-
-[node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Earth/Launch Complex" instance=ExtResource("8_j7vpr")]
-Factors = {
-2: -4.0,
-812: 2.0
-}
-InitialScale = 1.0
 
 [node name="Moon" type="Node2D" parent="Map/Galaxy/Sol System/Earth System"]
 position = Vector2(0.3, 0)
@@ -199,43 +181,6 @@ Aphelion = 300.0
 Perihelion = 300.0
 HasLaunchComplex = true
 HasEconomy = true
-
-[node name="Surface Mining" type="Node" parent="Map/Galaxy/Sol System/Earth System/Moon" node_paths=PackedStringArray("Template")]
-script = ExtResource("7_0xlau")
-Template = NodePath("../../../../../../Player/PlayerFeatureTemplates/Surface Mining")
-SplashScreenPath = "res://assets/splash/surface_mine.png"
-
-[node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Moon/Surface Mining" instance=ExtResource("8_j7vpr")]
-Factors = {
-1: 3.0,
-2: -2.0
-}
-StartingCapability = 0.8
-InitialScale = 1.0
-
-[node name="Launch Complex" type="Node" parent="Map/Galaxy/Sol System/Earth System/Moon"]
-script = ExtResource("7_0xlau")
-Description = "All the trade gantries, maintainance facilites and refueling shuttles required to maintain a fleet of starships frieghters."
-SplashScreenPath = "res://assets/splash/shuttle.png"
-
-[node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Moon/Launch Complex" instance=ExtResource("8_j7vpr")]
-Factors = {
-2: -4.0,
-812: 2.0
-}
-InitialScale = 1.0
-
-[node name="Spaceport" type="Node" parent="Map/Galaxy/Sol System/Earth System" node_paths=PackedStringArray("Template")]
-script = ExtResource("7_0xlau")
-Template = NodePath("../../../../../Player/PlayerFeatureTemplates/Spaceport")
-SplashScreenPath = "res://assets/splash/shuttle.png"
-
-[node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Spaceport" instance=ExtResource("8_j7vpr")]
-Factors = {
-2: -3.0,
-811: 2.0
-}
-InitialScale = 1.0
 
 [node name="Mars System" type="Node2D" parent="Map/Galaxy/Sol System"]
 script = ExtResource("7_k6jcv")
