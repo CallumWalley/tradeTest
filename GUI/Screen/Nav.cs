@@ -8,7 +8,7 @@ public partial class Nav : VBoxContainer
 {
 	//static readonly PackedScene prefab_UIAccordian = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/PlanetarySystem/UIAccordianPlanetarySystem.tscn");
 	static readonly PackedScene prefab_UIAccordian = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/UIAccordian.tscn");
-	static readonly PackedScene prefab_UITabContainerPosition = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Position/UITabContainerPosition.tscn");
+	// static readonly PackedScene prefab_UITabContainerPosition = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Position/UITabContainerPosition.tscn");
 	Map map;
 
 	CanvasLayer canvasLayer;
@@ -69,7 +69,7 @@ public partial class Nav : VBoxContainer
 					uIButton.Name = $"{ss.Name}-nav";
 
 					uIButton.Connect("pressed", Callable.From(() => camera.Center(ss)));
-
+					uIButton.Connect("pressed", Callable.From(() => OpenNewWindow(p)));
 
 					uIButton.Text = p.Name;
 					uIButton.Flat = true;
@@ -97,12 +97,15 @@ public partial class Nav : VBoxContainer
 		}
 		else
 		{
-			UIWindow uiw = prefab_UIWindow.Instantiate<UIWindow>();
-			uiw.Name = $"UIWindow-{satelliteSystem.Name}";
-			UITabContainerSatelliteSystem uit = prefab_UITabContainerDomain.Instantiate<UITabContainerSatelliteSystem>();
-
-			uit.satelliteSystem = satelliteSystem;
+			UIWindow uiw = new();
+			uiw.Name = $"UIWindow-{target.Name}";
+			UITabContainerPosition uit = new UITabContainerPosition();
+			uit.position = target;
+			uiw.Size = new Vector2I(800, 400);
+			uiw.Position = new Vector2I(500, 500);
 			uiw.AddChild(uit);
+			uit.AnchorsPreset = 15;
+
 			canvasLayer.AddChild(uiw);
 		}
 	}

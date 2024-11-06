@@ -24,7 +24,7 @@ public partial class UIPanelPositionFeatures : UIPanel, UIInterfaces.IEFrameUpda
     UIButton buttonAddFeature;
 
     static readonly PackedScene prefab_UIPanelFeatureFull = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Feature/UIPanelFeatureFull.tscn");
-    static readonly PackedScene prefab_UIPanelDomainFeatureTemplate = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Domain/UIWindowDomainFeaturePlan.tscn");
+    static readonly PackedScene prefab_UIPanelDomainFeatureTemplate = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/FeatureTemplate/UIWindowDomainFeatureTemplate.tscn");
 
 
     Entities.IFeature selected;
@@ -38,10 +38,6 @@ public partial class UIPanelPositionFeatures : UIPanel, UIInterfaces.IEFrameUpda
 
         list.Connect("item_selected", new Callable(this, "OnItemListItemSelected"));
         buttonAddFeature.Connect("pressed", new Callable(this, "OnButtonAddFeaturePressed"));
-    }
-
-    public void Init()
-    {
         if (position.Any())
         {
             selected = position[0];
@@ -82,11 +78,11 @@ public partial class UIPanelPositionFeatures : UIPanel, UIInterfaces.IEFrameUpda
 
     void DrawDisplay()
     {
-        {
-            displayEmpty.Visible = true;
-            display.Visible = false;
-            return;
-        }
+        // {
+        //     displayEmpty.Visible = true;
+        //     display.Visible = false;
+        //     return;
+        // }
         displayEmpty.Visible = false;
         display.Visible = true;
         // {

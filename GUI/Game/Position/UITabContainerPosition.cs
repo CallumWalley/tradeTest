@@ -34,6 +34,7 @@ public partial class UITabContainerPosition : TabContainer
         // panelFeatures.domain = position;
         // panelSupply.domain = position;
         // panelTrade.domain = planet;
+        OnEFrameUI();
 
     }
 
@@ -58,17 +59,37 @@ public partial class UITabContainerPosition : TabContainer
                 features.position = position;
                 AddChild(features);
             }
-            // if (typeof(Entities.IDomain).IsAssignableFrom(position.GetType()))
-            // {
-            //     UIPanelPositionFeatures features = GetNodeOrNull<UIPanelPositionFeatures>("Features");
-            //     if (features == null)
-            //     {
-            //         features = prefab_PanelFeatures.Instantiate<UIPanelPositionFeatures>();
-            //         features.Name = "Features";
-            //         features.position = position;
-            //         AddChild(features);
-            //     }
-            // }
+
+            if (typeof(Entities.IDomain).IsAssignableFrom(position.GetType()))
+            {
+                UIPanelDomainSupply supply = GetNodeOrNull<UIPanelDomainSupply>("Supply");
+                if (supply == null)
+                {
+                    supply = prefab_DomainSupply.Instantiate<UIPanelDomainSupply>();
+                    supply.Name = "Supply";
+                    supply.domain = ((Domain)position);
+                    AddChild(supply);
+                }
+            }
+            else
+            {
+                UIPanelDomainSupply supply = GetNodeOrNull<UIPanelDomainSupply>("Supply");
+                if (supply == null)
+                {
+                    supply = prefab_DomainSupply.Instantiate<UIPanelDomainSupply>();
+                    supply.Name = "Supply";
+                    supply.domain = (Domain)position.Domain;
+                    AddChild(supply);
+                }
+                UIPanelDomainTrade trade = GetNodeOrNull<UIPanelDomainTrade>("Trade");
+                if (trade == null)
+                {
+                    trade = prefab_DomainSupply.Instantiate<UIPanelDomainTrade>();
+                    trade.Name = "Trade";
+                    trade.domain = ((Domain)position.Domain);
+                    AddChild(trade);
+                }
+            }
 
 
         }
