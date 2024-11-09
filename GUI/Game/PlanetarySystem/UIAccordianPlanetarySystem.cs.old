@@ -22,7 +22,7 @@ public partial class UIAccordianPlanetarySystem : UIAccordian
 		button.Alignment = HorizontalAlignment.Left;
 		container.Visible = false;
 		VBoxContainer vb = new VBoxContainer();
-		foreach (Entities.IOrbital ss in planetarySystem)
+		foreach (SatelliteSystem ss in planetarySystem)
 		{
 			if (typeof(SatelliteSystem).IsAssignableFrom(ss.GetType()))
 			{
@@ -31,14 +31,14 @@ public partial class UIAccordianPlanetarySystem : UIAccordian
 				ui_ss.canvasLayer = canvasLayer;
 				vb.AddChild(ui_ss);
 			}
-			else if (typeof(Domain).IsAssignableFrom(ss.GetType()))
-			{
-				UIDomainNav uiw = new UIDomainNav();
-				uiw.domain = (Domain)ss;
-				uiw.Flat = true;
-				uiw.canvasLayer = canvasLayer;
-				vb.AddChild(uiw);
-			}
+			// else if (typeof(Planet).IsAssignableFrom(ss.GetType()))
+			// {
+			// 	UINavSatelliteSystem uiw = new UINavSatelliteSystem();
+			// 	uiw.satelliteSystem = (SatelliteSystem)ss;
+			// 	uiw.Flat = true;
+			// 	uiw.canvasLayer = canvasLayer;
+			// 	vb.AddChild(uiw);
+			// }
 			else
 			{
 
@@ -54,9 +54,9 @@ public partial class UIAccordianPlanetarySystem : UIAccordian
 		container.ThemeTypeVariation = "PanelContainerTransparent";
 		container.AddChild(hb);
 	}
-	public override void ShowDetails(bool toggled)
+	public override void OnToggled(bool toggled)
 	{
-		base.ShowDetails(toggled);
+		base.OnToggled(toggled);
 		camera.Center(planetarySystem);
 	}
 }

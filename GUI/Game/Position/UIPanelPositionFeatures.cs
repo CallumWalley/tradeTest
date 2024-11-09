@@ -6,10 +6,10 @@ namespace Game;
 /// <summary>
 /// Displays the ist of features in a location.
 /// </summary>
-public partial class UIPanelDomainFeatures : UIPanel, UIInterfaces.IEFrameUpdatable
+public partial class UIPanelPositionFeatures : UIPanel, UIInterfaces.IEFrameUpdatable
 {
 
-    public Domain domain;
+    public Entities.IPosition position;
     Label nameLabel;
     Label adjLabel;
     Label altNameLabel;
@@ -24,10 +24,10 @@ public partial class UIPanelDomainFeatures : UIPanel, UIInterfaces.IEFrameUpdata
     UIButton buttonAddFeature;
 
     static readonly PackedScene prefab_UIPanelFeatureFull = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Feature/UIPanelFeatureFull.tscn");
-    static readonly PackedScene prefab_UIPanelDomainFeatureTemplate = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Domain/UIWindowDomainFeaturePlan.tscn");
+    static readonly PackedScene prefab_UIPanelDomainFeatureTemplate = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/FeatureTemplate/UIWindowDomainFeatureTemplate.tscn");
 
 
-    FeatureBase selected;
+    Entities.IFeature selected;
     int selectedIndex = 0;
 
     UIList<FeatureBase> vbox;
@@ -38,13 +38,9 @@ public partial class UIPanelDomainFeatures : UIPanel, UIInterfaces.IEFrameUpdata
 
         list.Connect("item_selected", new Callable(this, "OnItemListItemSelected"));
         buttonAddFeature.Connect("pressed", new Callable(this, "OnButtonAddFeaturePressed"));
-    }
-
-    public void Init()
-    {
-        if (domain.GetChildCount() > 0)
+        if (position.Any())
         {
-            selected = domain[0];
+            selected = position[0];
         }
         else
         {
@@ -57,21 +53,21 @@ public partial class UIPanelDomainFeatures : UIPanel, UIInterfaces.IEFrameUpdata
     public void OnItemListItemSelected(int i)
     {
         selectedIndex = i;
-        selected = domain[selectedIndex];
+        selected = position[selectedIndex];
         DrawDisplay();
     }
 
     public void OnButtonAddFeaturePressed()
     {
-        UIWindow wdfpw = GetNodeOrNull<UIWindow>($"{domain}_build_dialouge");
+        UIWindow wdfpw = GetNodeOrNull<UIWindow>($"{position}_build_dialouge");
 
 
         if (wdfpw == null)
         {
             wdfpw = prefab_UIPanelDomainFeatureTemplate.Instantiate<UIWindow>();
             UIPanelDomainFeatureTemplate pdft = wdfpw.GetNode<UIPanelDomainFeatureTemplate>("UIPanelDomainFeatureTemplate");
-            pdft.Name = $"{domain}_build_dialouge";
-            pdft.domain = domain;
+            pdft.Name = $"{position}_build_dialouge";
+            pdft.domain = position;
             AddChild(wdfpw);
         }
         else
@@ -82,12 +78,11 @@ public partial class UIPanelDomainFeatures : UIPanel, UIInterfaces.IEFrameUpdata
 
     void DrawDisplay()
     {
-        if (domain.GetNodeOrNull("Features") == null)
-        {
-            displayEmpty.Visible = true;
-            display.Visible = false;
-            return;
-        }
+        // {
+        //     displayEmpty.Visible = true;
+        //     display.Visible = false;
+        //     return;
+        // }
         displayEmpty.Visible = false;
         display.Visible = true;
         // {
@@ -100,7 +95,7 @@ public partial class UIPanelDomainFeatures : UIPanel, UIInterfaces.IEFrameUpdata
                 c.QueueFree();
                 display.RemoveChild(c);
             }
-            selected ??= (FeatureBase)domain.First();
+            selected ??= (FeatureBase)position.First();
             UIPanelFeatureFull uipff = prefab_UIPanelFeatureFull.Instantiate<UIPanelFeatureFull>();
             uipff.feature = selected;
             display.AddChild(uipff);
@@ -111,13 +106,12 @@ public partial class UIPanelDomainFeatures : UIPanel, UIInterfaces.IEFrameUpdata
 
     public void UpdateElements()
     {
-        if (domain.GetNodeOrNull("Features") == null) { return; }
         list.Clear();
-        foreach (Node f in domain)
+        foreach (Node f in position)
         {
             if (f is FeatureBase)
             {
-                list.AddItem(((FeatureBase)f).Name, ((FeatureBase)f).iconMedium);
+                list.AddItem(((FeatureBase)f).Name, ((FeatureBase)f).IconMedium);
             }
         }
         list.Select(selectedIndex);

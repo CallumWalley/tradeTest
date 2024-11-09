@@ -3,18 +3,16 @@ using System;
 using System.Text;
 namespace Game;
 
-public partial class UIConditionTiny : UIAccordian, Lists.IListable<ConditionBase>
+public partial class UIConditionTiny : UIAccordian, Lists.IListable<Entities.ICondition>
 {
-    ConditionBase Condition;
-    public ConditionBase GameElement { get { return Condition; } }
+    Entities.ICondition Condition;
+    public Entities.ICondition GameElement { get { return Condition; } }
     public bool Destroy { get; set; } = false;
 
     [Export]
-    public Button button;
-    [Export]
     public RichTextLabel richTextLabelDetails;
 
-    public void Init(ConditionBase _condition)
+    public void Init(Entities.ICondition _condition)
     {
         Condition = _condition;
     }
@@ -27,7 +25,8 @@ public partial class UIConditionTiny : UIAccordian, Lists.IListable<ConditionBas
 
     public void Update()
     {
-        if (Destroy || !IsInstanceValid(Condition)) { QueueFree(); return; }
+        Visible = Condition.Visible;
+        if (Destroy || !IsInstanceValid((Node)Condition)) { QueueFree(); return; }
         button.Text = Condition.Name;
         richTextLabelDetails.Text = Condition.Description;
     }

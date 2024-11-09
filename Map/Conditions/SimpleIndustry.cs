@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using System.Linq;
 namespace Game;
 
-public partial class SimpleIndustry : ConditionScale
+public partial class SimpleIndustry : ConditionBase
 {
 
     [Export]
@@ -27,7 +27,6 @@ public partial class SimpleIndustry : ConditionScale
     Dictionary<Resource.RGroup<Resource.RStatic>, Resource.RStatic> inputFullfillments = new();
     //public Resource.RStatic inputSecurity = new Resource.RStatic(802, 1, 1, "Input Fulfilment", "Input Fulfilment");
     public Resource.RStatic demand = new Resource.RStatic(802, 1, 1, "Demand", "Demand");
-
 
     /// <summary>
     /// For non accruable resources, output is scaled to fit demand.
@@ -160,6 +159,17 @@ public partial class SimpleIndustry : ConditionScale
         {
             //double rolling = ((kvp.Key.Fraction() + kvp.Value.Sum) / 2);
             kvp.Value.Sum = kvp.Key.Fraction();
+
+        }
+        if ((Feature.FactorsLocal[801].Sum) < 1)
+        {
+            Visible = true;
+            Name = "Resource shortage";
+            Description = string.Format("A shortage of {0} is causing reduced output", string.Join(", ", inputFullfillments.Where(x => x.Key.State != 0).Select(x => Resource.Name(x.Key.Type))));
+        }
+        else
+        {
+            Visible = false;
         }
         // inputs
         // // Why so complicated?

@@ -1,8 +1,9 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 namespace Game;
 
-public partial class Planet : Domain, Entities.IOrbital
+public partial class Planet : Domain, Entities.IPosition
 {
     [ExportGroup("Physical")]
     [Export]
@@ -31,6 +32,18 @@ public partial class Planet : Domain, Entities.IOrbital
     [Export]
     public bool HasLaunchComplex { get; set; }
 
+    public Entities.IDomain Domain
+    {
+        get { return this; }
+    }
+
+    public Entities.IFeature this[int index]
+    {
+        get
+        {
+            return (Entities.IFeature)GetChild(index);
+        }
+    }
     public override float CameraZoom
     {
         get
@@ -48,8 +61,27 @@ public partial class Planet : Domain, Entities.IOrbital
         // }
     }
 
-
-
+    public override IEnumerable<Entities.IFeature> Features
+    {
+        get
+        {
+            foreach (Entities.IFeature f in GetChildren())
+            {
+                yield return f;
+            }
+        }
+    }
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+    public IEnumerator<Entities.IFeature> GetEnumerator()
+    {
+        foreach (Entities.IFeature f in Features)
+        {
+            yield return f;
+        }
+    }
     public override void _Draw()
     {
 
@@ -71,5 +103,20 @@ public partial class Planet : Domain, Entities.IOrbital
         }
         QueueRedraw();
     }
+    public Entities.IFeature AddFeature(PlayerFeatureTemplate template, StringName name)
+    {
+        FeatureBase newFeature = template.Instantiate();
+        newFeature.Template = template;
+        newFeature.Name = name;
+
+        // If has size. Set size to zero.
+        if (newFeature.FactorsSingle.ContainsKey(901))
+        {
+            newFeature.FactorsSingle[901].Sum = 0;
+        }
+        AddChild(newFeature);
+        return newFeature;
+    }
+
     // Called every frame. 'delta' is the elapsed time since the previous frame.
 }

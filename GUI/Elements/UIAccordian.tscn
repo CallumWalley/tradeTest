@@ -3,7 +3,7 @@
 [ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="1"]
 [ext_resource type="Script" path="res://GUI/Elements/UIAccordian.cs" id="2"]
 
-[node name="Accordian" type="VBoxContainer"]
+[node name="Accordian" type="VBoxContainer" node_paths=PackedStringArray("button", "container")]
 anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 35.0
@@ -11,6 +11,8 @@ grow_horizontal = 2
 size_flags_horizontal = 3
 theme = ExtResource("1")
 script = ExtResource("2")
+button = NodePath("Button")
+container = NodePath("Container")
 
 [node name="Button" type="Button" parent="."]
 layout_mode = 2
@@ -18,5 +20,6 @@ toggle_mode = true
 text = "Accordian"
 
 [node name="Container" type="PanelContainer" parent="."]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3

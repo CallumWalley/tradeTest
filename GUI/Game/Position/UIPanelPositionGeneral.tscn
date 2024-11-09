@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b21lbg7v3h1t"]
 
-[ext_resource type="Script" path="res://GUI/Game/Panels/UIPanelPoolGeneral.cs" id="1_p0rj4"]
+[ext_resource type="Script" path="res://GUI/Game/Position/UIPanelPositionGeneral.cs" id="1_p0rj4"]
 
 [node name="General" type="PanelContainer"]
 anchors_preset = 15

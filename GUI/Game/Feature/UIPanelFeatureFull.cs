@@ -5,7 +5,7 @@ namespace Game;
 public partial class UIPanelFeatureFull : UIPanel
 {
 	// Called when the node enters the scene tree for the first time.
-	public FeatureBase feature;
+	public Entities.IFeature feature;
 	UIRename name;
 
 	Player player;
@@ -21,7 +21,7 @@ public partial class UIPanelFeatureFull : UIPanel
 	UIListResources localFactors = new();
 	UIListResources singularFactors = new();
 
-	UIList<ConditionBase> conditions = new();
+	UIList<Entities.ICondition> conditions = new();
 
 	TextureButton templateButton;
 	public Godot.Collections.Array<string> NeedsTags { get; set; } = new Godot.Collections.Array<string>();
@@ -70,7 +70,7 @@ public partial class UIPanelFeatureFull : UIPanel
 		localFactors.Init(feature.FactorsLocal);
 		globalFactorsInput.Init(feature.FactorsGlobalInput);
 		globalFactorsOutput.Init(feature.FactorsGlobalOutput);
-		conditions.Init(feature.Conditions, prefab_conditionTiny);
+		conditions.Init(feature, prefab_conditionTiny);
 
 
 		name.entity = feature;

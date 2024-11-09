@@ -2,15 +2,15 @@ using Godot;
 using System;
 namespace Game;
 
-public partial class UIPanelPoolSupply : UIPanel
+public partial class UIPanelDomainSupply : UIPanel
 {
     UIPanelLedger panelLedger;
-    public Domain resourcePool;
+    public Domain domain;
     public override void _Ready()
     {
         base._Ready();
         panelLedger = new();
-        panelLedger.Ledger = resourcePool.Ledger;
+        panelLedger.Ledger = domain.Ledger;
         GetNode<HBoxContainer>("MarginContainer/HBoxContainer").AddChild(panelLedger);
     }
 

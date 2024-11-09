@@ -9,8 +9,7 @@ namespace Game;
 /// </summary>
 public partial class UIPanelDomainFeatureTemplate : UIPanel
 {
-	[Export]
-	public Domain domain;
+	public Entities.IPosition domain;
 
 	[Export]
 	public Button addButton;
@@ -98,7 +97,7 @@ public partial class UIPanelDomainFeatureTemplate : UIPanel
 		itemList.Clear();
 		foreach (Node f in featureList)
 		{
-			itemList.AddItem(((PlayerFeatureTemplate)f).Name, ((PlayerFeatureTemplate)f).Feature.iconMedium);
+			itemList.AddItem(((PlayerFeatureTemplate)f).Name, ((PlayerFeatureTemplate)f).Feature.IconMedium);
 		}
 		itemList.Select(selectedIndex);
 	}

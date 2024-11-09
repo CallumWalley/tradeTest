@@ -30,7 +30,7 @@ public partial class PlayerFeatureTemplates : Node, IEnumerable<PlayerFeatureTem
 	/// </summary>
 	/// <param name="domain"></param>
 	/// <returns></returns>
-	public IEnumerable<PlayerFeatureTemplate> GetValid(Domain domain)
+	public IEnumerable<PlayerFeatureTemplate> GetValid(Entities.IPosition domain)
 	{
 		foreach (PlayerFeatureTemplate template in this)
 		{

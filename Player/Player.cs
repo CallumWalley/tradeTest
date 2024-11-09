@@ -189,13 +189,13 @@ public partial class Player : Node
 			{
 				return ICommand.Failure(string.Format("Could not find template '{0}'.\nValid options are {1}", data.RawData[2], String.Join(", ", player.GetChildren().Select(x => x.Name))));
 			}
-			else if (!player.GetValid((Domain)domain).Contains((PlayerFeatureTemplate)template))
+			else if (!player.GetValid((Entities.IPosition)domain).Contains((PlayerFeatureTemplate)template))
 			{
 				return ICommand.Failure(string.Format("'{0}' cannot be built at {1}, does not contain tag '{2}'.", data.RawData[2], data.RawData[1], String.Join("', '", ((PlayerFeatureTemplate)template).NeedsTags.Where(x => !((Domain)domain).Tags.Contains(x)))));
 			}
 			else
 			{
-				((Domain)(domain)).AddFeature((PlayerFeatureTemplate)template, name);
+				((Entities.IPosition)(domain)).AddFeature((PlayerFeatureTemplate)template, name);
 				data.Terminal.Print($"Added new feature '{name}' to '{domain.Name}'.");
 				return ICommand.Success();
 			}

@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://c2xbjx0sqmnma"]
 
-[ext_resource type="Script" path="res://GUI/Elements/UIWindow.cs" id="1_ob1iy"]
-[ext_resource type="Script" path="res://GUI/Game/Domain/UIPanelDomainFeatureTemplate.cs" id="2_fsx8l"]
-[ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="3_2u68v"]
+[ext_resource type="Script" path="res://GUI/Elements/UIWindow.cs" id="1_vew7b"]
+[ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="2_rnudt"]
+[ext_resource type="Script" path="res://GUI/Game/FeatureTemplate/UIPanelDomainFeatureTemplate.cs" id="3_q7rtn"]
 
 [node name="Window" type="Window"]
 sdf_oversize = 0
@@ -10,7 +10,7 @@ initial_position = 1
 size = Vector2i(800, 400)
 content_scale_mode = 2
 content_scale_aspect = 1
-script = ExtResource("1_ob1iy")
+script = ExtResource("1_vew7b")
 
 [node name="UIPanelDomainFeatureTemplate" type="PanelContainer" parent="." node_paths=PackedStringArray("addButton", "scaleSpinbox", "nameLineEdit", "itemList", "display")]
 anchors_preset = 15
@@ -18,8 +18,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("3_2u68v")
-script = ExtResource("2_fsx8l")
+theme = ExtResource("2_rnudt")
+script = ExtResource("3_q7rtn")
 addButton = NodePath("VBoxContainer/VBoxContainer/HBoxContainer/Button")
 scaleSpinbox = NodePath("VBoxContainer/VBoxContainer/HBoxContainer/SpinBox")
 nameLineEdit = NodePath("VBoxContainer/VBoxContainer/NameEdit")
@@ -112,7 +112,7 @@ prefix = "×"
 [node name="Button" type="Button" parent="UIPanelDomainFeatureTemplate/VBoxContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("3_2u68v")
+theme = ExtResource("2_rnudt")
 text = "Build"
 
 [connection signal="close_requested" from="." to="." method="_on_close_requested"]

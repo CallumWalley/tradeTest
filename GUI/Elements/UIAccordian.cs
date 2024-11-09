@@ -4,20 +4,22 @@ using System.Collections.Generic;
 
 public partial class UIAccordian : Control
 {
-	Button button;
-	Container container;
-
+	[Export]
+	public Button button;
+	[Export]
+	public Container container;
+	[Signal]
+	public delegate void ShowDetailsEventHandler();
 	public bool Expanded { get { return container.Visible; } set { container.Visible = value; } }
 	public override void _Ready()
 	{
 		base._Ready();
-		container = GetNode<Container>("Container");
-		button = GetNode<Button>("Button");
 
-		button.Connect("toggled", new Callable(this, "ShowDetails"));
+		button.Connect("toggled", new Callable(this, "OnToggled"));
 	}
-	public virtual void ShowDetails(bool toggled)
+	public virtual void OnToggled(bool toggled)
 	{
+		EmitSignal(SignalName.ShowDetails);
 		Expanded = toggled;
 	}
 }
