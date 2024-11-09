@@ -100,7 +100,7 @@ public partial class UIPanelDomainFeatures : UIPanel, UIInterfaces.IEFrameUpdata
                 c.QueueFree();
                 display.RemoveChild(c);
             }
-            selected ??= domain.First();
+            selected ??= (FeatureBase)domain.First();
             UIPanelFeatureFull uipff = prefab_UIPanelFeatureFull.Instantiate<UIPanelFeatureFull>();
             uipff.feature = selected;
             display.AddChild(uipff);

@@ -124,7 +124,7 @@ public partial class UIPanelDomainFeatureTemplate : UIPanel
 
 	public void ValidateName(string new_text)
 	{
-		if ((domain == null) || (domain.Count() < 1)) { return; }
+		if ((domain == null) || (domain.Any())) { return; }
 		if (domain.Any(x => x.Name == new_text))
 		{
 			addButton.Disabled = true;

@@ -93,10 +93,8 @@ public partial class Domain : Node2D, Entities.IEntityable, IEnumerable<Node>
             else if (value == 1)
             {
                 Network = this;
-                if (NetworkName == null)
-                {
-                    NetworkName = $"{Name} Trade Network";
-                }
+                NetworkName ??= $"{Name} Trade Network";
+
             }
 
             // If this has downline trade routes, they need to be updated.
