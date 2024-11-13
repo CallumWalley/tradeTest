@@ -29,7 +29,6 @@ public static class Entities
     {
         float Aphelion { get; set; }
         float Perihelion { get; set; }
-        float SemiMajorAxis { get; set; }
         float Eccentricity { get; set; }
         float Period { get; set; }
     }
