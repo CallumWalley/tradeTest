@@ -13,6 +13,7 @@ public sealed class GameAttributes
         {
         }
     }
+
     /// <summary>
     /// Changes the behavior of an agent that can make game commands.
     /// </summary>

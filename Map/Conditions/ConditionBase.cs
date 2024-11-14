@@ -27,4 +27,6 @@ public partial class ConditionBase : Node, Entities.ICondition
     } //Called every eframe.
     public virtual void OnRequestSet() { }
 
+    public override string ToString() { return Name; }
+
 }

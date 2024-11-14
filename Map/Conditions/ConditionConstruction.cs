@@ -57,11 +57,11 @@ public partial class ConditionConstruction : ConditionBase
         }
         double p_of_full = (inputFullfillments.Count() > 0) ? inputFullfillments.Average(x => x.Value.Sum) : 1;
         completed.Sum += (Math.Max(0, p_of_full) / (Cost * Addition));
-        if (completed.Sum >= 1)
+        Description = string.Format("Constuction is {0:P0} complete.", completed.Sum);
+        if (completed.Sum >= 0.99)
         {
             OnCompletion();
         }
-        Description = string.Format("Constuction is {0:P0} complete.", completed.Sum);
     }
 
     public override void OnRemove()

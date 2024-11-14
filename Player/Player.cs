@@ -28,6 +28,25 @@ public partial class Player : Node
 		RegisterCommands();
 	}
 
+	public class Action
+	{
+		public IEnumerable<Parameter> Parameters { get; set; }
+
+		public virtual bool Execute()
+		{
+			return false;
+		}
+	}
+
+	public class Parameter
+	{
+		public IEnumerable<object> Options { get; }
+		public virtual bool Valid()
+		{
+			return false;
+		}
+	}
+
 	private void RegisterCommands()
 	{
 		TradeList.player = trade;
@@ -39,7 +58,6 @@ public partial class Player : Node
 		Extensible.RegisterExtension("trade", typeof(TradeAdd));
 
 		RegisteredCommands.AddCommand(typeof(Trade));
-
 
 		BuildAdd.player = featureTemplates;
 

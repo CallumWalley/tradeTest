@@ -55,8 +55,10 @@ public partial class UIPanelDomainFeatureTemplate : UIPanel
 	public void OnItemListItemSelected(int i)
 	{
 		selectedIndex = i;
+
 		// if (selectedIndex >= player.featureTemplates.GetValid(domain).Count) { return; }
 		selected = (PlayerFeatureTemplate)featureList[selectedIndex];
+		nameLineEdit.Text = selected.GenerateName();
 		DrawDisplay();
 	}
 	public override void _Process(double delta)
@@ -112,10 +114,6 @@ public partial class UIPanelDomainFeatureTemplate : UIPanel
 		}
 	}
 
-	public void OnTemplateListItemSelected(int i)
-	{
-		nameLineEdit.Text = selected.GenerateName();
-	}
 	public void OnLineEditTextChanged(string new_text)
 	{
 		ValidateName(new_text);
