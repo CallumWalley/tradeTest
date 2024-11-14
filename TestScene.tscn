@@ -103,8 +103,6 @@ script = ExtResource("6_yqk1w")
 
 [node name="Sol" type="Node2D" parent="Map/Galaxy/Sol System"]
 script = ExtResource("7_k6jcv")
-Aphelion = 69800.0
-Perihelion = 69800.0
 
 [node name="Sol" type="Node2D" parent="Map/Galaxy/Sol System/Sol"]
 script = ExtResource("8_hr0l1")
@@ -113,8 +111,8 @@ equatorialRadius = 700000.0
 
 [node name="Mercury System" type="Node2D" parent="Map/Galaxy/Sol System"]
 script = ExtResource("7_k6jcv")
-Aphelion = 69800.0
-Perihelion = 69800.0
+SemiMajorAxis = 69800.0
+Anomaly = 0.2
 
 [node name="Mercury" type="Node2D" parent="Map/Galaxy/Sol System/Mercury System"]
 script = ExtResource("8_hr0l1")
@@ -123,7 +121,8 @@ equatorialRadius = 2800.0
 
 [node name="Venus System" type="Node2D" parent="Map/Galaxy/Sol System"]
 script = ExtResource("7_k6jcv")
-Aphelion = 108900.0
+SemiMajorAxis = 108900.0
+Anomaly = 0.4
 
 [node name="Venus" type="Node2D" parent="Map/Galaxy/Sol System/Venus System"]
 script = ExtResource("8_hr0l1")
@@ -132,8 +131,7 @@ equatorialRadius = 6050.0
 
 [node name="Earth System" type="Node2D" parent="Map/Galaxy/Sol System"]
 script = ExtResource("7_k6jcv")
-Aphelion = 152100.0
-Perihelion = 149000.0
+SemiMajorAxis = 152100.0
 HasSpaceport = true
 HasEconomy = true
 
@@ -175,14 +173,14 @@ position = Vector2(0.3, 0)
 script = ExtResource("8_hr0l1")
 albedo = Color(0.776471, 0.776471, 0.776471, 1)
 equatorialRadius = 1500.0
-Aphelion = 300.0
-Perihelion = 300.0
+SemiMajorAxis = 300.0
 HasLaunchComplex = true
 HasEconomy = true
 
 [node name="Mars System" type="Node2D" parent="Map/Galaxy/Sol System"]
 script = ExtResource("7_k6jcv")
-Aphelion = 206700.0
+SemiMajorAxis = 206700.0
+Anomaly = 1.0
 
 [node name="Mars" type="Node2D" parent="Map/Galaxy/Sol System/Mars System"]
 script = ExtResource("8_hr0l1")
@@ -193,17 +191,18 @@ equatorialRadius = 3400.0
 script = ExtResource("8_hr0l1")
 albedo = Color(0.792157, 0.733333, 0.65098, 1)
 equatorialRadius = 3.0
-Aphelion = 9.0
+SemiMajorAxis = 9.0
 
 [node name="Demos" type="Node2D" parent="Map/Galaxy/Sol System/Mars System"]
 script = ExtResource("8_hr0l1")
 albedo = Color(1, 0.627451, 0.584314, 1)
 equatorialRadius = 16.0
-Aphelion = 2.0
+SemiMajorAxis = 2.0
 
 [node name="Jupiter System" type="Node2D" parent="Map/Galaxy/Sol System"]
 script = ExtResource("7_k6jcv")
-Aphelion = 816400.0
+SemiMajorAxis = 816400.0
+Anomaly = 5.0
 
 [node name="Jupiter" type="Node2D" parent="Map/Galaxy/Sol System/Jupiter System"]
 script = ExtResource("8_hr0l1")
@@ -214,31 +213,30 @@ equatorialRadius = 71450.0
 script = ExtResource("8_hr0l1")
 albedo = Color(0.941176, 0.764706, 0.105882, 1)
 equatorialRadius = 1800.0
-Aphelion = 420.0
-Perihelion = 420.0
+SemiMajorAxis = 420.0
 
 [node name="Europa" type="Node2D" parent="Map/Galaxy/Sol System/Jupiter System"]
 script = ExtResource("8_hr0l1")
 albedo = Color(0.847059, 0.72549, 0.619608, 1)
 equatorialRadius = 1550.0
-Aphelion = 670.0
+SemiMajorAxis = 670.0
 
 [node name="Ganymede" type="Node2D" parent="Map/Galaxy/Sol System/Jupiter System"]
 script = ExtResource("8_hr0l1")
 mass = 2.6
 albedo = Color(0.8, 0.729412, 0.596078, 1)
 equatorialRadius = 1600.0
-Aphelion = 1060.0
+SemiMajorAxis = 1060.0
 
 [node name="Callisto" type="Node2D" parent="Map/Galaxy/Sol System/Jupiter System"]
 script = ExtResource("8_hr0l1")
 albedo = Color(0.301961, 0.164706, 0, 1)
 equatorialRadius = 2400.0
-Aphelion = 1800.0
 
 [node name="Pluto System" type="Node2D" parent="Map/Galaxy/Sol System"]
 script = ExtResource("7_k6jcv")
-Aphelion = 7.375e+06
+SemiMajorAxis = 7.375e+06
+Anomaly = 6.0
 
 [node name="Pluto" type="Node2D" parent="Map/Galaxy/Sol System/Pluto System"]
 script = ExtResource("8_hr0l1")

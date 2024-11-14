@@ -27,8 +27,8 @@ public static class Entities
     /// </summary>
     public interface IOrbital : IEntityable
     {
-        float Aphelion { get; set; }
-        float Perihelion { get; set; }
+        float SemiMajorAxis { get; set; }
+        float Anomaly { get; set; }
         float Eccentricity { get; set; }
         float Period { get; set; }
     }

@@ -78,30 +78,32 @@ public partial class UIPanelPositionFeatures : UIPanel, UIInterfaces.IEFrameUpda
 
     void DrawDisplay()
     {
-        // {
-        //     displayEmpty.Visible = true;
-        //     display.Visible = false;
-        //     return;
-        // }
-        displayEmpty.Visible = false;
-        display.Visible = true;
-        // {
-        // If selected feature changed, or none.
-        if ((display.GetChildCount() < 1) || display.GetChild<UIPanelFeatureFull>(0).feature != selected)
+        if (position.Count() < 1)
         {
-            foreach (Control c in display.GetChildren().Cast<Control>())
-            {
-                c.Visible = false;
-                c.QueueFree();
-                display.RemoveChild(c);
-            }
-            selected ??= (FeatureBase)position.First();
-            UIPanelFeatureFull uipff = prefab_UIPanelFeatureFull.Instantiate<UIPanelFeatureFull>();
-            uipff.feature = selected;
-            display.AddChild(uipff);
+            displayEmpty.Visible = true;
+            display.Visible = false;
         }
-        display.GetChild<UIPanelFeatureFull>(0).OnEFrameUpdate();
-        // }
+        else
+        {
+            displayEmpty.Visible = false;
+            display.Visible = true;
+            // {
+            // If selected feature changed, or none.
+            if ((display.GetChildCount() < 1) || display.GetChild<UIPanelFeatureFull>(0).feature != selected)
+            {
+                foreach (Control c in display.GetChildren().Cast<Control>())
+                {
+                    c.Visible = false;
+                    c.QueueFree();
+                    display.RemoveChild(c);
+                }
+                selected ??= (FeatureBase)position.First();
+                UIPanelFeatureFull uipff = prefab_UIPanelFeatureFull.Instantiate<UIPanelFeatureFull>();
+                uipff.feature = selected;
+                display.AddChild(uipff);
+            }
+            display.GetChild<UIPanelFeatureFull>(0).OnEFrameUpdate();
+        }
     }
 
     public void UpdateElements()
@@ -121,10 +123,10 @@ public partial class UIPanelPositionFeatures : UIPanel, UIInterfaces.IEFrameUpda
     {
         base.OnEFrameUpdate();
         // If visible, and there are features, update the list to reflect reality.
-        // if (IsVisibleInTree() && resourcePool.GetChildCount() > 0)
-        // {
-        UpdateElements();
-        DrawDisplay();
-        // }
+        if (IsVisibleInTree() && position.Count() > 0)
+        {
+            UpdateElements();
+            DrawDisplay();
+        }
     }
 }

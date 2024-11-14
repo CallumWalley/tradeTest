@@ -16,9 +16,9 @@ public partial class Planet : Domain, Entities.IPosition
 
     [ExportGroup("Orbital")]
     [Export]
-    public float Aphelion { get; set; }
+    public float SemiMajorAxis { get; set; }
     [Export]
-    public float Perihelion { get; set; }
+    public float Anomaly { get; set; }
 
     [Export]
     public float Eccentricity { get; set; }
@@ -52,11 +52,19 @@ public partial class Planet : Domain, Entities.IPosition
             return GetViewportRect().Size[0] / (4 * drawRadius);
         }
     }
-
+    new public Vector2 CameraPosition
+    {
+        get
+        {
+            return GlobalPosition;
+            // size = this.Max<Entities.IPosition>(x => { return ((Node2D)x).Position.DistanceTo(Position); });
+            // return this.Average<Entities.IPosition>(x => { return ((Node2D)x).Position; }); ;
+        }
+    }
     public override void _Ready()
     {
         base._Ready();
-        RandomNumberGenerator rng = new();
+        rng = new();
         // if (HasEconomy)
         // {
         //     player.trade.RegisterTradeRoute(GetParent<SatelliteSystem>(), this);
@@ -96,14 +104,12 @@ public partial class Planet : Domain, Entities.IPosition
     public override void _Process(double delta)
     {
         base._Process(delta);
-        if (Aphelion > 0)
+        if (SemiMajorAxis > 0)
         {
-            float AphelionMod = (((float)PlayerConfig.config.GetValue("interface", "linearLogBase")) < 2) ? Aphelion :
-            (float)Math.Log(Aphelion, (float)PlayerConfig.config.GetValue("interface", "linearLogBase"));
+            float AphelionMod = (((float)PlayerConfig.config.GetValue("interface", "linearLogBase")) < 2) ? SemiMajorAxis :
+            (float)Math.Log(SemiMajorAxis, (float)PlayerConfig.config.GetValue("interface", "linearLogBase"));
             // would be better if this was just eccentricity.
-            float PerihelionnMod = (((float)PlayerConfig.config.GetValue("interface", "linearLogBase")) < 2) ? Perihelion :
-            (float)Math.Log(Perihelion, (float)PlayerConfig.config.GetValue("interface", "linearLogBase"));
-            Position = CalculatePosition(AphelionMod, PerihelionnMod, rng.RandfRange(0, 2* Mathf.Pi));
+            Position = CalculatePosition(AphelionMod, AphelionMod, Anomaly);
         }
         QueueRedraw();
     }
@@ -125,7 +131,7 @@ public partial class Planet : Domain, Entities.IPosition
     {
         float x = semiMajorAxis * Mathf.Cos(anomaly);
         float y = semiMinorAxis * Mathf.Sin(anomaly);
-        
+
         return new Vector2(x, y);
     }
     // Called every frame. 'delta' is the elapsed time since the previous frame.

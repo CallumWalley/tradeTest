@@ -68,7 +68,6 @@ scroll_active = false
 
 [node name="TabContainer" type="TabContainer" parent="PanelContainer/Details"]
 layout_mode = 2
-current_tab = 0
 
 [node name="Factors" type="PanelContainer" parent="PanelContainer/Details/TabContainer"]
 layout_mode = 2

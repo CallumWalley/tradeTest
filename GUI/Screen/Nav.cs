@@ -41,6 +41,7 @@ public partial class Nav : VBoxContainer
 			button.Flat = true;
 			button.ButtonPressed = true;
 			button.Alignment = HorizontalAlignment.Left;
+			button.Connect("pressed", Callable.From(() => camera.Center(ps)));
 			container.Visible = false;
 			VBoxContainer vb2 = new VBoxContainer();
 			container.AddChild(vb2);
@@ -68,7 +69,7 @@ public partial class Nav : VBoxContainer
 					UIButton uIButton = new UIButton();
 					uIButton.Name = $"{ss.Name}-nav";
 
-					uIButton.Connect("pressed", Callable.From(() => camera.Center(ss)));
+					//uIButton.Connect("pressed", Callable.From(() => camera.Center(ss)));
 					uIButton.Connect("pressed", Callable.From(() => OpenNewWindow(p)));
 
 					uIButton.Text = p.Name;

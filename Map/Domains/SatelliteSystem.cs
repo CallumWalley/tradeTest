@@ -12,11 +12,9 @@ public partial class SatelliteSystem : Domain, Entities.IOrbital, IEnumerable<En
 
     [ExportGroup("Orbital")]
     [Export]
-    public float Aphelion { get; set; }
-    [Export]
-    public float Perihelion { get; set; }
-    [Export]
     public float SemiMajorAxis { get; set; }
+    [Export]
+    public float Anomaly { get; set; }
     [Export]
     public float Eccentricity { get; set; }
     [Export]
@@ -31,20 +29,27 @@ public partial class SatelliteSystem : Domain, Entities.IOrbital, IEnumerable<En
         get
         {
             float viewport = GetViewportRect().Size[0];
-            float size;
+
+            if (this.Count() < 2)
+            {
+                return this.First().CameraZoom;
+            }
+            float maxX = -Mathf.Inf;
+            float maxY = -Mathf.Inf;
+            float minX = Mathf.Inf;
+            float minY = Mathf.Inf;
             // If has less than two children raw width is size of thing itself.
-            if (GetChildCount() < 2)
-            {
-                return this.First<Entities.IPosition>().CameraZoom;
-            }
-            else
-            {
-                size = this.Max<Entities.IPosition>(x => { return x.Aphelion; });
 
-                float zl = (((float)PlayerConfig.config.GetValue("interface", "linearLogBase")) < 2) ? size : (float)Math.Log(size, (float)PlayerConfig.config.GetValue("interface", "linearLogBase"));
-                return (viewport) / (zl * 4 * 0.1f);// Make moons fit on screen. //(float)PlayerConfig.config.GetValue("interface", "linearScale");
+            foreach (Node2D position in this)
+            {
+                maxX = Mathf.Max(maxX, position.GlobalPosition.X);
+                maxY = Mathf.Max(maxY, position.GlobalPosition.Y);
+                minX = Mathf.Min(minX, position.GlobalPosition.X);
+                minY = Mathf.Min(minY, position.GlobalPosition.Y);
             }
 
+
+            return viewport / Mathf.Max(1, Mathf.Max(maxX - minX, maxY - minY));
         }
     }
 
@@ -55,6 +60,8 @@ public partial class SatelliteSystem : Domain, Entities.IOrbital, IEnumerable<En
         get
         {
             return GlobalPosition;
+            // size = this.Max<Entities.IPosition>(x => { return ((Node2D)x).Position.DistanceTo(Position); });
+            // return this.Average<Entities.IPosition>(x => { return ((Node2D)x).Position; }); ;
         }
     }
 
@@ -88,10 +95,13 @@ public partial class SatelliteSystem : Domain, Entities.IOrbital, IEnumerable<En
     }
     public override void _Process(double delta)
     {
+
         base._Process(delta);
-        float place = (((float)PlayerConfig.config.GetValue("interface", "linearLogBase")) < 2) ? Aphelion : (float)Math.Log(Aphelion, (float)PlayerConfig.config.GetValue("interface", "linearLogBase"));
-        place *= 1; //(float)PlayerConfig.config.GetValue("interface", "linearScale");
-        Position = new Vector2(place, 0);
+        if (SemiMajorAxis == 0) { return; }
+        float AphelionMod = (((float)PlayerConfig.config.GetValue("interface", "linearLogBase")) < 2) ? SemiMajorAxis :
+(float)Math.Log(SemiMajorAxis, (float)PlayerConfig.config.GetValue("interface", "linearLogBase"));
+        // would be better if this was just eccentricity.
+        Position = CalculatePosition(AphelionMod, AphelionMod, Anomaly);
     }
 
     UIMapOverlayElement overlayElement;
@@ -110,4 +120,11 @@ public partial class SatelliteSystem : Domain, Entities.IOrbital, IEnumerable<En
     // public override void _Draw(){
     //     Eldest._Draw();
     // }
+    public static Vector2 CalculatePosition(float semiMajorAxis, float semiMinorAxis, float anomaly)
+    {
+        float x = semiMajorAxis * Mathf.Cos(anomaly);
+        float y = semiMinorAxis * Mathf.Sin(anomaly);
+
+        return new Vector2(x, y);
+    }
 }
