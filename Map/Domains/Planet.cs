@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Intrinsics.X86;
 namespace Game;
 
 public partial class Planet : Domain, Entities.IPosition
@@ -18,8 +19,7 @@ public partial class Planet : Domain, Entities.IPosition
     public float Aphelion { get; set; }
     [Export]
     public float Perihelion { get; set; }
-    [Export]
-    public float SemiMajorAxis { get; set; }
+
     [Export]
     public float Eccentricity { get; set; }
     [Export]
@@ -32,6 +32,7 @@ public partial class Planet : Domain, Entities.IPosition
     [Export]
     public bool HasLaunchComplex { get; set; }
 
+    RandomNumberGenerator rng;
     public Entities.IDomain Domain
     {
         get { return this; }
@@ -55,6 +56,7 @@ public partial class Planet : Domain, Entities.IPosition
     public override void _Ready()
     {
         base._Ready();
+        RandomNumberGenerator rng = new();
         // if (HasEconomy)
         // {
         //     player.trade.RegisterTradeRoute(GetParent<SatelliteSystem>(), this);
@@ -96,10 +98,12 @@ public partial class Planet : Domain, Entities.IPosition
         base._Process(delta);
         if (Aphelion > 0)
         {
-            float place = (((float)PlayerConfig.config.GetValue("interface", "linearLogBase")) < 2) ? Aphelion :
+            float AphelionMod = (((float)PlayerConfig.config.GetValue("interface", "linearLogBase")) < 2) ? Aphelion :
             (float)Math.Log(Aphelion, (float)PlayerConfig.config.GetValue("interface", "linearLogBase"));
-            place *= 0.1f; // Modify position of moons to fit on screen
-            Position = new Vector2(0, place);
+            // would be better if this was just eccentricity.
+            float PerihelionnMod = (((float)PlayerConfig.config.GetValue("interface", "linearLogBase")) < 2) ? Perihelion :
+            (float)Math.Log(Perihelion, (float)PlayerConfig.config.GetValue("interface", "linearLogBase"));
+            Position = CalculatePosition(AphelionMod, PerihelionnMod, rng.RandfRange(0, 2* Mathf.Pi));
         }
         QueueRedraw();
     }
@@ -117,6 +121,12 @@ public partial class Planet : Domain, Entities.IPosition
         AddChild(newFeature);
         return newFeature;
     }
-
+    public static Vector2 CalculatePosition(float semiMajorAxis, float semiMinorAxis, float anomaly)
+    {
+        float x = semiMajorAxis * Mathf.Cos(anomaly);
+        float y = semiMinorAxis * Mathf.Sin(anomaly);
+        
+        return new Vector2(x, y);
+    }
     // Called every frame. 'delta' is the elapsed time since the previous frame.
 }
