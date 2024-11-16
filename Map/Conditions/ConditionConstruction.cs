@@ -38,12 +38,13 @@ public partial class ConditionConstruction : ConditionBase
         Feature.UnderConstruction = true;
         if (Cost == 0) { OnCompletion(); }
         Feature.FactorsSingle[901].Request = Feature.FactorsSingle[901].Sum + Addition;
-        if (InputRequirements == null) { return; }
-        foreach (KeyValuePair<Variant, Variant> r in InputRequirements)
+        if (Feature.Template.ConstructionInputRequirements == null) { return; }
+        foreach (KeyValuePair<Variant, Variant> r in Feature.Template.ConstructionInputRequirements)
         {
             Resource.RGroup<Resource.RStatic> input = new(new Resource.RStatic((int)r.Key, 0, (double)r.Value, "Base", "Base input"));
             inputFullfillments[input] = new Resource.RStatic(801, 0, 1, $"{Resource.Name((int)r.Key)} fullfillment.", $"{Resource.Name((int)r.Key)} fullfillment.");
-            Feature.FactorsGlobalInput[801].Mux(inputFullfillments[input]);
+            // Feature.FactorsInput[801].Mux(inputFullfillments[input]);
+            Feature.FactorsInput[801].Add(input);
         }
     }
     public override void OnEFrame()
@@ -51,11 +52,11 @@ public partial class ConditionConstruction : ConditionBase
         base.OnEFrame();
 
         // Caclulate percentage done.
-        foreach (KeyValuePair<Resource.RGroup<Resource.RStatic>, Resource.RStatic> kvp in inputFullfillments)
-        {
-            kvp.Value.Sum = kvp.Key.Fraction();
-        }
-        double p_of_full = (inputFullfillments.Count() > 0) ? inputFullfillments.Average(x => x.Value.Sum) : 1;
+        // foreach (KeyValuePair<Resource.RGroup<Resource.RStatic>, Resource.RStatic> kvp in inputFullfillments)
+        // {
+        //     kvp.Value.Sum = kvp.Key.Fraction();
+        // }
+        double p_of_full = (inputFullfillments.Count() > 0) ? inputFullfillments.Average(x => x.Key.Sum) : 1;
         completed.Sum += (Math.Max(0, p_of_full) / (Cost * Addition));
         Description = string.Format("Constuction is {0:P0} complete.", completed.Sum);
         if (completed.Sum >= 0.99)
@@ -72,6 +73,10 @@ public partial class ConditionConstruction : ConditionBase
     void OnCompletion()
     {
         Feature.FactorsSingle[901].Sum += Addition;
+        foreach (KeyValuePair<Resource.RGroup<Resource.RStatic>, Resource.RStatic> inputFullfillments in inputFullfillments)
+        {
+            Feature.FactorsInput[801].UnAdd(inputFullfillments.Key);
+        }
         OnRemove();
     }
 }

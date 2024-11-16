@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 namespace Game;
 
 /// summary
@@ -7,13 +8,26 @@ namespace Game;
 public partial class UIPanelFeatureTemplateFull : UIPanel
 {
 	public PlayerFeatureTemplate template;
+	[Export]
 	UIRename name;
+	[Export]
 	TextureRect splashScreen;
 
+	[Export]
 	Label type;
+	[Export]
 	RichTextLabel description;
+	[Export]
 	HFlowContainer tags;
+	[Export]
+	MarginContainer factorMarginContainer;
+
+	[Export]
+	MarginContainer costMarginContainer;
+
 	UIListResources factors;
+	UIListResources cost;
+
 
 	static readonly PackedScene prefab_pill = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/UIPill.tscn");
 
@@ -38,7 +52,12 @@ public partial class UIPanelFeatureTemplateFull : UIPanel
 			pill.tag = tag;
 			tags.AddChild(pill);
 		}
-		// factors.Init(feature.FactorsGlobal);
+		foreach (KeyValuePair<Variant, Variant> r in template.ConstructionInputRequirements)
+		{
+			cost = new UIListResources();
+			//factors.Init(template.FactorsGlobal);
+		}
+
 		// GetNode<VBoxContainer>("PanelContainer/Details").AddChild(factors);
 		// factors.Update();
 	}

@@ -58,8 +58,11 @@ public static class Entities
     public interface IFeature : IEntityable, IEnumerable<ICondition>
     {
         public IPosition Position { get; }
-        public Resource.RDict<Resource.RGroup<Resource.IResource>> FactorsGlobalOutput { get; set; }
-        public Resource.RDict<Resource.RGroup<Resource.IResource>> FactorsGlobalInput { get; set; }
+        /// <summary>
+        ///  These are tranches
+        /// </summary>
+        public Resource.RDict<Resource.RGroup<Resource.IResource>> FactorsOutput { get; set; }
+        public Resource.RDict<Resource.RGroup<Resource.IResource>> FactorsInput { get; set; }
         public Resource.RDict<Resource.RGroup<Resource.IResource>> FactorsLocal { get; set; }
         public Resource.RDict<Resource.RStatic> FactorsSingle { get; set; }
         public PlayerFeatureTemplate Template { get; set; }

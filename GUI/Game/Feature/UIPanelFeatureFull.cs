@@ -68,8 +68,8 @@ public partial class UIPanelFeatureFull : UIPanel
 
 		singularFactors.Init(feature.FactorsSingle);
 		localFactors.Init(feature.FactorsLocal);
-		globalFactorsInput.Init(feature.FactorsGlobalInput);
-		globalFactorsOutput.Init(feature.FactorsGlobalOutput);
+		globalFactorsInput.Init(feature.FactorsInput);
+		globalFactorsOutput.Init(feature.FactorsOutput);
 		conditions.Init(feature, prefab_conditionTiny);
 
 

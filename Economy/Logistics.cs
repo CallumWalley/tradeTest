@@ -58,12 +58,12 @@ public partial class Logistics
 
             foreach (Entities.IFeature rp in Domain.Features)
             {
-                foreach (Resource.IResource f in rp.FactorsGlobalOutput)
+                foreach (Resource.IResource f in rp.FactorsOutput)
                 {
                     Domain.Ledger[f.Type].LocalGain.Add(f);
                     Domain.Ledger[f.Type].LocalNet.Add(f);
                 }
-                foreach (Resource.IResource f in rp.FactorsGlobalInput)
+                foreach (Resource.IResource f in rp.FactorsInput)
                 {
                     Domain.Ledger[f.Type].LocalLoss.Add(f);
                     Domain.Ledger[f.Type].LocalNet.Add(f);

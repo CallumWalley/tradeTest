@@ -62,6 +62,7 @@ public static partial class Resource
     ///  A static resource is the most simple resource. It will be a number and stay that way until changed.
     /// </summary>
 
+
     public partial class RStatic : IResource
     {
         // int lastEframe = -1;
@@ -412,6 +413,7 @@ public static partial class Resource
             {403, new ResourceType("Aerospace Engineering", GD.Load<Texture2D>("res://assets/icons/18x18/engineering_aerospace.svg"),  false)},
             {801, new ResourceType("Fulfillment", GD.Load<Texture2D>("res://assets/icons/18x18/fulfillment.svg"), false)},
             {802, new ResourceType("Capability", GD.Load<Texture2D>("res://assets/icons/18x18/capability.svg"), false)},
+            {803, new ResourceType("Maintainance", GD.Load<Texture2D>("res://assets/icons/18x18/fulfillment.svg"), false)},
             {811, new ResourceType("Freighter", GD.Load<Texture2D>("res://assets/icons/18x18/freight.svg"), false)},
             {812, new ResourceType("Payload", GD.Load<Texture2D>("res://assets/icons/18x18/payload.svg"), false)},
 
@@ -419,6 +421,7 @@ public static partial class Resource
             // {802, new ResourceType("Capacity Utilisation", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.png"), false)},
             // {803, new ResourceType("Efficiency", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.png"), false)},
             {901, new ResourceType("Scale", GD.Load<Texture2D>("res://assets/icons/18x18/scale.svg"), false)},
+            {902, new ResourceType("Condition", GD.Load<Texture2D>("res://assets/icons/18x18/scale.svg"), false)},
 
         };
 

@@ -41,6 +41,25 @@ public partial class FeatureBase : Node, Entities.IFeature
         }
     }
 
+    public double Condition
+    {
+        get
+        {
+            return FactorsSingle[902].Sum;
+        }
+        set
+        {
+            if (!FactorsSingle.ContainsKey(902))
+            {
+                FactorsSingle.Add(r: new Resource.RStatic(901, value, value, "Condition", "How well maintained this is"));
+            }
+            else
+            {
+                FactorsSingle[902].Sum = value;
+            }
+        }
+    }
+
     public IEnumerator<Entities.ICondition> GetEnumerator()
     {
         foreach (Entities.ICondition f in GetChildren())
@@ -52,8 +71,8 @@ public partial class FeatureBase : Node, Entities.IFeature
     {
         return GetEnumerator();
     }
-    public Resource.RDict<Resource.RGroup<Resource.IResource>> FactorsGlobalOutput { get; set; } = new();
-    public Resource.RDict<Resource.RGroup<Resource.IResource>> FactorsGlobalInput { get; set; } = new();
+    public Resource.RDict<Resource.RGroup<Resource.IResource>> FactorsOutput { get; set; } = new();
+    public Resource.RDict<Resource.RGroup<Resource.IResource>> FactorsInput { get; set; } = new();
     [Export]
     public bool UnderConstruction { get; set; } = false;
     [Export]
@@ -129,11 +148,11 @@ public partial class FeatureBase : Node, Entities.IFeature
             c.OnEFrame();
         }
         // Give thigns a nice name.
-        foreach (Resource.RGroup<Resource.IResource> rgroup in FactorsGlobalOutput)
+        foreach (Resource.RGroup<Resource.IResource> rgroup in FactorsOutput)
         {
             rgroup.Name = Name;
         }
-        foreach (Resource.RGroup<Resource.IResource> rgroup in FactorsGlobalInput)
+        foreach (Resource.RGroup<Resource.IResource> rgroup in FactorsInput)
         {
             rgroup.Name = Name;
         }

@@ -43,7 +43,7 @@ public partial class UIMapOrbitLine : Line2D
     public Vector2[] MakeEllipse(Vector2 center, float semiMajorAxis, float eccentricity, int count)
     {
         Vector2[] points = new Vector2[count];
-        float step = 2 * Mathf.Pi / count;
+        float step = (2 * Mathf.Pi) / count;
 
         for (int i = 0; i < count; i++)
         {
