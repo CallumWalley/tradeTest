@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Resources;
+using System.Linq;
 // [Tool]
 namespace Game;
 
@@ -128,22 +129,38 @@ public partial class UIResource : Control, Lists.IListable<Resource.IResource>
     {
         int maxDescend = 1;
 
-        UIResource uir = prefab_resourceIcon.Instantiate<UIResource>();
-        uir.Init(r1);
-        uir.ShowName = true;
-        uir.SizeFlagsHorizontal = SizeFlags.ShrinkEnd;
-        vbc1.AddChild(uir);
-        if (r1 is Resource.IResourceGroup<Resource.IResource> && level < maxDescend)
+        if (typeof(Resource.IResourceGroup<Resource.IResource>).IsAssignableFrom(r1.GetType()) && ((Resource.IResourceGroup<Resource.IResource>)r1).Count() > 0 && level < maxDescend)
         {
-            HBoxContainer hbc = new();
-            VBoxContainer vbc2 = new();
-            hbc.AddChild(new VSeparator());
-            hbc.AddChild(vbc2);
-            foreach (Resource.IResource r2 in (Resource.IResourceGroup<Resource.IResource>)r1)
+            // HBoxContainer hbc = new();
+            int positive = 0;
+            foreach (Resource.IResource r2 in ((Resource.IResourceGroup<Resource.IResource>)r1).OrderByDescending(x => x.Sum))
             {
+
+                if (r2.Sum < 0)
+                {
+                    if (positive < 2)
+                    {
+                        vbc1.AddChild(new HSeparator());
+                        positive = 2;
+                    }
+                }
+                else
+                {
+                    positive = 1;
+                }
+                UIResource uir = prefab_resourceIcon.Instantiate<UIResource>();
+                uir.Init(r2);
+                uir.ShowName = true;
+                uir.SizeFlagsHorizontal = SizeFlags.ShrinkEnd;
+                vbc1.AddChild(uir);
+
+
+                VBoxContainer vbc2 = new();
+                // hbc.AddChild(new VSeparator());
+                // hbc.AddChild(vbc2);
                 ExpandDetails(r2, vbc2, level + 1);
+                // vbc1.AddChild(hbc);
             }
-            vbc1.AddChild(hbc);
         }
     }
 }

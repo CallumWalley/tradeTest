@@ -14,12 +14,12 @@ public partial class UIAccordian : Control
 	public override void _Ready()
 	{
 		base._Ready();
-
+		button.SetPressedNoSignal(Expanded);
 		button.Connect("toggled", new Callable(this, "OnToggled"));
 	}
 	public virtual void OnToggled(bool toggled)
 	{
-		EmitSignal(SignalName.ShowDetails);
+		//EmitSignal(SignalName.ShowDetails);
 		Expanded = toggled;
 	}
 }

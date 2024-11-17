@@ -72,6 +72,8 @@ public static class Entities
         public Godot.Collections.Array<string> Tags { get; set; }
         public void AddCondition(ConditionBase s);
         public void RemoveCondition(ConditionBase s);
+
+        public IEnumerable<Entities.IAction> Actions { get; }
         public void OnEFrame();
     }
 
@@ -85,4 +87,30 @@ public static class Entities
         public virtual void OnRequestSet() { } // Called when requests are calculated.
 
     }
+    /// <summary>
+    /// An action is a descision that changes the game state.
+    /// </summary>
+    public interface IAction : IEntityable
+    {
+        public bool Visible { get; } // If action is visible.
+        public bool Active { get; } // If action is valid.
+        public virtual void OnAction() { } // When action confirmed
+    }
+    /// <summary>
+    /// An input element to an action
+    /// </summary>
+    // public interface ActionInput<T>
+    // {
+    //     public T Value { get; set; }
+    // }
+    // public class ActionInputSlider : IActionInput<double>
+    // {
+    //     public ActionInputSlider(double _value, double _step, double _min, double _max) => (Value, Step, Min, Max) = (_value, _step, _min, _max);
+    //     public double Value { get; set; } = 1;
+    //     public double Step { get; set; } = 1;
+    //     public double Min { get; set; } = 0;
+    //     public double Max { get; set; } = 10;
+    // }
+
+
 }

@@ -27,7 +27,7 @@ public partial class UIPanelLedgerEntry : VBoxContainer, Lists.IListable<Resourc
 		// net.Init(ledgerEntry.Net);
 
 		// IF accruable also make storage.
-		if (ledgerEntry.Type < 500)
+		if (ledgerEntry.Type < 300)
 		{
 			storage = (UIResourceStorage)GD.Load<PackedScene>("res://GUI/Game/Panels/UIResourceStorage.tscn").Instantiate();
 			AddChild(storage);
@@ -70,7 +70,7 @@ public partial class UIPanelLedgerEntry : VBoxContainer, Lists.IListable<Resourc
 		// {
 		// 	isZero = false;
 		// }
-		if (ledgerEntry.Type < 500)
+		if (ledgerEntry.Type < 300)
 		{
 			storage.Update();
 			if (storage.value.Text != "0%")

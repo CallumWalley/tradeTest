@@ -22,12 +22,13 @@ public partial class UIPanelFeatureFull : UIPanel
 	UIListResources singularFactors = new();
 
 	UIList<Entities.ICondition> conditions = new();
-
+	VBoxContainer Actions;
 	TextureButton templateButton;
 	public Godot.Collections.Array<string> NeedsTags { get; set; } = new Godot.Collections.Array<string>();
 
 	static readonly PackedScene prefab_pill = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/UIPill.tscn");
 	static readonly PackedScene prefab_conditionTiny = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Condition/UIConditionTiny.tscn");
+	static readonly PackedScene prefab_actionFull = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Action/UIActionFullSetIndustrySize.tscn");
 
 
 	public override void _Ready()
@@ -40,7 +41,7 @@ public partial class UIPanelFeatureFull : UIPanel
 		tags = GetNode<HFlowContainer>("PanelContainer/Details/MarginContainer/VBoxContainer/Tags");
 		splashScreen = GetNode<TextureRect>("PanelContainer/Details/SplashScreen");
 		templateButton = GetNode<TextureButton>("PanelContainer/Details/MarginContainer/VBoxContainer/HBoxContainer/Type");
-
+		Actions = GetNode<VBoxContainer>("PanelContainer/Details/TabContainer/Actions/VBoxContainer");
 
 		templateButton.Connect("pressed", new Callable(this, "OnTemplateButtonPressed"));
 
@@ -72,6 +73,9 @@ public partial class UIPanelFeatureFull : UIPanel
 		globalFactorsOutput.Init(feature.FactorsOutput);
 		conditions.Init(feature, prefab_conditionTiny);
 
+		UIActionFullSetIndustrySize afsis = prefab_actionFull.Instantiate<UIActionFullSetIndustrySize>();
+		afsis.Feature = (FeatureBase)feature;
+		Actions.AddChild(afsis);
 
 		name.entity = feature;
 		VBoxContainer vbcf = GetNode<VBoxContainer>("PanelContainer/Details/TabContainer/Factors/VBoxContainer");
@@ -109,6 +113,11 @@ public partial class UIPanelFeatureFull : UIPanel
 		globalFactorsOutput.Update();
 		localFactors.Update();
 		conditions.Update();
+
+		foreach (Node item in Actions.GetChildren())
+		{
+			((UIActionFull)item).Update();
+		}
 
 		if (feature.Template != null)
 		{

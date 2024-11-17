@@ -136,7 +136,11 @@ public partial class UIPanelDomainFeatureTemplate : UIPanel
 
 	public void OnButtonAddFeaturePressed()
 	{
-		((FeatureBase)domain.AddFeature(selected, nameLineEdit.Text)).ChangeSize(scaleSpinbox.Value);
+		FeatureBase nf = ((FeatureBase)domain.AddFeature(selected, nameLineEdit.Text));
+		ActionSetIndustrySize asis = new ActionSetIndustrySize();
+		asis.Feature = nf;
+		asis.NewSize = scaleSpinbox.Value;
+		asis.OnAction();
 		GetWindow().Hide();
 	}
 }

@@ -20,6 +20,7 @@ public partial class UIConditionTiny : UIAccordian, Lists.IListable<Entities.ICo
     public override void _Ready()
     {
         base._Ready();
+        Expanded = true;
         button.TooltipText = "Click to expand details";
     }
 

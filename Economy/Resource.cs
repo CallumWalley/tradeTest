@@ -753,8 +753,8 @@ public static partial class Resource
         protected Entry InitType(int type)
         {
             Entry nre;
-            // If type less than 500, it is accrul.
-            if (type < 500)
+            // If type less than 300, it is accrul.
+            if (type < 300)
             {
                 nre = new EntryAccrul(type);
                 nre.ledger = this;

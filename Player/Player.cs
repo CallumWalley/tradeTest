@@ -247,7 +247,10 @@ public partial class Player : Node
 			}
 			else
 			{
-				((FeatureBase)feature).ChangeSize(size);
+				ActionSetIndustrySize asis = new ActionSetIndustrySize();
+				asis.Feature = (FeatureBase)feature;
+				asis.NewSize = size;
+				asis.OnAction();
 				data.Terminal.Print($"'{feature}' '{size}'.");
 				return ICommand.Success();
 			}

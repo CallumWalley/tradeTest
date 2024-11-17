@@ -18,6 +18,9 @@ public partial class FeatureBase : Node, Entities.IFeature
     ///  Currently 000-800
     /// </summary>
     ///
+
+    public IEnumerable<Entities.IAction> Actions { get; private set; } = new List<Entities.IAction>();
+
     public Entities.IPosition Position { get; set; }
     [Export]
     public double Scale
@@ -156,30 +159,5 @@ public partial class FeatureBase : Node, Entities.IFeature
         {
             rgroup.Name = Name;
         }
-    }
-
-    [GameAttributes.Command]
-    public void ChangeSize(double deltaSize)
-    {
-        if (UnderConstruction)
-        {
-            throw new Exception("Cannot start new construction, already under construction.");
-        }
-        if (deltaSize == 0)
-        {
-            throw new Exception("This does nothing");
-        }
-        // Cannot make a negative size.
-        deltaSize = Math.Max(-FactorsSingle[901].Sum, deltaSize);
-
-
-        ConditionConstruction underConstruction = new ConditionConstruction();
-        underConstruction.Name = "Under Construction";
-        underConstruction.Description = "Opening Soon...";
-        underConstruction.Addition = deltaSize;
-        underConstruction.InputRequirements = Template.ConstructionInputRequirements;
-        underConstruction.Cost = Template.ConstructionCost;
-
-        AddCondition(underConstruction);
     }
 }

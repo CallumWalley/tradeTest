@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://cq0pf0lh0i58l"]
+[gd_scene load_steps=2 format=3 uid="uid://cq0pf0lh0i58l"]
+
+[ext_resource type="Texture2D" uid="uid://dfihyt16212ay" path="res://assets/splash/test.png" id="1_qoorx"]
 
 [node name="UiPosition" type="Panel"]
 anchors_preset = 15
@@ -23,34 +25,44 @@ layout_mode = 2
 [node name="GridContainer" type="GridContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Designation" type="VBoxContainer" parent="MarginContainer/VBoxContainer/GridContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 
-[node name="Name" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Designation"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Designation" type="VBoxContainer" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainer/VBoxContainer/Designation"]
 layout_mode = 2
 text = "Name:"
 
-[node name="Adj" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Designation"]
+[node name="Adj" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainer/VBoxContainer/Designation"]
 layout_mode = 2
 text = "Adjective:"
 
-[node name="AltNames" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Designation"]
+[node name="AltNames" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainer/VBoxContainer/Designation"]
 layout_mode = 2
 text = "Alternative Names:"
 
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/GridContainer"]
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Orbital" type="VBoxContainer" parent="MarginContainer/VBoxContainer/GridContainer"]
+[node name="Orbital" type="VBoxContainer" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="aphelion" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Orbital"]
+[node name="aphelion" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainer/VBoxContainer/Orbital"]
 layout_mode = 2
 text = "SemiMajorAxis:"
 
-[node name="perhelion" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Orbital"]
+[node name="perhelion" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainer/VBoxContainer/Orbital"]
 layout_mode = 2
 text = "perhelion"
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("1_qoorx")
 
 [node name="TabContainer" type="TabContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
