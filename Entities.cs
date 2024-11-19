@@ -98,6 +98,7 @@ public static class Entities
         public bool Active { get; } // If action is valid.
         public virtual void OnAction() { } // When action confirmed
     }
+
     /// <summary>
     /// An input element to an action
     /// </summary>

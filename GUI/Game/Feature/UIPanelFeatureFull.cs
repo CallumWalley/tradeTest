@@ -121,7 +121,7 @@ public partial class UIPanelFeatureFull : UIPanel
 
 		foreach (Node item in Actions.GetChildren())
 		{
-			((UIActionFull)item).Update();
+			((UIActionFull<ActionBase>)item).Update();
 		}
 
 		if (feature.Template != null)

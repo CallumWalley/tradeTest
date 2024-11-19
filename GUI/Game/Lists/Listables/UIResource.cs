@@ -10,7 +10,7 @@ namespace Game;
 public partial class UIResource : Control, Lists.IListable<Resource.IResource>
 {
     public Resource.IResource resource;
-    public Resource.IResource GameElement { get { return resource; } }
+    public object GameElement { get { return resource; } }
 
     protected Global global;
     public bool Destroy { get; set; } = false;

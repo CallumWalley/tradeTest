@@ -5,13 +5,13 @@ using System.Linq;
 using System.Collections.Generic;
 using YAT.Commands;
 
-public partial class ActionSetIndustrySize : Node, Entities.IAction
+public partial class ActionSetIndustrySize : ActionBase
 {
     public FeatureBase Feature { get; set; }
-    public bool Visible { get { return Active; } }
-    public string Description { get; set; } = "Expand, Downsize, or dismantle this industry.";
-    public new StringName Name { get; set; } = "Resize industry";
-    public bool Active
+    public override bool Visible { get { return Active; } }
+    public override string Description { get; set; } = "Expand, Downsize, or dismantle this industry.";
+    public override StringName Name { get; set; } = "Resize industry";
+    public override bool Active
     {
         get
         {
@@ -21,11 +21,11 @@ public partial class ActionSetIndustrySize : Node, Entities.IAction
             return true;
         }
     }
-    public Godot.Vector2 CameraPosition { get { return Feature.CameraPosition; } }
-    public float CameraZoom { get { return Feature.CameraZoom; } }
+    public override Godot.Vector2 CameraPosition { get { return Feature.CameraPosition; } }
+    public override float CameraZoom { get { return Feature.CameraZoom; } }
     public double NewScale;
 
-    public virtual void OnAction()
+    public override void OnAction()
     {
         ConditionConstruction underConstruction = new ConditionConstruction();
         underConstruction.Name = "Under Construction";

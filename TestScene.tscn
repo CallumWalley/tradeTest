@@ -26,24 +26,64 @@ ConstructionInputRequirements = {
 401: 1.0
 }
 ConstructionCost = 10.0
+NeedsTags = null
+
+[node name="DMHO Purification" parent="Player/PlayerFeatureTemplates/DMHO Purification" index="0"]
+Scale = null
+Condition = null
+CapabilityActual = null
+CapabilityTarget = null
+UnderConstruction = null
+TypeSlug = null
+Tags = null
 
 [node name="Surface Mining" parent="Player/PlayerFeatureTemplates" index="1"]
 ConstructionInputRequirements = {
 401: 1.0
 }
 ConstructionCost = 10.0
+NeedsTags = null
+
+[node name="Surface Mining" parent="Player/PlayerFeatureTemplates/Surface Mining" index="0"]
+Scale = null
+Condition = null
+CapabilityActual = null
+CapabilityTarget = null
+UnderConstruction = null
+TypeSlug = null
+Tags = null
 
 [node name="Fuel Refining" parent="Player/PlayerFeatureTemplates" index="2"]
 ConstructionInputRequirements = {
 401: 1.0
 }
 ConstructionCost = 10.0
+NeedsTags = null
+
+[node name="Fuel Refining" parent="Player/PlayerFeatureTemplates/Fuel Refining" index="0"]
+Scale = null
+Condition = null
+CapabilityActual = null
+CapabilityTarget = null
+UnderConstruction = null
+TypeSlug = null
+Tags = null
 
 [node name="Launch Complex" parent="Player/PlayerFeatureTemplates" index="3"]
 ConstructionInputRequirements = {
 401: 1.0
 }
 ConstructionCost = 10.0
+NeedsTags = null
+
+[node name="Launch Complex" parent="Player/PlayerFeatureTemplates/Launch Complex" index="0"]
+Scale = null
+Condition = null
+CapabilityActual = null
+CapabilityTarget = null
+UnderConstruction = null
+TypeSlug = null
+Tags = null
 
 [node name="Aerospace Industry" type="Node" parent="Player/PlayerFeatureTemplates" index="4" node_paths=PackedStringArray("Feature")]
 script = ExtResource("4_qu45m")
@@ -52,10 +92,19 @@ ConstructionInputRequirements = {
 401: 1.0
 }
 ConstructionCost = 10.0
+NeedsTags = null
 
 [node name="Aerospace Industry" type="Node" parent="Player/PlayerFeatureTemplates/Aerospace Industry"]
 script = ExtResource("7_0xlau")
+Scale = null
+Condition = null
+CapabilityActual = null
+CapabilityTarget = null
+UnderConstruction = null
+Description = null
 SplashScreenPath = "res://assets/splash/surface_mine.png"
+TypeSlug = null
+Tags = null
 
 [node name="Nominal Operation" parent="Player/PlayerFeatureTemplates/Aerospace Industry/Aerospace Industry" instance=ExtResource("8_j7vpr")]
 Factors = {
@@ -70,12 +119,20 @@ ConstructionInputRequirements = {
 1: 2.0
 }
 ConstructionCost = 10.0
+NeedsTags = null
 
 [node name="Construction Industry" type="Node" parent="Player/PlayerFeatureTemplates/Construction Industry" node_paths=PackedStringArray("Template")]
 script = ExtResource("7_0xlau")
 Scale = 1.0
+Condition = null
+CapabilityActual = null
+CapabilityTarget = null
+UnderConstruction = null
+Description = null
 Template = NodePath("..")
 SplashScreenPath = "res://assets/splash/chemical.png"
+TypeSlug = null
+Tags = null
 
 [node name="Nominal Operation" parent="Player/PlayerFeatureTemplates/Construction Industry/Construction Industry" instance=ExtResource("8_j7vpr")]
 Factors = {
@@ -89,18 +146,39 @@ ConstructionInputRequirements = {
 401: 1.0
 }
 ConstructionCost = 10.0
+NeedsTags = null
+
+[node name="Spaceport" parent="Player/PlayerFeatureTemplates/Spaceport" index="0"]
+Scale = null
+Condition = null
+CapabilityActual = null
+CapabilityTarget = null
+UnderConstruction = null
+TypeSlug = null
+Tags = null
 
 [node name="Maintainance" type="Node" parent="Player/PlayerFeatureTemplates/Spaceport/Spaceport" index="1"]
 script = ExtResource("4_jlj8k")
 Factors = {}
+Description = null
 
 [node name="City" type="Node" parent="Player/PlayerFeatureTemplates" index="7" node_paths=PackedStringArray("Feature")]
 script = ExtResource("4_qu45m")
 Feature = NodePath("City")
+ConstructionCost = null
+NeedsTags = null
 
 [node name="City" type="Node" parent="Player/PlayerFeatureTemplates/City"]
 script = ExtResource("7_0xlau")
+Scale = null
+Condition = null
+CapabilityActual = null
+CapabilityTarget = null
+UnderConstruction = null
+Description = null
 SplashScreenPath = "res://assets/splash/surface_mine.png"
+TypeSlug = null
+Tags = null
 
 [node name="Nominal Operation" parent="Player/PlayerFeatureTemplates/City/City" instance=ExtResource("8_j7vpr")]
 Factors = {
@@ -132,44 +210,110 @@ script = ExtResource("6_yqk1w")
 
 [node name="Sol" type="Node2D" parent="Map/Galaxy/Sol System"]
 script = ExtResource("7_k6jcv")
+SemiMajorAxis = null
+Anomaly = null
+Eccentricity = null
+Period = null
+HasSpaceport = null
+HasEconomy = null
+HasTrade = null
+Description = null
+StartingResources = null
 
 [node name="Sol" type="Node2D" parent="Map/Galaxy/Sol System/Sol"]
 script = ExtResource("8_hr0l1")
+mass = null
 albedo = Color(0.956863, 0.937255, 0, 1)
 equatorialRadius = 700000.0
+SemiMajorAxis = null
+Anomaly = null
+Eccentricity = null
+Period = null
+HasLaunchComplex = null
+HasEconomy = null
+HasTrade = null
+Description = null
+StartingResources = null
 
 [node name="Mercury System" type="Node2D" parent="Map/Galaxy/Sol System"]
 script = ExtResource("7_k6jcv")
 SemiMajorAxis = 69800.0
 Anomaly = 0.2
+Eccentricity = null
+Period = null
+HasSpaceport = null
+HasEconomy = null
+HasTrade = null
+Description = null
+StartingResources = null
 
 [node name="Mercury" type="Node2D" parent="Map/Galaxy/Sol System/Mercury System"]
 script = ExtResource("8_hr0l1")
+mass = null
 albedo = Color(0.635294, 0.580392, 0.545098, 1)
 equatorialRadius = 2800.0
+SemiMajorAxis = null
+Anomaly = null
+Eccentricity = null
+Period = null
+HasLaunchComplex = null
+HasEconomy = null
+HasTrade = null
+Description = null
+StartingResources = null
 
 [node name="Venus System" type="Node2D" parent="Map/Galaxy/Sol System"]
 script = ExtResource("7_k6jcv")
 SemiMajorAxis = 108900.0
 Anomaly = 0.4
+Eccentricity = null
+Period = null
+HasSpaceport = null
+HasEconomy = null
+HasTrade = null
+Description = null
+StartingResources = null
 
 [node name="Venus" type="Node2D" parent="Map/Galaxy/Sol System/Venus System"]
 script = ExtResource("8_hr0l1")
+mass = null
 albedo = Color(0.878431, 0.454902, 0.203922, 1)
 equatorialRadius = 6050.0
+SemiMajorAxis = null
+Anomaly = null
+Eccentricity = null
+Period = null
+HasLaunchComplex = null
+HasEconomy = null
+HasTrade = null
+Description = null
+StartingResources = null
 
 [node name="Earth System" type="Node2D" parent="Map/Galaxy/Sol System"]
 script = ExtResource("7_k6jcv")
 SemiMajorAxis = 152100.0
+Anomaly = null
+Eccentricity = null
+Period = null
 HasSpaceport = true
 HasEconomy = true
+HasTrade = null
+Description = null
+StartingResources = null
 
 [node name="Earth" type="Node2D" parent="Map/Galaxy/Sol System/Earth System"]
 script = ExtResource("8_hr0l1")
+mass = null
 albedo = Color(0.380392, 0.572549, 1, 1)
 equatorialRadius = 6300.0
+SemiMajorAxis = null
+Anomaly = null
+Eccentricity = null
+Period = null
 HasLaunchComplex = true
 HasEconomy = true
+HasTrade = null
+Description = null
 StartingResources = {
 2: 1000.0
 }
@@ -180,8 +324,12 @@ Scale = 0.75
 Condition = 0.6
 CapabilityActual = 0.661
 CapabilityTarget = 1.0
+UnderConstruction = null
+Description = null
 Template = NodePath("../../../../../../Player/PlayerFeatureTemplates/DMHO Purification")
 SplashScreenPath = "res://assets/splash/chemical.png"
+TypeSlug = null
+Tags = null
 
 [node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Earth/Desalination Site" instance=ExtResource("8_j7vpr")]
 Factors = {
@@ -194,6 +342,7 @@ script = ExtResource("4_jlj8k")
 Factors = {
 401: -0.2
 }
+Description = null
 
 [node name="Fuel Refining" type="Node" parent="Map/Galaxy/Sol System/Earth System/Earth" node_paths=PackedStringArray("Template")]
 script = ExtResource("7_0xlau")
@@ -201,8 +350,12 @@ Scale = 1.0
 Condition = 0.815
 CapabilityActual = 1.0
 CapabilityTarget = 1.0
+UnderConstruction = null
+Description = null
 Template = NodePath("../../../../../../Player/PlayerFeatureTemplates/Fuel Refining")
 SplashScreenPath = "res://assets/splash/chemical.png"
+TypeSlug = null
+Tags = null
 
 [node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Earth/Fuel Refining" instance=ExtResource("8_j7vpr")]
 Factors = {
@@ -215,6 +368,7 @@ script = ExtResource("4_jlj8k")
 Factors = {
 401: -0.2
 }
+Description = null
 
 [node name="Construction Industry" type="Node" parent="Map/Galaxy/Sol System/Earth System/Earth" node_paths=PackedStringArray("Template")]
 script = ExtResource("7_0xlau")
@@ -222,8 +376,12 @@ Scale = 0.5
 Condition = 1.0
 CapabilityActual = 1.0
 CapabilityTarget = 1.0
+UnderConstruction = null
+Description = null
 Template = NodePath("../../../../../../Player/PlayerFeatureTemplates/Construction Industry")
 SplashScreenPath = "res://assets/splash/chemical.png"
+TypeSlug = null
+Tags = null
 
 [node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Earth/Construction Industry" instance=ExtResource("8_j7vpr")]
 Factors = {
@@ -238,9 +396,12 @@ Scale = 0.5
 Condition = 0.55
 CapabilityActual = 1.0
 CapabilityTarget = 1.0
+UnderConstruction = null
 Description = "Surface Mining using hand tools."
 Template = NodePath("../../../../../../Player/PlayerFeatureTemplates/Surface Mining")
 SplashScreenPath = "res://assets/splash/surface_mine.png"
+TypeSlug = null
+Tags = null
 
 [node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Earth/Mining Industry" instance=ExtResource("8_j7vpr")]
 Factors = {
@@ -253,59 +414,137 @@ script = ExtResource("4_jlj8k")
 Factors = {
 401: -0.2
 }
+Description = null
 
 [node name="Moon" type="Node2D" parent="Map/Galaxy/Sol System/Earth System"]
 position = Vector2(0.3, 0)
 script = ExtResource("8_hr0l1")
+mass = null
 albedo = Color(0.776471, 0.776471, 0.776471, 1)
 equatorialRadius = 1500.0
 SemiMajorAxis = 300.0
+Anomaly = null
+Eccentricity = null
+Period = null
 HasLaunchComplex = true
 HasEconomy = true
+HasTrade = null
+Description = null
+StartingResources = null
 
 [node name="Mars System" type="Node2D" parent="Map/Galaxy/Sol System"]
 script = ExtResource("7_k6jcv")
 SemiMajorAxis = 206700.0
 Anomaly = 1.0
+Eccentricity = null
+Period = null
+HasSpaceport = null
+HasEconomy = null
+HasTrade = null
+Description = null
+StartingResources = null
 
 [node name="Mars" type="Node2D" parent="Map/Galaxy/Sol System/Mars System"]
 script = ExtResource("8_hr0l1")
+mass = null
 albedo = Color(1, 0.627451, 0.584314, 1)
 equatorialRadius = 3400.0
+SemiMajorAxis = null
+Anomaly = null
+Eccentricity = null
+Period = null
+HasLaunchComplex = null
+HasEconomy = null
+HasTrade = null
+Description = null
+StartingResources = null
 
 [node name="Phobos" type="Node2D" parent="Map/Galaxy/Sol System/Mars System"]
 script = ExtResource("8_hr0l1")
+mass = null
 albedo = Color(0.792157, 0.733333, 0.65098, 1)
 equatorialRadius = 3.0
 SemiMajorAxis = 9.0
+Anomaly = null
+Eccentricity = null
+Period = null
+HasLaunchComplex = null
+HasEconomy = null
+HasTrade = null
+Description = null
+StartingResources = null
 
 [node name="Demos" type="Node2D" parent="Map/Galaxy/Sol System/Mars System"]
 script = ExtResource("8_hr0l1")
+mass = null
 albedo = Color(1, 0.627451, 0.584314, 1)
 equatorialRadius = 16.0
 SemiMajorAxis = 2.0
+Anomaly = null
+Eccentricity = null
+Period = null
+HasLaunchComplex = null
+HasEconomy = null
+HasTrade = null
+Description = null
+StartingResources = null
 
 [node name="Jupiter System" type="Node2D" parent="Map/Galaxy/Sol System"]
 script = ExtResource("7_k6jcv")
 SemiMajorAxis = 816400.0
 Anomaly = 5.0
+Eccentricity = null
+Period = null
+HasSpaceport = null
+HasEconomy = null
+HasTrade = null
+Description = null
+StartingResources = null
 
 [node name="Jupiter" type="Node2D" parent="Map/Galaxy/Sol System/Jupiter System"]
 script = ExtResource("8_hr0l1")
+mass = null
 albedo = Color(0.745098, 0.435294, 0.133333, 1)
 equatorialRadius = 71450.0
+SemiMajorAxis = null
+Anomaly = null
+Eccentricity = null
+Period = null
+HasLaunchComplex = null
+HasEconomy = null
+HasTrade = null
+Description = null
+StartingResources = null
 
 [node name="Io" type="Node2D" parent="Map/Galaxy/Sol System/Jupiter System"]
 script = ExtResource("8_hr0l1")
+mass = null
 albedo = Color(0.941176, 0.764706, 0.105882, 1)
 equatorialRadius = 1800.0
 SemiMajorAxis = 420.0
+Anomaly = null
+Eccentricity = null
+Period = null
+HasLaunchComplex = null
+HasEconomy = null
+HasTrade = null
+Description = null
+StartingResources = null
 
 [node name="Europa" type="Node2D" parent="Map/Galaxy/Sol System/Jupiter System"]
 script = ExtResource("8_hr0l1")
+mass = null
 albedo = Color(0.847059, 0.72549, 0.619608, 1)
 equatorialRadius = 1550.0
 SemiMajorAxis = 670.0
+Anomaly = null
+Eccentricity = null
+Period = null
+HasLaunchComplex = null
+HasEconomy = null
+HasTrade = null
+Description = null
+StartingResources = null
 
 [node name="Ganymede" type="Node2D" parent="Map/Galaxy/Sol System/Jupiter System"]
 script = ExtResource("8_hr0l1")
@@ -313,20 +552,55 @@ mass = 2.6
 albedo = Color(0.8, 0.729412, 0.596078, 1)
 equatorialRadius = 1600.0
 SemiMajorAxis = 1060.0
+Anomaly = null
+Eccentricity = null
+Period = null
+HasLaunchComplex = null
+HasEconomy = null
+HasTrade = null
+Description = null
+StartingResources = null
 
 [node name="Callisto" type="Node2D" parent="Map/Galaxy/Sol System/Jupiter System"]
 script = ExtResource("8_hr0l1")
+mass = null
 albedo = Color(0.301961, 0.164706, 0, 1)
 equatorialRadius = 2400.0
+SemiMajorAxis = null
+Anomaly = null
+Eccentricity = null
+Period = null
+HasLaunchComplex = null
+HasEconomy = null
+HasTrade = null
+Description = null
+StartingResources = null
 
 [node name="Pluto System" type="Node2D" parent="Map/Galaxy/Sol System"]
 script = ExtResource("7_k6jcv")
 SemiMajorAxis = 7.375e+06
 Anomaly = 6.0
+Eccentricity = null
+Period = null
+HasSpaceport = null
+HasEconomy = null
+HasTrade = null
+Description = null
+StartingResources = null
 
 [node name="Pluto" type="Node2D" parent="Map/Galaxy/Sol System/Pluto System"]
 script = ExtResource("8_hr0l1")
+mass = null
 albedo = Color(0.627451, 0.584314, 0.482353, 1)
 equatorialRadius = 1100.0
+SemiMajorAxis = null
+Anomaly = null
+Eccentricity = null
+Period = null
+HasLaunchComplex = null
+HasEconomy = null
+HasTrade = null
+Description = null
+StartingResources = null
 
 [editable path="Player"]

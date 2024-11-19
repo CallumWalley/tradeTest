@@ -6,7 +6,7 @@ public partial class UIPanelLedgerEntry : VBoxContainer, Lists.IListable<Resourc
 {
 	public Resource.Ledger.Entry ledgerEntry;
 	public UIPanelLedger parent;
-	public Resource.Ledger.Entry GameElement { get { return ledgerEntry; } }
+	public object GameElement { get { return ledgerEntry; } }
 	public bool Destroy { get; set; } = false;
 	UIResource netLocal;
 	UIResource netRemote;

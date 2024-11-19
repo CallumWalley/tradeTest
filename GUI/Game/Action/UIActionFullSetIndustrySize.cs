@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Game;
 
-public partial class UIActionFullSetIndustrySize : UIActionFull, Lists.IListable<Entities.IAction>
+public partial class UIActionFullSetIndustrySize : UIActionFull<ActionSetIndustrySize>
 {
     public ActionSetIndustrySize Action;
     public FeatureBase Feature;

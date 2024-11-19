@@ -6,7 +6,7 @@ public partial class UIValidTradeRoute : Button, Lists.IListable<PlayerTrade.Val
 {
 	public PlayerTrade.ValidTradeHead validTradeHead;
 	public bool Destroy { get; set; }
-	public PlayerTrade.ValidTradeHead GameElement { get { return validTradeHead; } }
+	public object GameElement { get { return validTradeHead; } }
 	Label labelDistance;
 
 	public void Init(PlayerTrade.ValidTradeHead _validTradeHead)

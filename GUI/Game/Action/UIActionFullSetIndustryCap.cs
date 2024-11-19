@@ -5,10 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Game;
-public partial class UIActionFullSetIndustryCap : UIActionFull, Lists.IListable<Entities.IAction>
+public partial class UIActionFullSetIndustryCap : UIActionFull<ActionSetIndustryCap>
 {
 
-    public ActionSetIndustryCap Action;
+    public Entities.IAction Action;
     public FeatureBase Feature;
 
     [Export]
@@ -28,7 +28,7 @@ public partial class UIActionFullSetIndustryCap : UIActionFull, Lists.IListable<
     {
         base._Ready();
         Action = new ActionSetIndustryCap();
-        Action.Feature = (FeatureBase)Feature;
+        ((ActionSetIndustryCap)Action).Feature = (FeatureBase)Feature;
         slider.Value = Feature.CapabilityTarget * 100;
 
         label.Text = string.Format("{0:P0}", Feature.CapabilityTarget);
@@ -46,7 +46,7 @@ public partial class UIActionFullSetIndustryCap : UIActionFull, Lists.IListable<
 
     void OnSliderDragEnded(bool value)
     {
-        Action.NewTarget = (slider.Value / 100);
+        ((ActionSetIndustryCap)Action).NewTarget = (slider.Value / 100);
         Action.OnAction();
         Update();
     }

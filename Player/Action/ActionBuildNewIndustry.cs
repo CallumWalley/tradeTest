@@ -5,15 +5,15 @@ using System.Linq;
 using System.Collections.Generic;
 using YAT.Commands;
 
-public partial class ActionBuildNewIndustry : Node, Entities.IAction
+public partial class ActionBuildNewIndustry : ActionBase
 {
     public Entities.IPosition Position { get; set; }
     public PlayerFeatureTemplate Template { get; set; }
     public FeatureBase NewFeature { get; set; }
-    public bool Visible { get { return Active; } }
-    public string Description { get; set; } = "Plan a new industry.";
+    public override bool Visible { get { return Active; } }
+    public override string Description { get; set; } = "Plan a new industry.";
     public new StringName Name { get; set; } = "New Industry";
-    public bool Active
+    public override bool Active
     {
         get
         {
@@ -22,11 +22,11 @@ public partial class ActionBuildNewIndustry : Node, Entities.IAction
             return true;
         }
     }
-    public Godot.Vector2 CameraPosition { get { return Position.CameraPosition; } }
-    public float CameraZoom { get { return Position.CameraZoom; } }
+    public override Godot.Vector2 CameraPosition { get { return Position.CameraPosition; } }
+    public override float CameraZoom { get { return Position.CameraZoom; } }
     public double NewScale;
 
-    public virtual void OnAction()
+    public override void OnAction()
     {
         FeatureBase nf = Template.Instantiate();
         nf.Scale = 0;

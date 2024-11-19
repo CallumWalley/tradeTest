@@ -7,7 +7,7 @@ namespace Game;
 public partial class UIDomainSmall : Control, Lists.IListable<Domain>
 {
     Domain Domain;
-    public Domain GameElement { get { return Domain; } }
+    public object GameElement { get { return Domain; } }
     public bool Destroy { get; set; } = false;
 
     Label labelName;

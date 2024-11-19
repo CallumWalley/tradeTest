@@ -6,7 +6,7 @@ namespace Game;
 public partial class UIConditionTiny : UIAccordian, Lists.IListable<Entities.ICondition>
 {
     Entities.ICondition Condition;
-    public Entities.ICondition GameElement { get { return Condition; } }
+    public object GameElement { get { return Condition; } }
     public bool Destroy { get; set; } = false;
 
     [Export]

@@ -15,7 +15,7 @@ public partial class Lists
     /// <typeparam name="T"></typeparam>
     public interface IListable<T>
     {
-        public T GameElement { get; }
+        public object GameElement { get; }
         public void Init(T thing);
         public void Update();
         public void _Draw();
@@ -26,10 +26,10 @@ public partial class Lists
     }
 
     // Sub-class of listable element used in UIListSelector
-    public interface IOrderable<T> : IListable<T>
-    {
+    // public interface IOrderable<T> : IListable<T>
+    // {
 
-    }
+    // }
 
 
 

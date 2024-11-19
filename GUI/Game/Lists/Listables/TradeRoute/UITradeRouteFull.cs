@@ -26,7 +26,7 @@ public partial class UITradeRouteFull : Control, Lists.IListable<TradeRoute>
 
     public static Player player;
     public Control Control { get { return this; } }
-    public TradeRoute GameElement { get { return tradeRoute; } }
+    public object GameElement { get { return tradeRoute; } }
 
 
 
