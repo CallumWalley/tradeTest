@@ -21,7 +21,8 @@ public partial class FeatureBase : Node, Entities.IFeature
 
     public IEnumerable<Entities.IAction> Actions { get; private set; } = new List<Entities.IAction>();
 
-    public Entities.IPosition Position { get; set; }
+    public Entities.IPosition Site { get { return (Entities.IPosition)GetParent(); } } // parent reference.
+
     [Export]
     public double Scale
     {
@@ -31,19 +32,10 @@ public partial class FeatureBase : Node, Entities.IFeature
         }
         set
         {
-            if (!FactorsSingle.ContainsKey(901))
-            {
-                FactorsSingle.Add(r: new Resource.RStatic(901, value, value, "Size", "Size"));
-            }
-            else
-            {
-                FactorsSingle[901].Sum = value;
-            }
-
-
+            FactorsSingle[901].Sum = value;
         }
     }
-
+    [Export(PropertyHint.Range, "0,1,")]
     public double Condition
     {
         get
@@ -52,17 +44,38 @@ public partial class FeatureBase : Node, Entities.IFeature
         }
         set
         {
-            if (!FactorsSingle.ContainsKey(902))
-            {
-                FactorsSingle.Add(r: new Resource.RStatic(901, value, value, "Condition", "How well maintained this is"));
-            }
-            else
-            {
-                FactorsSingle[902].Sum = value;
-            }
+            FactorsSingle[902].Sum = value;
+        }
+    }
+    [Export(PropertyHint.Range, "0,1,")]
+
+    public double CapabilityActual
+    {
+        get
+        {
+            return FactorsSingle[903].Sum;
+        }
+        set
+        {
+            FactorsSingle[903].Sum = value;
+        }
+    }
+    [Export(PropertyHint.Range, "0,1,")]
+
+    public double CapabilityTarget
+    {
+        get
+        {
+            return FactorsSingle[903].Request;
+        }
+        set
+        {
+            FactorsSingle[903].Request = value;
         }
     }
 
+
+    // public double Cap
     public IEnumerator<Entities.ICondition> GetEnumerator()
     {
         foreach (Entities.ICondition f in GetChildren())
@@ -111,6 +124,22 @@ public partial class FeatureBase : Node, Entities.IFeature
     // public string TypeName { get { return ttype.Name; } }
     [Export]
     public Godot.Collections.Array<string> Tags { get; set; } = new Godot.Collections.Array<string>();
+
+    public override void _EnterTree()
+    {
+        // Add bare minimum factors for this feature.
+        FactorsSingle[901].Name = "Size";
+        FactorsSingle[901].Details = "How large this is.";
+        FactorsSingle[903].ValueFormat = "{0:F1} Mm^2";
+        FactorsSingle[902].Name = "Condition";
+        FactorsSingle[902].Details = "How well maintained this is.";
+        FactorsSingle[902].ValueFormat = "{0:P0}";
+        FactorsSingle[903].Name = "Capacity";
+        FactorsSingle[903].Request = 1;
+        FactorsSingle[903].Sum = 1;
+        FactorsSingle[903].Details = "What percentage of total capacity is this operating at.";
+        FactorsSingle[903].ValueFormat = "{0:P0}";
+    }
 
     public override void _Ready()
     {

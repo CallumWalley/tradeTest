@@ -149,7 +149,7 @@ public partial class Domain : Node2D, Entities.IDomain
     }
 
 
-    public Resource.RGroup<Resource.IResource> shipDemand = new Resource.RGroup<Resource.IResource>(802, "Trade vessels in use.");
+    public Resource.RGroup<Resource.IResource> shipDemand = new Resource.RGroup<Resource.IResource>(811, "Trade vessels in use.");
     // needs custom ui element
     public Resource.RGroup<Resource.IResource> ShipDemand
     {

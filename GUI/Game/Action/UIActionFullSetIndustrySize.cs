@@ -27,8 +27,8 @@ public partial class UIActionFullSetIndustrySize : UIActionFull, Lists.IListable
         base._Ready();
         Action = new ActionSetIndustrySize();
         Action.Feature = (FeatureBase)Feature;
+        Action.NewScale = Feature.Scale;
         spinBox.Value = Feature.Scale;
-        spinBox.MinValue = 0;
         button.Text = "Confirm";
         confirmButton.Connect("pressed", new Callable(this, "OnButtonConfirmPressed"));
         spinBox.Connect("value_changed", new Callable(this, "OnSpinboxValueChanged"));
@@ -37,7 +37,7 @@ public partial class UIActionFullSetIndustrySize : UIActionFull, Lists.IListable
         // hBoxContainer.AddChild(confirmButton);
         // vBoxContainer.AddChild(hBoxContainer);
         button.TooltipText = "Click to expand details";
-
+        spinBox.MinValue = 0;
         costEstimate = new Resource.RDict<Resource.RStatic>(Feature.Template.ConstructionInputRequirements.Select(x => new Resource.RStatic((int)x.Key, 0, 0, "Construction Cost", "How much this costs to build")));
         uIListResources.Init(costEstimate);
         hBoxContainer.AddChild(uIListResources);
@@ -54,26 +54,31 @@ public partial class UIActionFullSetIndustrySize : UIActionFull, Lists.IListable
     }
     void OnSpinboxValueChanged(double value)
     {
-        if (spinBox.Value != Feature.Scale)
+        if (spinBox.Value == Feature.Scale)
         {
-            button.Disabled = true;
-            button.TooltipText = "No change";
-            return;
+            confirmButton.Disabled = true;
+            confirmButton.TooltipText = "No change";
         }
-        if (Action.Active)
+        else if (!Action.Active)
         {
-            button.Disabled = true;
-            return;
+            confirmButton.Disabled = true;
         }
-        ((ActionSetIndustrySize)Action).NewSize = spinBox.Value;
+        else
+        {
+            confirmButton.Disabled = false;
+            confirmButton.TooltipText = "Start Construction.";
+            Action.NewScale = spinBox.Value;
+        }
         Update();
     }
     public override void Update()
     {
         base.Update();
+        // Minimum value is currently operating.
+
         foreach (KeyValuePair<Variant, Variant> kvp in Feature.Template.ConstructionInputRequirements)
         {
-            costEstimate[(int)kvp.Key].Sum = (float)kvp.Value * Feature.Template.ConstructionCost * (spinBox.Value - Feature.Scale);
+            costEstimate[(int)kvp.Key].Sum = ((float)kvp.Value * Feature.Template.ConstructionCost * spinBox.Value) - (0.1 * spinBox.Value);
         }
         uIListResources.Update();
         button.Text = Action.Name;

@@ -1,5 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://ckhub76bxwfd8"]
+[gd_scene load_steps=4 format=3 uid="uid://ckhub76bxwfd8"]
 
+[ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="1_6c8lf"]
 [ext_resource type="Script" path="res://GUI/Screen/Nav.cs" id="1_sctlv"]
 [ext_resource type="PackedScene" uid="uid://blr2onphs1wpv" path="res://GUI/Elements/UIAccordian.tscn" id="2_hu5pb"]
 
@@ -11,6 +12,7 @@ offset_top = 1.16
 offset_right = 151.0
 offset_bottom = 4.59998
 grow_vertical = 2
+theme = ExtResource("1_6c8lf")
 script = ExtResource("1_sctlv")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]

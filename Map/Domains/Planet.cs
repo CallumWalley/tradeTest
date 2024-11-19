@@ -113,19 +113,13 @@ public partial class Planet : Domain, Entities.IPosition
         }
         QueueRedraw();
     }
-    public Entities.IFeature AddFeature(PlayerFeatureTemplate template, StringName name)
+    public void AddFeature(Entities.IFeature f)
     {
-        FeatureBase newFeature = template.Instantiate();
-        newFeature.Template = template;
-        newFeature.Name = name;
-
-        // If has size. Set size to zero.
-        if (newFeature.FactorsSingle.ContainsKey(901))
-        {
-            newFeature.FactorsSingle[901].Sum = 0;
-        }
-        AddChild(newFeature);
-        return newFeature;
+        AddChild((Node)f);
+    }
+    public void RemoveFeature(Entities.IFeature f)
+    {
+        RemoveChild((Node)f);
     }
     public static Vector2 CalculatePosition(float semiMajorAxis, float semiMinorAxis, float anomaly)
     {

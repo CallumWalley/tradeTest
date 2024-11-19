@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://cq0pf0lh0i58l"]
+[gd_scene load_steps=4 format=3 uid="uid://cq0pf0lh0i58l"]
 
 [ext_resource type="Texture2D" uid="uid://dfihyt16212ay" path="res://assets/splash/test.png" id="1_qoorx"]
+[ext_resource type="PackedScene" uid="uid://b8m1ub13xosju" path="res://GUI/Elements/UIRename.tscn" id="1_ysc43"]
+[ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="2_w02my"]
 
 [node name="UiPosition" type="Panel"]
 anchors_preset = 15
@@ -14,12 +16,16 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -1030.0
-offset_bottom = -515.0
+offset_left = 2.0
+offset_right = 4.0
+offset_bottom = 3.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="UiRename" parent="MarginContainer/VBoxContainer" instance=ExtResource("1_ysc43")]
 layout_mode = 2
 
 [node name="GridContainer" type="GridContainer" parent="MarginContainer/VBoxContainer"]
@@ -27,9 +33,20 @@ layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_w02my")
+texture = ExtResource("1_qoorx")
+
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainer"]
+layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
+size_flags_horizontal = 10
 
 [node name="Designation" type="VBoxContainer" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
@@ -54,15 +71,11 @@ layout_mode = 2
 
 [node name="aphelion" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainer/VBoxContainer/Orbital"]
 layout_mode = 2
-text = "SemiMajorAxis:"
+text = "Semi Major Axis:"
 
 [node name="perhelion" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainer/VBoxContainer/Orbital"]
 layout_mode = 2
-text = "perhelion"
-
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainer"]
-layout_mode = 2
-texture = ExtResource("1_qoorx")
+text = "Eccentricity"
 
 [node name="TabContainer" type="TabContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2

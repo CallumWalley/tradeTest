@@ -5,12 +5,12 @@ using System.Linq;
 using System.Collections.Generic;
 using YAT.Commands;
 
-public partial class ActionSetIndustrySize : Node, Entities.IAction
+public partial class ActionSetIndustryCap : Node, Entities.IAction
 {
     public FeatureBase Feature { get; set; }
     public bool Visible { get { return Active; } }
-    public string Description { get; set; } = "Expand, Downsize, or dismantle this industry.";
-    public new StringName Name { get; set; } = "Resize industry";
+    public string Description { get; set; } = "Shut down, or restart this industry.";
+    public new StringName Name { get; set; } = "Capacity Industry";
     public bool Active
     {
         get
@@ -23,16 +23,11 @@ public partial class ActionSetIndustrySize : Node, Entities.IAction
     }
     public Godot.Vector2 CameraPosition { get { return Feature.CameraPosition; } }
     public float CameraZoom { get { return Feature.CameraZoom; } }
-    public double NewScale;
+    public double NewTarget;
 
     public virtual void OnAction()
     {
-        ConditionConstruction underConstruction = new ConditionConstruction();
-        underConstruction.Name = "Under Construction";
-        underConstruction.Description = "Opening Soon...";
-        underConstruction.NewScale = NewScale;
-
-        Feature.AddCondition(underConstruction);
+        Feature.CapabilityTarget = NewTarget;
     }
 
 }

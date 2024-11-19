@@ -16,7 +16,6 @@ public partial class ConditionMaintainance : ConditionBase
     /// List of values needing to be proccessed during fulfillment stage.
     /// </summary>
     Dictionary<int, Resource.RGroup<Resource.RStatic>> maintainanceFullfillments = new();
-    //public Resource.RStatic inputSecurity = new Resource.RStatic(802, 1, 1, "Input Fulfilment", "Input Fulfilment");
 
     /// <summary>
     /// For non accruable resources, output is scaled to fit demand.

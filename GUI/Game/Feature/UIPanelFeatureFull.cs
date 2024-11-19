@@ -28,7 +28,8 @@ public partial class UIPanelFeatureFull : UIPanel
 
 	static readonly PackedScene prefab_pill = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/UIPill.tscn");
 	static readonly PackedScene prefab_conditionTiny = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Condition/UIConditionTiny.tscn");
-	static readonly PackedScene prefab_actionFull = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Action/UIActionFullSetIndustrySize.tscn");
+	static readonly PackedScene prefab_actionSetIndustrySize = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Action/UIActionFullSetIndustrySize.tscn");
+	static readonly PackedScene prefab_actionSetIndustryCap = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Action/UIActionFullSetIndustryCap.tscn");
 
 
 	public override void _Ready()
@@ -73,9 +74,13 @@ public partial class UIPanelFeatureFull : UIPanel
 		globalFactorsOutput.Init(feature.FactorsOutput);
 		conditions.Init(feature, prefab_conditionTiny);
 
-		UIActionFullSetIndustrySize afsis = prefab_actionFull.Instantiate<UIActionFullSetIndustrySize>();
+		UIActionFullSetIndustrySize afsis = prefab_actionSetIndustrySize.Instantiate<UIActionFullSetIndustrySize>();
 		afsis.Feature = (FeatureBase)feature;
 		Actions.AddChild(afsis);
+
+		UIActionFullSetIndustryCap afsic = prefab_actionSetIndustryCap.Instantiate<UIActionFullSetIndustryCap>();
+		afsic.Feature = (FeatureBase)feature;
+		Actions.AddChild(afsic);
 
 		name.entity = feature;
 		VBoxContainer vbcf = GetNode<VBoxContainer>("PanelContainer/Details/TabContainer/Factors/VBoxContainer");

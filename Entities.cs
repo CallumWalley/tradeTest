@@ -50,14 +50,16 @@ public static class Entities
     {
         public IDomain Domain { get; }
         public bool HasEconomy { get; set; }
-        public IFeature AddFeature(PlayerFeatureTemplate template, StringName name);
+        public void AddFeature(Entities.IFeature feature);
+        public void RemoveFeature(Entities.IFeature feature);
+
         public IFeature this[int index] { get; }
         public List<string> Tags { get; set; }
 
     }
     public interface IFeature : IEntityable, IEnumerable<ICondition>
     {
-        public IPosition Position { get; }
+        public IPosition Site { get; }
         /// <summary>
         ///  These are tranches
         /// </summary>

@@ -19,7 +19,7 @@ corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_anr8v"]
-bg_color = Color(0, 0.329412, 0.32549, 0.717647)
+bg_color = Color(0.352941, 0.509804, 0.494118, 0.717647)
 shadow_color = Color(0, 0.0470588, 0, 0.941176)
 shadow_size = 3
 shadow_offset = Vector2(3, 3)

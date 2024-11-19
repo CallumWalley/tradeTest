@@ -177,6 +177,9 @@ StartingResources = {
 [node name="Desalination Site" type="Node" parent="Map/Galaxy/Sol System/Earth System/Earth" node_paths=PackedStringArray("Template")]
 script = ExtResource("7_0xlau")
 Scale = 0.75
+Condition = 0.6
+CapabilityActual = 0.661
+CapabilityTarget = 1.0
 Template = NodePath("../../../../../../Player/PlayerFeatureTemplates/DMHO Purification")
 SplashScreenPath = "res://assets/splash/chemical.png"
 
@@ -195,6 +198,9 @@ Factors = {
 [node name="Fuel Refining" type="Node" parent="Map/Galaxy/Sol System/Earth System/Earth" node_paths=PackedStringArray("Template")]
 script = ExtResource("7_0xlau")
 Scale = 1.0
+Condition = 0.815
+CapabilityActual = 1.0
+CapabilityTarget = 1.0
 Template = NodePath("../../../../../../Player/PlayerFeatureTemplates/Fuel Refining")
 SplashScreenPath = "res://assets/splash/chemical.png"
 
@@ -203,7 +209,6 @@ Factors = {
 2: 3.0,
 4: -2.0
 }
-StartingCapability = 0.8
 
 [node name="Maintainance" type="Node" parent="Map/Galaxy/Sol System/Earth System/Earth/Fuel Refining"]
 script = ExtResource("4_jlj8k")
@@ -214,6 +219,9 @@ Factors = {
 [node name="Construction Industry" type="Node" parent="Map/Galaxy/Sol System/Earth System/Earth" node_paths=PackedStringArray("Template")]
 script = ExtResource("7_0xlau")
 Scale = 0.5
+Condition = 1.0
+CapabilityActual = 1.0
+CapabilityTarget = 1.0
 Template = NodePath("../../../../../../Player/PlayerFeatureTemplates/Construction Industry")
 SplashScreenPath = "res://assets/splash/chemical.png"
 
@@ -227,6 +235,9 @@ Factors = {
 [node name="Mining Industry" type="Node" parent="Map/Galaxy/Sol System/Earth System/Earth" node_paths=PackedStringArray("Template")]
 script = ExtResource("7_0xlau")
 Scale = 0.5
+Condition = 0.55
+CapabilityActual = 1.0
+CapabilityTarget = 1.0
 Description = "Surface Mining using hand tools."
 Template = NodePath("../../../../../../Player/PlayerFeatureTemplates/Surface Mining")
 SplashScreenPath = "res://assets/splash/surface_mine.png"

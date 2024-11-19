@@ -67,7 +67,7 @@ public partial class UIPanelPositionFeatures : UIPanel, UIInterfaces.IEFrameUpda
             wdfpw = prefab_UIPanelDomainFeatureTemplate.Instantiate<UIWindow>();
             UIPanelDomainFeatureTemplate pdft = wdfpw.GetNode<UIPanelDomainFeatureTemplate>("UIPanelDomainFeatureTemplate");
             pdft.Name = $"{position}_build_dialouge";
-            pdft.domain = position;
+            pdft.Site = position;
             AddChild(wdfpw);
         }
         else
@@ -116,7 +116,15 @@ public partial class UIPanelPositionFeatures : UIPanel, UIInterfaces.IEFrameUpda
                 list.AddItem(((FeatureBase)f).Name, ((FeatureBase)f).IconMedium);
             }
         }
-        list.Select(selectedIndex);
+        if (list.GetChildCount() > selectedIndex)
+        {
+            list.Select(0);
+        }
+        else
+        {
+            list.Select(selectedIndex);
+        }
+
     }
 
     public override void OnEFrameUpdate()

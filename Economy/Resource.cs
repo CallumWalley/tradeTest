@@ -14,7 +14,7 @@ public static partial class Resource
     public interface IResource
     // Interface for displaying basic resource icon.
     {
-        int Type { get; }
+        int Type { get; set; }
         string Details { get; }
         string Name { get; }
         double Sum { get; }
@@ -92,7 +92,7 @@ public static partial class Resource
                 sum = value;
             }
         }
-        public virtual int Type { get; }
+        public virtual int Type { get; set; }
         public virtual string Details { get; set; } = "Base value";
         public virtual string Name { get; set; } = "Unknown";
         public virtual double Request { get; set; }
@@ -412,7 +412,6 @@ public static partial class Resource
             {401, new ResourceType("Construction Engineering", GD.Load<Texture2D>("res://assets/icons/18x18/engineering_construction.svg"),  false)},
             {403, new ResourceType("Aerospace Engineering", GD.Load<Texture2D>("res://assets/icons/18x18/engineering_aerospace.svg"),  false)},
             {801, new ResourceType("Fulfillment", GD.Load<Texture2D>("res://assets/icons/18x18/fulfillment.svg"), false)},
-            {802, new ResourceType("Capability", GD.Load<Texture2D>("res://assets/icons/18x18/capability.svg"), false)},
             {803, new ResourceType("Maintainance", GD.Load<Texture2D>("res://assets/icons/18x18/fulfillment.svg"), false)},
             {811, new ResourceType("Freighter", GD.Load<Texture2D>("res://assets/icons/18x18/freight.svg"), false)},
             {812, new ResourceType("Payload", GD.Load<Texture2D>("res://assets/icons/18x18/payload.svg"), false)},
@@ -422,6 +421,7 @@ public static partial class Resource
             // {803, new ResourceType("Efficiency", GD.Load<Texture2D>("res://assets/icons/resources/unity_grey.png"), false)},
             {901, new ResourceType("Scale", GD.Load<Texture2D>("res://assets/icons/18x18/scale.svg"), false)},
             {902, new ResourceType("Condition", GD.Load<Texture2D>("res://assets/icons/18x18/scale.svg"), false)},
+            {903, new ResourceType("Capability", GD.Load<Texture2D>("res://assets/icons/18x18/capability.svg"), false)},
 
         };
 
@@ -468,9 +468,6 @@ public static partial class Resource
     /// <typeparam name="TResource"></typeparam>
     public partial class RDict<TResource> : IEnumerable<TResource> where TResource : IResource, new()
     {
-        // if true, element will be created rather than returning null
-        public bool CreateMissing = false;
-
         // Returns standard resources.
         public IEnumerable<TResource> Standard
         {
@@ -527,7 +524,9 @@ public static partial class Resource
         {
             if (!members.ContainsKey(index))
             {
-                members[index] = new();
+                TResource resource = new();
+                resource.Type = index;
+                members[index] = resource;
             }
             return members[index];
         }

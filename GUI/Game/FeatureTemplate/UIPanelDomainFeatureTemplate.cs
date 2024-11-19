@@ -9,7 +9,7 @@ namespace Game;
 /// </summary>
 public partial class UIPanelDomainFeatureTemplate : UIPanel
 {
-	public Entities.IPosition domain;
+	public Entities.IPosition Site;
 
 	[Export]
 	public Button addButton;
@@ -30,7 +30,7 @@ public partial class UIPanelDomainFeatureTemplate : UIPanel
 	// Where selected element is displayed.
 	[Export]
 	ScrollContainer display;
-
+	ActionBuildNewIndustry asbni;
 	public PlayerFeatureTemplate selected;
 	int selectedIndex = 0;
 
@@ -42,6 +42,10 @@ public partial class UIPanelDomainFeatureTemplate : UIPanel
 		itemList.Connect("item_selected", new Callable(this, "OnItemListItemSelected"));
 		itemList.Connect("visibility_changed", new Callable(this, "OnItemListVisibilityChanged"));
 		addButton.Connect("pressed", new Callable(this, "OnButtonAddFeaturePressed"));
+
+		asbni = new ActionBuildNewIndustry();
+		asbni.Position = Site;
+
 		UpdateElements();
 		//OnItemListItemSelected(0);
 	}
@@ -59,6 +63,7 @@ public partial class UIPanelDomainFeatureTemplate : UIPanel
 		// if (selectedIndex >= player.featureTemplates.GetValid(domain).Count) { return; }
 		selected = (PlayerFeatureTemplate)featureList[selectedIndex];
 		nameLineEdit.Text = selected.GenerateName();
+		asbni.Template = selected;
 		DrawDisplay();
 	}
 	public override void _Process(double delta)
@@ -92,7 +97,7 @@ public partial class UIPanelDomainFeatureTemplate : UIPanel
 	/// </summary>
 	public void UpdateElements()
 	{
-		featureList = player.featureTemplates.GetValid(domain).ToList();
+		featureList = player.featureTemplates.GetValid(Site).ToList();
 
 		if (featureList.Count < 1) { return; }
 
@@ -121,8 +126,8 @@ public partial class UIPanelDomainFeatureTemplate : UIPanel
 
 	public void ValidateName(string new_text)
 	{
-		if ((domain == null) || (domain.Any())) { return; }
-		if (domain.Any(x => x.Name == new_text))
+		if ((Site == null) || (Site.Any())) { return; }
+		if (Site.Any(x => x.Name == new_text))
 		{
 			addButton.Disabled = true;
 			addButton.TooltipText = "Name must be unique";
@@ -136,11 +141,7 @@ public partial class UIPanelDomainFeatureTemplate : UIPanel
 
 	public void OnButtonAddFeaturePressed()
 	{
-		FeatureBase nf = ((FeatureBase)domain.AddFeature(selected, nameLineEdit.Text));
-		ActionSetIndustrySize asis = new ActionSetIndustrySize();
-		asis.Feature = nf;
-		asis.NewSize = scaleSpinbox.Value;
-		asis.OnAction();
+		asbni.OnAction();
 		GetWindow().Hide();
 	}
 }

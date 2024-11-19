@@ -1,0 +1,54 @@
+[gd_scene load_steps=6 format=3 uid="uid://dhf6fetnbcqw1"]
+
+[ext_resource type="PackedScene" uid="uid://blr2onphs1wpv" path="res://GUI/Elements/UIAccordian.tscn" id="1_ir1aq"]
+[ext_resource type="Script" path="res://GUI/Game/Action/UIActionFullSetIndustryCap.cs" id="2_q0351"]
+[ext_resource type="Texture2D" uid="uid://mh81xqxjijhi" path="res://assets/icons/18x18/trade_value.png" id="3_lah1n"]
+[ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="4_7sp81"]
+[ext_resource type="Texture2D" uid="uid://bjlfvrv4ptu4p" path="res://assets/icons/18x18/capacity.svg" id="5_ag317"]
+
+[node name="Accordian" node_paths=PackedStringArray("vBoxContainer", "hBoxContainer", "slider", "label", "richTextLabelDetails") instance=ExtResource("1_ir1aq")]
+offset_right = -1066.0
+offset_bottom = 46.0
+script = ExtResource("2_q0351")
+vBoxContainer = NodePath("Container/MarginContainer/VBoxContainer")
+hBoxContainer = NodePath("Container/MarginContainer/VBoxContainer/HBoxContainer")
+slider = NodePath("Container/MarginContainer/VBoxContainer/HBoxContainer/HSlider")
+label = NodePath("Container/MarginContainer/VBoxContainer/HBoxContainer/Label")
+richTextLabelDetails = NodePath("Container/MarginContainer/VBoxContainer/RichTextLabel")
+
+[node name="Button" parent="." index="0"]
+icon = ExtResource("3_lah1n")
+alignment = 0
+
+[node name="Container" parent="." index="1"]
+visible = true
+
+[node name="MarginContainer" type="MarginContainer" parent="Container" index="0"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Container/MarginContainer" index="0"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Container/MarginContainer/VBoxContainer" index="0"]
+layout_mode = 2
+theme = ExtResource("4_7sp81")
+theme_type_variation = &"LabelContext"
+bbcode_enabled = true
+text = "Everything is fine."
+fit_content = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Container/MarginContainer/VBoxContainer" index="1"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Container/MarginContainer/VBoxContainer/HBoxContainer" index="0"]
+layout_mode = 2
+texture = ExtResource("5_ag317")
+
+[node name="Label" type="Label" parent="Container/MarginContainer/VBoxContainer/HBoxContainer" index="1"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
+[node name="HSlider" type="HSlider" parent="Container/MarginContainer/VBoxContainer/HBoxContainer" index="2"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 3

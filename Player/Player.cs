@@ -213,7 +213,11 @@ public partial class Player : Node
 			}
 			else
 			{
-				((Entities.IPosition)(domain)).AddFeature((PlayerFeatureTemplate)template, name);
+				ActionBuildNewIndustry abni = new ActionBuildNewIndustry();
+				abni.Template = (PlayerFeatureTemplate)template;
+				abni.OnAction();
+				abni.Name = name;
+				abni.Position = (Entities.IPosition)(domain);
 				data.Terminal.Print($"Added new feature '{name}' to '{domain.Name}'.");
 				return ICommand.Success();
 			}
@@ -249,7 +253,7 @@ public partial class Player : Node
 			{
 				ActionSetIndustrySize asis = new ActionSetIndustrySize();
 				asis.Feature = (FeatureBase)feature;
-				asis.NewSize = size;
+				asis.NewScale = size;
 				asis.OnAction();
 				data.Terminal.Print($"'{feature}' '{size}'.");
 				return ICommand.Success();
