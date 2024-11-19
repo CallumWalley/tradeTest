@@ -13,9 +13,15 @@ script = ExtResource("1_rr1wj")
 
 [node name="NetLocal" parent="." instance=ExtResource("1_rh2jm")]
 layout_mode = 2
+ShowName = false
+ShowDetails = false
+ShowBreakdown = false
 
 [node name="NetRemote" parent="." instance=ExtResource("1_rh2jm")]
 layout_mode = 2
+ShowName = false
+ShowDetails = false
+ShowBreakdown = false
 
 [node name="Storage" parent="." instance=ExtResource("3_ksktb")]
 visible = false

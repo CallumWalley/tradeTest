@@ -12,9 +12,6 @@ size_flags_horizontal = 5
 size_flags_vertical = 5
 tooltip_text = "test"
 script = ExtResource("1_xxchr")
-ShowName = null
-ShowDetails = null
-ShowBreakdown = null
 
 [node name="Name" type="Label" parent="."]
 visible = false

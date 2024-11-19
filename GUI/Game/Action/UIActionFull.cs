@@ -1,9 +1,10 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Text;
 namespace Game;
 
-public partial class UIActionFull<T> : UIAccordian, Lists.IListable<T> where T : Node, Entities.IAction
+public partial class UIActionFull<T> : UIAccordian, Lists.IListable<T> where T : ActionBase
 {
     T Action;
     public object GameElement { get { return Action; } }
@@ -27,7 +28,7 @@ public partial class UIActionFull<T> : UIAccordian, Lists.IListable<T> where T :
     {
         if (Action == null) { return; }
         Visible = Action.Visible;
-        if (Destroy || !IsInstanceValid(Action)) { QueueFree(); return; }
+        if (Destroy) { QueueFree(); return; }
         button.Text = Action.Name;
         richTextLabelDetails.Text = Action.Description;
     }

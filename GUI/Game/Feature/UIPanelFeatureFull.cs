@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 namespace Game;
 
 public partial class UIPanelFeatureFull : UIPanel
@@ -24,6 +25,8 @@ public partial class UIPanelFeatureFull : UIPanel
 	UIList<Entities.ICondition> conditions = new();
 	VBoxContainer Actions;
 	TextureButton templateButton;
+	UIActionFullSetIndustrySize afsis;
+	UIActionFullSetIndustryCap afsic;
 	public Godot.Collections.Array<string> NeedsTags { get; set; } = new Godot.Collections.Array<string>();
 
 	static readonly PackedScene prefab_pill = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/UIPill.tscn");
@@ -74,11 +77,11 @@ public partial class UIPanelFeatureFull : UIPanel
 		globalFactorsOutput.Init(feature.FactorsOutput);
 		conditions.Init(feature, prefab_conditionTiny);
 
-		UIActionFullSetIndustrySize afsis = prefab_actionSetIndustrySize.Instantiate<UIActionFullSetIndustrySize>();
+		afsis = prefab_actionSetIndustrySize.Instantiate<UIActionFullSetIndustrySize>();
 		afsis.Feature = (FeatureBase)feature;
 		Actions.AddChild(afsis);
 
-		UIActionFullSetIndustryCap afsic = prefab_actionSetIndustryCap.Instantiate<UIActionFullSetIndustryCap>();
+		afsic = prefab_actionSetIndustryCap.Instantiate<UIActionFullSetIndustryCap>();
 		afsic.Feature = (FeatureBase)feature;
 		Actions.AddChild(afsic);
 
@@ -119,10 +122,13 @@ public partial class UIPanelFeatureFull : UIPanel
 		localFactors.Update();
 		conditions.Update();
 
-		foreach (Node item in Actions.GetChildren())
-		{
-			((UIActionFull<ActionBase>)item).Update();
-		}
+		// foreach (Node item in Actions.GetChildren())
+		// {
+		// 	((UIActionFull<ActionBase>)item).Update();
+		// }
+		afsis.Update();
+
+		afsic.Update();
 
 		if (feature.Template != null)
 		{

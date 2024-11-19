@@ -52,6 +52,8 @@ public partial class UIActionFullSetIndustrySize : UIActionFull<ActionSetIndustr
         Visible = false;
         QueueFree();
     }
+
+
     void OnSpinboxValueChanged(double value)
     {
         if (spinBox.Value == Feature.Scale)
@@ -73,7 +75,6 @@ public partial class UIActionFullSetIndustrySize : UIActionFull<ActionSetIndustr
     }
     public override void Update()
     {
-        base.Update();
         // Minimum value is currently operating.
 
         foreach (KeyValuePair<Variant, Variant> kvp in Feature.Template.ConstructionInputRequirements)

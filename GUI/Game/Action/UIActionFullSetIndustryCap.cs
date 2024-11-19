@@ -7,7 +7,6 @@ using System.Linq;
 namespace Game;
 public partial class UIActionFullSetIndustryCap : UIActionFull<ActionSetIndustryCap>
 {
-
     public Entities.IAction Action;
     public FeatureBase Feature;
 
