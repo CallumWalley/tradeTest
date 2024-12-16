@@ -9,6 +9,8 @@ public partial class UIRename : LineEdit
 	{
 		base._Ready();
 		Connect("text_submitted", new Callable(this, "OnTextSubmitted"));
+		Connect("focus_exited", new Callable(this, "OnFocusLost"));
+
 	}
 
 	public override void _Draw()
@@ -20,6 +22,10 @@ public partial class UIRename : LineEdit
 		}
 	}
 
+	public void OnFocusLost()
+	{
+
+	}
 	public void OnTextSubmitted(string s)
 	{
 		entity.Name = s;

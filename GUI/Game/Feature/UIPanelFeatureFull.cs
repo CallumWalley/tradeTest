@@ -40,12 +40,12 @@ public partial class UIPanelFeatureFull : UIPanel
 		base._Ready();
 		player = GetNode<Player>("/root/Global/Player");
 		screen = GetNode<CanvasLayer>("/root/Global/Screen");
-		name = GetNode<UIRename>("PanelContainer/Details/MarginContainer/VBoxContainer/Name");
-		description = GetNode<RichTextLabel>("PanelContainer/Details/MarginContainer/VBoxContainer/Description");
-		tags = GetNode<HFlowContainer>("PanelContainer/Details/MarginContainer/VBoxContainer/Tags");
-		splashScreen = GetNode<TextureRect>("PanelContainer/Details/SplashScreen");
-		templateButton = GetNode<TextureButton>("PanelContainer/Details/MarginContainer/VBoxContainer/HBoxContainer/Type");
-		Actions = GetNode<VBoxContainer>("PanelContainer/Details/TabContainer/Actions/ScrollContainer/VBoxContainer");
+		name = GetNode<UIRename>("Details/HBoxContainer/MarginContainer/VBoxContainer/Name");
+		description = GetNode<RichTextLabel>("Details/HBoxContainer//MarginContainer/VBoxContainer/Description");
+		tags = GetNode<HFlowContainer>("Details/HBoxContainer//MarginContainer/VBoxContainer/Tags");
+		splashScreen = GetNode<TextureRect>("Details/HBoxContainer/SplashScreen");
+		templateButton = GetNode<TextureButton>("Details/HBoxContainer//MarginContainer/VBoxContainer/HBoxContainer/Type");
+		Actions = GetNode<VBoxContainer>("Details/TabContainer/Actions/ScrollContainer/VBoxContainer");
 
 		templateButton.Connect("pressed", new Callable(this, "OnTemplateButtonPressed"));
 
@@ -86,8 +86,9 @@ public partial class UIPanelFeatureFull : UIPanel
 		Actions.AddChild(afsic);
 
 		name.entity = feature;
-		VBoxContainer vbcf = GetNode<VBoxContainer>("PanelContainer/Details/TabContainer/Factors/ScrollContainer/VBoxContainer");
-		VBoxContainer vbcc = GetNode<VBoxContainer>("PanelContainer/Details/TabContainer/Conditions/ScrollContainer/VBoxContainer");
+		name._Draw();
+		VBoxContainer vbcf = GetNode<VBoxContainer>("Details/TabContainer/Factors/ScrollContainer/VBoxContainer");
+		VBoxContainer vbcc = GetNode<VBoxContainer>("Details/TabContainer/Conditions/ScrollContainer/VBoxContainer");
 
 		vbcf.AddChild(singularFactors);
 		vbcf.AddChild(localFactors);

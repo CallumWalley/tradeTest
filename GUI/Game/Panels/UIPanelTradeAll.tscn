@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://GUI/Game/Panels/UIPanelTradeAll.cs" id="1_ge5jg"]
 
-[node name="TradeAll" type="Panel"]
+[node name="TradeAll" type="PanelContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -12,8 +12,6 @@ script = ExtResource("1_ge5jg")
 
 [node name="NoTradeRoutes" type="MarginContainer" parent="."]
 layout_mode = 2
-offset_right = 1152.0
-offset_bottom = 648.0
 
 [node name="NoTradeRoutes" type="Label" parent="NoTradeRoutes"]
 layout_mode = 2

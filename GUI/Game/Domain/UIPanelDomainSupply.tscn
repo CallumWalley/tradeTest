@@ -1,30 +1,53 @@
-[gd_scene load_steps=2 format=3 uid="uid://b3ntcmg31dscj"]
+[gd_scene load_steps=3 format=3 uid="uid://b3ntcmg31dscj"]
 
 [ext_resource type="Script" path="res://GUI/Game/Domain/UIPanelDomainSupply.cs" id="1_30phl"]
+[ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="2_6gcqq"]
 
-[node name="Supply" type="Panel"]
+[node name="Supply" type="PanelContainer" node_paths=PackedStringArray("label")]
+offset_right = 62.0
+offset_bottom = 79.0
 size_flags_horizontal = 0
+size_flags_vertical = 0
 script = ExtResource("1_30phl")
+label = NodePath("MarginContainer/VBoxContainer/HBoxContainer2/Label")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
-offset_right = 62.0
-offset_bottom = 79.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Local" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+theme = ExtResource("2_6gcqq")
+theme_type_variation = &"LabelSecondry"
+text = "Domain Name"
+
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Local" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Local"
 
-[node name="Trade" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="Trade" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Trade"
 
-[node name="Storage" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="Storage" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Storage"

@@ -6,8 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://mh81xqxjijhi" path="res://assets/icons/18x18/trade_value.png" id="2_sdgxt"]
 
 [node name="Accordian" node_paths=PackedStringArray("richTextLabelDetails") instance=ExtResource("1_njoa1")]
-offset_right = -1066.0
-offset_bottom = 46.0
+custom_minimum_size = Vector2(400, 0)
+offset_bottom = 79.0
 script = ExtResource("2_nwilc")
 richTextLabelDetails = NodePath("Container/MarginContainer/VBoxContainer/RichTextLabel")
 

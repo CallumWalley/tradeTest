@@ -7,8 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://cnpahdtxuvkem" path="res://assets/icons/18x18/scale.svg" id="5_6msfr"]
 
 [node name="Accordian" node_paths=PackedStringArray("vBoxContainer", "hBoxContainer", "spinBox", "confirmButton", "richTextLabelDetails") instance=ExtResource("1_v1ji2")]
-offset_right = -1066.0
-offset_bottom = 46.0
+custom_minimum_size = Vector2(400, 0)
+offset_bottom = 80.0
 script = ExtResource("2_0j38r")
 vBoxContainer = NodePath("Container/MarginContainer/VBoxContainer")
 hBoxContainer = NodePath("Container/MarginContainer/VBoxContainer/HBoxContainer")

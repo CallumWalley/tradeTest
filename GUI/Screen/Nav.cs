@@ -104,7 +104,7 @@ public partial class Nav : VBoxContainer
 			uiw.Name = $"UIWindow-{target.Name}";
 			UIPanelPosition uit = prefab_Position.Instantiate<UIPanelPosition>();
 			uit.position = target;
-			uiw.Size = new Vector2I(800, 400);
+			uiw.Size = (Vector2I)uit.GetMinimumSize();
 			uiw.Position = new Vector2I(500, 500);
 			uiw.AddChild(uit);
 			uit.AnchorsPreset = 15;

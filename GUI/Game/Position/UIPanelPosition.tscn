@@ -1,97 +1,76 @@
-[gd_scene load_steps=7 format=3 uid="uid://cq0pf0lh0i58l"]
+[gd_scene load_steps=6 format=3 uid="uid://cq0pf0lh0i58l"]
 
 [ext_resource type="Script" path="res://GUI/Game/Position/UIPanelPosition.cs" id="1_8gipv"]
 [ext_resource type="Texture2D" uid="uid://dfihyt16212ay" path="res://assets/splash/test.png" id="1_qoorx"]
 [ext_resource type="PackedScene" uid="uid://b8m1ub13xosju" path="res://GUI/Elements/UIRename.tscn" id="1_ysc43"]
 [ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="2_w02my"]
-[ext_resource type="PackedScene" uid="uid://bejhglo4krc63" path="res://GUI/Game/Position/UIPanelPositionFeatures.tscn" id="4_xhvsx"]
-[ext_resource type="PackedScene" uid="uid://b3ntcmg31dscj" path="res://GUI/Game/Domain/UIPanelDomainSupply.tscn" id="5_teiwa"]
+[ext_resource type="PackedScene" uid="uid://cko7sagev61sq" path="res://GUI/Game/Orbital/UIOrbitalDescription.tscn" id="5_wdmms"]
 
-[node name="Position" type="Panel" node_paths=PackedStringArray("panelFeatures")]
-offset_right = 1200.0
-offset_bottom = 600.0
-script = ExtResource("1_8gipv")
-panelFeatures = NodePath("MarginContainer/VBoxContainer/GridContainer/MarginContainer2/Features")
-
-[node name="MarginContainer" type="MarginContainer" parent="."]
-layout_mode = 2
-offset_right = 1200.0
-offset_bottom = 600.0
+[node name="Position" type="PanelContainer" node_paths=PackedStringArray("orbitalDescription")]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 113.0
 grow_horizontal = 2
-grow_vertical = 2
+size_flags_horizontal = 0
+size_flags_vertical = 2
+script = ExtResource("1_8gipv")
+orbitalDescription = NodePath("VBoxContainer/GridContainer/HBoxContainer/VBoxContainer/OrbitalDescription")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="UiRename" parent="MarginContainer/VBoxContainer" instance=ExtResource("1_ysc43")]
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 0
 
-[node name="GridContainer" type="GridContainer" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GridContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 0
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/GridContainer/HBoxContainer"]
 layout_mode = 2
 theme = ExtResource("2_w02my")
 texture = ExtResource("1_qoorx")
 
-[node name="VSeparator" type="VSeparator" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainer"]
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/GridContainer/HBoxContainer"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/GridContainer/HBoxContainer"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 10
 
-[node name="Designation" type="VBoxContainer" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/GridContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Name" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainer/VBoxContainer/Designation"]
+[node name="Adj" type="Label" parent="VBoxContainer/GridContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "Name:"
 
-[node name="Adj" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainer/VBoxContainer/Designation"]
+[node name="UiRename" parent="VBoxContainer/GridContainer/HBoxContainer/VBoxContainer/HBoxContainer" instance=ExtResource("1_ysc43")]
+layout_mode = 2
+
+[node name="Designation" type="VBoxContainer" parent="VBoxContainer/GridContainer/HBoxContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Adj" type="Label" parent="VBoxContainer/GridContainer/HBoxContainer/VBoxContainer/Designation"]
 layout_mode = 2
 text = "Adjective:"
 
-[node name="AltNames" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainer/VBoxContainer/Designation"]
+[node name="AltNames" type="Label" parent="VBoxContainer/GridContainer/HBoxContainer/VBoxContainer/Designation"]
 layout_mode = 2
 text = "Alternative Names:"
 
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Orbital" type="VBoxContainer" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="aphelion" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainer/VBoxContainer/Orbital"]
-layout_mode = 2
-text = "Semi Major Axis:"
-
-[node name="perhelion" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainer/VBoxContainer/Orbital"]
-layout_mode = 2
-text = "Eccentricity"
-
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/GridContainer"]
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/GridContainer/HBoxContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
 
-[node name="Supply" parent="MarginContainer/VBoxContainer/GridContainer/MarginContainer" instance=ExtResource("5_teiwa")]
+[node name="OrbitalDescription" parent="VBoxContainer/GridContainer/HBoxContainer/VBoxContainer" instance=ExtResource("5_wdmms")]
 layout_mode = 2
-size_flags_horizontal = 2
-size_flags_vertical = 0
 
-[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/VBoxContainer/GridContainer"]
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-
-[node name="Features" parent="MarginContainer/VBoxContainer/GridContainer/MarginContainer2" instance=ExtResource("4_xhvsx")]
-layout_mode = 2
-size_flags_horizontal = 1
-size_flags_vertical = 0

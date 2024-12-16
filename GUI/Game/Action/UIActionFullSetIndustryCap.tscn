@@ -7,13 +7,13 @@
 [ext_resource type="Texture2D" uid="uid://cxogipbol3s8b" path="res://assets/icons/18x18/capability.svg" id="5_k8eoq"]
 
 [node name="Accordian" node_paths=PackedStringArray("vBoxContainer", "hBoxContainer", "slider", "progressBar", "label", "richTextLabelDetails") instance=ExtResource("1_ir1aq")]
-offset_right = -1066.0
-offset_bottom = 46.0
+custom_minimum_size = Vector2(400, 0)
+offset_bottom = 80.0
 script = ExtResource("2_q0351")
 vBoxContainer = NodePath("Container/MarginContainer/VBoxContainer")
 hBoxContainer = NodePath("Container/MarginContainer/VBoxContainer/HBoxContainer")
-slider = NodePath("Container/MarginContainer/VBoxContainer/HBoxContainer/HSlider")
-progressBar = NodePath("Container/MarginContainer/VBoxContainer/HBoxContainer/HSlider/ProgressBar")
+slider = NodePath("Container/MarginContainer/VBoxContainer/HBoxContainer/Margin/HSlider")
+progressBar = NodePath("Container/MarginContainer/VBoxContainer/HBoxContainer/Margin/ProgressBar")
 label = NodePath("Container/MarginContainer/VBoxContainer/HBoxContainer/Label")
 richTextLabelDetails = NodePath("Container/MarginContainer/VBoxContainer/RichTextLabel")
 
@@ -43,29 +43,28 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="Container/MarginContainer/VBoxContainer/HBoxContainer" index="0"]
 layout_mode = 2
+size_flags_vertical = 4
 texture = ExtResource("5_k8eoq")
+stretch_mode = 2
 
 [node name="Label" type="Label" parent="Container/MarginContainer/VBoxContainer/HBoxContainer" index="1"]
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 
-[node name="HSlider" type="HSlider" parent="Container/MarginContainer/VBoxContainer/HBoxContainer" index="2"]
+[node name="Margin" type="VBoxContainer" parent="Container/MarginContainer/VBoxContainer/HBoxContainer" index="2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HSlider" type="HSlider" parent="Container/MarginContainer/VBoxContainer/HBoxContainer/Margin" index="0"]
+modulate = Color(1, 1, 1, 0.780392)
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ProgressBar" type="ProgressBar" parent="Container/MarginContainer/VBoxContainer/HBoxContainer/HSlider" index="0"]
-show_behind_parent = true
-z_index = -1
-custom_minimum_size = Vector2(0, 8)
-layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = -2.0
-offset_bottom = 2.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="ProgressBar" type="ProgressBar" parent="Container/MarginContainer/VBoxContainer/HBoxContainer/Margin" index="1"]
+self_modulate = Color(1, 1, 0.360784, 1)
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+size_flags_vertical = 4
 value = 50.0
 show_percentage = false

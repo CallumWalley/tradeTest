@@ -21,15 +21,14 @@ corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p5nu8"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vo75h"]
-content_margin_left = 4.0
-bg_color = Color(0.160708, 0.211521, 0.203708, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6fxg5"]
+bg_color = Color(0.196078, 0.254902, 0.247059, 1)
 border_width_left = 2
-border_color = Color(0.454902, 0.521569, 0.509804, 1)
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
+expand_margin_left = 4.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yd6ou"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_anr8v"]
 bg_color = Color(0.352941, 0.509804, 0.494118, 0.717647)
@@ -61,8 +60,10 @@ LabelPill/font_sizes/font_size = 8
 LabelPill/fonts/font = ExtResource("1_2e4sy")
 LabelPill/styles/normal = SubResource("StyleBoxFlat_25l4a")
 LabelSecondry/base_type = &"Label"
-LineEdit/styles/focus = SubResource("StyleBoxFlat_p5nu8")
-LineEdit/styles/normal = SubResource("StyleBoxFlat_vo75h")
+LabelSecondry/colors/font_color = Color(0.92549, 0.92549, 0.92549, 1)
+LabelSecondry/font_sizes/font_size = 8
+LineEdit/styles/focus = SubResource("StyleBoxFlat_6fxg5")
+LineEdit/styles/normal = SubResource("StyleBoxEmpty_yd6ou")
 MarginContainer/constants/margin_bottom = 10
 MarginContainer/constants/margin_left = 10
 MarginContainer/constants/margin_right = 10
