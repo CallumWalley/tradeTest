@@ -45,7 +45,7 @@ public partial class UIPanelFeatureFull : UIPanel
 		tags = GetNode<HFlowContainer>("PanelContainer/Details/MarginContainer/VBoxContainer/Tags");
 		splashScreen = GetNode<TextureRect>("PanelContainer/Details/SplashScreen");
 		templateButton = GetNode<TextureButton>("PanelContainer/Details/MarginContainer/VBoxContainer/HBoxContainer/Type");
-		Actions = GetNode<VBoxContainer>("PanelContainer/Details/TabContainer/Actions/VBoxContainer");
+		Actions = GetNode<VBoxContainer>("PanelContainer/Details/TabContainer/Actions/ScrollContainer/VBoxContainer");
 
 		templateButton.Connect("pressed", new Callable(this, "OnTemplateButtonPressed"));
 
@@ -86,8 +86,8 @@ public partial class UIPanelFeatureFull : UIPanel
 		Actions.AddChild(afsic);
 
 		name.entity = feature;
-		VBoxContainer vbcf = GetNode<VBoxContainer>("PanelContainer/Details/TabContainer/Factors/VBoxContainer");
-		VBoxContainer vbcc = GetNode<VBoxContainer>("PanelContainer/Details/TabContainer/Conditions/VBoxContainer");
+		VBoxContainer vbcf = GetNode<VBoxContainer>("PanelContainer/Details/TabContainer/Factors/ScrollContainer/VBoxContainer");
+		VBoxContainer vbcc = GetNode<VBoxContainer>("PanelContainer/Details/TabContainer/Conditions/ScrollContainer/VBoxContainer");
 
 		vbcf.AddChild(singularFactors);
 		vbcf.AddChild(localFactors);

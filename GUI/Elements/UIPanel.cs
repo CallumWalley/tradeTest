@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class UIPanel : PanelContainer, UIInterfaces.IEFrameUpdatable
+public partial class UIPanel : Panel, UIInterfaces.IEFrameUpdatable
 {
 
 	public override void _Ready()
@@ -14,7 +14,7 @@ public partial class UIPanel : PanelContainer, UIInterfaces.IEFrameUpdatable
 	{
 		// Impliment any updates here that need be called less frequently than 'Draw';
 		// e.g. game data updates.
-		if (Visible)
+		if (IsVisibleInTree())
 		{
 			OnEFrameUpdate();
 		}

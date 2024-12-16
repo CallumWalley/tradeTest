@@ -16,7 +16,8 @@ public partial class UIActionFullSetIndustryCap : UIActionFull<ActionSetIndustry
     HBoxContainer hBoxContainer;
     [Export]
     Slider slider;
-
+    [Export]
+    ProgressBar progressBar;
     [Export]
     Label label;
 
@@ -29,8 +30,6 @@ public partial class UIActionFullSetIndustryCap : UIActionFull<ActionSetIndustry
         Action = new ActionSetIndustryCap();
         ((ActionSetIndustryCap)Action).Feature = (FeatureBase)Feature;
         slider.Value = Feature.CapabilityTarget * 100;
-
-        label.Text = string.Format("{0:P0}", Feature.CapabilityTarget);
 
         slider.Connect("value_changed", new Callable(this, "OnSliderValueChanged"));
 
@@ -58,5 +57,9 @@ public partial class UIActionFullSetIndustryCap : UIActionFull<ActionSetIndustry
     public override void Update()
     {
         base.Update();
+        label.Text = string.Format("{0:P0}", Feature.CapabilityTarget);
+        progressBar.Value = Feature.CapabilityActual * 100;
+        button.Text = Action.Name;
+        richTextLabelDetails.Text = Action.Description;
     }
 }

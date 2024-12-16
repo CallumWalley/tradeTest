@@ -6,9 +6,5 @@
 [node name="UIResourceStorage" instance=ExtResource("1_58u5a")]
 script = ExtResource("2_jv7yj")
 
-[node name="Value" parent="." index="2"]
+[node name="Value" parent="." index="3"]
 mouse_filter = 1
-
-[node name="Details" parent="." index="3"]
-tooltip_text = "TEST"
-mouse_force_pass_scroll_events = false

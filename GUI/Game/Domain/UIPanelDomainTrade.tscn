@@ -4,12 +4,14 @@
 [ext_resource type="PackedScene" uid="uid://dvge38wi43hpw" path="res://GUI/Game/Dropdowns/UIDropDownSetHead.tscn" id="1_t3j0p"]
 [ext_resource type="PackedScene" uid="uid://dal1khopu4euf" path="res://GUI/Game/Network/UINetworkInfo.tscn" id="2_53ldy"]
 
-[node name="Trade" type="PanelContainer"]
+[node name="Trade" type="Panel"]
 size_flags_horizontal = 0
 script = ExtResource("1_obseg")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
+offset_right = 128.0
+offset_bottom = 103.0
 
 [node name="NetworkInfo" parent="VBoxContainer" instance=ExtResource("2_53ldy")]
 layout_mode = 2

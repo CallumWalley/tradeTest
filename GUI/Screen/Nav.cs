@@ -8,6 +8,8 @@ public partial class Nav : VBoxContainer
 {
 	//static readonly PackedScene prefab_UIAccordian = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/PlanetarySystem/UIAccordianPlanetarySystem.tscn");
 	static readonly PackedScene prefab_UIAccordian = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/UIAccordian.tscn");
+	static readonly PackedScene prefab_Position = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Position/UIPanelPosition.tscn");
+
 	// static readonly PackedScene prefab_UITabContainerPosition = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Position/UITabContainerPosition.tscn");
 	Map map;
 
@@ -100,7 +102,7 @@ public partial class Nav : VBoxContainer
 		{
 			UIWindow uiw = new();
 			uiw.Name = $"UIWindow-{target.Name}";
-			UITabContainerPosition uit = new UITabContainerPosition();
+			UIPanelPosition uit = prefab_Position.Instantiate<UIPanelPosition>();
 			uit.position = target;
 			uiw.Size = new Vector2I(800, 400);
 			uiw.Position = new Vector2I(500, 500);

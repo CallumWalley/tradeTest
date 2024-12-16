@@ -1,24 +1,22 @@
-[gd_scene load_steps=4 format=3 uid="uid://cq0pf0lh0i58l"]
+[gd_scene load_steps=7 format=3 uid="uid://cq0pf0lh0i58l"]
 
+[ext_resource type="Script" path="res://GUI/Game/Position/UIPanelPosition.cs" id="1_8gipv"]
 [ext_resource type="Texture2D" uid="uid://dfihyt16212ay" path="res://assets/splash/test.png" id="1_qoorx"]
 [ext_resource type="PackedScene" uid="uid://b8m1ub13xosju" path="res://GUI/Elements/UIRename.tscn" id="1_ysc43"]
 [ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="2_w02my"]
+[ext_resource type="PackedScene" uid="uid://bejhglo4krc63" path="res://GUI/Game/Position/UIPanelPositionFeatures.tscn" id="4_xhvsx"]
+[ext_resource type="PackedScene" uid="uid://b3ntcmg31dscj" path="res://GUI/Game/Domain/UIPanelDomainSupply.tscn" id="5_teiwa"]
 
-[node name="UiPosition" type="Panel"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Position" type="Panel" node_paths=PackedStringArray("panelFeatures")]
+offset_right = 1200.0
+offset_bottom = 600.0
+script = ExtResource("1_8gipv")
+panelFeatures = NodePath("MarginContainer/VBoxContainer/GridContainer/MarginContainer2/Features")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 2.0
-offset_right = 4.0
-offset_bottom = 3.0
+layout_mode = 2
+offset_right = 1200.0
+offset_bottom = 600.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -77,5 +75,23 @@ text = "Semi Major Axis:"
 layout_mode = 2
 text = "Eccentricity"
 
-[node name="TabContainer" type="TabContainer" parent="MarginContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/GridContainer"]
+visible = false
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Supply" parent="MarginContainer/VBoxContainer/GridContainer/MarginContainer" instance=ExtResource("5_teiwa")]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Features" parent="MarginContainer/VBoxContainer/GridContainer/MarginContainer2" instance=ExtResource("4_xhvsx")]
+layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 0

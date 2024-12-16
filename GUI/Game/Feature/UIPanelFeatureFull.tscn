@@ -6,27 +6,30 @@
 [ext_resource type="PackedScene" uid="uid://b8m1ub13xosju" path="res://GUI/Elements/UIRename.tscn" id="4_8k85m"]
 [ext_resource type="PackedScene" uid="uid://bmwberlk1bdl3" path="res://GUI/Elements/Buttons/UITemplate.tscn" id="5_avhne"]
 
-[node name="Feature" type="PanelContainer"]
+[node name="Feature" type="Panel"]
+custom_minimum_size = Vector2(350, 600)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = -802.0
+offset_bottom = -75.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
+size_flags_horizontal = 8
+size_flags_vertical = 0
 theme = ExtResource("1_xowkr")
 script = ExtResource("1_sgn1i")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 2
+offset_right = 350.0
+offset_bottom = 600.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
 layout_mode = 2
 
 [node name="Details" type="VBoxContainer" parent="PanelContainer"]
 layout_mode = 2
-size_flags_vertical = 0
 
 [node name="SplashScreen" type="TextureRect" parent="PanelContainer/Details"]
 layout_mode = 2
@@ -35,6 +38,7 @@ stretch_mode = 3
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer/Details"]
 layout_mode = 2
+size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Details/MarginContainer"]
 layout_mode = 2
@@ -68,26 +72,53 @@ scroll_active = false
 
 [node name="TabContainer" type="TabContainer" parent="PanelContainer/Details"]
 layout_mode = 2
+size_flags_vertical = 8
 
 [node name="Factors" type="PanelContainer" parent="PanelContainer/Details/TabContainer"]
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Details/TabContainer/Factors"]
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/Details/TabContainer/Factors"]
+custom_minimum_size = Vector2(0, 300)
 layout_mode = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Details/TabContainer/Factors/ScrollContainer"]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="Conditions" type="PanelContainer" parent="PanelContainer/Details/TabContainer"]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Details/TabContainer/Conditions"]
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/Details/TabContainer/Conditions"]
+custom_minimum_size = Vector2(0, 300)
 layout_mode = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Details/TabContainer/Conditions/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="Actions" type="PanelContainer" parent="PanelContainer/Details/TabContainer"]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Details/TabContainer/Actions"]
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/Details/TabContainer/Actions"]
+custom_minimum_size = Vector2(0, 300)
 layout_mode = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Details/TabContainer/Actions/ScrollContainer"]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3

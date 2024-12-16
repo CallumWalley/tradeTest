@@ -4,13 +4,17 @@
 [ext_resource type="PackedScene" uid="uid://rwliij8aoq6r" path="res://GUI/Elements/UIButtonToggleWindow.tscn" id="2_3dkul"]
 [ext_resource type="Script" path="res://GUI/Elements/UIButton.cs" id="4_fh5l6"]
 
-[node name="Features" type="PanelContainer" node_paths=PackedStringArray("list", "display", "displayEmpty", "buttonAddFeature")]
+[node name="Features" type="Panel" node_paths=PackedStringArray("list", "display", "displayEmpty", "buttonAddFeature")]
+custom_minimum_size = Vector2(800, 400)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = -352.0
+offset_bottom = -248.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("1_tk57f")
 list = NodePath("VBoxContainer/HSplitContainer/ScrollContainer/VBoxContainer/ItemList")
 display = NodePath("VBoxContainer/HSplitContainer/Display")
@@ -19,6 +23,8 @@ buttonAddFeature = NodePath("VBoxContainer/HSplitContainer/ScrollContainer/VBoxC
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
+offset_right = 1152.0
+offset_bottom = 648.0
 
 [node name="Filters" type="PanelContainer" parent="VBoxContainer"]
 visible = false
@@ -58,6 +64,7 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_horizontal = 3
 horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HSplitContainer/ScrollContainer"]
 layout_mode = 2

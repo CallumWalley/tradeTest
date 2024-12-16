@@ -7,7 +7,7 @@ namespace Game;
 public partial class Body : FeatureBase
 {
 
-    UITabContainerPosition uiBody;
+    UIPanelPosition uiBody;
     bool focus = false;
 
     [ExportGroup("Orbital")]
