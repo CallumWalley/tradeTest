@@ -27,7 +27,6 @@ public partial class ConditionMaintainance : ConditionBase
     {
         base.OnAdd();
         Name = "Condition";
-
         foreach (KeyValuePair<Variant, Variant> r in Factors)
         {
             switch ((int)r.Key)
@@ -36,7 +35,7 @@ public partial class ConditionMaintainance : ConditionBase
                 case < 999:
                     maintainanceFullfillments[(int)r.Key] = new Resource.RGroup<Resource.RStatic>(new Resource.RStatic((int)r.Key, (double)r.Value, (double)r.Value, "Base", "Base Maintainance"), "maintainance", "Required for maintainance");
                     maintainanceFullfillments[(int)r.Key].Mux(Feature.FactorsSingle[901]);
-                    Feature.FactorsOutput[(int)r.Key].Add(maintainanceFullfillments[(int)r.Key]);
+                    Feature.FactorsInput[(int)r.Key].Add(maintainanceFullfillments[(int)r.Key]);
                     // Scale
                     break;
                 default:

@@ -78,7 +78,7 @@ layout_mode = 2
 auto_height = true
 
 [node name="Display" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/HSplitContainer"]
-custom_minimum_size = Vector2(350, 0)
+custom_minimum_size = Vector2(350, 300)
 layout_mode = 2
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 0

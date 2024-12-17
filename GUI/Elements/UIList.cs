@@ -8,6 +8,8 @@ public partial class UIList<T> : BoxContainer
 // where T : Lists.IListable<T>
 {
     public IEnumerable<T> list;
+
+    public String EmptyText { get; set; }
     protected PackedScene prefab;
 
     Control unset;
@@ -23,12 +25,6 @@ public partial class UIList<T> : BoxContainer
     //     list = _list;
     //     Update();
     // }
-    public virtual Control DrawUnset()
-    {
-        Label label = new Label();
-        label.Text = "Empty";
-        return label;
-    }
 
     /// <summary>
     ///  Call to recalculate all child elements.
@@ -36,21 +32,34 @@ public partial class UIList<T> : BoxContainer
     public virtual void Update()
     {
         /// Queue all children for deletion
-        foreach (Lists.IListable<T> uichild in GetChildren())
+        foreach (Node uichild in GetChildren())
         {
-            uichild.Destroy = true;
+            if (typeof(Lists.IListable<T>).IsAssignableFrom(uichild.GetType()))
+            {
+                ((Lists.IListable<T>)uichild).Destroy = true;
+            }
+            else
+            {
+                uichild.QueueFree();
+            }
         }
         if (list == null) { GD.Print("List instantiated will null list."); return; }
-        /// For each in list, check if element exists. 
+
         foreach (T r in list)
         {
             UpdateElement(r);
         }
+
+        if (!GetChildren().Any(x => ((Control)x).Visible))
+        {
+            Label label = new Label();
+            label.HorizontalAlignment = HorizontalAlignment.Center;
+            label.Text = EmptyText;
+            AddChild(label);
+        }
+        /// For each in list, check if element exists. 
+
         QueueRedraw();
-        // eww
-        // force child redraw.
-        // Visible = !Visible;
-        // Visible = !Visible;
     }
 
     public override void _Draw()

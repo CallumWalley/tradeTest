@@ -21,9 +21,6 @@ richTextLabelDetails = NodePath("Container/MarginContainer/VBoxContainer/RichTex
 icon = ExtResource("3_lah1n")
 alignment = 0
 
-[node name="Container" parent="." index="1"]
-visible = true
-
 [node name="MarginContainer" type="MarginContainer" parent="Container" index="0"]
 layout_mode = 2
 

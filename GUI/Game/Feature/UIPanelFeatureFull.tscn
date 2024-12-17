@@ -7,9 +7,9 @@
 [ext_resource type="PackedScene" uid="uid://bmwberlk1bdl3" path="res://GUI/Elements/Buttons/UITemplate.tscn" id="5_avhne"]
 
 [node name="PanelContainer" type="PanelContainer"]
-custom_minimum_size = Vector2(550, 0)
-offset_right = 550.0
-offset_bottom = 593.0
+custom_minimum_size = Vector2(500, 0)
+offset_right = 500.0
+offset_bottom = 274.0
 size_flags_horizontal = 8
 size_flags_vertical = 0
 theme = ExtResource("1_xowkr")
@@ -65,14 +65,14 @@ scroll_active = false
 
 [node name="TabContainer" type="TabContainer" parent="Details"]
 layout_mode = 2
-size_flags_vertical = 8
+size_flags_vertical = 3
 
 [node name="Factors" type="PanelContainer" parent="Details/TabContainer"]
 layout_mode = 2
 metadata/_tab_index = 0
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Details/TabContainer/Factors"]
-custom_minimum_size = Vector2(0, 300)
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 horizontal_scroll_mode = 0
 
@@ -88,7 +88,7 @@ layout_mode = 2
 metadata/_tab_index = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Details/TabContainer/Conditions"]
-custom_minimum_size = Vector2(0, 300)
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 horizontal_scroll_mode = 0
 
@@ -103,10 +103,9 @@ layout_mode = 2
 metadata/_tab_index = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Details/TabContainer/Actions"]
-custom_minimum_size = Vector2(0, 300)
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 horizontal_scroll_mode = 0
-vertical_scroll_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Details/TabContainer/Actions/ScrollContainer"]
 layout_mode = 2

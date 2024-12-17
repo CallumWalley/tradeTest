@@ -96,7 +96,6 @@ public partial class Nav : VBoxContainer
 		if (existingWindow != null)
 		{
 			existingWindow.Popup();
-			existingWindow.Position += new Vector2I(0, 100);
 		}
 		else
 		{
@@ -104,12 +103,16 @@ public partial class Nav : VBoxContainer
 			uiw.Name = $"UIWindow-{target.Name}";
 			UIPanelPosition uit = prefab_Position.Instantiate<UIPanelPosition>();
 			uit.position = target;
-			uiw.Size = (Vector2I)uit.GetMinimumSize();
 			uiw.Position = new Vector2I(500, 500);
+			uiw.Size = new Vector2I(800, 500);
 			uiw.AddChild(uit);
-			uit.AnchorsPreset = 15;
+
+			// uit.AnchorsPreset = 15;
 
 			canvasLayer.AddChild(uiw);
+
+			//uiw.Size = (Vector2I)uiw.GetContentsMinimumSize();
+
 		}
 	}
 }

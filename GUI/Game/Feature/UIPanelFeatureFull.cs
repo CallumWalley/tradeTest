@@ -76,7 +76,7 @@ public partial class UIPanelFeatureFull : UIPanel
 		globalFactorsInput.Init(feature.FactorsInput);
 		globalFactorsOutput.Init(feature.FactorsOutput);
 		conditions.Init(feature, prefab_conditionTiny);
-
+		conditions.EmptyText = "No Conditions";
 		afsis = prefab_actionSetIndustrySize.Instantiate<UIActionFullSetIndustrySize>();
 		afsis.Feature = (FeatureBase)feature;
 		Actions.AddChild(afsis);
@@ -127,8 +127,8 @@ public partial class UIPanelFeatureFull : UIPanel
 		// {
 		// 	((UIActionFull<ActionBase>)item).Update();
 		// }
-		afsis.Update();
 
+		afsis.Update();
 		afsic.Update();
 
 		if (feature.Template != null)
