@@ -41,6 +41,7 @@ layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Details/HBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 0
 
 [node name="Type" parent="Details/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" instance=ExtResource("5_avhne")]
 layout_mode = 2

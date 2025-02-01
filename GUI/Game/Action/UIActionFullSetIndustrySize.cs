@@ -49,8 +49,6 @@ public partial class UIActionFullSetIndustrySize : UIActionFull<ActionSetIndustr
     void OnButtonConfirmPressed()
     {
         Action.OnAction();
-        Visible = false;
-        QueueFree();
     }
 
 
@@ -79,9 +77,21 @@ public partial class UIActionFullSetIndustrySize : UIActionFull<ActionSetIndustr
 
         foreach (KeyValuePair<Variant, Variant> kvp in Feature.Template.ConstructionInputRequirements)
         {
-            costEstimate[(int)kvp.Key].Sum = ((float)kvp.Value * Feature.Template.ConstructionCost * spinBox.Value) - (0.1 * spinBox.Value);
+            costEstimate[(int)kvp.Key].Sum = ((float)kvp.Value * Feature.Template.ConstructionCost * (spinBox.Value - Feature.Scale));
         }
         uIListResources.Update();
+        if (Feature.UnderConstruction)
+        {
+            Disabled = true;
+            Expanded = false;
+
+            button.TooltipText = "Can only have one construction order at a time.";
+        }
+        else
+        {
+            Disabled = false;
+            button.TooltipText = "Click to expand details";
+        }
         button.Text = Action.Name;
         richTextLabelDetails.Text = Action.Description;
     }

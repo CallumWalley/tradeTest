@@ -24,7 +24,7 @@ public partial class UIPanelDomain : Control
     static readonly PackedScene p_uirequest = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/UIResource.tscn");
     static readonly PackedScene p_uiDropDown = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/UIDropDown.tscn");
     // static readonly PackedScene p_uiTradeDestination = GD.Load<PackedScene>("res://GUI/Components/UIDropDown.tscn");
-    static readonly PackedScene prefab_TradeRoute = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/TradeRoute/UITradeRouteFull.tscn");
+    static readonly PackedScene prefab_TradeRoute = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/TradeRoute/UITradeRouteFull.tscn");
     static readonly PackedScene prefab_UplineSelector = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Dropdowns/UIDropDownSetHead.tscn");
     UIPanelLedger panelLedger;
     UIList<TradeRoute> tradeRouteList;
@@ -70,7 +70,7 @@ public partial class UIPanelDomain : Control
 
         tradeRouteList = new();
         UIDropDownSetHead setUpline = tradePanel.GetNode<UIDropDownSetHead>("DropDown");
-        setUpline.Init(Domain);
+        setUpline.Domain = Domain;
         tradeRouteList.Init(Domain.DownlineTraderoutes, prefab_TradeRoute);
         tradeRouteList.Vertical = true;
         tradePanel.AddChild(tradeRouteList);

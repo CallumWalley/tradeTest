@@ -94,12 +94,6 @@ public partial class ConditionConstruction : ConditionBase
     }
     void OnCompletion()
     {
-
-        // Update actual capability to match new size.
-        Feature.CapabilityActual = Mathf.Min(Feature.CapabilityActual * (Feature.Scale / NewScale), 1);
-
-        // Set target to match previous target, or max.
-        Feature.CapabilityTarget = (Feature.CapabilityTarget == 1) ? 1 : Mathf.Min(Feature.FactorsSingle[903].Sum * (Feature.Scale / NewScale), 1);
         foreach (Resource.RStatic input in inputFullfillments)
         {
             Feature.FactorsInput[input.Type].UnAdd(input);
@@ -108,7 +102,16 @@ public partial class ConditionConstruction : ConditionBase
         {
             Feature.Site.RemoveFeature(Feature);
         }
-        Feature.Scale = NewScale;
+        else
+        {
+            Feature.Scale = NewScale;
+            // Update actual capability to match new size.
+            Feature.CapabilityActual = Mathf.Min(Feature.CapabilityActual * (Feature.Scale / NewScale), 1);
+
+            // Set target to match previous target, or max.
+            Feature.CapabilityTarget = (Feature.CapabilityTarget == 1) ? 1 : Mathf.Min(Feature.FactorsSingle[903].Sum * (Feature.Scale / NewScale), 1);
+
+        }
 
         OnRemove();
     }

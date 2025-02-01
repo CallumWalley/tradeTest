@@ -97,7 +97,7 @@ public static partial class Resource
         public virtual string Name { get; set; } = "Unknown";
         public virtual double Request { get; set; }
         public bool IsHidden { get; set; } = false;
-        public string ValueFormat { get; set; } = "{0:F1}";
+        public string ValueFormat { get; set; } = "{0:N1}";
         public FixedSizedQueue<double> History { get; set; } = new();
 
         protected static Global global { get; set; }
@@ -219,7 +219,7 @@ public static partial class Resource
         public virtual string Name { get; set; } = "Sum";
 
         public bool IsHidden { get; set; } = false;
-        public string ValueFormat { get; set; } = "{0:G2}";
+        public string ValueFormat { get; set; } = "{0:N1}";
 
         public FixedSizedQueue<double> History = new();
         protected List<T> _adders { get; set; }

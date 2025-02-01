@@ -15,7 +15,7 @@ public partial class UIPanelTradeAll : UIPanel
 
 	MarginContainer noTradeRoutes;
 
-	static readonly PackedScene prefab_TradeRoute = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/TradeRoute/UITradeRouteFull.tscn");
+	static readonly PackedScene prefab_TradeRoute = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/TradeRoute/UITradeRouteFull.tscn");
 
 	PlayerTrade player;
 

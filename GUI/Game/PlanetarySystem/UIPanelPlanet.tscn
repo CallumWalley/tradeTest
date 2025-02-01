@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://eccsfjistcma"]
+
+[ext_resource type="PackedScene" uid="uid://cq0pf0lh0i58l" path="res://GUI/Game/Position/UIPanelPosition.tscn" id="1_diiix"]
+[ext_resource type="Script" path="res://GUI/Game/PlanetarySystem/UIPanelPlanet.cs" id="2_c37cs"]
+
+[node name="Position" instance=ExtResource("1_diiix")]
+script = ExtResource("2_c37cs")

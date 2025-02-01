@@ -65,10 +65,10 @@ public partial class Planet : Domain, Entities.IPosition
     {
         base._Ready();
         rng = new();
-        // if (HasEconomy)
-        // {
-        //     player.trade.RegisterTradeRoute(GetParent<SatelliteSystem>(), this);
-        // }
+        if (HasEconomy)
+        {
+            UplineTraderoute = player.trade.RegisterTradeRoute(GetParent<SatelliteSystem>(), this);
+        }
     }
 
     public override IEnumerable<Entities.IFeature> Features

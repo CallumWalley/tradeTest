@@ -26,7 +26,7 @@ public partial class ConditionMaintainance : ConditionBase
     public override void OnAdd()
     {
         base.OnAdd();
-        Name = "Condition";
+        Name = "Maintainance";
         foreach (KeyValuePair<Variant, Variant> r in Factors)
         {
             switch ((int)r.Key)

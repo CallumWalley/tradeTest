@@ -7,17 +7,17 @@ namespace Game;
 public partial class UIDropDownSetHead : UIDropDown
 {
 	Player player;
-	Domain Domain;
+	public Domain Domain;
 
-	static readonly PackedScene prefab_UIValidTradeRoute = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/TradeRoute/UIValidTradeRoute.tscn");
-	static readonly PackedScene prefab_UITradeRouteFull = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Lists/Listables/TradeRoute/UITradeRouteFull.tscn");
+	static readonly PackedScene prefab_UIValidTradeRoute = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/TradeRoute/UIValidTradeRoute.tscn");
+	static readonly PackedScene prefab_UITradeRouteFull = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/TradeRoute/UITradeRouteFull.tscn");
 	IEnumerable<PlayerTrade.ValidTradeHead> validTradeHeads;
 	UITradeRouteFull uitrf;
-	public void Init(Domain _Domain)
-	{
-		Domain = _Domain;
-		SetButtonContent();
-	}
+	// public void Init(Domain _Domain)
+	// {
+	// 	Domain = _Domain;
+	// 	SetButtonContent();
+	// }
 	public override void _Ready()
 	{
 		base._Ready();
@@ -49,6 +49,7 @@ public partial class UIDropDownSetHead : UIDropDown
 	public override void _Draw()
 	{
 		base._Draw();
+		SetButtonContent();
 		validTradeHeads = player.trade.GetValidTradeHeads(Domain);
 		if (Domain.UplineTraderoute == null)
 		{
@@ -60,18 +61,18 @@ public partial class UIDropDownSetHead : UIDropDown
 			buttonDefaultVisible = false;
 		}
 
-		if (validTradeHeads.Count() < 1)
-		{
-			buttonDefault.Text = "No Upline Trade Routes Available";
-			buttonDefaultVisible = true;
-			buttonSettings.Disabled = true;
-			buttonSettings.TooltipText = "No Valid Trade Hubs";
-		}
-		else
-		{
-			buttonSettings.Disabled = false;
-			buttonSettings.TooltipText = "Set Upline Trade Hub";
-		}
+		// if (validTradeHeads.Count() < 1)
+		// {
+		// 	buttonDefault.Text = "No Upline Trade Routes Available";
+		// 	buttonDefaultVisible = true;
+		// 	buttonSettings.Disabled = true;
+		// 	buttonSettings.TooltipText = "No Valid Trade Hubs";
+		// }
+		// else
+		// {
+		// 	buttonSettings.Disabled = false;
+		// 	buttonSettings.TooltipText = "Set Upline Trade Hub";
+		// }
 
 	}
 

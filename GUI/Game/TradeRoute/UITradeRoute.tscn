@@ -1,0 +1,183 @@
+[gd_scene load_steps=8 format=3 uid="uid://cwl6026ed1gcc"]
+
+[ext_resource type="Script" path="res://GUI/Game/TradeRoute/UITradeRouteFull.cs" id="1_0uw81"]
+[ext_resource type="PackedScene" uid="uid://fiabywy3cj4i" path="res://GUI/Game/Lists/Listables/Domain/UIDomainTiny.tscn" id="2_4sy85"]
+[ext_resource type="PackedScene" uid="uid://c6l1f58cf2j1w" path="res://GUI/Game/Lists/UIListResources.tscn" id="3_ginyl"]
+[ext_resource type="Texture2D" uid="uid://dwwese1sj41fa" path="res://assets/icons/18x18/freighter.png" id="4_vgild"]
+[ext_resource type="Theme" uid="uid://dv1dcg5y6swss" path="res://base_theme.tres" id="5_ko3pa"]
+[ext_resource type="PackedScene" uid="uid://chy6hnvyi7yb7" path="res://GUI/Elements/Buttons/UIButtonPause.tscn" id="6_o660v"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ygrda"]
+font_size = 10
+
+[node name="TradeRoute" type="PanelContainer"]
+custom_minimum_size = Vector2(400, 0)
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 95.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_0uw81")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Panel" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/Panel"]
+layout_mode = 2
+text = "Trade Route name"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="HSplitContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/HBoxContainer/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 3
+
+[node name="Head" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer"]
+layout_mode = 2
+
+[node name="DomainSummary" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Head" instance=ExtResource("2_4sy85")]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Head"]
+layout_mode = 2
+text = "<-"
+
+[node name="toHead" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer" instance=ExtResource("3_ginyl")]
+layout_mode = 2
+
+[node name="SpaceHold" type="MarginContainer" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Container2" type="MarginContainer" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer"]
+layout_mode = 2
+
+[node name="toTail" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer" instance=ExtResource("3_ginyl")]
+layout_mode = 2
+
+[node name="Tail" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Tail"]
+layout_mode = 2
+text = "<-"
+
+[node name="DomainSummary" parent="VBoxContainer/HBoxContainer/HSplitContainer/GridContainer/Tail" instance=ExtResource("2_4sy85")]
+layout_mode = 2
+
+[node name="VSeparator2" type="VSeparator" parent="VBoxContainer/HBoxContainer/HSplitContainer"]
+layout_mode = 2
+
+[node name="FreighterRequirements" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/HSplitContainer"]
+layout_mode = 2
+
+[node name="Inbound" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/HSplitContainer/FreighterRequirements"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
+tooltip_text = "test"
+alignment = 1
+
+[node name="Name" type="Label" parent="VBoxContainer/HBoxContainer/HSplitContainer/FreighterRequirements/Inbound"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Inbound:"
+horizontal_alignment = 2
+
+[node name="Icon" type="TextureRect" parent="VBoxContainer/HBoxContainer/HSplitContainer/FreighterRequirements/Inbound"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("4_vgild")
+
+[node name="Value" type="Label" parent="VBoxContainer/HBoxContainer/HSplitContainer/FreighterRequirements/Inbound"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("5_ko3pa")
+text = "0"
+
+[node name="Outbound" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/HSplitContainer/FreighterRequirements"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
+tooltip_text = "test"
+alignment = 1
+
+[node name="Name" type="Label" parent="VBoxContainer/HBoxContainer/HSplitContainer/FreighterRequirements/Outbound"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Outbound:"
+horizontal_alignment = 2
+
+[node name="Icon" type="TextureRect" parent="VBoxContainer/HBoxContainer/HSplitContainer/FreighterRequirements/Outbound"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("4_vgild")
+
+[node name="Value" type="Label" parent="VBoxContainer/HBoxContainer/HSplitContainer/FreighterRequirements/Outbound"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("5_ko3pa")
+text = "0"
+
+[node name="VSeparator3" type="VSeparator" parent="VBoxContainer/HBoxContainer/HSplitContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Details" type="ScrollContainer" parent="VBoxContainer/HBoxContainer/HSplitContainer"]
+visible = false
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/HSplitContainer/Details"]
+layout_mode = 2
+
+[node name="Distance" type="Label" parent="VBoxContainer/HBoxContainer/HSplitContainer/Details/VBoxContainer"]
+layout_mode = 2
+text = "xxx LY"
+label_settings = SubResource("LabelSettings_ygrda")
+horizontal_alignment = 3
+
+[node name="Time" type="Label" parent="VBoxContainer/HBoxContainer/HSplitContainer/Details/VBoxContainer"]
+layout_mode = 2
+text = "xxx Months"
+label_settings = SubResource("LabelSettings_ygrda")
+horizontal_alignment = 3
+
+[node name="Date" type="Label" parent="VBoxContainer/HBoxContainer/HSplitContainer/Details/VBoxContainer"]
+layout_mode = 2
+text = "xxx Date"
+label_settings = SubResource("LabelSettings_ygrda")
+horizontal_alignment = 3
+
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="AlignRight" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
+layout_direction = 2
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="Pause" parent="VBoxContainer/HBoxContainer/AlignRight" instance=ExtResource("6_o660v")]
+layout_mode = 2
+
+[node name="Cancel" parent="VBoxContainer/HBoxContainer/AlignRight" instance=ExtResource("6_o660v")]
+layout_mode = 2

@@ -28,16 +28,17 @@ public partial class ActionBuildNewIndustry : ActionBase
 
     public override void OnAction()
     {
-        FeatureBase nf = Template.Instantiate();
-        nf.Scale = 0;
-        nf.CapabilityActual = 0;
-        nf.Condition = 1;
+        FeatureBase newFeature = Template.Instantiate();
+        newFeature.Scale = 0;
+        newFeature.CapabilityActual = 0;
+        newFeature.Condition = 1;
+        Position.AddFeature(newFeature);
 
         // Create the Resize action, and execute it.
-        ActionSetIndustrySize asis = new ActionSetIndustrySize();
-        asis.Feature = nf;
-        asis.NewScale = NewScale;
-        asis.OnAction();
+        ActionSetIndustrySize resizeAction = new ActionSetIndustrySize();
+        resizeAction.Feature = newFeature;
+        resizeAction.NewScale = NewScale;
+        resizeAction.OnAction();
     }
 
 }

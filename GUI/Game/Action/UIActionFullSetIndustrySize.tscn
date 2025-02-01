@@ -49,6 +49,7 @@ texture = ExtResource("5_6msfr")
 
 [node name="SpinBox" type="SpinBox" parent="Container/MarginContainer/VBoxContainer/HBoxContainer" index="2"]
 layout_mode = 2
+step = 0.1
 
 [node name="Button" type="Button" parent="Container/MarginContainer/VBoxContainer/HBoxContainer" index="3"]
 layout_mode = 2

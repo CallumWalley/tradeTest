@@ -35,13 +35,14 @@ public partial class PlayerTrade : Node, IEnumerable<TradeRoute>
 	}
 
 	[GameAttributes.Command]
-	public void RegisterTradeRoute(Domain head, Domain tail)
+	public TradeRoute RegisterTradeRoute(Domain head, Domain tail)
 	{
 		TradeRoute newTradeRoute = new TradeRoute();
 		newTradeRoute.Head = head;
 		newTradeRoute.Tail = tail;
 		AddChild(newTradeRoute);
 		GD.Print("Registered trade route.");
+		return newTradeRoute;
 	}
 	[GameAttributes.Command]
 	public void DeregisterTradeRoute(TradeRoute tr)

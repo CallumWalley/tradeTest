@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://b6r5n5gf38mqj"]
 
-[ext_resource type="Script" path="res://GUI/Game/Lists/Listables/TradeRoute/UITradeRouteFull.cs" id="1_acrdv"]
+[ext_resource type="Script" path="res://GUI/Game/TradeRoute/UITradeRouteFull.cs" id="1_acrdv"]
 [ext_resource type="PackedScene" uid="uid://c6l1f58cf2j1w" path="res://GUI/Game/Lists/UIListResources.tscn" id="3_7vo1k"]
 [ext_resource type="PackedScene" uid="uid://fiabywy3cj4i" path="res://GUI/Game/Lists/Listables/Domain/UIDomainTiny.tscn" id="3_cmyw0"]
 [ext_resource type="PackedScene" uid="uid://chy6hnvyi7yb7" path="res://GUI/Elements/Buttons/UIButtonPause.tscn" id="4_dfy41"]

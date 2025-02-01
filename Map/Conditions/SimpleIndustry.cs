@@ -88,7 +88,11 @@ public partial class SimpleIndustry : ConditionBase
             Visible = false;
         }
 
-        Feature.CapabilityActual += (Feature.CapabilityTarget - Feature.CapabilityActual) / (Feature.Scale * 10);
+        // Will approach equilibrium at setpoint
+        if (Feature.Scale > 0)
+        {
+            Feature.CapabilityActual += (Feature.CapabilityTarget - Feature.CapabilityActual) / (Feature.Scale * 10);
+        }
 
         // inputs
         // // Why so complicated?

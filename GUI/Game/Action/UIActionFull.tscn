@@ -5,11 +5,10 @@
 [ext_resource type="Script" path="res://GUI/Game/Condition/UIConditionTiny.cs" id="2_nwilc"]
 [ext_resource type="Texture2D" uid="uid://mh81xqxjijhi" path="res://assets/icons/18x18/trade_value.png" id="2_sdgxt"]
 
-[node name="Accordian" node_paths=PackedStringArray("richTextLabelDetails") instance=ExtResource("1_njoa1")]
+[node name="Accordian" instance=ExtResource("1_njoa1")]
 custom_minimum_size = Vector2(400, 0)
 offset_bottom = 79.0
 script = ExtResource("2_nwilc")
-richTextLabelDetails = NodePath("Container/MarginContainer/VBoxContainer/RichTextLabel")
 
 [node name="Button" parent="." index="0"]
 icon = ExtResource("2_sdgxt")

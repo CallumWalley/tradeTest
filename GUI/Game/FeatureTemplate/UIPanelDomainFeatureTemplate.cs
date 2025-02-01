@@ -43,8 +43,7 @@ public partial class UIPanelDomainFeatureTemplate : UIPanel
 		itemList.Connect("visibility_changed", new Callable(this, "OnItemListVisibilityChanged"));
 		addButton.Connect("pressed", new Callable(this, "OnButtonAddFeaturePressed"));
 
-		asbni = new ActionBuildNewIndustry();
-		asbni.Position = Site;
+
 
 		UpdateElements();
 		//OnItemListItemSelected(0);
@@ -63,7 +62,11 @@ public partial class UIPanelDomainFeatureTemplate : UIPanel
 		// if (selectedIndex >= player.featureTemplates.GetValid(domain).Count) { return; }
 		selected = (PlayerFeatureTemplate)featureList[selectedIndex];
 		nameLineEdit.Text = selected.GenerateName();
+		asbni = new ActionBuildNewIndustry();
+		asbni.Position = Site;
 		asbni.Template = selected;
+		asbni.NewScale = scaleSpinbox.Value;
+		asbni.Name = nameLineEdit.Text;
 		DrawDisplay();
 	}
 	public override void _Process(double delta)

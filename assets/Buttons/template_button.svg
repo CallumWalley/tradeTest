@@ -4,9 +4,9 @@
 <svg
    version="1.1"
    id="svg1"
-   width="152"
-   height="50.666668"
-   viewBox="0 0 152 50.666668"
+   width="76"
+   height="25.333334"
+   viewBox="0 0 76 25.333334"
    sodipodi:docname="template_button.svg"
    inkscape:version="1.3.1 (9b9bdc1480, 2023-11-25, custom)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -43,15 +43,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="4.1449483"
-     inkscape:cx="84.319508"
-     inkscape:cy="8.5646424"
+     inkscape:zoom="5.8618421"
+     inkscape:cx="72.673401"
+     inkscape:cy="26.698092"
      inkscape:window-width="1920"
      inkscape:window-height="963"
      inkscape:window-x="0"
      inkscape:window-y="32"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="g1"
      showguides="true">
     <sodipodi:guide
        position="26,61.925927"
@@ -107,12 +107,18 @@
        inkscape:locked="false"
        inkscape:label=""
        inkscape:color="rgb(0,134,229)" />
+    <sodipodi:guide
+       position="-8.1885522,5.2884412"
+       orientation="0,-1"
+       id="guide2"
+       inkscape:locked="false" />
   </sodipodi:namedview>
   <g
      inkscape:groupmode="layer"
      inkscape:label="Image"
      id="g1"
-     style="display:none">
+     style="display:none"
+     transform="matrix(0.5,0,0,0.5,38,12.666667)">
     <image
        width="152"
        height="50.666668"
@@ -125,94 +131,97 @@
      inkscape:groupmode="layer"
      id="layer1"
      inkscape:label="Fill"
-     style="display:inline">
+     style="display:inline"
+     transform="matrix(0.5,0,0,0.5,38,12.666667)">
     <rect
        style="fill:#28571f;fill-opacity:0.360253"
        id="rect4333-3"
        width="38"
        height="38"
-       x="58"
-       y="7"
+       x="-18.16189"
+       y="-18.785706"
        inkscape:label="Enabled" />
     <rect
        style="display:inline;fill:#28571f;fill-opacity:0.360253"
        id="rect4333-3-1"
        width="38"
        height="38"
-       x="109"
-       y="7"
+       x="32.838108"
+       y="-18.785706"
        inkscape:label="Selected" />
     <rect
        style="fill:#28571f;fill-opacity:0.360253"
        id="rect4333"
        width="38"
        height="38"
-       x="7"
-       y="7"
+       x="-69.161888"
+       y="-18.785706"
        inkscape:label="Disabled" />
   </g>
   <g
      inkscape:groupmode="layer"
      id="g4336"
      inkscape:label="Outline"
-     style="display:inline">
+     style="display:inline"
+     transform="matrix(0.5,0,0,0.5,38,12.666667)">
     <rect
        style="display:inline;fill:none;fill-opacity:0.360253;stroke:#cf9e17;stroke-opacity:1"
        id="rect4335"
        width="38"
        height="38"
-       x="109"
-       y="7"
+       x="32.838108"
+       y="-18.785706"
        inkscape:label="Selected" />
     <rect
        style="display:inline;fill:none;fill-opacity:0.360253;stroke:#1e8622;stroke-opacity:1"
        id="rect4334"
        width="38"
        height="38"
-       x="58"
-       y="7"
+       x="-18.16189"
+       y="-18.785706"
        inkscape:label="Enabled" />
     <rect
-       style="fill:none;fill-opacity:0.360253;stroke:#525252;stroke-opacity:1;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-miterlimit:4.7;stroke-linecap:butt"
+       style="fill:none;fill-opacity:0.360253;stroke:#525252;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect4336"
        width="38"
        height="38"
-       x="7"
-       y="7"
+       x="-69.161888"
+       y="-18.785706"
        inkscape:label="Disabled" />
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer2"
-     inkscape:label="Icon">
+     inkscape:label="Icon"
+     transform="matrix(0.5,0,0,0.5,38,12.666667)">
     <g
        id="g2"
-       transform="translate(16.964395,74.224939)"
+       transform="translate(-59.197495,48.439234)"
        inkscape:label="Disabled">
       <path
          d="m 25.009742,-40.144053 v 4.996021 l -1.249006,1.249005 h -4.996021 l -1.249005,-1.249005 v -4.996021 l 1.249005,-1.249006 h 1.249005 v -3.747016 h -9.992041 v 3.747016 h 1.249005 l 1.249005,1.249006 v 4.996021 l -1.249005,1.249005 H 6.2746631 l -1.2490053,-1.249005 v -4.996021 l 1.2490053,-1.249006 h 1.2490052 v -3.747016 h -9.9920419 v 3.747016 h 1.2490053 l 1.24900525,1.249006 v 4.996021 l -1.24900525,1.249005 h -4.996021 l -1.2490053,-1.249005 v -4.996021 l 1.2490053,-1.249006 h 1.2490052 v -4.996021 l 1.2490053,-1.249004 H 7.5236683 v -8.996021 H 6.2746631 L 5.0256578,-57.88311 v -4.996022 l 1.2490053,-1.249005 h 4.9960209 l 1.249005,1.249005 v 4.996022 l -1.249005,1.249005 h -1.249005 v 8.996021 h 11.241047 l 1.249005,1.249004 v 4.996021 h 1.249005 z"
          id="path1"
-         style="stroke-width:1.249;stroke-dasharray:none;fill:#525252;fill-opacity:1"
+         style="fill:#525252;fill-opacity:1;stroke-width:1.249;stroke-dasharray:none"
          sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccccccccccccc" />
     </g>
     <g
        id="g2-2"
-       transform="translate(119.53183,74.353723)"
+       transform="translate(43.36994,48.568018)"
        inkscape:label="Disabled">
       <path
          d="m 25.009742,-40.144053 v 4.996021 l -1.249006,1.249005 h -4.996021 l -1.249005,-1.249005 v -4.996021 l 1.249005,-1.249006 h 1.249005 v -3.747016 h -9.992041 v 3.747016 h 1.249005 l 1.249005,1.249006 v 4.996021 l -1.249005,1.249005 H 6.2746631 l -1.2490053,-1.249005 v -4.996021 l 1.2490053,-1.249006 h 1.2490052 v -3.747016 h -9.9920419 v 3.747016 h 1.2490053 l 1.24900525,1.249006 v 4.996021 l -1.24900525,1.249005 h -4.996021 l -1.2490053,-1.249005 v -4.996021 l 1.2490053,-1.249006 h 1.2490052 v -4.996021 l 1.2490053,-1.249004 H 7.5236683 v -8.996021 H 6.2746631 L 5.0256578,-57.88311 v -4.996022 l 1.2490053,-1.249005 h 4.9960209 l 1.249005,1.249005 v 4.996022 l -1.249005,1.249005 h -1.249005 v 8.996021 h 11.241047 l 1.249005,1.249004 v 4.996021 h 1.249005 z"
          id="path1-6"
-         style="stroke-width:1.24901;fill:#cf9e17;fill-opacity:1"
+         style="fill:#cf9e17;fill-opacity:1;stroke-width:1.24901"
          sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccccccccccccc" />
     </g>
     <g
        id="g2-20"
-       transform="translate(35.464395,69.128137)"
+       transform="translate(-40.697495,43.342432)"
        inkscape:label="Disabled">
       <path
          d="m 57.760411,-34.761548 v 4.996021 l -1.249006,1.249005 h -4.996021 l -1.249005,-1.249005 v -4.996021 l 1.249005,-1.249006 h 1.249005 v -3.747016 h -9.992041 v 3.747016 h 1.249005 l 1.249005,1.249006 v 4.996021 l -1.249005,1.249005 h -4.996021 l -1.249006,-1.249005 v -4.996021 l 1.249006,-1.249006 h 1.249005 v -3.747016 h -9.992042 v 3.747016 H 31.5313 l 1.249006,1.249006 v 4.996021 l -1.249006,1.249005 h -4.996021 l -1.249005,-1.249005 v -4.996021 l 1.249005,-1.249006 h 1.249005 v -4.996021 l 1.249006,-1.249004 H 40.274337 V -51.2516 h -1.249005 l -1.249006,-1.249005 v -4.996022 l 1.249006,-1.249005 h 4.996021 l 1.249005,1.249005 v 4.996022 l -1.249005,1.249005 h -1.249005 v 8.996021 h 11.241047 l 1.249005,1.249004 v 4.996021 h 1.249005 z"
          id="path1-2"
-         style="stroke-width:1.24901;fill:#1e8622;fill-opacity:1"
+         style="fill:#1e8622;fill-opacity:1;stroke-width:1.24901"
          sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccccccccccccc" />
     </g>
   </g>

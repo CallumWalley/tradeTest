@@ -9,6 +9,7 @@ public partial class Nav : VBoxContainer
 	//static readonly PackedScene prefab_UIAccordian = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/PlanetarySystem/UIAccordianPlanetarySystem.tscn");
 	static readonly PackedScene prefab_UIAccordian = (PackedScene)GD.Load<PackedScene>("res://GUI/Elements/UIAccordian.tscn");
 	static readonly PackedScene prefab_Position = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Position/UIPanelPosition.tscn");
+	static readonly PackedScene prefab_Planet = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/PlanetarySystem/UIPanelPlanet.tscn");
 
 	// static readonly PackedScene prefab_UITabContainerPosition = (PackedScene)GD.Load<PackedScene>("res://GUI/Game/Position/UITabContainerPosition.tscn");
 	Map map;
@@ -100,8 +101,16 @@ public partial class Nav : VBoxContainer
 		else
 		{
 			UIWindow uiw = new();
+			UIPanelPosition uit;
 			uiw.Name = $"UIWindow-{target.Name}";
-			UIPanelPosition uit = prefab_Position.Instantiate<UIPanelPosition>();
+			if (typeof(Entities.IDomain).IsAssignableFrom(target.GetType()))
+			{
+				uit = prefab_Planet.Instantiate<UIPanelPlanet>();
+			}
+			else
+			{
+				uit = prefab_Position.Instantiate<UIPanelPosition>();
+			}
 			uit.position = target;
 			uiw.Position = new Vector2I(500, 500);
 			uiw.Size = new Vector2I(800, 500);

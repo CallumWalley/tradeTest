@@ -140,7 +140,6 @@ public partial class UIPanelFeatureFull : UIPanel
 		{
 			templateButton.TooltipText = $"No template";
 			templateButton.Disabled = true;
-
 		}
 
 	}

@@ -23,4 +23,4 @@ texture = ExtResource("3_ospdy")
 [node name="Name" type="Label" parent="."]
 layout_mode = 2
 size_flags_horizontal = 4
-text = "Mars Station"
+text = "Placeholder"

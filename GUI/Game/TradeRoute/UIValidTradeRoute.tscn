@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://ce8scx58klaca"]
 
-[ext_resource type="Script" path="res://GUI/Game/Lists/Listables/TradeRoute/UIValidTradeRoute.cs" id="1_a35q7"]
+[ext_resource type="Script" path="res://GUI/Game/TradeRoute/UIValidTradeRoute.cs" id="1_a35q7"]
 [ext_resource type="PackedScene" uid="uid://fiabywy3cj4i" path="res://GUI/Game/Lists/Listables/Domain/UIDomainTiny.tscn" id="2_txdf8"]
 [ext_resource type="PackedScene" uid="uid://dui8s5f2ql5qm" path="res://GUI/Game/Lists/Listables/UIResource.tscn" id="3_fkh11"]
 
@@ -35,6 +35,9 @@ horizontal_alignment = 3
 layout_mode = 2
 size_flags_horizontal = 7
 alignment = 2
+ShowName = false
+ShowDetails = false
+ShowBreakdown = false
 
 [node name="VSeparator" type="VSeparator" parent="HBoxContainer/UIResource"]
 custom_minimum_size = Vector2(20, 0)

@@ -119,7 +119,7 @@ ConstructionInputRequirements = {
 1: 2.0
 }
 ConstructionCost = 10.0
-NeedsTags = null
+NeedsTags = ["planetary"]
 
 [node name="Construction Industry" type="Node" parent="Player/PlayerFeatureTemplates/Construction Industry" node_paths=PackedStringArray("Template")]
 script = ExtResource("7_0xlau")
@@ -146,7 +146,7 @@ ConstructionInputRequirements = {
 401: 1.0
 }
 ConstructionCost = 10.0
-NeedsTags = null
+NeedsTags = [" orbital"]
 
 [node name="Spaceport" parent="Player/PlayerFeatureTemplates/Spaceport" index="0"]
 Scale = null
