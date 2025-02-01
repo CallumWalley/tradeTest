@@ -209,7 +209,7 @@ public partial class Player : Node
 			}
 			else if (!player.GetValid((Entities.IPosition)domain).Contains((PlayerFeatureTemplate)template))
 			{
-				return ICommand.Failure(string.Format("'{0}' cannot be built at {1}, does not contain tag '{2}'.", data.RawData[2], data.RawData[1], String.Join("', '", ((PlayerFeatureTemplate)template).NeedsTags.Where(x => !((Domain)domain).Tags.Contains(x)))));
+				return ICommand.Failure(string.Format("'{0}' cannot be built at {1}, does not contain tag '{2}'.", data.RawData[2], data.RawData[1], String.Join("', '", ((PlayerFeatureTemplate)template).NeedsTags.Where(x => !((Entities.IPosition)domain).Tags.Contains(x)))));
 			}
 			else
 			{

@@ -65,7 +65,6 @@ public partial class Domain : Node2D, Entities.IDomain
     public string NetworkName { get; set; }
 
 
-    public List<string> Tags { get; set; } = new List<string> { };
     // These are SECONDRY characteristics. Recomputed at every EFrame.
 
     // Is this resource relevent. (used for UI)

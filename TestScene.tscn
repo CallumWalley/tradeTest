@@ -416,6 +416,53 @@ Factors = {
 }
 Description = null
 
+[node name="Earth Orbit" type="Node2D" parent="Map/Galaxy/Sol System/Earth System"]
+script = ExtResource("8_hr0l1")
+mass = null
+albedo = Color(0.380392, 0.572549, 1, 1)
+equatorialRadius = 6300.0
+SemiMajorAxis = null
+Anomaly = null
+Eccentricity = null
+Period = null
+HasLaunchComplex = true
+HasEconomy = true
+HasTrade = null
+Description = null
+StartingResources = {
+2: 1000.0
+}
+
+[node name="Mining Industry" type="Node" parent="Map/Galaxy/Sol System/Earth System/Earth Orbit"]
+script = ExtResource("7_0xlau")
+Scale = 0.5
+Condition = 0.55
+CapabilityActual = 1.0
+CapabilityTarget = 1.0
+UnderConstruction = null
+Description = "Surface Mining using hand tools."
+Template = Object(Node,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","script":ExtResource("4_qu45m"),"Feature":Object(Node,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","script":ExtResource("7_0xlau"),"Scale":null,"Condition":null,"CapabilityActual":null,"CapabilityTarget":null,"UnderConstruction":null,"Description":"Surface Mining using hand tools.","Template":null,"IconMedium":null,"SplashScreenPath":"res://assets/splash/surface_mine.png","TypeSlug":null,"Tags":null)
+,"ConstructionInputRequirements":{
+401: 1.0
+},"ConstructionCost":10.0,"NeedsTags":null)
+
+SplashScreenPath = "res://assets/splash/surface_mine.png"
+TypeSlug = null
+Tags = null
+
+[node name="Nominal Operation" parent="Map/Galaxy/Sol System/Earth System/Earth Orbit/Mining Industry" instance=ExtResource("8_j7vpr")]
+Factors = {
+1: 3.0,
+2: -2.0
+}
+
+[node name="Maintainance" type="Node" parent="Map/Galaxy/Sol System/Earth System/Earth Orbit/Mining Industry"]
+script = ExtResource("4_jlj8k")
+Factors = {
+401: -0.2
+}
+Description = null
+
 [node name="Moon" type="Node2D" parent="Map/Galaxy/Sol System/Earth System"]
 position = Vector2(0.3, 0)
 script = ExtResource("8_hr0l1")

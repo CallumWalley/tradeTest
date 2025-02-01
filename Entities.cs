@@ -27,10 +27,10 @@ public static class Entities
     /// </summary>
     public interface IOrbital : IEntityable
     {
-        float SemiMajorAxis { get; set; }
-        float Anomaly { get; set; }
-        float Eccentricity { get; set; }
-        float Period { get; set; }
+        float SemiMajorAxis { get; }
+        float Anomaly { get; }
+        float Eccentricity { get; }
+        float Period { get; }
     }
     public interface IDomain : IEntityable
     {

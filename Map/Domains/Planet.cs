@@ -31,6 +31,8 @@ public partial class Planet : Domain, Entities.IPosition
     [ExportGroup("Economic")]
     [Export]
     public bool HasLaunchComplex { get; set; }
+    public List<string> Tags { get; set; } = new List<string> { };
+
 
     RandomNumberGenerator rng;
     public Entities.IDomain Domain
