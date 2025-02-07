@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bqwjnbtt5kf3p"]
+[gd_scene load_steps=15 format=3 uid="uid://bqwjnbtt5kf3p"]
 
 [ext_resource type="Script" path="res://Global.cs" id="1_1b3uo"]
 [ext_resource type="PackedScene" uid="uid://con3ea5txcdnn" path="res://Player/Player.tscn" id="1_w03ia"]
@@ -13,6 +13,7 @@
 [ext_resource type="Script" path="res://Camera.cs" id="7_xqav8"]
 [ext_resource type="Script" path="res://Map/Domains/Planet.cs" id="8_hr0l1"]
 [ext_resource type="PackedScene" uid="uid://b81a02d1keo5i" path="res://Map/Conditions/SimpleIndustry.tscn" id="8_j7vpr"]
+[ext_resource type="Script" path="res://Positions/NearOrbit.cs" id="14_us2em"]
 
 [node name="Global" type="Node"]
 script = ExtResource("1_1b3uo")
@@ -416,24 +417,13 @@ Factors = {
 }
 Description = null
 
-[node name="Earth Orbit" type="Node2D" parent="Map/Galaxy/Sol System/Earth System"]
-script = ExtResource("8_hr0l1")
-mass = null
-albedo = Color(0.380392, 0.572549, 1, 1)
-equatorialRadius = 6300.0
-SemiMajorAxis = null
-Anomaly = null
-Eccentricity = null
-Period = null
-HasLaunchComplex = true
-HasEconomy = true
-HasTrade = null
+[node name="Earth Orbit" type="Node2D" parent="Map/Galaxy/Sol System/Earth System" node_paths=PackedStringArray("Planet")]
+script = ExtResource("14_us2em")
+Planet = NodePath("../Earth")
+HasEconomy = null
 Description = null
-StartingResources = {
-2: 1000.0
-}
 
-[node name="Mining Industry" type="Node" parent="Map/Galaxy/Sol System/Earth System/Earth Orbit"]
+[node name="Mining Industry" type="Node" parent="Map/Galaxy/Sol System/Earth System/Earth Orbit" node_paths=PackedStringArray("Template")]
 script = ExtResource("7_0xlau")
 Scale = 0.5
 Condition = 0.55
@@ -441,11 +431,7 @@ CapabilityActual = 1.0
 CapabilityTarget = 1.0
 UnderConstruction = null
 Description = "Surface Mining using hand tools."
-Template = Object(Node,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","script":ExtResource("4_qu45m"),"Feature":Object(Node,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","script":ExtResource("7_0xlau"),"Scale":null,"Condition":null,"CapabilityActual":null,"CapabilityTarget":null,"UnderConstruction":null,"Description":"Surface Mining using hand tools.","Template":null,"IconMedium":null,"SplashScreenPath":"res://assets/splash/surface_mine.png","TypeSlug":null,"Tags":null)
-,"ConstructionInputRequirements":{
-401: 1.0
-},"ConstructionCost":10.0,"NeedsTags":null)
-
+Template = NodePath("")
 SplashScreenPath = "res://assets/splash/surface_mine.png"
 TypeSlug = null
 Tags = null

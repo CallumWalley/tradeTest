@@ -37,7 +37,16 @@ public partial class PlayerTrade : Node, IEnumerable<TradeRoute>
 	[GameAttributes.Command]
 	public TradeRoute RegisterTradeRoute(Domain head, Domain tail)
 	{
-		TradeRoute newTradeRoute = new TradeRoute();
+		TradeRoute newTradeRoute;
+		if (typeof(TradeRoutePlanet).IsAssignableFrom(tail.GetType()))
+		{
+			newTradeRoute = new TradeRoute();
+		}
+		else
+		{
+			newTradeRoute = new TradeRoutePlanet();
+		}
+
 		newTradeRoute.Head = head;
 		newTradeRoute.Tail = tail;
 		AddChild(newTradeRoute);

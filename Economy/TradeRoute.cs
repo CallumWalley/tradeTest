@@ -49,7 +49,6 @@ public partial class TradeRoute : Node, Entities.IEntityable
             shipDemand.Details = string.Format("{0:N1} required for indbound cargo, {1:N1} for outbound.", InboundShipDemand, OutboundShipDemand);
             return shipDemand;
         }
-
     }
     public int Order
     {
